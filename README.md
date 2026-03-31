@@ -2,11 +2,11 @@
 
 **The most advanced writing compiler ever open-sourced.**
 
-52 files. 42,264 words. A 6-pass compilation pipeline that produces prose with authorial identity, argument force, epistemic discipline, and zero AI residue — because language is how the poor build power and the middle class keep it.
+52 files. 42,264 words. A 6-pass compilation pipeline that produces prose with authorial identity, argument force, epistemic discipline, and zero AI residue — because language is how the poor build power and the middle class get into the wealthy class.
 
 **Free. For everyone. Forever.**
 
-Created by **[Antonio T. Smith Jr.](https://density6.com)** — Founder & CEO of [Density6 LLC](https://density6.com)
+Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO of [Density6 LLC](https://densitysix.com)
 
 ---
 
@@ -159,13 +159,13 @@ Credit appreciated: **Antonio T. Smith Jr. / Density6 LLC**
 
 ## Author
 
-**Antonio T. Smith Jr.** is the Founder and CEO of [Density6 LLC](https://density6.com) and the inventor of Operational Machine Consciousness (OMC) and Existential Recursive Intelligence (ERI). He builds sovereign infrastructure across AI automation, institutional trading, financial literacy gaming, publishing, and revenue operating systems.
+**Antonio T. Smith Jr.** is the Founder and CEO of [Density6 LLC](https://densitysix.com) and the inventor of Operational Machine Consciousness (OMC) and Existential Recursive Intelligence (ERI). He builds sovereign infrastructure across AI automation, institutional trading, financial literacy gaming, publishing, and revenue operating systems.
 
 Writing Intelligence was built because the existing tools stopped at removal. This starts where they stop. It compiles prose with authorial identity, argument discipline, and structural integrity — the way writing is supposed to work.
 
 It's free because access to powerful language shouldn't depend on what you can afford. The student at 2 AM and the executive before the board meeting deserve the same tool.
 
-**[density6.com](https://density6.com)** · **[@AntonioTSmithJr](https://twitter.com/AntonioTSmithJr)**
+**[density6.com](https://densitysix.com)** · **[@theatsjr](https://instagram.com/theatsjr)**
 
 ---
 
