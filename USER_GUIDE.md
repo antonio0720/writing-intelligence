@@ -1127,7 +1127,7 @@ Because language is how the poor build power and the middle class keep it. The s
 
 ---
 
-*Built by Antonio T. Smith Jr. / [Density6 LLC](https://densitysix.com)*
+*Built by Antonio T. Smith Jr. / [Density6 LLC](https://density6.com)*
 
 *Writing should sound like a person wrote it. This makes sure it does.*
 
