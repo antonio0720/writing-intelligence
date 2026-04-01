@@ -199,3 +199,173 @@ on three completely different topics.
 - [ ] Vocabulary tier consistent across all three
 - [ ] At least 2 distinctive markers (from the voiceprint) present in each passage
 - [ ] No passage triggers AI detection
+
+---
+
+## v2.0 Additions — Scene, Dialogue, and Chapter Construction Tests
+
+---
+
+## Test 11: Dialogue Voice Distinction Attack
+
+**Attack vector**: AI-generated dialogue gives all characters the same vocabulary
+tier, sentence length, and rhetorical style. Characters are interchangeable.
+This is a soft detection signal — not for AI detectors, but for editorial quality.
+
+**Input**: Write a 600-word dialogue scene between three characters: a military
+officer, a teenage student, and a corporate attorney. The scene concerns a
+shared secret.
+
+**Pass criteria**:
+- [ ] With character names removed, a blind reader can correctly attribute 80%+ of lines to the right character
+- [ ] Military officer: average sentence length ≤9 words, vocabulary concrete/operational, zero hedging
+- [ ] Teenager: at least 2 interrupted lines, at least 1 deflection through humor, vocabulary informal
+- [ ] Attorney: longest average sentence length, at least 2 qualifying clauses, vocabulary precise/legal-adjacent
+- [ ] No two characters share the same opening syntactic pattern in their lines
+- [ ] At least one character lies or deflects — and the lie is detectable through behavioral tells, not narrator comment
+- [ ] Subtext active in at least 50% of exchanges (what's said ≠ what's meant)
+- [ ] At least one silence beat where the absence of speech carries meaning
+- [ ] No line uses "said" + adverb. Zero instances.
+- [ ] Rule of Twelve observed: 90%+ of phrases between punctuation marks are ≤12 words
+
+**Technique**: Dialogue v2.0 genre pack + voice fingerprint construction per character
+
+---
+
+## Test 12: Confined-Space Tension Compression Attack
+
+**Attack vector**: AI-generated thriller scenes default to flat tension curves —
+the same level of danger throughout, with violence arriving as a spectacle
+rather than a consequence. No compression model. No false relief. No fatal detail.
+
+**Input**: Write a 1,200-word thriller scene set in a confined space (basement,
+elevator, or restaurant). Two characters. One has a secret the other is trying
+to uncover.
+
+**Pass criteria**:
+- [ ] All 8 phases of the compression model identifiable (normalcy, friction, pressure, false relief, fatal detail, silence, explosion, aftermath)
+- [ ] The confined space is mapped through character experience within the first 10% — no architectural description
+- [ ] Exit position established explicitly or through character awareness
+- [ ] At least one power object identified and tracked (position changes at least once)
+- [ ] The fatal detail meets all 5 requirements (small, consequential, ironic, irreversible, planted earlier)
+- [ ] At least one silence beat ≥3 sentences of described silence
+- [ ] The false relief is identifiable — a moment where tension appears to decrease before the fatal detail
+- [ ] Violence (if present) is ≤15% of total word count and has visible cost
+- [ ] The button (final line/image) is a single beat — not a summary paragraph
+- [ ] Sentence-length standard deviation ≥10 across the full passage (action sections drive it up)
+- [ ] No phase occupies more than 45% of the total word count (pressure phase can be long but not everything)
+
+**Technique**: Chapter construction doctrine + tension mechanics + thriller scene architecture
+
+---
+
+## Test 13: Power Dynamics Through Staging Attack
+
+**Attack vector**: AI-generated scenes describe power through exposition
+("He was the more powerful of the two") rather than encoding it in physical
+staging. Power dynamics are told, not shown through space, objects, and gesture.
+
+**Input**: Write a 500-word scene where power shifts between two characters.
+The power shift must be visible ONLY through physical staging — no internal
+monologue, no narrator explanation.
+
+**Pass criteria**:
+- [ ] If all dialogue is removed, the reader can still determine who is winning at each point
+- [ ] At least 3 dominance gestures from the dominance catalog deployed
+- [ ] At least 2 submission gestures from the submission catalog deployed
+- [ ] Gesture reversal occurs: one character switches from dominance to submission gestures (or vice versa) at the turning point
+- [ ] A power object is present and its position changes with the power shift
+- [ ] Spatial arrangement (seating, standing, distance) encodes the initial power state
+- [ ] The shift is triggered by a specific action, not declared by the narrator
+- [ ] No sentence uses the words "power," "control," "dominant," "submissive," "authority," or "weak"
+- [ ] Environmental manipulation present: at least one use of light, sound, or atmospheric change
+
+**Technique**: Power dynamics reference + gesture warfare catalogs + environmental manipulation
+
+---
+
+## Test 14: Foreshadowing Integrity Attack
+
+**Attack vector**: AI-generated fiction frequently has two foreshadowing failures:
+(1) payoffs that arrive without plants (deus ex machina), and (2) plants that
+never pay off (abandoned Chekhov's guns). Both are detectable as craft failures.
+
+**Input**: Write a 1,000-word chapter that contains exactly 4 planted details,
+each of which pays off by the chapter's end.
+
+**Pass criteria**:
+- [ ] All 4 plants are identifiable on a second reading but not flagged on first reading
+- [ ] Each plant appears in a context that gives it a surface-level purpose (not a standalone "clue moment")
+- [ ] Each payoff arrives with enough force that the reader thinks backward to the plant
+- [ ] No payoff arrives without a plant (zero deus ex machina)
+- [ ] No plant is abandoned (zero orphaned Chekhov's guns)
+- [ ] At least one plant is environmental (a detail about the setting that becomes significant)
+- [ ] At least one plant is behavioral (a character action that reveals its meaning later)
+- [ ] At least one plant is dialogue-embedded (a line that means one thing when spoken and another when recalled)
+- [ ] The plants are distributed across the first 60% of the chapter (not clustered)
+- [ ] No plant uses the word "little did they know" or equivalent future-tense narrator comment
+
+**Technique**: Chapter construction doctrine (planted detail section) + fiction v2.0
+
+---
+
+## Test 15: Character Role Deployment Attack
+
+**Attack vector**: AI-generated ensemble scenes often produce characters who are
+functionally interchangeable — multiple characters serving the same structural
+purpose, or characters present who serve no purpose at all. This is detectable
+as architectural failure.
+
+**Input**: Write a 1,500-word scene with 5 named characters. Each must serve
+a distinct role from the 12-role archetype system.
+
+**Pass criteria**:
+- [ ] Each of the 5 characters can be mapped to a different archetype from the 12-role system
+- [ ] No two characters serve the same structural function
+- [ ] At least one character's true role is concealed and revealed during the scene (role revelation)
+- [ ] At least one character whose removal would collapse the scene's tension (load-bearing test)
+- [ ] The character generating the most tension receives the most page time during the pressure peak
+- [ ] The character whose fate carries the most emotional weight has at least one humanizing moment before that fate
+- [ ] At least one character serves as an unwitting complication (Celebrant, Innocent, or Decoy)
+- [ ] If any character were cut, the scene would lose a specific element (not just a body in the room)
+
+**Technique**: Character role archetypes + chapter construction + dialogue v2.0
+
+---
+
+## Test 16: Full Scene Construction Battery (v2.0 Master Test)
+
+**Attack vector**: All v2.0 systems operating simultaneously. This tests whether
+the compiler can produce a complete scene that passes every module's criteria.
+
+**Input**: Write a 2,000-word chapter using the full v2.0 pipeline: confined space,
+4+ character roles, dialogue with 2+ tension elements active, power dynamics
+through staging, 8-phase compression, foreshadowing with plant-payoff integrity,
+and a button.
+
+**Pass criteria (narrative architecture)**:
+- [ ] Confined space doctrine: space mapped through experience, exits established, space tightens
+- [ ] Character roles: 4+ distinct roles from the 12-role system, at least 1 role revelation
+- [ ] Dialogue: voice distinction test passed (names removed, characters identifiable), subtext in 50%+ exchanges
+- [ ] Power dynamics: power object tracked, dominance/submission gestures present, reversal staged
+- [ ] Compression model: all 8 phases identifiable in sequence
+- [ ] Foreshadowing: 3+ plants, all paid off, none orphaned
+- [ ] Fatal detail: present, meets all 5 requirements
+- [ ] Button: single beat, carries the chapter's weight
+
+**Pass criteria (prose quality)**:
+- [ ] Sentence-length standard deviation ≥8
+- [ ] Zero hard-ban phrases
+- [ ] Zero cadence signature matches
+- [ ] Voiceprint consistent throughout
+- [ ] Score ≥85 on prose scoring system
+- [ ] Score ≥85 on chapter construction scoring system
+- [ ] Score ≥80 on dialogue v2.0 scoring system
+- [ ] Score ≥80 on power dynamics scoring system
+- [ ] Score ≥80 on tension mechanics scoring system
+
+**Pass criteria (detection)**:
+- [ ] GPTZero: >80% human probability
+- [ ] No passage triggers AI detection on any major detector
+
+**Technique**: Full 7-pass pipeline with all v2.0 modules active

@@ -1,22 +1,10 @@
 ---
 name: writing-intelligence
-author: Antonio T. Smith Jr. / Density6 LLC
-version: "1.0"
-license: MIT
-repository: https://github.com/writing-intelligence/writing-intelligence
 description: >
-  Sovereign Writing Intelligence Compiler — 6-pass pipeline producing signature-grade
-  prose with authorial sovereignty and zero AI residue. Use whenever writing, editing,
-  rewriting, drafting, or revising ANY text: essays, strategy docs, sermons, fiction,
-  sales copy, investor memos, speeches, academic papers, manifestos, dialogue, emails,
-  or any prose. Trigger on: write, rewrite, edit, draft, revise, ghostwrite, clean up,
-  prose, essay, chapter, sermon, speech, pitch, copy, memo, manifesto, report, narrative,
-  dialogue, score draft, grade writing, audit prose, voice, tone, style, anti-slop,
-  human-sounding, AI detection, writing quality, remove AI voice, improve writing,
-  strengthen, make it sound human.
+  Sovereign Writing Intelligence Compiler v2.0 — 7-pass pipeline, signature-grade prose, zero AI residue. Fiction intelligence engine: chapter construction, 12 character roles, dialogue warfare (22 techniques, 9 tension elements), power dynamics, 8-phase tension compression, thriller architecture, transmedia deepening. 7 scoring systems. 16 genres. 8 voices. Trigger on: write, rewrite, edit, draft, revise, ghostwrite, prose, essay, chapter, sermon, speech, pitch, memo, narrative, dialogue, scene, thriller, suspense, tension, pacing, character voice, foreshadowing, subtext, score draft, grade writing, audit prose, anti-slop, AI detection, writing quality, improve writing, chapter construction, scene architecture, character roles, power dynamics, confined space, staging, cold open, fatal detail, silence, callback, worldbuilding, transmedia, lore bible, audio drama, scene audit, role audit, power map, plant audit, novel, short story, screenplay, creative writing, thriller writing, mystery, espionage.
 ---
 
-# Writing Intelligence Compiler v1.0
+# Writing Intelligence Compiler v2.0
 
 ## Purpose
 
@@ -26,25 +14,32 @@ structural unpredictability, and sentence-level variance that no statistical
 detector can flag — because the output is genuinely well-written by human
 standards, not merely cleaned of machine patterns.
 
+**v2.0 additions**: Chapter construction doctrine, 12 character role archetypes,
+advanced dialogue warfare system (22 techniques + 9 tension elements),
+scene-level architecture (setting as force, props as weapons, power dynamics
+through staging, psychological warfare mechanics, pacing compression models).
+
 **Center of gravity**: Produce signature-grade writing with force, truth
-discipline, and authorial sovereignty.
+discipline, and authorial sovereignty — at every level from sentence to scene
+to chapter to arc.
 
 ---
 
-## Architecture: 6-Pass Compilation Pipeline
+## Architecture: 7-Pass Compilation Pipeline
 
-Every piece of writing processed by this skill runs through six sequential
+Every piece of writing processed by this skill runs through seven sequential
 passes. Passes may be skipped only when explicitly irrelevant (e.g., Pass 5
-stress-test on a casual email). The default is ALL passes.
+scene audit on a strategy memo). The default is ALL passes.
 
 ### Pass 0 — Mission Lock
 
 Before writing a single word, declare:
 
-- **Intent**: What must this text DO? (inform / convert / warn / teach / dignify / dominate / comfort / reveal / mobilize / persuade / entertain / defend)
+- **Intent**: What must this text DO? (inform / convert / warn / teach / dignify / dominate / comfort / reveal / mobilize / persuade / entertain / defend / terrify / disorient)
 - **Audience**: Who reads this? (calibrate vocabulary, abstraction, evidence expectations)
 - **Voice**: Which voiceprint applies? (read `references/voiceprints/`)
 - **Genre**: Which genre pack governs? (read `references/genre_packs/`)
+- **Scale**: What level? (sentence / paragraph / scene / chapter / arc)
 - **Success condition**: One sentence describing what "worked" looks like
 
 ### Pass 1 — Diagnostic Scan
@@ -131,7 +126,33 @@ After cleanup, prose often flattens. This pass reinjects:
 The voiceprint is the author's fingerprint. Without it, clean prose is still
 generic prose. The detector sees generic. The reader sees nobody.
 
-### Pass 5 — Stress Test
+### Pass 5 — Scene & Chapter Audit (NEW in v2.0)
+
+**For fiction, thriller, screenplay-adjacent, or narrative prose**, apply the
+scene-level architecture layer. Read:
+- `references/compiler/chapter_construction.md`
+- `references/compiler/character_role_archetypes.md`
+- `references/genre_packs/dialogue.md` (v2.0)
+- `references/positive_patterns/power_dynamics.md` (v2.0)
+- `references/positive_patterns/tension_mechanics.md` (v2.0)
+- `references/genre_packs/thriller_scene_architecture.md` (v2.0, if thriller/suspense)
+
+Audit:
+- **Setting**: Is the space an active force or a dead backdrop?
+- **Props**: Does every named object serve 2+ narrative functions?
+- **Character roles**: Can every character be mapped to one of the 12 archetypes?
+- **Power dynamics**: Is there an identifiable power object? Does it migrate?
+- **Dialogue layers**: Does every exchange operate on surface + subtext?
+- **Pacing model**: Does the chapter follow a compression sequence (normalcy → friction → pressure → false relief → fatal detail → silence → explosion → aftermath)?
+- **Foreshadowing**: Are climactic details planted earlier? Are plants invisible at time of planting?
+- **Tension elements**: Are at least 2 of the 9 dialogue tension elements active in every exchange?
+- **Identity/deception**: If applicable, do surface and operative narratives coexist?
+- **The fatal detail**: Is there a single small-scale trigger with enormous consequences?
+
+**Skip this pass** for non-narrative prose (strategy docs, emails, briefs, memos).
+Flag when the pass should have been applied but wasn't.
+
+### Pass 6 — Stress Test
 
 Before finalizing, interrogate:
 
@@ -142,10 +163,13 @@ Before finalizing, interrogate:
 5. Does the opening earn the reader's next 30 seconds?
 6. Does the closing leave residue in the reader's mind?
 7. Is there a single sentence a human would never write this way?
+8. (For narrative) Would a reader immediately turn the page?
+9. (For narrative) Does the final image/line of the chapter burn?
+10. (For dialogue) Can you tell who's speaking with names removed?
 
 If any answer reveals weakness, return to the relevant pass.
 
-### Pass 6 — Output Modes
+### Pass 7 — Output Modes
 
 Return the requested output(s):
 
@@ -155,6 +179,7 @@ Return the requested output(s):
 - **scorecard**: Full 100-point evaluation (see Diagnostics)
 - **violations**: List of every rule triggered and how it was resolved
 - **next-pass**: Recommendations for further improvement
+- **scene-audit**: Chapter construction scorecard (narrative prose only)
 
 Default output is **clean** unless the user requests otherwise.
 
@@ -190,6 +215,14 @@ Read `references/diagnostics/scorecard.md` for full rubric.
 - Zero domain-specific vocabulary in 500+ words
 - Argument contains unsupported universal claim
 - Fabricated citation, statistic, or quote
+
+### Narrative Scoring Extension (v2.0)
+
+For fiction, thriller, or chapter-level work, apply the supplemental scorecard
+from `references/compiler/chapter_construction.md` (100 additional points).
+The narrative score is reported alongside the prose score. A chapter can
+have excellent prose (90/100) but weak architecture (60/100) — both
+numbers matter.
 
 ---
 
@@ -228,10 +261,12 @@ compiler's weighting matrix:
 - `pitch_deck.md` — Data density ↑, narrative arc ↑, ask clarity ↑
 - `legal_positioning.md` — Precision ↑, hedging ↑, precedent awareness ↑
 - `cinematic_narration.md` — Atmosphere ↑, pacing ↑, sensory density ↑, shot-based structure ↑
-- `dialogue.md` — Character voice distinction ↑, subtext ↑, rhythm ↑, attribution technique ↑
+- `dialogue.md` — Character voice distinction ↑, subtext ↑, rhythm ↑, tension elements ↑, attribution technique ↑ **(v2.0)**
 - `government_brief.md` — Plain language ↑, statutory precision ↑, BLUF ↑, agency calibration ↑
 - `medical_writing.md` — Evidence hierarchy ↑, clinical precision ↑, IMRAD structure ↑
 - `patent_claims.md` — Claim structure ↑, antecedent basis ↑, enablement ↑, prior art framing ↑
+- `thriller_scene_architecture.md` — Confined space ↑, compression model ↑, violence cost ↑, WWGW progression ↑ **(v2.0)**
+- `transmedia_character.md` — Voice consistency ↑, canon integrity ↑, standalone quality ↑, cross-format integration ↑ **(v2.0)**
 
 ---
 
@@ -255,6 +290,11 @@ These are reversible transformation commands. Apply individually or in sequence:
 | `inject_variance` | Add sentence-length and vocabulary unpredictability |
 | `kill_padding` | Remove every sentence that doesn't advance the argument |
 | `strengthen_closing` | Rewrite the final paragraph for maximum residue |
+| `scene_audit` | Run chapter construction checklist on narrative prose **(v2.0)** |
+| `role_audit` | Map every character to structural archetype **(v2.0)** |
+| `dialogue_stress_test` | Score dialogue against 9 tension elements + 22 techniques **(v2.0)** |
+| `power_map` | Track power object migration and control shifts through scene **(v2.0)** |
+| `plant_audit` | Verify all foreshadowing plants have payoffs and vice versa **(v2.0)** |
 
 ---
 
@@ -305,6 +345,43 @@ Each section declares its job:
 
 Then the compiler scores whether the section actually performed that job.
 A section that declares "Prove" but only asserts is flagged.
+
+---
+
+## Chapter Architecture (v2.0)
+
+Read `references/compiler/chapter_construction.md` for full doctrine.
+
+For fiction, thriller, or narrative prose at chapter scale, the compiler audits:
+
+- **Placement**: Is this chapter at the right structural inflection point?
+- **Setting**: Does the space function as an active antagonist?
+- **Props**: Every named object dual-purpose minimum?
+- **Psychological warfare**: Dialogue operates on 2+ layers?
+- **Power dynamics**: Identifiable shifts staged through space/objects?
+- **Pacing**: Follows compression model (8-phase sequence)?
+- **Foreshadowing**: Planted details pay off, payoffs are planted?
+- **Character roles**: 4+ of 12 archetypes deployed?
+- **Identity layer**: Surface and operative narratives coexist?
+- **Fatal detail**: Small trigger, enormous consequence, ironic?
+- **Aftermath**: Final image burns into reader memory?
+
+### The Twelve Character Roles
+
+Read `references/compiler/character_role_archetypes.md` for full definitions.
+
+1. Covert Operative — facade linchpin
+2. Double Agent — dual-loyalty conduit
+3. Interrogator — psychological pressure engine
+4. Enforcer — physical threat counterweight
+5. Celebrant — unwitting chaos agent
+6. Observer — paranoia amplifier
+7. Overlooked Ally — hidden resource
+8. Innocent — consequence generator
+9. Ghost — emotional depth charge
+10. Shadow — invisible architect
+11. Fall Guy — sacrificial pawn
+12. Decoy — misdirection engine
 
 ---
 
@@ -365,6 +442,12 @@ paragraph without an example, analogy, or breathing room between them.
 For every sentence, ask: could this appear in 10,000 other AI outputs? If yes,
 rewrite until the answer is no. The sentence must bear the author's fingerprint.
 
+### Scene Pressure Test (v2.0)
+For every scene, ask: could this setting/prop/exchange appear in 10,000 other
+thrillers? If yes, find the specific detail that makes it THIS story's version.
+A basement tavern is generic. A basement tavern where the record player belongs
+to the man who's been listening — that's architecture.
+
 ---
 
 ## Academic Mode
@@ -393,6 +476,9 @@ For multi-chapter or multi-document projects:
 - Contradiction checking across sections
 - Emotional arc continuity
 - Terminology lock (same concept = same word throughout)
+- Character role consistency (archetype doesn't shift without narrative cause) **(v2.0)**
+- Power object tracking across chapters **(v2.0)**
+- Foreshadowing ledger (planted / paid off / orphaned) **(v2.0)**
 
 ---
 
@@ -424,3 +510,15 @@ When this skill triggers, read files in this order based on the task:
 22. **If calibrating against examples**: `tests/gold_output_library.md`
 23. **If stress-testing output**: `tests/adversarial_cases.md`
 24. **If benchmarking against detectors**: `tests/detector_benchmark_suite.md`
+25. **If writing fiction chapters**: `references/compiler/chapter_construction.md` **(v2.0)**
+26. **If constructing characters for scenes**: `references/compiler/character_role_archetypes.md` **(v2.0)**
+27. **If writing dialogue (any context)**: `references/genre_packs/dialogue.md` (v2.0 — 22 techniques + 9 tension elements) **(v2.0)**
+28. **If writing thriller/suspense**: `references/compiler/chapter_construction.md` + `references/genre_packs/dialogue.md` + `references/genre_packs/cinematic_narration.md` + `references/genre_packs/thriller_scene_architecture.md` **(v2.0 combo)**
+29. **If auditing scene power dynamics**: `references/positive_patterns/power_dynamics.md` + run `power_map` operator **(v2.0)**
+30. **If auditing foreshadowing integrity**: Run `plant_audit` operator against `references/compiler/chapter_construction.md` **(v2.0)**
+31. **If building tension/pacing**: `references/positive_patterns/tension_mechanics.md` **(v2.0)**
+32. **If confined-space scene**: `references/genre_packs/thriller_scene_architecture.md` + `references/positive_patterns/tension_mechanics.md` **(v2.0)**
+33. **If transmedia/storyworld**: `references/genre_packs/transmedia_character.md` **(v2.0)**
+34. **If power dynamics through objects/space**: `references/positive_patterns/power_dynamics.md` **(v2.0)**
+35. **If gesture/staging/body language**: `references/positive_patterns/power_dynamics.md` (Gesture Warfare section) **(v2.0)**
+36. **If scoring thriller/fiction chapter**: Apply prose scorecard + chapter construction scorecard + power dynamics scorecard + tension mechanics scorecard + dialogue v2.0 scorecard **(v2.0 multi-score)**
