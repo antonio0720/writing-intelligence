@@ -1,93 +1,131 @@
-# Contributing to Writing Intelligence
+# Contributing to Writing Intelligence v3.0
 
-Thank you for considering contributing to Writing Intelligence. This project grows through community contributions — new patterns, new genres, new voices, new tests, and new fiction intelligence modules.
+Welcome. Writing Intelligence is free and open under MIT. Contributions are how it stays alive and how it gets better than its author alone could make it.
 
-## What We Accept
+This document is the v3.0 contribution standard. It is stricter than v2.0 because v3.0 is infrastructure now, not only a skill.
 
-### Anti-Patterns
-- New AI-detectable phrases, structures, or cadence signatures
-- Genre-specific cliché discoveries (with examples)
-- New fake-depth or fake-authority patterns
+**The v3.0 Law**: *If a rule cannot be applied, audited, scored, tested, or explained — it is not a v3.0 rule yet.*
 
-### Positive Patterns
-- New paragraph shapes with examples
-- New opening/closing techniques
-- New evidence integration methods
-- New scene grounding techniques
-- **Power dynamics case studies** — real examples of how objects, space, and gesture encode power in published fiction *(v2.0)*
-- **Tension mechanic variations** — alternative compression models, pacing structures, silence techniques *(v2.0)*
-
-### Voiceprints
-- New pre-built voice profiles with all 8 dimensions documented
-- Voice samples from public-domain authors for calibration
-- Improvements to the custom voiceprint builder
-
-### Genre Packs
-- New genre packs for underserved domains (journalism, technical writing, grant writing, screenwriting, poetry)
-- Improvements to existing genre packs
-- **Fiction sub-genre packs** — mystery, horror, romance, literary fiction, historical fiction, science fiction, fantasy *(v2.0)*
-- **Thriller sub-genre packs** — espionage, psychological, legal, medical, political *(v2.0)*
-- **International dialogue patterns** — how dialogue conventions differ across cultures and languages *(v2.0)*
-
-### Fiction Intelligence Engine *(v2.0)*
-- **New character role archetypes** beyond the current 12 — with profile, inner conflict, tension contribution, and deployment rules
-- **Role combination case studies** — analysis of how published fiction deploys multiple roles in a single scene
-- **Confined-space case studies** — analysis of how published thrillers use setting as antagonist
-- **Foreshadowing pattern libraries** — cataloged plant-payoff patterns from published fiction
-- **Transmedia format templates** — production-ready templates for character diaries, audio drama scripts, lore posts, scavenger hunt designs
-
-### Diagnostics
-- New failure modes with examples and severity classification
-- Improvements to the scoring rubrics
-- New adversarial test cases
-- **Fiction-specific failure modes** — flat tension, interchangeable characters, settings as backdrop, violence without cost *(v2.0)*
-
-### Tests
-- Gold output examples at 90+ scores in any genre
-- Before/after transformation pairs
-- AI detector benchmark results (with methodology and tool versions)
-- **Fiction gold outputs** — chapter-level examples scoring 90+ on chapter construction, dialogue, power dynamics, and tension mechanics *(v2.0)*
-
-### Academic
-- New discipline-specific reasoning primitives
-- Rubric examples from specific courses/universities
-- Citation style extensions
-
-## How to Contribute
-
-1. **Fork** the repository
-2. **Create a branch** named for your contribution: `add-horror-genre-pack`, `new-voiceprint-journalist`, `fiction-role-archetype-sentinel`
-3. **Follow the format** of existing files in the same category — headers, structure, scoring criteria
-4. **Include examples** — every pattern, technique, or rule should have at least one concrete example
-5. **Test your contribution** — if adding an anti-pattern, show text that violates it. If adding a genre pack, include a gold output sample.
-6. **Submit a pull request** with a clear description of what you're adding and why
-
-## Quality Standards
-
-- Every file must earn its place. No padding, no filler, no decorative content.
-- Anti-patterns must include both the pattern and the fix.
-- Genre packs must include weighting adjustments and scoring criteria.
-- Voiceprints must include all 8 dimensions plus at least one calibration sample.
-- **Character role archetypes must include**: profile requirements, inner conflict, tension contribution, tells to plant, fatal vulnerability, and deployment rules *(v2.0)*
-- **Fiction contributions must demonstrate**: the technique working in context, not just describe it abstractly *(v2.0)*
-
-## What We Don't Accept
-
-- Content that is purely theoretical without examples
-- Contributions that duplicate existing coverage without improvement
-- Anti-patterns without fix suggestions
-- Genre packs without scoring criteria
-- Voiceprints without calibration samples
-- Fiction contributions that contradict the existing doctrine without clear justification
-
-## Code of Conduct
-
-Be helpful. Be specific. Be generous with examples. Respect the existing architecture. If you think a core principle is wrong, make the case with evidence — don't just assert it.
-
-## Credit
-
-All contributors are credited in the commit history and, for significant contributions, in the relevant file's header. This project is MIT-licensed — your contributions are freely available to everyone who uses the skill.
+Every contribution must satisfy this law.
 
 ---
 
-*Built by Antonio T. Smith Jr. / [Density6 LLC](https://densitysix.com)*
+## The Three Contribution Tiers
+
+| Tier | Effort | Process |
+|---|---|---|
+| **Patch** | Small fixes | Open a PR with a clear description |
+| **Minor** | New capability | RFC → PR → benchmark gate |
+| **Major** | Structural change | Maintainer-led; community discussion required |
+
+See `governance/RFC_PROCESS.md` for the full RFC lifecycle and `governance/VERSIONING.md` for what counts as which tier.
+
+---
+
+## Patch Contributions
+
+Open a PR directly. Examples:
+
+- Typo fixes
+- Doc clarifications
+- Anti-pattern library additions (must include detection rule + before/after)
+- Benchmark cases added inside an existing category
+- Bug fixes in schema files
+- Reference example additions
+
+**PR checklist**:
+
+- [ ] Description explains the change and why
+- [ ] Existing tests / benchmarks still pass
+- [ ] No breaking changes to schemas
+- [ ] Documentation reflects the change
+
+---
+
+## Minor Contributions (Require RFC)
+
+Open an RFC first. Use the template in `governance/RFC_PROCESS.md`. Examples:
+
+- **New genre pack**: must follow the 15-section Domain Pack Schema (`docs/DOMAIN_PACK_GUIDE.md`). Must include at least 5 benchmark cases.
+- **New voiceprint**: must include the measurable fingerprint per `docs/VOICEPRINT_GUIDE.md` — NOT only a descriptive sketch.
+- **New rewrite operator**: must declare its effect, its before/after examples, and its placement in the v3.0 operator table.
+- **New scoring rubric**: must declare its dimensions, weighting, and how it interacts with v3.0 Composite.
+- **New agent**: must follow the agent spec format. Must declare job, artifact, schema, dependencies, conflict resolution.
+- **New domain pack category**: must include at least 5 benchmark cases and update the genre collision matrix.
+
+**RFC + PR checklist**:
+
+- [ ] RFC accepted before PR opens
+- [ ] PR linked to the accepted RFC
+- [ ] Benchmark cases authored
+- [ ] Benchmark suite passes for the change
+- [ ] Genre collision matrix updated (if new pack)
+- [ ] Documentation updated (USER_GUIDE, CHEATSHEET, applicable docs/)
+- [ ] No breaking changes to existing schemas
+
+---
+
+## Major Contributions
+
+Major contributions change the kernel, the laws, or the public API. These are maintainer-led. Open an issue describing the change you want to see; expect deep discussion. Major contributions ship in MAJOR-version releases only.
+
+---
+
+## Quality Requirements for All Contributions
+
+Every contributed rule, pack, voiceprint, operator, schema, agent, or doctrine file must be:
+
+1. **Applicable** — a writer or operator can use it on a real task
+2. **Auditable** — its effect can be observed in the output
+3. **Scored** — its presence or absence shifts a measurable score
+4. **Testable** — there's at least one benchmark case demonstrating its effect
+5. **Explainable** — its rationale can be stated in plain language
+
+Contributions that satisfy fewer than 3 of these criteria will be returned for revision.
+
+---
+
+## What We Will Not Merge
+
+- Anti-patterns that are stylistic preferences without measurable effect
+- Voiceprints that are mood boards without metrics
+- "Tips" that read like motivational content
+- Genre packs without benchmark cases
+- Schemas without backwards compatibility consideration
+- Changes that reduce evidence discipline in high-stakes domains
+- Anything that makes a fabrication risk easier
+
+---
+
+## Communication
+
+- Open an issue before opening a PR for anything beyond a typo
+- Use the issue labels: `bug`, `docs`, `genre`, `voiceprint`, `schema`, `agent`, `benchmark`, `governance`, `certification`, `rfc`
+- Keep discussions in the issue or PR thread; the maintainer reads everything
+
+## Code of Conduct
+
+- Be precise. Be kind. Be honest.
+- Disagree with arguments, not people.
+- Surface evidence; cite sources.
+- Treat the doctrine like a living thing — it can change, but only for cause.
+
+---
+
+## Recognition
+
+Every accepted contribution is acknowledged in `CHANGELOG.md`. Operators who contribute multiple accepted minor or major changes can apply for Architect tier (see `certification/operator_levels.md`).
+
+---
+
+## License
+
+By submitting a contribution, you agree to license it under MIT (the same license as the project) and confirm you own the work or have the right to submit it.
+
+---
+
+## Author
+
+Antonio T. Smith Jr. / Density6 LLC
+
+[densitysix.com](https://densitysix.com) · [github.com/antonio0720/writing-intelligence](https://github.com/antonio0720/writing-intelligence)
