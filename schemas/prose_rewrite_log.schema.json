@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/prose_rewrite_log.schema.json",
+  "title": "ProseRewriteLogV3",
+  "description": "Sentence-by-sentence transformation log produced by Pass 6 (Sentence Surgery). Every cut, strengthening, and preservation is recorded so the user can audit decisions and so regression tests can compare runs.",
+  "type": "object",
+  "required": ["task_id", "transformations"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "transformations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["op", "before", "after"],
+        "properties": {
+          "transformation_id": {"type": "string"},
+          "op": {
+            "type": "string",
+            "enum": ["hard_ban_removed", "soft_ban_removed", "variance_injected", "compression", "specificity_added", "abstract_to_scene", "voice_restored", "preserved", "rhetorical_question_kept_earned", "fragment_kept_earned", "transition_replaced", "metaphor_added", "metaphor_removed", "claim_softened", "claim_qualified", "evidence_attached"]
+          },
+          "before": {"type": "string"},
+          "after": {"type": "string"},
+          "rationale": {"type": "string"},
+          "rule_id": {"type": "string", "description": "Which rule from the anti-pattern or positive-pattern library triggered this transformation."},
+          "voice_impact": {
+            "type": "string",
+            "enum": ["increased_fidelity", "neutral", "decreased_fidelity"]
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total_transformations": {"type": "integer"},
+        "hard_ban_count": {"type": "integer"},
+        "soft_ban_count": {"type": "integer"},
+        "compressions": {"type": "integer"},
+        "voice_fidelity_delta": {"type": "number"}
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/storyworld_memory.schema.json",
+  "title": "StoryworldMemoryV3",
+  "description": "Longform continuity record for fiction, transmedia, and series work. Produced by the Narrative Intelligence Engine. Tracks characters, motifs, power objects, foreshadowing, arcs, canon hierarchy.",
+  "type": "object",
+  "required": ["storyworld_id", "characters", "motifs"],
+  "properties": {
+    "storyworld_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "title": {"type": "string"},
+    "author": {"type": "string"},
+    "canon_hierarchy": {
+      "type": "object",
+      "properties": {
+        "canonical": {"type": "array", "items": {"type": "string"}, "description": "Source IDs that are part of the canon."},
+        "sanctioned": {"type": "array", "items": {"type": "string"}, "description": "Author-sanctioned extensions (audio drama adaptations, etc.)."},
+        "fan_tier": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["character_id", "name", "archetype"],
+        "properties": {
+          "character_id": {"type": "string"},
+          "name": {"type": "string"},
+          "archetype": {
+            "type": "string",
+            "enum": ["covert_operative", "double_agent", "interrogator", "enforcer", "celebrant", "observer", "overlooked_ally", "innocent", "ghost", "shadow", "fall_guy", "decoy", "protagonist", "antagonist", "supporting"]
+          },
+          "voice_fingerprint_id": {"type": "string"},
+          "tells": {"type": "array", "items": {"type": "string"}},
+          "fatal_vulnerability": {"type": "string"},
+          "first_appearance": {"type": "string"},
+          "last_appearance": {"type": "string"},
+          "arc_state": {"type": "string"}
+        }
+      }
+    },
+    "motifs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "motif_id": {"type": "string"},
+          "description": {"type": "string"},
+          "appearances": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "power_objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "object_id": {"type": "string"},
+          "name": {"type": "string"},
+          "current_holder": {"type": "string"},
+          "migration_log": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": {"type": "string"},
+                "to": {"type": "string"},
+                "chapter": {"type": "string"},
+                "mechanism": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "foreshadowing_ledger": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["plant_id", "status"],
+        "properties": {
+          "plant_id": {"type": "string"},
+          "plant_location": {"type": "string"},
+          "payoff_location": {"type": "string"},
+          "status": {
+            "type": "string",
+            "enum": ["planted", "paid_off", "orphaned", "telegraphed"]
+          },
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "series_arc": {
+      "type": "object",
+      "properties": {
+        "books": {"type": "array", "items": {"type": "string"}},
+        "escalation_curve": {
+          "type": "string",
+          "enum": ["rising", "plateau", "declining", "uneven"]
+        },
+        "stakes_per_book": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "book": {"type": "string"},
+              "stakes_score": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+    "terminology_lock": {
+      "type": "object",
+      "additionalProperties": {"type": "string"},
+      "description": "Concept → canonical word. Enforces same-word-for-same-concept across the storyworld."
+    }
+  },
+  "additionalProperties": false
+}

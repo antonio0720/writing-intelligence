@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/corpus_map.schema.json",
+  "title": "CorpusMapV3",
+  "description": "Map of all source material governing a v3.0 compilation. Produced by Pass 2 (Corpus & Context Ingestion). Prevents source confusion, hallucination, and accidental blending of unrelated material.",
+  "type": "object",
+  "required": ["task_id", "sources", "priority_order"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "type", "status"],
+        "properties": {
+          "source_id": {"type": "string"},
+          "type": {
+            "type": "string",
+            "enum": ["user_text", "repo_knowledge", "external_document", "prior_memory", "example", "generated_idea", "web_fetch", "user_provided_data"]
+          },
+          "title": {"type": "string"},
+          "uri": {"type": "string"},
+          "status": {
+            "type": "string",
+            "enum": ["verified", "user-provided", "assumed", "inferred", "missing", "unsafe", "stale", "contradictory"]
+          },
+          "freshness_timestamp": {"type": "string", "format": "date-time"},
+          "summary": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "priority_order": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Source IDs in descending priority order. When two sources conflict, the higher-priority source wins."
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_a", "source_b", "kind"],
+        "properties": {
+          "source_a": {"type": "string"},
+          "source_b": {"type": "string"},
+          "kind": {
+            "type": "string",
+            "enum": ["contradiction", "staleness", "scope_mismatch", "tonal_mismatch", "fact_drift"]
+          },
+          "resolution": {
+            "type": "string",
+            "enum": ["a_wins", "b_wins", "merge", "flag_for_user", "block"]
+          },
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "missing_sources": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Sources required by the genre pack or epistemic ledger but absent. Each entry is a description of what's missing."
+    },
+    "fabrication_risks": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Claims that would require fabrication if drafted without additional source."
+    }
+  },
+  "additionalProperties": false
+}

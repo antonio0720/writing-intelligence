@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/delivery_bundle.schema.json",
+  "title": "DeliveryBundleV3",
+  "description": "Final packaged output from Pass 10. Bundles final draft, scorecard, notes, format variants, and audit artifacts according to the Pass 0 intake contract.",
+  "type": "object",
+  "required": ["task_id", "arena", "assets"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "arena": {
+      "type": "string",
+      "enum": ["memo", "grant_response", "sermon", "caption", "article", "chapter", "email", "pitch_slide", "youtube_script", "newsletter", "government_brief", "sop", "speech", "landing_page", "linkedin_post", "twitter_thread", "instagram_caption", "press_release", "case_study", "blog_post"]
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["mode", "content"],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["clean", "annotated", "redline", "scorecard", "violations", "next-pass", "scene-audit", "epistemic-ledger", "voice-drift-report", "benchmark-result"]
+          },
+          "content": {"type": "string"},
+          "format": {
+            "type": "string",
+            "enum": ["markdown", "plain_text", "html", "json", "yaml"],
+            "default": "markdown"
+          },
+          "word_count": {"type": "integer"},
+          "char_count": {"type": "integer"}
+        }
+      }
+    },
+    "channel_constraints": {
+      "type": "object",
+      "properties": {
+        "char_max": {"type": "integer"},
+        "hashtag_max": {"type": "integer"},
+        "headline_variants_required": {"type": "boolean"},
+        "cta_required": {"type": "boolean"},
+        "readability_level": {"type": "string"}
+      }
+    },
+    "constraints_satisfied": {
+      "type": "boolean",
+      "description": "True only if every channel constraint and Pass 0 contract requirement was met."
+    },
+    "scorecard_summary": {
+      "type": "object",
+      "properties": {
+        "prose_quality": {"type": "number"},
+        "chapter_construction": {"type": "number"},
+        "dialogue": {"type": "number"},
+        "epistemic_integrity": {"type": "number"},
+        "arena_fit": {"type": "number"},
+        "v3_composite": {"type": "number"}
+      }
+    },
+    "delivery_decision": {
+      "type": "string",
+      "enum": ["release", "hold_for_review", "block"]
+    },
+    "blocking_reasons": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/epistemic_ledger.schema.json",
+  "title": "EpistemicLedgerV3",
+  "description": "Claim classification with source status. Produced by Pass 5 (Evidence & Epistemic Ledger). Mandatory for high-stakes domains: academic, medical, legal, government, grant, financial. Hard-blocks fabrication.",
+  "type": "object",
+  "required": ["task_id", "claims"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "text", "class", "source_status"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "text": {"type": "string", "description": "The exact claim sentence as it appears in the draft."},
+          "location": {
+            "type": "object",
+            "properties": {
+              "paragraph": {"type": "integer"},
+              "sentence": {"type": "integer"}
+            }
+          },
+          "class": {
+            "type": "string",
+            "enum": ["observed_fact", "sourced_fact", "inference", "synthesis", "recommendation", "rhetoric"]
+          },
+          "source_status": {
+            "type": "string",
+            "enum": ["verified", "user-provided", "assumed", "inferred", "missing", "unsafe"]
+          },
+          "sources": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Source IDs from the corpus map."
+          },
+          "premises": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "For inferences and synthesis — the claim IDs they derive from."
+          },
+          "universal_quantifier_flag": {"type": "boolean", "description": "True if the claim uses all/every/never/always."},
+          "inflated_verb_flag": {"type": "boolean", "description": "True if the claim uses revolutionize/transform/redefine/etc."},
+          "fabrication_risk": {
+            "type": "string",
+            "enum": ["none", "low", "medium", "high", "blocked"]
+          },
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total_claims": {"type": "integer"},
+        "verified_pct": {"type": "number"},
+        "sourced_pct": {"type": "number"},
+        "inference_pct": {"type": "number"},
+        "rhetoric_pct": {"type": "number"},
+        "missing_source_count": {"type": "integer"},
+        "unsafe_count": {"type": "integer"},
+        "fabrication_blocks": {"type": "integer"}
+      }
+    },
+    "delivery_block": {
+      "type": "boolean",
+      "description": "If true, the ledger has detected an unsafe claim and Pass 10 must not produce a final delivery bundle until resolved."
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim_id": {"type": "string"},
+          "action": {
+            "type": "string",
+            "enum": ["cite_added", "claim_softened", "claim_removed", "claim_qualified", "user_clarification_required"]
+          },
+          "rationale": {"type": "string"}
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
