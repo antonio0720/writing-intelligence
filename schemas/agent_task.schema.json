@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/agent_task.schema.json",
+  "title": "AgentTaskV3",
+  "description": "Multi-agent orchestration unit. Each agent on the Writing Board receives an AgentTask and emits an artifact validating against the corresponding schema.",
+  "type": "object",
+  "required": ["task_id", "agent_id", "input_refs", "expected_artifact"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "agent_id": {
+      "type": "string",
+      "enum": ["intake_architect", "corpus_auditor", "voice_fingerprinter", "genre_marshal", "structure_engineer", "evidence_prosecutor", "sentence_surgeon", "dialogue_commander", "narrative_architect", "stress_tester", "scorekeeper", "delivery_packager"]
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Agent IDs whose artifacts this agent requires before running."
+    },
+    "input_refs": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "URIs or artifact IDs the agent consumes."
+    },
+    "expected_artifact": {
+      "type": "string",
+      "enum": ["intake_contract", "corpus_map", "voice_fingerprint", "genre_stack", "architecture_graph", "epistemic_ledger", "prose_rewrite_log", "storyworld_memory", "stress_battery_report", "scorecard", "delivery_bundle"]
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "timeout_ms": {"type": "integer"},
+    "priority": {
+      "type": "string",
+      "enum": ["low", "normal", "high", "critical"],
+      "default": "normal"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "completed", "failed", "blocked"]
+    },
+    "result_ref": {"type": "string", "description": "URI or artifact ID of the produced artifact."},
+    "error": {"type": "string"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/architecture_graph.schema.json",
+  "title": "ArchitectureGraphV3",
+  "description": "Explicit graph for sections, paragraphs, claims, scene beats, dialogue exchanges, and proof points. Produced by Pass 4 (Architecture Compile). Replaces loose structural advice with auditable nodes and edges.",
+  "type": "object",
+  "required": ["task_id", "graph_type", "nodes", "edges"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "graph_type": {
+      "type": "string",
+      "enum": ["section", "argument", "scene", "chapter", "series"]
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["node_id", "type", "label"],
+        "properties": {
+          "node_id": {"type": "string"},
+          "type": {
+            "type": "string",
+            "enum": ["section", "paragraph", "claim", "premise", "evidence", "scene_beat", "dialogue_exchange", "proof_point", "image", "callback", "plant", "payoff", "transition", "opening", "closing"]
+          },
+          "label": {"type": "string"},
+          "purpose": {
+            "type": "string",
+            "enum": ["define", "prove", "contrast", "narrate", "warn", "persuade", "operationalize", "close", "escalate", "resolve", "reveal", "foreshadow", "pay_off", "interrogate", "comfort"]
+          },
+          "weight": {"type": "number"},
+          "word_count": {"type": "integer"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "relation"],
+        "properties": {
+          "from": {"type": "string"},
+          "to": {"type": "string"},
+          "relation": {
+            "type": "string",
+            "enum": ["supports", "contrasts", "escalates", "resolves", "foreshadows", "pays_off", "transitions_to", "depends_on", "rebuts", "complicates"]
+          },
+          "strength": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "properties": {
+        "orphan_nodes": {"type": "array", "items": {"type": "string"}},
+        "unsupported_claims": {"type": "array", "items": {"type": "string"}},
+        "dead_scenes": {"type": "array", "items": {"type": "string"}},
+        "repeated_beats": {"type": "array", "items": {"type": "string"}},
+        "unpaid_plants": {"type": "array", "items": {"type": "string"}, "description": "Foreshadowing without payoff."},
+        "unplanted_payoffs": {"type": "array", "items": {"type": "string"}, "description": "Payoffs without setup."}
+      }
+    }
+  },
+  "additionalProperties": false
+}

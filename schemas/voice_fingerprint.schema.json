@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/voice_fingerprint.schema.json",
+  "title": "VoiceFingerprintV3",
+  "description": "Measurable authorial profile. Produced by the Voice Fingerprint Engine (Pass 7). Replaces qualitative voiceprints with structured measurements so drift can be detected, fidelity can be scored, and team voice can be enforced.",
+  "type": "object",
+  "required": ["voice_id", "metrics"],
+  "properties": {
+    "voice_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "author": {"type": "string", "description": "Antonio T. Smith Jr., team name, character name, etc."},
+    "baseline_corpus": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Source IDs of the samples used to compute this fingerprint. Minimum 3 samples, 500+ words each."
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["avg_sentence_length", "sentence_length_std", "vocab_tier"],
+      "properties": {
+        "avg_sentence_length": {"type": "number", "description": "Words per sentence."},
+        "sentence_length_std": {"type": "number", "description": "Standard deviation of sentence length."},
+        "avg_paragraph_length": {"type": "number"},
+        "paragraph_length_std": {"type": "number"},
+        "compression_ratio": {"type": "number", "description": "Fraction of words that survive ruthless edit."},
+        "abstraction_tolerance": {"type": "number", "description": "Fraction of sentences operating above the concrete plane."},
+        "metaphor_density": {"type": "number", "description": "Metaphors per 500 words."},
+        "question_frequency": {"type": "number", "description": "Questions per 500 words."},
+        "comma_density": {"type": "number"},
+        "vocab_tier": {
+          "type": "string",
+          "enum": ["plain", "educated", "scholarly", "rarefied", "mixed"]
+        },
+        "domain_vocab_per_500w": {"type": "number"},
+        "transition_top5": {
+          "type": "array",
+          "items": {"type": "string"},
+          "maxItems": 5
+        },
+        "opening_pattern_repertoire": {"type": "array", "items": {"type": "string"}},
+        "closing_pattern_repertoire": {"type": "array", "items": {"type": "string"}},
+        "dominant_syntactic_structures": {"type": "array", "items": {"type": "string"}},
+        "authority_posture": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Warmth (0) to Dominance (100) dial position."
+        }
+      }
+    },
+    "team_voice": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, this fingerprint represents a team or brand voice and may be applied to multiple authors."
+    },
+    "drift_baseline_id": {
+      "type": "string",
+      "description": "Reference fingerprint ID against which drift is measured."
+    },
+    "drift_report": {
+      "type": "object",
+      "properties": {
+        "deltas": {
+          "type": "object",
+          "additionalProperties": {"type": "number"},
+          "description": "Per-metric deltas between current fingerprint and baseline."
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["closer_to_baseline", "further_from_baseline", "stable"]
+        },
+        "explanation": {"type": "string"}
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/benchmark_result.schema.json",
+  "title": "BenchmarkResultV3",
+  "description": "Regression and quality delta tracking. Produced by Pass 11 against the benchmark manifest. A release cannot ship until aggregate results pass the gates.",
+  "type": "object",
+  "required": ["case_id", "v3_score", "decision"],
+  "properties": {
+    "case_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "category": {
+      "type": "string",
+      "enum": ["ai_slop_rewrite", "business_strategy_memo", "founder_manifesto", "investor_update", "sales_email", "sermon_excerpt", "academic_paragraph", "grant_narrative", "government_brief", "fiction_scene", "dialogue_scene", "longform_continuity_audit"]
+    },
+    "v2_baseline_score": {"type": "number"},
+    "v3_score": {"type": "number"},
+    "delta": {"type": "number"},
+    "failure_modes_detected": {"type": "array", "items": {"type": "string"}},
+    "failure_modes_expected": {"type": "array", "items": {"type": "string"}},
+    "detection_recall": {"type": "number", "minimum": 0, "maximum": 1},
+    "score_range_expected": {
+      "type": "object",
+      "properties": {
+        "min": {"type": "number"},
+        "max": {"type": "number"}
+      }
+    },
+    "score_within_range": {"type": "boolean"},
+    "regression_hazards_observed": {"type": "array", "items": {"type": "string"}},
+    "decision": {
+      "type": "string",
+      "enum": ["PASS", "CONDITIONAL_PASS", "FAIL"]
+    },
+    "rationale": {"type": "string"},
+    "run_id": {"type": "string"},
+    "ran_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

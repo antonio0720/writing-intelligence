@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/intake_contract.schema.json",
+  "title": "IntakeContractV3",
+  "description": "Governed task object produced by Pass 0 of the Writing Intelligence v3.0 kernel. Locks task, source, constraints, audience, voice, genre, and output mode before any writing begins.",
+  "type": "object",
+  "required": ["task_id", "mode", "intent", "audience", "constraints", "source_policy", "success_condition"],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for this task. Convention: wi_v3_YYYY_NNNNNN"
+    },
+    "version": {
+      "type": "string",
+      "const": "3.0.0"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["draft", "rewrite", "score", "redline", "compress", "expand", "audit", "convert", "certify"]
+    },
+    "intent": {
+      "type": "string",
+      "enum": ["inform", "convert", "warn", "teach", "dignify", "dominate", "comfort", "reveal", "mobilize", "persuade", "entertain", "defend", "terrify", "disorient"]
+    },
+    "audience": {
+      "type": "string",
+      "description": "Free-form description, or a known audience archetype identifier."
+    },
+    "voice": {
+      "type": "string",
+      "description": "Voiceprint identifier from references/voiceprints/, or 'custom' with fingerprint reference."
+    },
+    "genre_stack": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1,
+      "description": "Active genre pack identifiers. Multiple allowed — resolved by the Genre Stack Engine."
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "word_count_min": {"type": "integer", "minimum": 0},
+        "word_count_max": {"type": "integer", "minimum": 0},
+        "preserve_user_claims": {"type": "boolean"},
+        "allow_new_claims": {"type": "boolean"},
+        "citations_required": {"type": "boolean"},
+        "forbidden_changes": {"type": "array", "items": {"type": "string"}},
+        "output_mode": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["clean", "annotated", "redline", "scorecard", "violations", "next-pass", "scene-audit", "epistemic-ledger", "delivery-bundle", "voice-drift-report", "benchmark-result"]
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "source_policy": {
+      "type": "object",
+      "properties": {
+        "user_text_priority": {
+          "type": "string",
+          "enum": ["highest", "high", "normal", "low", "ignored"]
+        },
+        "memory_allowed": {"type": "boolean"},
+        "web_required": {"type": "boolean"},
+        "citations_required": {"type": "boolean"},
+        "fabrication_tolerance": {
+          "type": "string",
+          "enum": ["zero", "flag_only"]
+        }
+      },
+      "required": ["fabrication_tolerance"]
+    },
+    "arena": {
+      "type": "string",
+      "description": "Target delivery arena: memo, grant, sermon, caption, article, chapter, email, pitch_slide, youtube_script, newsletter, government_brief, sop, speech, landing_page."
+    },
+    "high_stakes": {
+      "type": "boolean",
+      "description": "If true, Pass 5 (Epistemic Ledger) is mandatory and cannot be skipped."
+    },
+    "success_condition": {
+      "type": "string",
+      "description": "One sentence describing what 'worked' looks like for this task."
+    },
+    "ambiguity_flags": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Items the Intake Architect could not resolve and should clarify with the user."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

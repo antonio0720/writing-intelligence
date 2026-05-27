@@ -1,0 +1,74 @@
+---
+manifest_version: "3.0.0"
+total_cases: 60
+categories: 12
+release_target: "3.0.0"
+
+gates:
+  score_improvement:
+    pct_cases_must_improve: 70
+    min_points: 5
+  regression:
+    max_drop_without_reason: 3
+  evidence_safety:
+    fabrication_trap_recall: 100
+  voice_preservation:
+    drift_direction_recall: 80
+  genre_collision:
+    declared_stack_required: true
+  narrative_audit:
+    detects_dead_props: true
+    detects_flat_setting: true
+    detects_missing_payoff: true
+  output_packaging:
+    delivery_bundle_validates: true
+
+categories:
+  - id: ai_slop_rewrite
+    cases: 5
+    file: cases/ai_slop_rewrite.md
+    focus: "Generic AI prose → authored prose"
+  - id: business_strategy_memo
+    cases: 5
+    file: cases/business_strategy_memo.md
+    focus: "Strategic memo with BLUF + evidence"
+  - id: founder_manifesto
+    cases: 5
+    file: cases/founder_manifesto.md
+    focus: "Vision-dense, voice-anchored manifesto"
+  - id: investor_update
+    cases: 5
+    file: cases/investor_update.md
+    focus: "Investor precision voice, no inflated verbs"
+  - id: sales_email
+    cases: 5
+    file: cases/sales_email.md
+    focus: "Conversion + trust preservation"
+  - id: sermon_excerpt
+    cases: 5
+    file: cases/sermon_excerpt.md
+    focus: "Cadence, dignity, theological care"
+  - id: academic_paragraph
+    cases: 5
+    file: cases/academic_paragraph.md
+    focus: "Claim-evidence binding, citation discipline"
+  - id: grant_narrative
+    cases: 5
+    file: cases/grant_narrative.md
+    focus: "Funder fit, logic model, compliance"
+  - id: government_brief
+    cases: 5
+    file: cases/government_brief.md
+    focus: "BLUF, plain language, agency calibration"
+  - id: fiction_scene
+    cases: 5
+    file: cases/fiction_scene.md
+    focus: "Setting as force, props as weapons, fatal detail"
+  - id: dialogue_scene
+    cases: 5
+    file: cases/dialogue_scene.md
+    focus: "Voice distinction, subtext, tension elements"
+  - id: longform_continuity_audit
+    cases: 5
+    file: cases/longform_continuity_audit.md
+    focus: "Series arc, foreshadowing ledger, voice fingerprint stability"

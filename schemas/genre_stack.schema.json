@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/genre_stack.schema.json",
+  "title": "GenreStackV3",
+  "description": "Active genre packs and their weights for a v3.0 compilation. Produced by the Genre Stack Engine. Allows multiple packs to operate simultaneously (e.g., sermon + grant + plain-language government) with explicit conflict resolution.",
+  "type": "object",
+  "required": ["task_id", "stack"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "version": {"type": "string", "const": "3.0.0"},
+    "stack": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pack_id", "weight"],
+        "properties": {
+          "pack_id": {"type": "string", "description": "Genre pack identifier, e.g. 'grant_nofo', 'sermon', 'small_business_operator'."},
+          "weight": {"type": "number", "minimum": 0, "maximum": 1, "description": "Relative weight. Weights across the stack should sum to 1.0."},
+          "role": {
+            "type": "string",
+            "enum": ["primary", "secondary", "modulator"],
+            "description": "Primary owns structural defaults. Secondary refines. Modulator only adjusts tone/cadence."
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "collision_resolutions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dimension", "winner"],
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "enum": ["evidence_discipline", "cadence", "compression", "warmth", "persuasion", "compliance", "formality", "narrative_distance"]
+          },
+          "winner": {"type": "string", "description": "Pack ID that wins this dimension."},
+          "rationale": {"type": "string"}
+        }
+      }
+    },
+    "auto_detected": {
+      "type": "boolean",
+      "description": "Whether this stack was inferred by the Genre Marshal vs. specified by user."
+    },
+    "user_override": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

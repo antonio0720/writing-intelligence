@@ -1,143 +1,107 @@
-# Writing Intelligence — Cheatsheet
+# Writing Intelligence v3.0 — Cheatsheet
 
-**The one-page reference. Print it. Pin it. Share it.**
-
-Created by Antonio T. Smith Jr. / Density6 LLC
+One-page quick reference. For depth see `SKILL.md` and `USER_GUIDE.md`.
 
 ---
 
-## The 6-Pass Pipeline
+## The 11-Pass Kernel
 
-| Pass | Name | One-Line Job |
+| Pass | Name | Artifact |
 |---|---|---|
-| 0 | Mission Lock | What are we writing, for whom, in what voice? |
-| 1 | Diagnostic Scan | What's broken? AI residue, weak arguments, flat rhythm |
-| 2 | Structural Rewrite | Fix section order, paragraph sequence, thesis placement |
-| 3 | Sentence Surgery | Anti-slop cleanup with hard/soft/earned tiers |
-| 4 | Voice Restoration | Reinject personality so cleanup doesn't flatten |
-| 5 | Stress Test | What would a skeptic attack? What feels generic? |
+| 0 | Intake Contract | `IntakeContractV3` |
+| 1 | Mission Lock | `MissionLockV3` |
+| 2 | Corpus & Context Ingestion | `CorpusMapV3` |
+| 3 | Diagnostic Scan | `DiagnosticReportV3` |
+| 4 | Architecture Compile | `ArchitecturePlanV3` |
+| 5 | Evidence & Epistemic Ledger | `EpistemicLedgerV3` |
+| 6 | Sentence Surgery | `SentenceSurgeryLogV3` |
+| 7 | Voice Restoration | `VoiceMatchReportV3` |
+| 8 | Genre & Arena Alignment | `ArenaAlignmentV3` |
+| 9 | Adversarial Stress Battery | `StressBatteryV3` |
+| 10 | Score & Delivery Packaging | `DeliveryBundleV3` |
+| 11 | Memory & Benchmark Update | `MemoryBenchmarkUpdateV3` |
 
 ---
 
-## Voices (Use by Name)
+## The 12 Engines
 
-| Voice | Sounds Like |
-|---|---|
-| `sovereign commander` | Cold, precise, declarative. Zero filler. |
-| `academic rigorous` | Evidence-first, qualified, citation-dense |
-| `casual sharp` | Smart friend over coffee. No hand-holding. |
-| `literary recursive` | Layered, image-driven, subtext-heavy |
-| `sermon black church` | Cadence-built, dignified, prophetic |
-| `investor precision` | Numbers only. No adjectives. Risk-aware. |
-| `founder manifesto` | Hot conviction. Cold execution. Future-claiming. |
-| `custom` | Built from your writing samples (3+ samples, 500+ words each) |
+Intake Contract · Corpus Governance · Voice Fingerprint · Genre Stack · Architecture Graph · Epistemic Ledger · Prose Compiler · Narrative Intelligence · Arena Delivery · Benchmark & Regression · Agent Orchestration · Certification & Governance
 
 ---
 
-## Genres (Use by Name)
+## The 12 Specialist Agents
 
-| Genre | Optimized For |
-|---|---|
-| `academic` | Rubric, citations, claim-evidence binding |
-| `strategy` | SCIR structure, owners, timelines, risk |
-| `fiction` | Scene, dialogue, show-don't-tell |
-| `sales` | Hook → Story → Offer → Proof → Close |
-| `email` | Compression, action clarity, under 100 words |
-| `speech` | Landing lines, applause architecture |
-| `sermon` | Cadence arc, scripture, testimony |
-| `pitch deck` | 12 slides, data density, clear ask |
-| `legal positioning` | IRAC, statutory precision |
-| `cinematic narration` | Shot-based prose, pacing |
-| `dialogue` | Voice distinction, subtext |
-| `government brief` | BLUF, plain language, fiscal refs |
-| `medical writing` | IMRAD, evidence hierarchy |
-| `patent claims` | Claim structure, antecedent basis |
+Intake Architect · Corpus Auditor · Voice Fingerprinter · Genre Marshal · Structure Engineer · Evidence Prosecutor · Sentence Surgeon · Dialogue Commander · Narrative Architect · Stress Tester · Scorekeeper · Delivery Packager
 
 ---
 
-## Rewrite Operators
+## 24 Rewrite Operators
 
-| Command | What It Does |
-|---|---|
-| `compress(N%)` | Cut N% of words, keep all meaning |
-| `raise_intelligence` | Sharper ideas, not bigger words |
-| `add_specificity` | Names, numbers, examples — not abstraction |
-| `abstract_to_scene` | Convert concept to grounded moment |
-| `sharpen_thesis` | Make the claim precise and falsifiable |
-| `strip_corporate` | Kill buzzwords, passive voice, committee prose |
-| `make_colder` | More analytical distance |
-| `make_warmer` | More empathy, less sentiment |
-| `make_executable` | Convert insight to action steps |
-| `genre_transfer(A, B)` | Rewrite from genre A to genre B |
-| `audience_shift(A, B)` | Adjust register for different reader |
-| `inject_variance` | Break sentence-length patterns |
-| `kill_padding` | Delete every sentence that doesn't earn its place |
-| `strengthen_closing` | Rewrite the ending for maximum impact |
+`compress(N%)` · `raise_intelligence` · `add_specificity` · `abstract_to_scene` · `sharpen_thesis` · `strip_corporate` · `make_colder` · `make_warmer` · `make_executable` · `genre_transfer` · `audience_shift` · `inject_variance` · `kill_padding` · `strengthen_closing` · `scene_audit` · `role_audit` · `dialogue_stress_test` · `power_map` · `plant_audit` · **`intake_contract`** · **`corpus_audit`** · **`epistemic_classify`** · **`voice_fingerprint`** · **`arena_repackage`** · **`benchmark_run`**
 
 ---
 
-## Scoring (100 Points)
+## 11 Output Modes
 
-| Category | Pts | Quick Test |
-|---|---|---|
-| Clarity | 10 | Every sentence parses on first read? |
-| Specificity | 10 | Named actors, real numbers, concrete examples? |
-| Rhythm | 10 | Sentence lengths vary dramatically? |
-| Voice Integrity | 10 | Sounds like a person, not a model? |
-| Argument Strength | 15 | Logic holds under pressure? |
-| Evidence Discipline | 15 | Claims backed by real sources? |
-| Density | 10 | Zero filler? |
-| Audience Fit | 10 | Register matches the reader? |
-| Memorability | 5 | Any line worth quoting? |
-| Structural Control | 5 | Every section does its declared job? |
-
-**95+** Signature-grade · **90-94** Elite · **80-89** Strong · **70-79** Usable · **<70** Rewrite
+`clean` · `annotated` · `redline` · `scorecard` · `violations` · `next-pass` · `scene-audit` · **`epistemic-ledger`** · **`delivery-bundle`** · **`voice-drift-report`** · **`benchmark-result`**
 
 ---
 
-## Auto-Fail Conditions (Score Capped at 65)
+## 9 Scoring Systems + Composite
 
-- 3+ hard-ban phrases ("Here's the thing," "In today's," "At its core," etc.)
-- 5+ consecutive sentences with flat perplexity
-- Sentence-length std dev below 4 across 8+ sentences
-- Zero domain-specific vocabulary in 500+ words
-- Unsupported universal claim used as premise
-- Fabricated citation, statistic, or quote
-- Opening with a dictionary definition
-- Closing that only summarizes
+Prose Quality · Chapter Construction · Dialogue · Power Dynamics · Tension Mechanics · Thriller Scene · Transmedia · **Epistemic Integrity** · **Arena Fit** · **v3.0 Composite (1000)**
+
+Grade thresholds: <70 weak · 70-79 usable · 80-89 strong · 90-94 elite · 95-100 signature.
+Auto-fail caps at 65 for: 3+ hard-bans · perplexity flatness · zero domain vocab · unsupported universal · fabricated citation · missing epistemic ledger in high-stakes · channel constraint violation.
 
 ---
 
-## 10 Prompts That Cover 90% of Use Cases
+## 26 Genre Packs
 
-```
-1. Rewrite this to sound human: [paste]
-2. Score this on the 100-point scale: [paste]
-3. Write 500 words on [topic]. Voice: [voice]. Genre: [genre].
-4. Compress this by 40%: [paste]
-5. Fix the opening — hook me in one sentence: [paste]
-6. Fix the closing — make it unforgettable: [paste]
-7. Run the full diagnostic with AI detection risk: [paste]
-8. Strip all corporate voice from this: [paste]
-9. Transfer this from [genre A] to [genre B]: [paste]
-10. Build a custom voiceprint from these samples: [paste 3 samples]
-```
+**v2.0 preserved (16)**: strategy · fiction · sales · academic · speech · sermon · email · pitch_deck · legal_positioning · cinematic_narration · dialogue · government_brief · medical_writing · patent_claims · thriller_scene_architecture · transmedia_character
+
+**v3.0 new (11)**: grant_nofo · technical_documentation · journalism · resume_cover_letter · social_media · youtube_script · newsletter · real_estate · loan_officer · church_leadership · small_business_operator
 
 ---
 
-## Anti-Detection Quick Check
+## 8 Voiceprints + Fingerprint Engine
 
-Before submitting anything:
-- [ ] Sentence-length std dev ≥ 8?
-- [ ] No 3+ consecutive sentences within ±5 words of each other?
-- [ ] At least 1 sentence ≤ 6 words per 500 words?
-- [ ] At least 1 sentence ≥ 30 words per 500 words?
-- [ ] No transition word used more than twice in 1000 words?
-- [ ] At least 2 uncommon but precise words per 300 words?
-- [ ] Opening is NOT a context-setter?
-- [ ] Closing is NOT a summary?
-- [ ] Zero hard-ban phrases?
+sovereign_commander · literary_recursive · sermon_black_church · investor_precision · founder_manifesto · academic_rigorous · casual_sharp · **courageous_builder** · custom (build from 3+ samples)
+
+Use the Voice Fingerprint Engine for measurable profiles + drift detection.
 
 ---
 
-*[github.com/antonio0720/writing-intelligence](https://github.com/antonio0720/writing-intelligence) · MIT License · Free forever*
+## 13 Delivery Arenas
+
+memo · grant_response · sermon · caption · article · chapter · email · pitch_slide · youtube_script · newsletter · government_brief · sop · speech · landing_page · linkedin_post · twitter_thread · instagram_caption · press_release · case_study · blog_post
+
+---
+
+## 11 Machine-Readable Schemas
+
+`intake_contract` · `corpus_map` · `voice_fingerprint` · `genre_stack` · `architecture_graph` · `epistemic_ledger` · `prose_rewrite_log` · `storyworld_memory` · `delivery_bundle` · `benchmark_result` · `agent_task`
+
+---
+
+## Trigger Phrases (skill auto-activates)
+
+write · rewrite · edit · draft · revise · ghostwrite · compile · audit · score · grade · redline · voice fingerprint · voice drift · genre stack · epistemic ledger · claim classify · evidence prosecutor · architecture graph · argument graph · scene graph · storyworld memory · delivery bundle · arena delivery · regression · benchmark · prose · essay · chapter · sermon · speech · pitch · memo · narrative · dialogue · scene · thriller · suspense · tension · pacing · grant writing · NOFO · technical documentation · social media · YouTube script · newsletter · real estate · loan officer · church leadership · small business · resume · cover letter · journalism
+
+---
+
+## Quick Prompts
+
+**Full kernel rewrite**: *Run Writing Intelligence v3.0 on this. Apply [voice], [genre stack], emit clean + scorecard + epistemic ledger.*
+
+**Voice fingerprint build**: *Build a voice fingerprint from these 3 samples. Output the measurable profile.*
+
+**Cross-arena repackage**: *Repackage this approved memo for LinkedIn, Twitter thread, newsletter section, YouTube short script. Preserve voice fingerprint.*
+
+**Grant compliance**: *Apply grant_nofo + government_brief. Emit epistemic ledger and delivery bundle. High-stakes, citations required.*
+
+**Chapter audit**: *Run scene_audit + role_audit + dialogue_stress_test + power_map + plant_audit. Update storyworld memory.*
+
+---
+
+**Antonio T. Smith Jr. / Density6 LLC** · MIT · v3.0

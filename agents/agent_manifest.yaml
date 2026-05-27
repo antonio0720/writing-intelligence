@@ -1,0 +1,153 @@
+---
+manifest_version: "3.0.0"
+project: writing-intelligence
+project_version: "3.0.0"
+project_author: "Antonio T. Smith Jr. / Density6 LLC"
+project_license: MIT
+
+agents:
+  - id: intake_architect
+    title: Intake Architect
+    role: Translate request into governed contract
+    artifact: intake_contract
+    schema: schemas/intake_contract.schema.json
+    pass: 0
+    always_runs: true
+    depends_on: []
+    spec: agents/intake_architect.md
+
+  - id: corpus_auditor
+    title: Corpus Auditor
+    role: Map allowed sources and prevent blending
+    artifact: corpus_map
+    schema: schemas/corpus_map.schema.json
+    pass: 2
+    runs_when: "sources matter (default: true)"
+    depends_on: [intake_architect]
+    spec: agents/corpus_auditor.md
+
+  - id: voice_fingerprinter
+    title: Voice Fingerprinter
+    role: Identify voice target and measure drift
+    artifact: voice_fingerprint
+    schema: schemas/voice_fingerprint.schema.json
+    pass: 7
+    always_runs: true
+    depends_on: [intake_architect, sentence_surgeon]
+    spec: agents/voice_fingerprinter.md
+
+  - id: genre_marshal
+    title: Genre Marshal
+    role: Choose genre stack and weight conflicts
+    artifact: genre_stack
+    schema: schemas/genre_stack.schema.json
+    pass: 1
+    always_runs: true
+    depends_on: [intake_architect]
+    spec: agents/genre_marshal.md
+
+  - id: structure_engineer
+    title: Structure Engineer
+    role: Build section / scene / argument plan
+    artifact: architecture_graph
+    schema: schemas/architecture_graph.schema.json
+    pass: 4
+    always_runs: true
+    depends_on: [intake_architect, corpus_auditor, genre_marshal]
+    spec: agents/structure_engineer.md
+
+  - id: evidence_prosecutor
+    title: Evidence Prosecutor
+    role: Attack unsupported claims and enforce sources
+    artifact: epistemic_ledger
+    schema: schemas/epistemic_ledger.schema.json
+    pass: 5
+    always_runs_in:
+      - academic
+      - medical
+      - legal
+      - government
+      - grant
+      - financial
+      - high_stakes
+    depends_on: [corpus_auditor, structure_engineer]
+    spec: agents/evidence_prosecutor.md
+
+  - id: sentence_surgeon
+    title: Sentence Surgeon
+    role: Repair prose without flattening voice
+    artifact: prose_rewrite_log
+    schema: schemas/prose_rewrite_log.schema.json
+    pass: 6
+    always_runs: true
+    depends_on: [structure_engineer, evidence_prosecutor]
+    spec: agents/sentence_surgeon.md
+
+  - id: dialogue_commander
+    title: Dialogue Commander
+    role: Fix conversation, subtext, tension
+    artifact: dialogue_stress_report
+    schema: (embedded in stress_battery; see agent spec)
+    pass: 6
+    runs_when: "dialogue present in source"
+    depends_on: [structure_engineer]
+    spec: agents/dialogue_commander.md
+
+  - id: narrative_architect
+    title: Narrative Architect
+    role: Audit storyworld, chapter, arc, series
+    artifact: storyworld_memory
+    schema: schemas/storyworld_memory.schema.json
+    pass: 11
+    runs_when: "fiction / story / chapter / scene / lore / transmedia / screenplay"
+    depends_on: [structure_engineer, dialogue_commander]
+    spec: agents/narrative_architect.md
+
+  - id: stress_tester
+    title: Stress Tester
+    role: Adversarial battery (reader / editor / skeptic / detector)
+    artifact: stress_battery_report
+    schema: (embedded; see agent spec)
+    pass: 9
+    always_runs: true
+    depends_on: [sentence_surgeon, voice_fingerprinter]
+    spec: agents/stress_tester.md
+
+  - id: scorekeeper
+    title: Scorekeeper
+    role: Score all applicable rubrics
+    artifact: scorecard
+    schema: (embedded; see references/diagnostics/scorecard.md)
+    pass: 10
+    always_runs: true
+    depends_on: [stress_tester, evidence_prosecutor]
+    spec: agents/scorekeeper.md
+    cannot_override: [evidence_prosecutor.cap_rules]
+
+  - id: delivery_packager
+    title: Delivery Packager
+    role: Format final assets to arena spec
+    artifact: delivery_bundle
+    schema: schemas/delivery_bundle.schema.json
+    pass: 10
+    always_runs: true
+    depends_on: [scorekeeper]
+    spec: agents/delivery_packager.md
+    constraints:
+      - "Cannot invent content; formats approved content only"
+
+orchestration:
+  conflict_resolution:
+    user_constraint_vs_auto_genre: user_constraint
+    evidence_integrity_vs_persuasive_force: evidence_integrity
+    voice_fidelity_vs_factual_clarity:
+      high_stakes: factual_clarity
+      else: voice_fidelity
+    compression_vs_compliance: compliance
+    drama_vs_story_continuity: story_continuity
+    cta_force_vs_trust_preservation: trust_preservation
+  block_signals:
+    - "epistemic_ledger.delivery_block = true"
+    - "delivery_bundle.delivery_decision = block"
+    - "any source.status = unsafe"
+    - "fabrication_risk = blocked"
