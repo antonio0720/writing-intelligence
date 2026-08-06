@@ -1,3 +1,12 @@
 
 services/api/node_modules/
 services/api/*.log
+
+# build artifacts
+dist/
+
+# wi.py working files
+*.original-*
+*.claims.json
+__pycache__/
+*.pyc

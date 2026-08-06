@@ -7,6 +7,24 @@ kernel with **zero LLM and zero ML dependencies** (Law 10) — pure rules + scor
 - **Stack:** Node 20+, TypeScript, Express, ESM. Runs via **tsx** (no build step). Tests via **vitest**.
 - **Author:** Antonio T. Smith Jr. / Density6 LLC · MIT.
 
+## Scope: this service is the v3 craft kernel, not the v4 accountability tier
+
+The repository is at **v4.0.0**. This service is not, and the gap is deliberate.
+
+It implements the **craft** half — the eleven passes, scoring, voice metrics, banned-phrase
+detection, arena repackaging. It does **not** expose the v4 accountability layer: no span
+lock, no claim ledger, no source-injection scanning, no `RELEASE / HOLD / BLOCK` gate.
+
+That tier has exactly one implementation — [`scripts/wi.py`](../../scripts/wi.py) — and it
+stays that way on purpose. Two implementations of a verification rule drift, and the one that
+drifts is invisible, because both look correct right up until they disagree about something
+that matters. A second copy here would be the first thing to rot and the last thing anyone
+would think to check.
+
+If you need v4 checks in a pipeline, shell out to `wi.py`. It is stdlib-only, has no
+dependencies, and returns exit codes 0/1/2 for RELEASE/HOLD/BLOCK — see
+[`docs/INSTALL.md`](../../docs/INSTALL.md).
+
 ## Run
 
 ```bash

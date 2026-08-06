@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The deterministic tier is the part of v4 that does not require trusting
+  # anything. It has to work on the oldest Python we claim to support, on the
+  # platforms people actually use, with no dependencies installed.
+  verifier:
+    name: verifier · py${{ matrix.python }} · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # 3.8 is the documented floor. It is tested so the claim is backed.
+          - { os: ubuntu-22.04, python: "3.8" }
+          - { os: ubuntu-latest, python: "3.11" }
+          - { os: ubuntu-latest, python: "3.13" }
+          - { os: macos-latest, python: "3.12" }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: No dependencies are installed on purpose
+        run: python3 -c "import sys; print(sys.version)"
+
+      - name: CLI loads
+        run: python3 scripts/wi.py --version
+
+      # test_wi.sh exits non-zero on failure, so this step gates on its own.
+      # The PASS count is asserted separately: an exit code cannot tell you the
+      # script stopped early and skipped checks it never ran.
+      - name: Regression suite (adversarial fixture)
+        run: bash tests/v4/test_wi.sh | tee /tmp/out.txt
+
+      - name: All three checks actually ran
+        run: |
+          n=$(grep -c '^PASS' /tmp/out.txt || true)
+          test "$n" -eq 3 \
+            || { echo "::error::expected 3 PASS lines, got $n"; cat /tmp/out.txt; exit 1; }
+
+      - name: Gate exit codes are wired
+        run: |
+          set +e
+          python3 scripts/wi.py extract-claims tests/v4/narrative.md --out /tmp/c.json >/dev/null
+          python3 scripts/wi.py verify /tmp/c.json tests/v4/sources/ >/dev/null
+          python3 scripts/wi.py gate /tmp/c.json --mode strict --exit-code >/dev/null
+          code=$?
+          set -e
+          test "$code" -eq 2 || { echo "::error::expected BLOCK (exit 2), got $code"; exit 1; }
+          echo "gate returned BLOCK (exit 2) as expected"
+
+  docs:
+    name: docs · links resolve
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Every relative link resolves
+        run: python3 scripts/check-links.py
+
+  bundle:
+    name: bundle · build and verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build the skill bundle
+        run: bash scripts/build-skill.sh --no-root
+
+      - name: Reproducible build
+        run: |
+          A=$(sha256sum dist/writing-intelligence.skill | cut -d' ' -f1)
+          rm -rf dist
+          bash scripts/build-skill.sh --no-root >/dev/null
+          B=$(sha256sum dist/writing-intelligence.skill | cut -d' ' -f1)
+          echo "run 1: $A"
+          echo "run 2: $B"
+          test "$A" = "$B" \
+            || { echo "::error::build is not reproducible; the published checksum would be meaningless"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: writing-intelligence-skill
+          path: |
+            dist/writing-intelligence.skill
+            dist/writing-intelligence.skill.sha256
+          if-no-files-found: error
+
+  api:
+    name: api · node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "22"]
+    defaults:
+      run:
+        working-directory: services/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: services/api/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test

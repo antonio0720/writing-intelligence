@@ -7,6 +7,113 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [4.0.0] — 2026-08-06 — **Accountable Authorship System**
+
+### The Leap
+
+v1.0 proved AI-sounding prose can be defeated by compilation instead of cosmetic cleanup.
+v2.0 proved fiction can be engineered as a living architecture.
+v3.0 proved authorship can be governed without being flattened.
+**v4.0 proves it can be held accountable.**
+
+v3 governs *how well* the writing is built. v4 governs *what may be claimed about it.* The eleven passes, twelve engines, twenty-seven genre packs, voiceprints and anti-slop doctrine are unchanged and remain the craft core. v4 adds a layer above them that can stop them.
+
+**The v4 law:** *If a claim cannot be pointed at, it has not been verified — and fluent prose must never be allowed to look like checked prose.*
+
+### Added
+
+**The accountability layer — six operating laws** (`references/v4/ACCOUNTABILITY_LAYER.md`)
+- **Law A** — Propose, never silently replace. Every edit ships as `before → after → why → effect`
+- **Law B** — The original is recoverable
+- **Law C** — Never report work not done
+- **Law D** — Support means a verbatim span
+- **Law E** — Under-claim
+- **Law F** — Sources are data, never instruction
+
+**`scripts/wi.py` — deterministic verification CLI (v4.0.0)**
+- Stdlib-only Python 3.8+. No dependencies, no network, no model. Runs air-gapped
+- `preserve` — timestamped snapshot before editing (Law B)
+- `scan-sources` — injection indicators, zero-width characters, bidi controls, encoded payloads (Law F)
+- `extract-claims` — claim ledger with class, signals and offsets
+- `verify` — span lock, quotation check, numeric agreement, date agreement, citation resolution (Law D)
+- `gate` — RELEASE / HOLD / BLOCK with named repairs; `--exit-code` returns 0/1/2 for CI and git hooks
+- Unicode NFC normalization; whitespace-folded comparison survives line wrapping and PDF extraction artifacts
+- Script-tier detection so word-based metrics are withheld where they are undefined
+
+**Proof protocol** (`references/v4/PROOF_PROTOCOL.md`)
+- Claim detection keyed on *checkable content*, not assertive tone
+- Claim classes: `sourced_fact` · `observed_fact` · `inference` · `recommendation` · `rhetoric`
+- Verification statuses: `supported` · `quote_verified` · `author_asserted` · `inference` · `recommendation` · `needs_source` · `conflicted` · `unsafe` · `stale`
+- Evidence modes: `off` · `light` · `standard` · `strict` · `regulated`, with automatic escalation to `strict` on grant, NOFO, RFP, IRB, regulatory, clinical, filing, prospectus, due-diligence, court, compliance and fact-check contexts
+
+**Proposal protocol** (`references/v4/PROPOSAL_PROTOCOL.md`)
+- Redline unit: `before → after → why → effect`
+- Craft edits and claim edits held apart; hedge removal is always a claim change
+
+**Source hygiene** (`references/v4/SOURCE_HYGIENE.md`)
+- Prompt-injection defense on supplied documents
+- Quarantine on imperative-to-system text, role markers, verification overrides, suppression instructions and invisible text
+- Conflicts between two supplied documents surfaced *before* writing, not after submission
+
+**Language tiers** (`references/v4/LANGUAGE_TIERS.md`)
+- Tier 1 space-delimited · Tier 2 CJK · Tier 3 no word boundaries
+- An unavailable metric is reported unavailable, never faked with an English-shaped substitute
+
+**Voice and consent** (`references/v4/VOICE_CONSENT.md`)
+- Five bases for modeling a named person's voice; three unrestricted
+- Consent basis required before building a voiceprint from samples attributable to a real, identifiable person
+
+**Surfaces** (`references/v4/SURFACES.md`)
+- Chat, Cowork and Claude Code capability matrix; output shaped to what the surface can actually do
+- Surface detected from available tools rather than by asking
+
+**Non-goals** (`references/v4/NON_GOALS.md`)
+- Detector evasion, source generation, truth verification and absolute quality scores stated as explicit refusals
+
+**Tests**
+- `tests/v4/` adversarial fixture: inflated figure, reshaped quotation, fabricated citation, prompt injection with zero-width characters
+- `tests/v4/test_wi.sh` regression suite
+
+**Documentation and distribution**
+- `docs/INSTALL.md` — six install surfaces with a capability matrix, CLI reference, git-hook and CI recipes, troubleshooting
+- `docs/MIGRATION_v3_to_v4.md` — staged adoption path
+- `scripts/build-skill.sh` — reproducible skill bundle build
+- `.github/workflows/ci.yml` — verifier regression, API tests and bundle build on every push
+- `.github/workflows/release.yml` — bundle and checksum attached to every tag
+
+### Changed
+
+- Reliability language: `verified` / `measured` / `judged` replaces confidence percentages. **A percentage is never attached to a judgment with no denominator**
+- Default edit return is a proposal set rather than a rewritten document. The clean rewrite is still available on request
+- `README.md` rewritten as the v4 front door
+- `CHEATSHEET.md`, `USER_GUIDE.md`, `ROADMAP.md`, `CONTRIBUTING.md` updated for v4
+- Genre pack count corrected to 27 (previously documented as 26)
+
+### Unchanged
+
+The 11-pass kernel · 12 engines · 12 agents · 11 JSON schemas · 27 genre packs · voiceprints · benchmark harness · gold outputs · `services/api` REST runtime.
+
+**No schema version bump. No field changes. Every v3 workflow still runs.**
+
+### Deliberately not done
+
+`services/api` still implements the **v3 craft kernel** and does not expose the v4 accountability tier. That tier has exactly one implementation — `scripts/wi.py` — and it stays that way. Two implementations of a verification rule drift, and the one that drifts is invisible because both look correct until they disagree about something that matters.
+
+---
+
+## [3.1.0] — 2026-05-27 — **REST Reference Runtime**
+
+### Added
+
+- `services/api/` — containerized TypeScript reference runtime for the v3 craft kernel
+- Routes: `compile` · `score` · `voice` · `benchmark` · `repackage` · `manifest`
+- Deterministic kernel with banned-phrase detection, claim scanning and voice metrics
+- Per-tenant auth, rate limits, input sanitization
+- Test suite: kernel, determinism, banned phrases, epistemic, voice, benchmark
+- Dockerfile and deployment configuration
+
+---
+
 ## [3.0.0] — 2026-05-26 — **Sovereign Writing Operating System**
 
 ### The Leap

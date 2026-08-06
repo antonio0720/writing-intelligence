@@ -1,12 +1,43 @@
-# Contributing to Writing Intelligence v3.0
+# Contributing to Writing Intelligence v4
 
 Welcome. Writing Intelligence is free and open under MIT. Contributions are how it stays alive and how it gets better than its author alone could make it.
 
-This document is the v3.0 contribution standard. It is stricter than v2.0 because v3.0 is infrastructure now, not only a skill.
+**The v3 Law**: *If a rule cannot be applied, audited, scored, tested, or explained — it is not a rule yet.*
 
-**The v3.0 Law**: *If a rule cannot be applied, audited, scored, tested, or explained — it is not a v3.0 rule yet.*
+**The v4 Law**: *If a claim cannot be pointed at, it has not been verified — and fluent prose must never be allowed to look like checked prose.*
 
-Every contribution must satisfy this law.
+Every contribution must satisfy both.
+
+---
+
+## Before you open a PR
+
+```bash
+bash tests/v4/test_wi.sh          # verifier regression — must print 3 × PASS
+python3 scripts/check-links.py    # every relative link must resolve
+bash scripts/build-skill.sh --check
+cd services/api && npm ci && npm run typecheck && npm test
+```
+
+CI runs all of it on every push, across Python 3.8–3.13 on Linux and macOS, and on Node 20 and 22.
+
+---
+
+## Contributing to the v4 accountability layer
+
+This is the part of the project where a well-meant change does the most damage, so it carries extra rules.
+
+**A check must be able to fail.** If you add a check, add the input that breaks it and show the check reporting the failure. A guard that has only ever passed has not been shown to work — its green line is indistinguishable from a broken one. `tests/v4/test_wi.sh` exits non-zero and is proven able to: disable citation resolution in `wi.py` and it turns the gate from BLOCK to HOLD and says so.
+
+**Under-claim, always.** Wrongly `supported` is a catastrophe; wrongly `needs_source` is a nuisance. Any change that moves a claim toward `supported` needs a stronger argument than one that moves it away.
+
+**`scripts/wi.py` stays stdlib-only.** No pip installs, no network, no model calls. It must run air-gapped on Python 3.8. The whole value of the deterministic tier is that it requires trusting nothing — a single dependency ends that.
+
+**Never make the system able to invent a source.** This is not a tunable. See `references/v4/NON_GOALS.md`.
+
+**Do not add a second implementation of a verification rule.** If a check exists in `wi.py`, the REST service does not reimplement it — it shells out or does without. Two implementations drift and the drifting one is invisible.
+
+**Report what was not done.** If a check could not run, the output says so. Silence that reads as success is the failure mode this project exists to remove.
 
 ---
 
