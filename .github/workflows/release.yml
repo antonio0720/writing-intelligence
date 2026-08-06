@@ -64,7 +64,7 @@ jobs:
       - name: Verifier regression must pass
         run: bash tests/v4/test_wi.sh
 
-      - name: Every relative link resolves
+      - name: Every link resolves
         run: python3 scripts/check-links.py
 
       - name: Build the skill bundle
