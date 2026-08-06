@@ -29,7 +29,7 @@ curl -O https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/
 python3 wi.py --version
 ```
 
-Full matrix for all six surfaces: [`docs/INSTALL.md`](../docs/INSTALL.md)
+Full matrix for all six surfaces: [`docs/INSTALL.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/docs/INSTALL.md)
 
 ---
 
@@ -136,7 +136,7 @@ Building a voiceprint from a real, identifiable person now requires a stated bas
 
 The 11-pass kernel · 12 engines · 12 agents · 11 JSON schemas · 27 genre packs · voiceprints · benchmark harness · gold outputs · the REST runtime.
 
-**No schema version bump. No field changes. Every v3 workflow still runs.** See [`docs/MIGRATION_v3_to_v4.md`](../docs/MIGRATION_v3_to_v4.md) — the upgrade is `git pull`.
+**No schema version bump. No field changes. Every v3 workflow still runs.** See [`docs/MIGRATION_v3_to_v4.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/docs/MIGRATION_v3_to_v4.md) — the upgrade is `git pull`.
 
 ---
 
@@ -180,7 +180,7 @@ Every push runs this on Python 3.8, 3.11, 3.12 and 3.13, on Linux and macOS. The
 
 ## Full detail
 
-[`CHANGELOG.md`](../CHANGELOG.md) · [`README.md`](../README.md) · [`docs/INSTALL.md`](../docs/INSTALL.md) · [`CHEATSHEET.md`](../CHEATSHEET.md) · [`USER_GUIDE.md`](../USER_GUIDE.md)
+[`CHANGELOG.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/CHANGELOG.md) · [`README.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/README.md) · [`docs/INSTALL.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/docs/INSTALL.md) · [`CHEATSHEET.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/CHEATSHEET.md) · [`USER_GUIDE.md`](https://github.com/antonio0720/writing-intelligence/blob/v4.0.0/USER_GUIDE.md)
 
 ---
 
