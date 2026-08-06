@@ -99,6 +99,23 @@ jobs:
           test "$A" = "$B" \
             || { echo "::error::build is not reproducible; the published checksum would be meaningless"; exit 1; }
 
+      # README and docs/INSTALL.md tell people to download the committed bundle
+      # straight from `main`. That instruction is only safe while the committed
+      # bundle is the tree it claims to be. Without this, anyone who edits a
+      # reference doc and does not rebuild silently ships a stale skill to every
+      # Claude.ai and Cowork user — and nothing anywhere would say so, because a
+      # stale bundle installs exactly like a current one.
+      - name: Committed bundle matches the tree
+        run: |
+          A=$(sha256sum dist/writing-intelligence.skill | cut -d' ' -f1)
+          B=$(sha256sum writing-intelligence.skill      | cut -d' ' -f1)
+          echo "fresh build: $A"
+          echo "committed  : $B"
+          test "$A" = "$B" || {
+            echo "::error::writing-intelligence.skill is stale — run: bash scripts/build-skill.sh"
+            exit 1
+          }
+
       - uses: actions/upload-artifact@v4
         with:
           name: writing-intelligence-skill

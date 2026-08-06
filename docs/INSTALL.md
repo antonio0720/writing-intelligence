@@ -40,7 +40,16 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
 
 ## 2. Claude.ai and Cowork — as an uploaded skill
 
-1. Download **`writing-intelligence.skill`** from [Releases → latest](https://github.com/antonio0720/writing-intelligence/releases/latest).
+1. Download **`writing-intelligence.skill`**:
+
+   ```bash
+   curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence.skill
+   ```
+
+   This tracks `main`, so it always matches these instructions. CI rebuilds the bundle on every push and fails if it does not byte-match the committed one, so this file cannot quietly go stale.
+
+   Want a pinned version instead? Take it from [Releases](https://github.com/antonio0720/writing-intelligence/releases), where each bundle ships with a `.sha256` beside it. Note that `releases/latest` resolves to the newest **published release** — if a version has landed on `main` and has not been released yet, `latest` is behind it.
+
 2. In Claude: **Settings → Capabilities → Skills → Upload skill** (labelled **Settings → Skills** in some versions).
 3. Select the downloaded `.skill` file.
 

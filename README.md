@@ -139,7 +139,13 @@ Restart Claude Code. The skill triggers on any writing, editing, fact-checking o
 
 ### Claude.ai / Cowork — as an uploaded skill
 
-Download `writing-intelligence.skill` from [**Releases**](https://github.com/antonio0720/writing-intelligence/releases/latest) → **Settings → Capabilities → Skills → Upload skill**.
+Download the bundle, then **Settings → Capabilities → Skills → Upload skill**.
+
+```bash
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence.skill
+```
+
+That link tracks `main`, so it always matches the version of this README you are reading — CI fails if the committed bundle and a fresh build of the tree ever disagree. [**Releases**](https://github.com/antonio0720/writing-intelligence/releases) is where pinned versions live with their checksums; note that `releases/latest` returns the newest *published release*, which is not always the newest code.
 
 ### Claude Projects
 
