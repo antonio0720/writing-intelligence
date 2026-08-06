@@ -48,12 +48,17 @@ FENCE = re.compile(r"```.*?```", re.S)
 
 # Absolute links that point back at this repository. Anything else on the
 # internet is somebody else's to keep alive; these are ours.
-SELF = re.compile(
-    r"^https?://(?:"
+_SELF_PREFIX = (
+    r"https?://(?:"
     r"github\.com/antonio0720/writing-intelligence/(?:blob|tree|raw)/"
     r"|raw\.githubusercontent\.com/antonio0720/writing-intelligence/"
-    r")(?P<rest>.+)$"
+    r")"
 )
+
+SELF = re.compile(r"^" + _SELF_PREFIX + r"(?P<rest>.+)$")
+
+# The same thing unanchored, for finding self-URLs in prose and in commands.
+BARE_SELF_URL = re.compile(_SELF_PREFIX + r"[^\s)\"'`<>\]]+")
 
 
 def is_external(target):
@@ -106,8 +111,27 @@ def main(argv):
 
     for md in sorted(markdown_files()):
         files += 1
-        text = md.read_text(encoding="utf-8", errors="replace")
-        text = FENCE.sub("", text)
+        raw = md.read_text(encoding="utf-8", errors="replace")
+
+        # Self-URLs are checked in the RAW text, fences included. A fenced
+        # `curl -LO https://raw.githubusercontent.com/.../writing-intelligence.skill`
+        # is not an illustration — it is the install command for everyone who
+        # is not a developer, and a typo in that path breaks the only download
+        # path they have while the page still reads as correct.
+        seen = set()
+        for m in BARE_SELF_URL.finditer(raw):
+            url = m.group(0).rstrip(".,;:")
+            if url in seen:
+                continue
+            seen.add(url)
+            claimed = self_link_path(url)
+            if claimed is None:
+                continue
+            self_checked += 1
+            if not (REPO / claimed.split("#", 1)[0]).exists():
+                broken.append((md.relative_to(REPO), url))
+
+        text = FENCE.sub("", raw)
 
         for m in LINK.finditer(text):
             target = m.group(1).strip()
@@ -120,13 +144,8 @@ def main(argv):
             if not target:
                 continue
 
+            # Self-URLs were already covered by the raw-text pass above.
             if is_external(target):
-                claimed = self_link_path(target)
-                if claimed is None:
-                    continue
-                self_checked += 1
-                if not (REPO / claimed.split("#", 1)[0]).exists():
-                    broken.append((md.relative_to(REPO), target))
                 continue
 
             # Drop any anchor; we verify the file exists, not the heading.
