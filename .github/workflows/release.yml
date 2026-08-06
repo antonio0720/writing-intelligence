@@ -1,13 +1,36 @@
 name: Release
 
+# Two ways in, and they are not the same trust level.
+#
+#   push a tag        the tag already exists and somebody chose the commit
+#   workflow_dispatch the tag may not exist yet; this job creates it
+#
+# The dispatch path exists because tag creation is not always available to the
+# person cutting the release — a sandboxed agent, a machine without push rights
+# for refs/tags, a fork. A release workflow that can only be reached by pushing
+# a tag has a single point of failure: if that one mechanism is unavailable
+# there is no way to release at all.
+#
+# The dispatch path is not a looser path. It creates the tag only AFTER the
+# commit has passed the verifier, the link check and the version gate — so a
+# commit that fails its own release gate never gets stamped with a version
+# number. And if the tag already exists it must point at the commit we built,
+# or the job stops: publishing assets under a tag that names a different commit
+# is the one failure here that is undetectable afterwards, because the release
+# page looks completely normal.
+
 on:
   push:
     tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to build and publish (e.g. v4.0.0)"
+        description: "Tag to publish (e.g. v4.0.0). Created at `ref` if it does not exist."
         required: true
+      ref:
+        description: "Commit or branch to build and tag"
+        required: false
+        default: main
 
 permissions:
   contents: write
@@ -19,7 +42,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          # On dispatch this is the branch/sha being released. On a tag push
+          # `inputs.*` are empty and it falls through to the tag ref itself.
+          ref: ${{ github.event.inputs.ref || github.event.inputs.tag || github.ref }}
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
@@ -30,8 +55,9 @@ jobs:
         id: v
         run: |
           TAG="${{ github.event.inputs.tag || github.ref_name }}"
-          echo "tag=$TAG"                >> "$GITHUB_OUTPUT"
-          echo "version=${TAG#v}"        >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG"         >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       # A release whose verifier is broken is the worst artifact this project
       # could publish: it installs cleanly and quietly certifies nothing.
@@ -53,6 +79,39 @@ jobs:
             || { echo "::error::tag $WANT does not match wi.py $GOT"; exit 1; }
           grep -q "## \[$WANT\]" CHANGELOG.md \
             || { echo "::error::CHANGELOG.md has no entry for $WANT"; exit 1; }
+
+      # Runs after the gate on purpose: nothing gets tagged until it has been
+      # shown to survive its own checks.
+      - name: Tag exists, and points at this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -u
+          TAG="${{ steps.v.outputs.tag }}"
+          SHA="${{ steps.v.outputs.sha }}"
+
+          # ^{} dereferences an annotated tag to the commit it points at.
+          # A lightweight tag has no ^{} entry, hence the second lookup.
+          REMOTE=$(git ls-remote origin "refs/tags/$TAG^{}" | awk '{print $1}')
+          if [ -z "$REMOTE" ]; then
+            REMOTE=$(git ls-remote origin "refs/tags/$TAG" | awk '{print $1}')
+          fi
+
+          if [ -n "$REMOTE" ]; then
+            if [ "$REMOTE" != "$SHA" ]; then
+              echo "::error::$TAG already exists at $REMOTE but this build is $SHA."
+              echo "::error::Publishing would attach assets built from a different commit than the tag names."
+              exit 1
+            fi
+            echo "$TAG already exists at $SHA"
+            exit 0
+          fi
+
+          echo "creating $TAG at $SHA"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Writing Intelligence $TAG" "$SHA"
+          git push origin "refs/tags/$TAG"
 
       - name: Release notes
         id: notes
@@ -90,3 +149,13 @@ jobs:
           else
             gh release create "${ARGS[@]}"
           fi
+
+      - name: Summary
+        run: |
+          {
+            echo "### Writing Intelligence ${{ steps.v.outputs.tag }}"
+            echo
+            echo "- commit \`${{ steps.v.outputs.sha }}\`"
+            echo "- sha256 \`$(cut -d' ' -f1 dist/writing-intelligence.skill.sha256)\`"
+            echo "- $(stat -c%s dist/writing-intelligence.skill) bytes"
+          } >> "$GITHUB_STEP_SUMMARY"
