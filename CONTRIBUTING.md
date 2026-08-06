@@ -23,6 +23,27 @@ CI runs all of it on every push, across Python 3.8–3.13 on Linux and macOS, an
 
 ---
 
+## Cutting a release
+
+Releases are published by `.github/workflows/release.yml`, never by hand. There are two ways in:
+
+**Push a tag** — `git tag -a v4.1.0 -m … && git push origin v4.1.0`.
+
+**Or run the workflow** — *Actions → Release → Run workflow*, `tag: v4.1.0`, `ref: main`. This path creates the tag itself, which is the one to use when tag pushing is unavailable (a sandboxed runner, a machine without permission for `refs/tags`, a fork).
+
+Either way the job refuses to publish unless, in this order:
+
+1. `tests/v4/test_wi.sh` passes — a release whose verifier is broken installs cleanly and quietly certifies nothing, which is the worst artifact this project could ship;
+2. every link resolves;
+3. the bundle builds;
+4. the tag, `wi.py --version` and the `CHANGELOG.md` heading all agree.
+
+Only then is the tag created — a commit that fails its own release gate never gets stamped with a version number. And if the tag already exists it must point at the commit that was built, or the job stops: publishing assets under a tag naming a different commit is the one failure here nobody can see afterwards, because the release page looks entirely normal.
+
+Before tagging, write `release/RELEASE_NOTES_<tag>.md`; the workflow uses it as the release body. **Links in that file must be absolute**, pinned to the tag. A release body is not rendered from its own directory, so a relative `../docs/INSTALL.md` resolves to nothing on the page most people will ever read. `check-links.py` verifies absolute links that point back into this repository, so this is checked rather than trusted.
+
+---
+
 ## Contributing to the v4 accountability layer
 
 This is the part of the project where a well-meant change does the most damage, so it carries extra rules.
