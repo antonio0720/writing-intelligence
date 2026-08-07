@@ -147,7 +147,7 @@ Before a grant, filing, investor memo or published article:
 
 ```
 Rewrite this to sound like a real person wrote it. Run the full
-Writing Intelligence v3.0 kernel. Show me the clean version and
+Writing Intelligence kernel. Show me the clean version and
 a brief scorecard.
 
 [paste text]
@@ -166,8 +166,8 @@ description I can use as a quick reference.
 ### Prompt 3 — Score what I just wrote
 
 ```
-Apply all relevant Writing Intelligence v3.0 scoring rubrics to
-this draft. Show me the per-rubric scores, the v3.0 composite,
+Apply all relevant Writing Intelligence scoring rubrics to
+this draft. Show me the per-rubric scores, the composite,
 the auto-fail flags if any, and the top 3 things to fix.
 
 [paste draft]

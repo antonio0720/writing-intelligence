@@ -74,7 +74,7 @@ def self_link_path(target):
     """Repo-relative path a self-link claims, or None if it is not a self-link.
 
     The ref sits between the repo and the path and may itself contain slashes
-    (`blob/claude/some-branch/README.md`), so where the ref ends is genuinely
+    (`blob/feature/some-branch/README.md`), so where the ref ends is genuinely
     ambiguous from the URL alone. Every split point is tried and the first that
     resolves on disk wins. That is permissive in the harmless direction: a link
     to a file that does not exist under ANY split still fails, which is the

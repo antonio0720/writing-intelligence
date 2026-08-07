@@ -1,6 +1,6 @@
 # The Writing Board — Twelve Specialist Agents
 
-Writing Intelligence v3.0 decomposes the 11-pass kernel into a coordinated multi-agent writing board. Each agent owns one job and emits one artifact. The board runs as a single skill or as a multi-agent orchestration.
+Writing Intelligence decomposes the 11-pass kernel into a coordinated multi-agent writing board. Each agent owns one job and emits one artifact. The board runs as a single skill or as a multi-agent orchestration.
 
 **Manifest**: `agents/agent_manifest.yaml` — canonical roster, dependencies, schemas, conflict resolution.
 
