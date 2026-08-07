@@ -32,6 +32,27 @@ Three cells deserve their own sentences.
 
 ---
 
+## What is inside the `.skill` bundle
+
+A skill bundle may contain **at most 200 files**. Over that, the upload is
+rejected outright — it does not degrade, it simply will not load. So the bundle
+ships the operating set and `scripts/build-skill.sh` fails the build if the
+count is ever exceeded.
+
+**Ships in the bundle (182 files):** `SKILL.md`, the twenty `references/v5/`
+doctrine documents, the eight `references/v4/` accountability documents, the
+craft corpus (`compiler`, `genre_packs`, `voiceprints`, `anti_patterns`,
+`diagnostics`, `positive_patterns`, `academic`), all 26 schemas, the twelve
+agents, `docs/`, `governance/`, `scripts/wi.py`, and the `tests/v4` and
+`tests/v5` fixtures so the verifier can be proven from the extracted bundle.
+
+**Repository only:** `benchmarks/`, `certification/`, `examples/`, `release/`,
+the regression corpora at the top of `tests/`, and `services/api/`. Nothing in
+the shipped set links to any of them, and a `git clone` is one command away.
+
+If you want everything, clone the repository instead of uploading the bundle —
+see [Claude Code — as a skill](#claude-code--as-a-skill) above.
+
 ## 1. Claude Code and other terminal agents *(fullest surface)*
 
 Filesystem, shell, version control, CI wiring, long-running work, and the deterministic core all available.

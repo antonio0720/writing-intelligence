@@ -32,9 +32,22 @@ for arg in "$@"; do
   esac
 done
 
-# What ships inside the bundle. The REST service, CI config and repo scaffolding
-# are deliberately excluded — they are not useful inside a chat surface and they
-# more than double the download.
+# What ships inside the bundle.
+#
+# Two constraints shape this list, and the second one is a hard wall:
+#
+#   1. The REST service, CI config and repo scaffolding are not useful inside a
+#      chat surface and more than double the download.
+#   2. **A skill bundle may contain at most 200 files.** Exceed it and the
+#      upload is rejected outright — the bundle does not degrade, it simply
+#      will not load, which makes every install instruction in this repository
+#      false. MAX_FILES below enforces it at build time so that can never ship.
+#
+# So the payload is the operating set: the skill, the doctrine it cites, the
+# schemas, the agents, the verifier, and the fixtures that prove the verifier
+# works. Benchmarks, certification rubrics, release notes, worked examples and
+# the regression corpora are repository material — they stay in the repo, where
+# they are one `git clone` away, and nothing in the shipped set links to them.
 PAYLOAD=(
   SKILL.md
   README.md
@@ -45,17 +58,18 @@ PAYLOAD=(
   CONTRIBUTING.md
   LICENSE
   agents
-  benchmarks
-  certification
   docs
-  examples
   governance
   references
-  release
   schemas
   scripts/wi.py
-  tests
+  tests/v4
+  tests/v5
 )
+
+# The upload limit. Not a style preference — a bundle over this does not load.
+MAX_FILES=200
+WARN_FILES=185
 
 # --------------------------------------------------------------------------
 # Preflight. A bundle that ships a broken verifier is worse than no bundle,
@@ -143,7 +157,23 @@ find "$ROOT" \( -name '__pycache__' -o -name '.DS_Store' -o -name '*.pyc' \
      -exec rm -rf {} + 2>/dev/null || true
 
 FILES=$(find "$ROOT" -type f | wc -l | tr -d ' ')
-echo "    staged $FILES files"
+echo "    staged $FILES files (limit $MAX_FILES)"
+
+# A bundle that exceeds the limit is not a degraded bundle. It is a bundle
+# nobody can install, shipped from a repository whose README says they can.
+# Fail here, loudly, with the arithmetic already done.
+if [ "$FILES" -gt "$MAX_FILES" ]; then
+  echo "FAIL bundle has $FILES files; the skill upload limit is $MAX_FILES" >&2
+  echo "     over by $(( FILES - MAX_FILES )). Largest directories:" >&2
+  ( cd "$ROOT" && find . -type f | sed 's|^\./||; s|/[^/]*$||' \
+      | sort | uniq -c | sort -rn | head -12 | sed 's/^/       /' ) >&2
+  echo "     Drop a directory from PAYLOAD, or split it. Do not raise MAX_FILES:" >&2
+  echo "     the limit is imposed by the installer, not by this script." >&2
+  exit 1
+fi
+if [ "$FILES" -gt "$WARN_FILES" ]; then
+  echo "    WARN only $(( MAX_FILES - FILES )) file(s) of headroom remain" >&2
+fi
 
 # Normalize mtimes so the archive is byte-reproducible.
 find "$ROOT" -exec touch -t 200001010000.00 {} + 2>/dev/null || true

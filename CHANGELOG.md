@@ -96,6 +96,14 @@ No hosted-account dependency · no proprietary-model dependency · no vector dat
 
 ### Fixed
 
+- **Skill bundle exceeded the 200-file upload limit and could not be
+  installed.** The payload had grown to 211 files, so every upload
+  instruction in the README and `docs/INSTALL.md` was false. Benchmarks,
+  certification rubrics, worked examples, release notes and the top-level
+  regression corpora are now repository-only; the bundle ships 182 files.
+  `scripts/build-skill.sh` enforces the limit as a build gate with the
+  over-count and the largest directories printed, so it cannot regress.
+
 Pre-release testing of the v5 core caught and fixed six defects. They are recorded because a release that only lists what was added is describing a system nobody stress-tested.
 
 - **YAML flow-mapping crash in `wi test`.** The minimal stdlib YAML reader did not handle inline flow mappings, so a tests file written with `{ }` syntax aborted the run instead of parsing it. A test harness that crashes on valid input reports nothing, which is the most dangerous output it has
