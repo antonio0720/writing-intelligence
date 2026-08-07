@@ -1,5 +1,7 @@
 # Writing Intelligence v4
 
+[![Release](https://img.shields.io/github/v/release/antonio0720/writing-intelligence?label=release&color=0b7285)](https://github.com/antonio0720/writing-intelligence/releases/latest)
+
 **The Accountable Authorship System.**
 
 v3 governs *how well* the writing is built. **v4 governs what may be claimed about it** — and refuses to let a fluent answer stand in for a checked one.
