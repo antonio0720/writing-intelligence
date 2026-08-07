@@ -1,13 +1,13 @@
 ---
 name: writing-intelligence
-description: Writing Intelligence v5 — Proof-Carrying Authorship OS. The governed craft kernel (11 passes, 12 engines, 12 agents, 27 genre packs, voiceprints, anti-slop doctrine) plus the v4 accountability layer plus the v5 dependency layer - claim atoms as the unit of verification, evidence anchors that point at an exact span of an exact source version, an authorship graph, staleness propagation so a changed source names exactly what it broke and what it provably did not, deterministic semantic diff that classifies whether a rewrite changed meaning, writing tests, and proof-carrying release bundles a stranger can verify offline with no model. Use whenever the user wants to write, rewrite, edit, draft, revise, ghostwrite, redline, audit, score, fact-check, verify, or release any prose - grant and NOFO narratives, policy, journalism, medical, legal, investor material, technical docs, books, resumes, sermons, speeches, newsletters, social posts, fiction, screenplays - and especially when writing cites sources, makes factual claims, must stay consistent across many documents, or faces a reader who could challenge it. Trigger even when unnamed - 'clean this up', 'is this accurate', 'make this sound like me', 'check my sources', 'what breaks if this number changes', 'will this hold up'.
+description: Writing Intelligence v5 — Proof-Carrying Authorship OS. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop) plus deterministic verification — claim atoms anchored to an exact span of an exact source version, staleness that names what a changed source broke, semantic diff, and release bundles a stranger verifies offline with no model. Use whenever the user wants to write, rewrite, edit, draft, ghostwrite, redline, audit, fact-check, verify or release any prose — grant and NOFO narratives, policy, journalism, medical, legal, investor material, technical docs, books, resumes, sermons, speeches, newsletters, social posts, fiction, screenplays — and especially when it cites sources, makes factual claims, must stay consistent, or faces a reader who could challenge it. Trigger when unnamed — 'clean this up', 'is this accurate', 'make this sound like me', 'check my sources', 'what breaks if this number changes', 'will this hold up'.
 ---
 
 # Writing Intelligence v5 — Proof-Carrying Authorship OS
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 5.0.0
+**Version:** 5.0.1
 **Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → **v5.0 (semantic identity, dependency graph, proof-carrying release)**
 
 ---

@@ -605,7 +605,7 @@ built out/delta.wiab (10631 bytes, profile: hash-only)
   graph            31 nodes, 62 edges
   stale nodes      0
   proof closure    sha256:4eda4da4d91aa89e
-  sha256           sha256:007ccb9e36ce7534da8bff9a1592c71450647abccc83187d312ea1ee81bc1c0a
+  sha256           sha256:d53f439c344c906db0a51c9514167340f0b9e8135f2d2ddf21792245c4495f26
 
 This is a hash-only bundle. A reviewer who does not already hold the
 sources cannot inspect them from it, and the manifest says so.
@@ -632,7 +632,7 @@ The `hash-only` bundle prints its own limitation and the manifest records the pr
 # Release verification: delta.wiab
 
 project   delta-regional-capacity
-built by  wi.py 5.0.0
+built by  wi.py 5.0.1
 profile   hash-only
 verdict   RELEASE
 

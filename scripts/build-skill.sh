@@ -82,13 +82,61 @@ for p in "${PAYLOAD[@]}"; do
 done
 echo "    payload paths present"
 
-head -1 SKILL.md | grep -qx -- '---' \
-  || { echo "FAIL SKILL.md has no YAML frontmatter; the skill loader reads it" >&2; exit 1; }
-grep -qE '^name: +' SKILL.md \
-  || { echo "FAIL SKILL.md frontmatter has no name:" >&2; exit 1; }
-grep -qE '^description: +' SKILL.md \
-  || { echo "FAIL SKILL.md frontmatter has no description:" >&2; exit 1; }
-echo "    SKILL.md frontmatter intact"
+# The frontmatter is what the loader reads, and every field in it has a hard
+# limit on the other side. A bundle that violates one is not degraded — it is
+# rejected, which turns every install instruction in this repository into a
+# false claim. Check the arithmetic here, where it is cheap.
+python3 - <<'FRONTMATTER' || exit 1
+import re, sys
+
+MAX_NAME, MAX_DESC = 64, 1024
+src = open("SKILL.md", encoding="utf-8").read()
+
+if not src.startswith("---\n"):
+    sys.exit("FAIL SKILL.md has no YAML frontmatter; the skill loader reads it")
+end = src.find("\n---", 4)
+if end < 0:
+    sys.exit("FAIL SKILL.md frontmatter is not terminated")
+fm = src[4:end]
+
+fields, bad = {}, []
+for key in ("name", "description"):
+    m = re.search(r"^%s:[ \t]+(.*)$" % key, fm, re.M)
+    if not m:
+        sys.exit("FAIL SKILL.md frontmatter has no %s:" % key)
+    fields[key] = m.group(1).strip().strip('"\'')
+
+if len(fields["name"]) > MAX_NAME:
+    bad.append("name is %d characters; the limit is %d"
+               % (len(fields["name"]), MAX_NAME))
+if not re.match(r"^[a-z0-9][a-z0-9-]*$", fields["name"]):
+    bad.append("name %r must be lowercase letters, digits and hyphens"
+               % fields["name"])
+
+n = len(fields["description"])
+if n > MAX_DESC:
+    bad.append("description is %d characters, over by %d; the limit is %d"
+               % (n, n - MAX_DESC, MAX_DESC))
+elif n > MAX_DESC - 40:
+    print("    WARN description has only %d character(s) of headroom"
+          % (MAX_DESC - n), file=sys.stderr)
+
+# A colon followed by a space inside an unquoted plain scalar is ambiguous
+# YAML. It parses in some loaders and not others, which is the worst kind of
+# bug: it works here and fails on the surface the user actually installs to.
+if ": " in fields["description"]:
+    bad.append("description contains ': ' — quote it or rewrite the clause; "
+               "unquoted plain scalars must not contain a colon-space")
+
+if bad:
+    for b in bad:
+        print("FAIL " + b, file=sys.stderr)
+    sys.exit(1)
+
+print("    SKILL.md frontmatter intact "
+      "(name %d/%d, description %d/%d characters)"
+      % (len(fields["name"]), MAX_NAME, n, MAX_DESC))
+FRONTMATTER
 
 V4_DOCS=$(ls references/v4/*.md 2>/dev/null | wc -l | tr -d ' ')
 [ "$V4_DOCS" -ge 8 ] \

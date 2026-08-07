@@ -214,7 +214,7 @@ python3 scripts/wi.py --version
 ```
 
 ```
-wi 5.0.0
+wi 5.0.1
 ```
 
 ### 2. The v4 adversarial suite
@@ -276,7 +276,7 @@ python3 scripts/wi.py doctor
 ```
 
 ```
-Writing Intelligence 5.0.0 — capability report
+Writing Intelligence 5.0.1 — capability report
 
 python            3.11.15
 schema            5.0.0

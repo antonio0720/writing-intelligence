@@ -131,13 +131,13 @@ PASS  no_legacy_brand_term                   forbidden term 'Legacy Program Name
 5 passed · 0 failed · 0 unavailable
 
 ### wi bundle out/delta.wiab --artifact drafts/report.md
-built out/delta.wiab (10787 bytes, profile: hash-only)
+built out/delta.wiab (10793 bytes, profile: hash-only)
   verdict          RELEASE
   claim atoms      5 required, 5 permitted
   graph            31 nodes, 62 edges
   stale nodes      0
   proof closure    sha256:4eda4da4d91aa89e
-  sha256           sha256:007ccb9e36ce7534da8bff9a1592c71450647abccc83187d312ea1ee81bc1c0a
+  sha256           sha256:d53f439c344c906db0a51c9514167340f0b9e8135f2d2ddf21792245c4495f26
 
 This is a hash-only bundle. A reviewer who does not already hold the
 sources cannot inspect them from it, and the manifest says so.
@@ -148,7 +148,7 @@ Verify anywhere: python3 wi.py verify-release out/delta.wiab
 # Release verification: delta.wiab
 
 project   delta-regional-capacity
-built by  wi.py 5.0.0
+built by  wi.py 5.0.1
 profile   hash-only
 verdict   RELEASE
 
@@ -161,7 +161,7 @@ PASS  graph.reference_integrity    0 dangling edge(s)
 PASS  proof.dependencies           0 check(s) reference a claim not in the graph
 PASS  release.stale_closure        0 stale node(s)
 PASS  manifest.counts              manifest says 31 nodes / 62 edges; bundle has 31 / 62
-PASS  core.version                 5.0.0
+PASS  core.version                 5.0.1
 SKIP  release.signature            unsigned bundle
 
 Checks the producer states were NOT run:
@@ -263,7 +263,7 @@ You can proceed; you are choosing to, with these outstanding.
 
 
 ### wi doctor
-Writing Intelligence 5.0.0 — capability report
+Writing Intelligence 5.0.1 — capability report
 
 python            3.11.15
 schema            5.0.0

@@ -44,7 +44,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-VERSION = "5.0.0"
+VERSION = "5.0.1"
 
 # --------------------------------------------------------------------------
 # Text normalization. Offsets are Unicode code point indices over NFC text.

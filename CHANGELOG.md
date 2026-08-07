@@ -7,6 +7,35 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [5.0.1] — 2026-08-07
+
+Packaging only. No change to the core, the doctrine, the schemas or any verdict
+this system produces. The v5.0.0 bundle could not be installed, which made every
+install instruction in the repository a claim that did not survive contact with
+the loader — the exact failure this project exists to catch, turned inward.
+
+### Fixed
+
+- **`SKILL.md` frontmatter `description` exceeded the 1024-character limit** at
+  1289 characters, so the v5.0.0 bundle was rejected on upload. Rewritten to 964
+  characters with the full trigger vocabulary intact; the architecture summary
+  was shortened, since a description's job is activation, not explanation.
+
+### Added
+
+- **`scripts/build-skill.sh` now validates the frontmatter as a build gate.**
+  It parses the block rather than grepping it, and fails on: a description over
+  1024 characters (printing the over-count), a name over 64 characters or
+  outside `[a-z0-9-]`, a missing or unterminated frontmatter block, and an
+  unquoted description containing `': '` — ambiguous YAML that parses in some
+  loaders and not others, which is the worst kind of bug because it works where
+  it is built and fails where it is installed. It warns below 40 characters of
+  headroom.
+
+Both limits — 1024 characters and 200 files — are imposed by the installer, not
+by this repository. The build script refuses to let either be raised in place of
+trimming, and prints the arithmetic so the fix is obvious.
+
 ## [5.0.0] — 2026-08-07 — **Proof-Carrying Authorship OS**
 
 ### The Leap

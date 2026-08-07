@@ -10,7 +10,7 @@ What v5 adds is memory: a workspace that knows what supports what, so an edit ma
 
 ```bash
 cd ~/.claude/skills/writing-intelligence && git pull
-python3 scripts/wi.py --version    # wi 5.0.0
+python3 scripts/wi.py --version    # wi 5.0.1
 bash tests/v4/test_wi.sh           # 3 x PASS — the v4 floor still passes
 bash tests/v5/test_wi5.sh          # 32 x PASS — the v5 core
 python3 scripts/wi.py doctor       # what this machine can and cannot do
