@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/policy.schema.json",
+  "title": "PolicyV5",
+  "description": "The project's evidence discipline expressed as a file rather than as an understanding. It exists so that 'under what rules was this document checked?' has an answer a stranger can read: because the policy is a document, it is hashable, and because it is hashable, every release manifest can carry a `policy_digest` naming the exact rules in force. A policy that lives in someone's head cannot be attached to a release. The reciprocal rule matters as much — changing the policy invalidates nothing about the past and everything about the present: a release built under digest A stays verifiable under A forever, and a hostile reviewer can read A inside the bundle and judge whether it was strict enough, while the current workspace is re-evaluated from the policy in force. Policy may TIGHTEN a constitutional law and may never override one. Written as `wi.policy.yaml` or as the corresponding blocks of `wi.project.yaml`; read by `wi gate`, `wi test` and `wi bundle` in `scripts/wi.py`, which seals the resolved policy into `policy/wi.policy.json` and its digest into the manifest. Full commentary in references/v5/POLICY_AS_CODE.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Policy document format version. Bumping it is a breaking change to how these fields are interpreted, and it changes every downstream policy digest by construction."
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Project identity. Present in `wi.project.yaml`; carried into the release manifest as `project_id`.",
+      "properties": {
+        "id": {"type": "string", "description": "Stable project identifier, defaulting to the workspace directory name."},
+        "title": {"type": "string", "description": "Human-readable project title."},
+        "language": {"type": "string", "description": "BCP-47 language tag of the primary drafting language, for example `en-US`."}
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Glob patterns for the drafts under governance. What `wi test` walks when a test does not name its own `in` patterns."
+    },
+    "sources": {
+      "$ref": "#/$defs/sources_block",
+      "description": "Where sources come from and how they are treated. In `wi.project.yaml` this key is a list of glob patterns; in `wi.policy.yaml` it is the injection and freshness block. Both forms are accepted."
+    },
+    "targets": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "One declared release target.",
+        "properties": {
+          "renderer": {"type": "string", "description": "Which renderer produces this target."},
+          "entry": {"type": "string", "description": "Glob matching the documents that render into this target. `register_targets()` draws a `renders_as` edge from every matching work and a `depends_on` edge back, which is what puts a release target inside the invalidation closure of the sources under it."}
+        }
+      },
+      "description": "Declared output channels, keyed by target name."
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The baseline discipline for every claim in this project. Everything in this block narrows the mode for particular claim classes; nothing widens it past what the mode permits.",
+      "properties": {
+        "default_mode": {
+          "$ref": "#/$defs/evidence_mode",
+          "description": "The baseline evidence mode. Escalation to `strict` is automatic and unasked when the work or the request names a context whose reader is adversarial by role — grant, NOFO, RFP, funder, IRB, regulatory, clinical, filing, prospectus, due diligence, expert report, court, compliance, audit, fact-check. The escalation is announced in the report, because moving it back down deliberately is a different act from never having raised it."
+        },
+        "truth_claim": {
+          "type": "string",
+          "enum": ["prohibited", "flagged", "permitted"],
+          "description": "How to treat a sentence that asserts something about the world and names nothing that makes it true. `prohibited` is the project default and the sharpest line in the file: not downgraded, not flagged, not permitted with a warning. The repair is always available and always cheap — attach an anchor, attribute the assertion to a named source, qualify it, or mark it as the author's own declaration under their own authority. All four are honest; leaving it floating is not."
+        },
+        "allowed_basis": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "string", "enum": ["verbatim_span", "structured_data", "author_declaration", "canon_registry"]},
+            "description": "Bases permitted for this claim class."
+          },
+          "description": "Which basis a claim may rest on, per claim class. A class absent from this map falls back to the basis set of `default_mode`. The block exists because claim classes are not equally forgiving: an experiential claim cannot have a verbatim span and should not need one, while a legal claim has exactly one acceptable basis, because a paraphrase of a statute is a new statute. Collapsing them into one rule would make the system useless for memoir or dangerous for filings."
+        }
+      }
+    },
+    "proposals": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "What may change without a person, and what may never.",
+      "properties": {
+        "auto_accept": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Semantic delta classes that may be applied without a recorded human decision. Auto-acceptance is a delegation of authorship — legitimate, since nobody should approve a trailing newline by hand — and it is bounded by CLASS, never by confidence. In ordinary mode this list should contain `wording_only` and nothing else, because that is the only class where applying a change cannot move an assertion, and it is for exactly that reason the class an over-eager classifier reaches for."
+        },
+        "require_human": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Change dimensions that always require a recorded human decision: scope, quantity, time, entity, attribution, certainty, causality, legal_force, obligation, recommendation, definition, canon. Under Law E an uncertain classification resolves away from `auto_accept` and lands here, so a misclassification costs a click rather than a career."
+        }
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The gate: the v4 verdict language made configurable without being made negotiable. Moving any condition between the two lists is a change every future reviewer can see in the bundle's policy digest.",
+      "properties": {
+        "block_on": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["unresolved_citation", "source_contradiction", "invalid_anchor", "protected_term_violation", "stale_claim", "judgment_missing", "waiver_required", "rights_unknown", "rights_expired"]},
+          "description": "Conditions that produce BLOCK. The release cannot proceed. These are the conditions where proceeding is not a judgment call — `unresolved_citation` above all, which is the fabrication condition."
+        },
+        "hold_on": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["unresolved_citation", "source_contradiction", "invalid_anchor", "protected_term_violation", "stale_claim", "judgment_missing", "waiver_required", "rights_unknown", "rights_expired"]},
+          "description": "Conditions that produce HOLD. The author may proceed with a recorded waiver bound to the exact state waived. The single field difference between `strict` and `regulated` is that `source_contradiction` moves from this list to `block_on`."
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "What may leave the machine.",
+      "properties": {
+        "network_default": {
+          "type": "string",
+          "enum": ["deny", "allow"],
+          "description": "`deny` means the tool does not reach the network to be helpful — not to check a link, not to resolve a DOI, not to fetch a favicon. The v5.0 core opens no network connection at all and reports `network: false` in `capabilities()`."
+        },
+        "telemetry_content": {
+          "type": "string",
+          "const": "never",
+          "description": "The one line in this file with no legitimate other value. Counts, error codes, durations and version strings may be collected where an operator has configured collection. Source text, draft text, claim surfaces, quotes, filenames and author-supplied strings never leave the machine. A configurable version of this setting would be an invitation, and the invitation is the problem."
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requires": {"type": "string", "description": "Role that must be the deciding actor for this delta class."}
+        },
+        "description": "One authority rule."
+      },
+      "description": "Which role must be the deciding actor for which semantic delta class. A proposal classified `legal_force` cannot be accepted by anyone who does not hold `legal_reviewer`, regardless of who is at the keyboard and regardless of how the request is phrased. Specified for multi-actor workspaces; single-actor policy is executable without it."
+    },
+    "concepts": {
+      "type": "object",
+      "description": "Inline concept registry, keyed by concept name. Same shape as concept_registry.schema.json; `wi test` reads it from the project file when there is no separate registry."
+    },
+    "tests": {
+      "type": "array",
+      "items": {"type": "object"},
+      "description": "Writing tests to run under `wi test`. Same shape as the `tests` array in concept_registry.schema.json."
+    },
+    "mode": {
+      "$ref": "#/$defs/evidence_mode",
+      "description": "The mode actually in force for a given run. `wi bundle` writes the resolved evidence, release and privacy blocks plus this field into `policy/wi.policy.json` and digests that object into the manifest's `policy_digest`, so the mode a release was gated under is part of what the digest covers."
+    }
+  },
+  "$defs": {
+    "evidence_mode": {
+      "type": "string",
+      "enum": ["off", "light", "standard", "strict", "regulated"],
+      "description": "`off` — no claim extraction and no gate; craft passes only. For fiction, poetry, personal writing, brainstorming. `light` — claims extracted and listed, no verdict, no blocking. For blog posts, marketing, internal notes. `standard` — claims classified, unsupported high-risk claims flagged, verdict advisory. The default; for business writing, technical docs, proposals. `strict` — every factual claim needs a resolvable anchor or a stated qualification, verdict enforced. For grants, NOFO responses, policy, journalism, investor material. `regulated` — strict, plus contradictions block rather than hold and every proceed-anyway is a recorded waiver. For medical, legal, regulatory and compliance work. `wi gate` and `wi bundle` accept light, standard, strict and regulated."
+    },
+    "sources_block": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Glob patterns naming the source corpus, as written in `wi.project.yaml`."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Source handling policy, as written in `wi.policy.yaml`.",
+          "properties": {
+            "injection": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "What the gate does when the source scanner returns a finding. The quarantine boundary itself is architectural and sits at the adapter; this block governs the gate's response.",
+              "properties": {
+                "quarantine_on_high": {
+                  "type": "boolean",
+                  "description": "Whether a high-severity injection finding quarantines the source rather than producing a warning the author can scroll past. Setting it false is a real option for a project whose sources are all internally authored, and it is a change that shows up in the policy digest of every release afterward."
+                }
+              }
+            },
+            "freshness": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Per-selector age limits. A uniform age limit is always wrong in one direction: three years is generous for a pricing table and absurd for a census cross-tabulation. A source past its limit is not rejected — it is stale, and staleness is a hold condition, which means a human sees it and decides.",
+              "properties": {
+                "default_days": {"type": "integer", "minimum": 0, "description": "Age limit applied when no rule selector matches."},
+                "rules": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["selector", "max_age_days"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "selector": {"type": "string", "description": "Pattern matched against source metadata and claim class."},
+                      "max_age_days": {"type": "integer", "minimum": 0, "description": "Age limit in days for sources matching the selector."}
+                    }
+                  },
+                  "description": "Selector-specific limits, most specific first."
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

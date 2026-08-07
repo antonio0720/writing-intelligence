@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/claim_atom.schema.json",
+  "title": "ClaimAtomV5",
+  "description": "The canonical verification unit of v5: the smallest independently checkable assertion in a document, together with its structured proposition, its evidence anchors, every check that ran against it, and the weakest defensible status those checks support. It exists because a compound sentence can be partly supported and partly not — verification at sentence granularity cannot tell an author which half failed, so v5 verifies the halves. Emitted by `atomize_document()` in `scripts/wi.py` during `wi atomize` (with `status` set to `unverified` and empty `anchors`, `checks` and `notes`) and completed in place by `anchor_and_check()` during `wi anchor`. Consumed by `gate_atoms()`, `run_writing_tests()`, `semantic_diff()`, `write_ledger_to_graph()` and `build_bundle()`. This is the most load-bearing schema in the v5 set: the meaning of every value in `status` is what a reader is being told, and widening any of them is a change to what this system promises.",
+  "type": "object",
+  "required": ["logical_id", "id", "type", "class", "realm", "text", "sentence", "signals", "proposition", "skeleton", "paragraph", "document", "offset", "line", "status", "anchors", "checks", "notes", "state_digest"],
+  "additionalProperties": false,
+  "properties": {
+    "logical_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Derived by `logical_id(\"claim_atom\", <document path>, <skeleton>)`. Keyed on the proposition skeleton rather than the wording, so rewording an atom keeps its identity and changing what it asserts gives it a new one. That single choice is what lets a semantic diff distinguish an edit from a replacement."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^a\\d{4}$",
+      "description": "Short document-local label (`a0001`, `a0002`, ...) assigned in emission order. For human reference in reports and console output only; it is not stable across re-atomization and nothing joins on it."
+    },
+    "type": {
+      "type": "string",
+      "const": "meaning.claim_atom",
+      "description": "Graph node family. Fixed, so a consumer reading a mixed stream of node payloads can dispatch on it."
+    },
+    "class": {
+      "type": "string",
+      "enum": ["sourced_fact", "observed_fact", "inference", "recommendation"],
+      "description": "What kind of assertion this is, decided by `classify()` from surface signals. `sourced_fact` asserts something about the world and carries the evidence burden. `observed_fact` is the author's own record — first person plus a checkable figure, with no attribution or citation signal — and the author is the source. `inference` asserts a causal relation the author reached rather than a source stated. `recommendation` prescribes an action; its factual premises carry the burden, the advice itself does not. A fifth class, `rhetoric`, is produced by `classify()` and is DISCARDED by `atomize_document()` — framing with no checkable content never becomes an atom, so it can never be mistaken for a claim."
+    },
+    "realm": {
+      "type": "string",
+      "enum": ["external_fact", "author_observation", "fictional_canon", "hypothetical", "simulation", "rhetorical"],
+      "description": "The epistemic realm the claim lives in, which determines what verification even means for it. `external_fact` is checkable against external sources; `author_observation` is labeled as the author's assertion and no source is demanded; `fictional_canon` is checked against canon nodes and must never render as externally verified fact; `hypothetical` has checkable premises and an uncheckable conditional; `simulation` inherits the status of its model, inputs and assumptions; `rhetorical` carries no checkable content. The v5.0 core assigns `external_fact` for class `sourced_fact`, `author_observation` for class `observed_fact`, and `rhetorical` for everything else; the remaining realms are author-declared. Realm is a graph property, not a formatting decision, and a renderer may never drop it."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The atom's own surface text — one independently checkable piece, which may be shorter than the sentence it came from. This is the string every check runs against."
+    },
+    "sentence": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The full sentence the atom was split out of. Kept so a report can show the atom in the context an author will recognize, and so a split that produced a misleading fragment is visible."
+    },
+    "signals": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["quotation", "percentage", "currency", "date", "numeral", "attribution", "superlative", "comparative", "causal", "categorical", "citation", "hedged"],
+        "description": "One detected surface signal."
+      },
+      "description": "Checkable features detected in the sentence by `classify()`. They drive classification and they tell a reader why this fragment was treated as a claim at all. An atom whose only signal is `hedged`, or which has no signals, is classified `rhetoric` and never emitted."
+    },
+    "proposition": {
+      "$ref": "#/$defs/proposition",
+      "description": "The structured skeleton of the assertion, produced by `proposition_of()`. Deliberately modest: v5.0 does not attempt a universal ontology of language, only the dimensions that make a consequential change mechanically visible."
+    },
+    "skeleton": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The identity key of the claim, produced by `proposition_skeleton()` as a pipe-joined `q=|t=|m=|n=|a=|e=` string over quantities, temporal scope, modality, negation, attribution and entities. Two atoms with the same skeleton are the same claim however differently worded. When nothing structural exists to key on, it falls back to `w=<whitespace-folded lowercased wording>` so the atom still gets a stable identity rather than colliding with every other bare assertion in the document."
+    },
+    "paragraph": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the `structure.paragraph` node this atom is asserted in. The join that lets an impact report say which paragraphs a source change reaches."
+    },
+    "document": {
+      "type": "string",
+      "minLength": 1,
+      "description": "POSIX-normalized path of the document the atom was extracted from, as supplied to `wi atomize`."
+    },
+    "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Character offset of the atom within the document text, measured from the start of the sentence it came from plus its offset within that sentence. Used to place a finding in the file."
+    },
+    "line": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "One-based line number of the sentence the atom came from. What a report prints so an author can go straight to it."
+    },
+    "status": {
+      "$ref": "#/$defs/status",
+      "description": "The proof state of the atom after `anchor_and_check()`. Under Law E the weakest defensible label wins: when two labels are both arguable, the atom gets the weaker one."
+    },
+    "anchors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/logical_id"},
+      "description": "Anchor ids bound to this atom, in binding order. The anchor objects themselves live once in the ledger's `anchors` array, deduplicated by id, so the same source span bound to four atoms is one anchor and four references. An entry here means only that a span was located — what it proves is in `status`, never in the presence of the anchor."
+    },
+    "checks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/check"},
+      "description": "Every deterministic check that ran against this atom, in run order, with its result. A check that could not run is recorded with result `unavailable` rather than omitted: an absent check and a passing check must never look the same."
+    },
+    "notes": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Plain-language explanations attached during checking — what was not found, what the status does not mean, and which question was left to a tier that is not configured. Written for the author, not for a parser."
+    },
+    "state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "`state_digest()` over the payload of `proposition`, `class` and the whitespace-folded surface, under schema id `meaning.claim_atom`. Note what is inside and what is not: the proposition and the folded wording are, and the status, anchors and checks are not — the digest names the claim's state, and a verification record points at it. That is why re-running `wi anchor` does not change the digest a proof was recorded against."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "basis": {
+      "type": "string",
+      "enum": ["verified", "measured", "judged", "human_declared"],
+      "description": "The reliability type of a result, from references/v5/RELIABILITY_TYPES.md. `verified` is a deterministic comparison that actually ran; `measured` is a quantity against a stated baseline with a visible denominator; `judged` is a reasoned assessment with no external comparison behind it; `human_declared` is a named person asserting on their own authority. They never collapse into one score. Every check emitted by the v5.0 core carries `verified`, because every check the v5.0 core runs is a deterministic comparison."
+    },
+    "proposition": {
+      "type": "object",
+      "required": ["quantities", "temporal_scope", "modality", "negated", "attribution", "entities", "causal", "categorical", "hedged"],
+      "additionalProperties": false,
+      "description": "The semantic IR of one assertion. Every field here is a dimension along which a change is consequential, and each one is compared field-by-field by `compare_atoms()` to classify a semantic delta.",
+      "properties": {
+        "quantities": {
+          "type": "array",
+          "description": "Numeric quantities found in the atom. A bare four-digit year with no unit is excluded here — it is temporal scope, not a quantity.",
+          "items": {
+            "type": "object",
+            "required": ["value", "unit", "surface"],
+            "additionalProperties": false,
+            "properties": {
+              "value": {"type": "number", "description": "The numeric value, rounded to six decimal places. A percentage is normalized to its fractional value, so `38%` is stored as `0.38`."},
+              "unit": {"type": ["string", "null"], "description": "What the quantity counts or measures, lowercased, or null when the surface named no unit. A percentage carries unit `ratio`. Unit identity is checked separately from value identity, because `11,800 households` becoming `11,800 individuals` is a different claim with the same number."},
+              "surface": {"type": "string", "description": "The literal text the quantity was read from, so a reader can see what was parsed."}
+            }
+          }
+        },
+        "temporal_scope": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": ["start", "end", "kind"],
+              "additionalProperties": false,
+              "properties": {
+                "start": {"type": ["string", "null"], "description": "Four-digit start year as a string, or null."},
+                "end": {"type": ["string", "null"], "description": "Four-digit end year as a string, or null for an open range."},
+                "kind": {"type": "string", "enum": ["range", "open_range", "point"], "description": "`range` is a closed period (`between 2019 and 2022`); `open_range` is unbounded forward (`since 2019`); `point` is a single year (`in 2021`). The kind is compared as part of the tuple, because moving from open to closed changes what is being claimed even when the start year does not move."}
+              }
+            },
+            {"type": "null"}
+          ],
+          "description": "The period the assertion is about, or null when no temporal expression was found."
+        },
+        "modality": {
+          "type": "string",
+          "enum": ["is", "may", "should", "must", "will"],
+          "description": "The force of the assertion, on an ordered lattice used by `compare_atoms()`: `may` < `should` < `will` = `is` < `must`. Moving up the lattice is `certainty_strengthened` and invalidates existing support — a source that says a thing may happen does not support a claim that it does."
+        },
+        "negated": {"type": "boolean", "description": "Whether a negation marker was found. Negation inverts the sign of every other dimension, so a change here is always material."},
+        "attribution": {"type": ["string", "null"], "description": "Who the assertion is credited to, when the surface names them (`according to`, `as reported by`, `per the`, `cited in`), or null. Removing an attribution is a semantic change: it converts a reported claim into an asserted one."},
+        "entities": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {"type": "string"},
+          "description": "Proper-noun phrases found in the atom, capped at six. Sentence-initial single capitalized words and a stop list of pronouns and determiners are excluded, because treating capitalization as an entity produces `entity.presence` failures that teach people to ignore the check."
+        },
+        "causal": {"type": "boolean", "description": "Whether the atom asserts a causal relation. Adding causation where none was asserted is the single most common misreporting failure in sourced writing and the least visible in a line diff."},
+        "categorical": {"type": "boolean", "description": "Whether the atom uses a universal quantifier (`all`, `every`, `never`, `always`, `without exception`). A universal is refuted by one counterexample, so broadening into one almost never carries its old evidence forward."},
+        "hedged": {"type": "boolean", "description": "Whether hedging language is present. Removing a hedge strengthens certainty even when the modal verb does not move."}
+      }
+    },
+    "check": {
+      "type": "object",
+      "required": ["check", "result", "basis"],
+      "additionalProperties": false,
+      "description": "One check that ran, or that could not run, against this atom.",
+      "properties": {
+        "check": {
+          "type": "string",
+          "enum": ["anchor.integrity", "quote.verbatim", "citation.resolution", "numeric.value", "date.range", "entity.presence"],
+          "description": "Which check. `anchor.integrity` is whether a locating span was found at all; `quote.verbatim` is whether quoted text appears verbatim in some source; `citation.resolution` is whether a citation-shaped reference resolves to something supplied — the fabrication check; `numeric.value` compares figures against source figures within tolerance; `date.range` compares years; `entity.presence` checks that named entities appear."
+        },
+        "result": {
+          "type": "string",
+          "enum": ["pass", "fail", "candidate", "unavailable"],
+          "description": "`pass` and `fail` are results of a comparison that ran. `unavailable` means the check could not run and is recorded rather than omitted, so an absent check never reads as a passing one. `candidate` marks a retrieval result offered for human inspection that is explicitly not support; the v5.0 core expresses candidacy through the atom `status` rather than through this field and emits only `pass`, `fail` and `unavailable`."
+        },
+        "basis": {"$ref": "#/$defs/basis", "description": "How the result was produced. Every result from the v5.0 core is `verified`."},
+        "detail": {"type": "string", "description": "What the check actually found, in words — which figures were missing, whether a match was inside the anchor span or merely somewhere in the corpus. Optional; present when there is something specific to say."}
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["unverified", "supported", "span_supported", "quote_verified", "candidate_support", "author_asserted", "inference", "recommendation", "needs_source", "conflicted", "unsafe", "stale"],
+      "description": "The atom's proof state. What each value MEANS, and what the gate does with it at each evidence mode:\n\n`unverified` — the atom exists and nothing has been checked. Set by `wi atomize`; replaced by `wi anchor`. Never a release state; if it survives to a gate, no anchoring pass has run.\n\n`supported` — the atom's own text was found verbatim inside one supplied source. The strongest deterministic result available. Counts toward coverage at every mode. Never holds, never blocks.\n\n`quote_verified` — every quotation in the atom was found verbatim in a supplied source. Counts toward coverage at every mode. Never holds, never blocks. Misquotation is the most common serious error and the one a reader can check fastest, so a verified quote is reported as its own state rather than folded into `supported`.\n\n`span_supported` — every checkable component (figures, years, named entities) was found inside ONE span of ONE source, but the atom's own wording was not found verbatim. This is a deterministic co-location result, not an inference. Counts toward coverage. Advisory at light and standard; passes at strict; HOLDS at regulated, because whether that span entails the sentence is a judgment-tier question and no provider is configured.\n\n`candidate_support` — the components were located across the corpus but not inside a single span. This is retrieval, not proof: it is stored so a human can open the right paragraph in one click, and labeled so nothing downstream mistakes it for support. Does NOT count toward coverage. Advisory at standard; HOLDS at strict and regulated.\n\n`author_asserted` — the atom is an `observed_fact` and the author is the source. Checking the author's own attested observation against someone else's documents and calling it unsupported is both wrong and insulting, so the note stays and the verdict does not. Not required to carry evidence at any mode; never holds, never blocks.\n\n`inference` — the atom asserts a causal relation the author reached rather than a source stated. Labeled so it is never rendered as a sourced fact. Its premises carry the burden. Never holds, never blocks on its own.\n\n`recommendation` — the atom prescribes an action. The advice is the author's to give; the factual premises under it are separate atoms carrying their own status. Never holds, never blocks on its own.\n\n`needs_source` — no verbatim support was found, or a numeric or date check failed, or no readable source was supplied at all. Advisory at standard; HOLDS at strict and regulated. This is the state most repairs target.\n\n`conflicted` — a quotation in the atom was not found verbatim in any source, or a supplied source states something incompatible with it. HOLDS at light, standard and strict; BLOCKS at regulated. The strict/regulated difference is exactly this one movement.\n\n`unsafe` — a citation-shaped reference does not resolve to anything supplied. BLOCKS at every mode without exception. This is the fabrication state and it is not a judgment call.\n\n`stale` — the atom was verified against a source version that has since been replaced, and the anchor's byte range overlaps the changed region. HOLDS at light, standard and strict; BLOCKS at regulated. In the executable core staleness is recorded in the workspace `invalidation` table by `wi impact --apply` and read by the gate from there, not written back into this field; the value is enumerated here because it is a real proof state a consumer must be able to represent."
+    }
+  }
+}

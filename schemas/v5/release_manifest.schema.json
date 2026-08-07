@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/release_manifest.schema.json",
+  "title": "ReleaseManifestV5",
+  "description": "The manifest at the root of a `.wiab` proof-carrying release bundle: what was shipped, what was checked, under which policy, by which core, and what was NOT run. It exists so that a released document carries its own proof rather than pointing at a system the reader has to trust. A reviewer with no access to the workspace, no network, no model and no relationship with the author can run `wi verify-release` and independently confirm that the artifact's bytes are the bytes that were checked, that every file matches its recorded digest, that no graph edge dangles, that no check references a claim that is not present, and that nothing stale reached the release. `checks_not_run` is as load-bearing as the verdict: a bundle that listed only what passed would be authority theater. Written byte-for-byte by `build_bundle()` in `scripts/wi.py` under `wi bundle` as canonical JSON (sorted keys, no spaces, NFC strings) with a fixed ZIP epoch, so the same inputs produce the same bundle bytes every time. Read by `verify_bundle()` under `wi verify-release`.",
+  "type": "object",
+  "required": ["format", "version", "profile", "release_id", "project_id", "project_state_digest", "policy_digest", "core", "targets", "gate", "counts", "checks_not_run", "attestations"],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "type": "string",
+      "const": "wi-release-manifest",
+      "description": "Format discriminator. `verify_bundle()` fails `manifest.format` on anything else rather than attempting a best-effort read of a document it does not recognize."
+    },
+    "version": {
+      "type": "string",
+      "const": "5.0.0",
+      "description": "Schema generation of the manifest and of every record inside the bundle."
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["full", "hash-only", "redacted"],
+      "description": "How much evidence the bundle carries. `full` includes every source object's bytes and therefore redistributes them, so every source's rights scope must permit redistribution; a stranger can re-resolve every anchor. `hash-only` carries digests and no source bytes, so a reviewer who does not already hold the sources cannot inspect them — the manifest says so on its face, and this is the profile most likely to survive an organization's own data policy. `redacted` carries only approved excerpts and regions, each with the identity of the human who approved that disclosure and the state it was approved against; coverage is partial by construction and the manifest names which anchors were withheld. Redaction is a decision, not a filter: an automatic redactor deciding what was safe would be making a legal judgment with a regular expression. The v5.0 CLI implements `full` and `hash-only`; `redacted` is specified."
+    },
+    "release_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Derived by `logical_id(\"release\", <proof closure digest>, <verdict>)`. Content-derived, so rebuilding the same graph at the same verdict produces the same release id — a rebuild is recognizable as the same release rather than a new one."
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The project identifier from the project file, or `untitled`. What the bundle is a release of."
+    },
+    "project_state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "The PROOF CLOSURE digest: `content_digest()` over the graph nodes, edges, check rows, source lock rows and anchor rows together. It is the single value that names everything the verdict rested on. Change any node state, any edge, any check result or any anchor and this digest moves, which is what makes 'is this the release that was verified?' a question with a mechanical answer."
+    },
+    "policy_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "`content_digest()` over the resolved policy object — the evidence, release and privacy blocks plus the mode in force — which is also sealed into the bundle at `policy/wi.policy.json`. Under what rules this was checked. A reader can compare two releases by comparing two digests and know whether the same standard was applied."
+    },
+    "core": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "description": "Which build produced the bundle. `verify_bundle()` requires a non-empty version; a bundle whose producer is anonymous cannot be reasoned about when a defect is later found in a specific build.",
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "description": "Core implementation name. `wi.py` for the reference core."},
+        "version": {"type": "string", "minLength": 1, "description": "Core version string."}
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 0,
+      "description": "One entry per artifact sealed into the bundle. `verify_bundle()` recomputes each artifact's digest from the archived bytes and fails `release.artifact_digest` on any mismatch — the check that catches an artifact swapped after verification.",
+      "items": {
+        "type": "object",
+        "required": ["target", "path", "digest", "byte_length", "proof_closure_digest"],
+        "additionalProperties": false,
+        "properties": {
+          "target": {"type": "string", "description": "Target name, taken from the artifact file's stem."},
+          "path": {"type": "string", "description": "Archive member path of the artifact inside the bundle, under `artifact/`."},
+          "digest": {"$ref": "#/$defs/digest", "description": "Raw-bytes digest of the artifact as shipped. Not a digest of a normalized form: the bytes a reader will open are the bytes that were checked."},
+          "byte_length": {"type": "integer", "minimum": 0, "description": "Artifact size in bytes."},
+          "proof_closure_digest": {"$ref": "#/$defs/digest", "description": "The proof closure this artifact was verified under. Equal to `project_state_digest` for every target in a bundle built by the v5.0 core, and carried per target so a future build that renders targets from different graph states can still name each one's closure exactly."}
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": ["verdict", "reasons"],
+      "additionalProperties": false,
+      "description": "The verdict at build time, from `gate_atoms()`.",
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["RELEASE", "HOLD", "BLOCK"],
+          "description": "`RELEASE` — nothing blocking and nothing holding. `HOLD` — the author may proceed with a recorded waiver bound to the exact state waived. `BLOCK` — the release cannot proceed; `wi bundle` refuses to build at BLOCK unless `--allow-block` is passed, and passing it records the blocked state in the manifest rather than resolving it. These three words are protocol, not copy: changing what any of them promises requires an RFC and a benchmark update."
+        },
+        "reasons": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Deduplicated, sorted reasons for a blocking verdict, in plain language. Empty at RELEASE and, in the v5.0 core, also empty at HOLD — holding reasons are carried in the rendered gate report rather than in this array."
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["claim_atoms_required", "claim_atoms_permitted", "waivers", "stale_nodes", "nodes", "edges"],
+      "additionalProperties": false,
+      "description": "The arithmetic behind the verdict, with visible denominators. `verify_bundle()` fails `manifest.counts` if `nodes` or `edges` disagree with what is actually in the bundle, so the summary cannot drift from the contents.",
+      "properties": {
+        "claim_atoms_required": {"type": "integer", "minimum": 0, "description": "Claim atoms of class `sourced_fact` — the atoms that carry the evidence burden. The denominator of every coverage statement about this release."},
+        "claim_atoms_permitted": {"type": "integer", "minimum": 0, "description": "Of those, how many carry a status in the supported set: `supported`, `quote_verified` or `span_supported`. `permitted` is protocol language and means these atoms may ship under the policy in force — it does not mean they are true."},
+        "waivers": {"type": "integer", "minimum": 0, "description": "Recorded waivers covering held conditions in this release. The v5.0 core writes 0, because the waiver loop is specified rather than executable and `decisions/decisions.jsonl` ships empty."},
+        "stale_nodes": {"type": "integer", "minimum": 0, "description": "Nodes with an unresolved invalidation at build time. `verify_bundle()` fails `release.stale_closure` when this is not zero, so a stale proof cannot quietly reach a release."},
+        "nodes": {"type": "integer", "minimum": 0, "description": "Total node rows in `graph/nodes.jsonl`."},
+        "edges": {"type": "integer", "minimum": 0, "description": "Total edge rows in `graph/edges.jsonl`."}
+      }
+    },
+    "checks_not_run": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Every check that did not execute and why, in plain language — carried into the release so that a reader learns what was not examined at the same moment they learn what was. In the v5.0 core this is the ledger's own `checks_not_run` list: paraphrase entailment, because the judgment tier has no configured provider, and the `pdf_region` / `sheet_range` / `audio_time` / `video_time` / `image_region` anchor types, because they are specified and not executable in this build. A bundle that omitted this array would present the visual language of diligence over an absence."
+    },
+    "attestations": {
+      "type": "array",
+      "description": "Where the attestation for each target lives and whether it carries a cryptographic signature. `verify_bundle()` reports `release.signature` as SKIP with the detail 'unsigned bundle' when `attestations/signature.bundle` is absent — it does not treat absence as a pass. The v5.0 core writes this array empty; external signing paths are specified, not executable.",
+      "items": {
+        "type": "object",
+        "required": ["target", "path", "signed"],
+        "additionalProperties": false,
+        "properties": {
+          "target": {"type": "string", "description": "Which target the attestation covers."},
+          "path": {"type": "string", "description": "Archive member path of the attestation."},
+          "signed": {"type": "boolean", "description": "Whether a signature over this attestation is present in the bundle."}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    }
+  }
+}

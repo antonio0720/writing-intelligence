@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/judgment_record.schema.json",
+  "title": "JudgmentRecordV5",
+  "description": "A reasoned assessment with no external comparison behind it — paraphrase entailment, scope narrowing, tone, and the other questions a deterministic check cannot decide — recorded as a typed, replaceable artifact with named inputs, a named producer and a hashed question. NO JUDGMENT PROVIDER SHIPS IN v5.0. Nothing in this repository executes a judgment, no adapter is included, and `wi anchor` lists paraphrase entailment in `checks_not_run` rather than approximating it. This schema exists now so that the first implementation to arrive does not get to define the terms. A judgment provider is third-party infrastructure in this architecture, exactly like a PDF decoder or a hash function: named so it can be replaced, audited and disagreed with — never an author, never a contributor, never a signer, and no field here is one it could become one in. A provider has no write path into the graph; a judgment enters a workspace the way a supplied source does, as data examined before it is trusted. The `.wiab` bundle reserves `proof/judgments.jsonl` for these records and `build_bundle()` writes it empty.",
+  "type": "object",
+  "required": ["judgment_id", "kind", "input_hashes", "result", "basis", "provider", "policy_hash", "prompt_template_hash", "created_at", "expires_if"],
+  "additionalProperties": false,
+  "properties": {
+    "judgment_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Addressable identity of the record. A judgment nobody can point at cannot be contested, re-run or withdrawn."
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Which typed question was asked, for example `entailment`. A record without it cannot be re-run by a different provider or compared against the first. A provider is never sent a `kind` it did not declare in its capabilities."
+    },
+    "input_hashes": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Exactly what the provider saw, by role and by digest. Without this the judgment is unreproducible and its currency is undecidable — there would be no way to tell whether it is still about the text it was about.",
+      "items": {
+        "type": "object",
+        "required": ["role", "digest"],
+        "additionalProperties": false,
+        "properties": {
+          "role": {"type": "string", "description": "What this input was to the question, for example `claim`, `anchor`, `source_state`."},
+          "node": {"type": "string", "description": "Logical id of the node the input came from, when it came from one."},
+          "digest": {"$ref": "#/$defs/digest", "description": "Digest of the exact state supplied."}
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "required": ["verdict", "statement"],
+      "additionalProperties": false,
+      "description": "The verdict and a statement in words. NEVER A SCORE. A model's internal probabilities are real quantities a provider may keep in its own diagnostics and may use for routing — whether to escalate, whether to ask a second provider, whether to flag for human review — but they are never surfaced as evidence and never appear in a rendered proof line.",
+      "properties": {
+        "verdict": {"type": "string", "minLength": 1, "description": "The named outcome of the typed question, for example `supports_with_scope_narrowing`."},
+        "statement": {"type": "string", "minLength": 1, "description": "The reasoning in plain words, addressed to the person who has to decide what to do about it."},
+        "recommended_repair": {"type": "string", "description": "A named repair route, for example `qualify_claim`. Advisory; it is never applied without a decision."}
+      }
+    },
+    "basis": {
+      "const": "judged",
+      "description": "Always the literal string `judged`, and there is no other legal value for this field. `verified` names how a result was produced — a deterministic comparison that actually executed — not how sure anybody is, so no confidence threshold and no provider quality promotes a judgment into a verification. A provider that emits `verified` is rejected at the schema boundary as a hard error rather than coerced to the correct value, because a provider that tried is a provider with a defect worth seeing."
+    },
+    "provider": {
+      "type": "object",
+      "required": ["provider_id", "provider_version", "adapter_version"],
+      "additionalProperties": false,
+      "description": "Who ran it. An unnamed provider cannot be audited, compared or replaced, so identity is mandatory rather than courteous.",
+      "properties": {
+        "provider_id": {"type": "string", "minLength": 1, "description": "Stable identity of the provider implementation."},
+        "provider_version": {"type": "string", "minLength": 1, "description": "Version of the provider implementation."},
+        "adapter_version": {"type": "string", "minLength": 1, "description": "Version of the adapter that translated between the core and the provider. It translates only; it has no handle on the workspace."}
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": ["identifier", "version"],
+      "additionalProperties": false,
+      "description": "What it ran on. 'A language model' is not an identifier. This block names third-party infrastructure and nothing else; it is not an authorship field and confers no credit.",
+      "properties": {
+        "identifier": {"type": "string", "minLength": 1, "description": "Identifier of the inference engine used."},
+        "version": {"type": "string", "minLength": 1, "description": "Version of that engine. A different version is a different producer and a re-run under it is a new judgment."}
+      }
+    },
+    "policy_hash": {
+      "$ref": "#/$defs/digest",
+      "description": "Digest of the decision policy in force when the judgment was requested. Under what rules the answer was interpreted."
+    },
+    "prompt_template_hash": {
+      "$ref": "#/$defs/digest",
+      "description": "Digest of the question template the provider was given. A judgment whose question is unknown is unreviewable — a reader cannot tell whether the answer is to the question they care about."
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When the judgment was recorded. Judgments age; this is what lets a policy expire them on time as well as on state."
+    },
+    "expires_if": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["claim_state_changes", "anchor_state_changes", "source_state_changes", "policy_changes", "provider_changes", "template_changes"],
+        "description": "One expiry condition."
+      },
+      "description": "The dependency contract, carried in the record itself. A judgment is not a permanent fact about two texts; it is a fact about two STATES under one policy. Change the claim, the anchor or the policy and the record does not silently continue to apply — it is marked stale and either re-run or shown as expired. This is what wires a judgment into the staleness system."
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    }
+  }
+}

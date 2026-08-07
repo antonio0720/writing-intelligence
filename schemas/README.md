@@ -1,4 +1,21 @@
-# Writing Intelligence v3.0 — Machine-Readable Schemas
+# Writing Intelligence — Machine-Readable Schemas
+
+There are two schema families in this repository, and they answer different questions.
+
+| Family | Where | What it describes | Question it answers |
+|---|---|---|---|
+| **v3 craft schemas** | this directory, unchanged | The artifacts a writing pass produces — intake, corpus, voice, genre, architecture, ledger, rewrite log, storyworld, delivery, benchmark, agent task | *What did this pass find?* |
+| **v5 state schemas** | [`v5/`](v5/README.md) | The objects a governed workspace holds — sources, versions, anchors, claim atoms, graph nodes and edges, verification, judgment, proposals, decisions, invalidations, policy, concepts, release manifests | *Is that finding still true?* |
+
+The v5 family does not replace the v3 family and does not deprecate it. The eleven v3 schemas below are the **craft artifacts** and remain valid for the craft kernel; their conceptual boundaries — corpus, structure, evidence, voice, canon, delivery — were correct and v5 keeps every one of them. What v5 adds is a single graph identity system underneath, so that the same claim, source or output has one name everywhere instead of a different name in each artifact. That is the difference between a photograph of a document's accuracy and a state that notices when it expires.
+
+Start with [`v5/README.md`](v5/README.md) for the two-identity model (logical id vs. state digest), the canonical hashing contract, which schemas are executable today, and how each v3 artifact becomes a view over the v5 graph.
+
+The rest of this document describes the v3 craft schemas.
+
+---
+
+## Writing Intelligence v3.0 — the craft schemas
 
 Every pass of the v3.0 kernel emits a structured artifact. The schemas here define those artifacts as JSON Schema draft 2020-12 documents.
 

@@ -81,17 +81,39 @@ V4_DOCS=$(ls references/v4/*.md 2>/dev/null | wc -l | tr -d ' ')
   || { echo "FAIL expected >=8 v4 reference docs, found $V4_DOCS" >&2; exit 1; }
 echo "    v4 reference docs: $V4_DOCS"
 
+# v4 doctrine is not deleted by v5; it is the compatibility layer beneath it.
+# Both must be present or the skill degrades into naming laws it cannot cite.
+V5_DOCS=$(ls references/v5/*.md 2>/dev/null | wc -l | tr -d ' ')
+[ "$V5_DOCS" -ge 20 ] \
+  || { echo "FAIL expected >=20 v5 reference docs, found $V5_DOCS" >&2; exit 1; }
+echo "    v5 reference docs: $V5_DOCS"
+
+V5_SCHEMAS=$(ls schemas/v5/*.json 2>/dev/null | wc -l | tr -d ' ')
+[ "$V5_SCHEMAS" -ge 14 ] \
+  || { echo "FAIL expected >=14 v5 schemas, found $V5_SCHEMAS" >&2; exit 1; }
+echo "    v5 schemas: $V5_SCHEMAS"
+
+# The version in the CLI, the skill and the changelog must be one number.
+CLI_V=$(python3 scripts/wi.py --version 2>/dev/null | awk '{print $2}')
+grep -q "^\*\*Version:\*\* $CLI_V" SKILL.md \
+  || { echo "FAIL SKILL.md does not declare version $CLI_V" >&2; exit 1; }
+grep -q "## \[$CLI_V\]" CHANGELOG.md \
+  || { echo "FAIL CHANGELOG.md has no entry for $CLI_V" >&2; exit 1; }
+echo "    version consistent: $CLI_V"
+
 if command -v python3 >/dev/null 2>&1; then
-  if RESULT=$(bash tests/v4/test_wi.sh 2>&1); then
-    echo "$RESULT" | sed 's/^/    /'
-  else
-    echo "$RESULT" | sed 's/^/    /'
-    echo "FAIL verifier regression did not pass; refusing to build a bundle" >&2
-    echo "     shipping a broken verifier is worse than shipping none — it looks installed" >&2
-    exit 1
-  fi
+  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh; do
+    if RESULT=$(bash "$SUITE" 2>&1); then
+      echo "$RESULT" | sed 's/^/    /'
+    else
+      echo "$RESULT" | sed 's/^/    /'
+      echo "FAIL $SUITE did not pass; refusing to build a bundle" >&2
+      echo "     shipping a broken verifier is worse than shipping none — it looks installed" >&2
+      exit 1
+    fi
+  done
 else
-  echo "    WARN python3 not found; verifier regression not run" >&2
+  echo "    WARN python3 not found; verifier regressions not run" >&2
 fi
 
 # --------------------------------------------------------------------------
@@ -155,6 +177,8 @@ unzip -qq "$BUNDLE" -d "$VERIFY"
 [ -f "$VERIFY/$NAME/SKILL.md" ]             || { echo "FAIL bundle has no SKILL.md" >&2; exit 1; }
 [ -f "$VERIFY/$NAME/scripts/wi.py" ]        || { echo "FAIL bundle has no scripts/wi.py" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/references/v4" ]        || { echo "FAIL bundle has no references/v4" >&2; exit 1; }
+[ -d "$VERIFY/$NAME/references/v5" ]        || { echo "FAIL bundle has no references/v5" >&2; exit 1; }
+[ -d "$VERIFY/$NAME/schemas/v5" ]           || { echo "FAIL bundle has no schemas/v5" >&2; exit 1; }
 [ ! -d "$VERIFY/$NAME/services" ]           || { echo "FAIL bundle contains services/" >&2; exit 1; }
 [ ! -d "$VERIFY/$NAME/.git" ]               || { echo "FAIL bundle contains .git" >&2; exit 1; }
 
@@ -162,13 +186,15 @@ unzip -qq "$BUNDLE" -d "$VERIFY"
 if command -v python3 >/dev/null 2>&1; then
   ( cd "$VERIFY/$NAME" && python3 scripts/wi.py --version >/dev/null ) \
     || { echo "FAIL wi.py does not run from the extracted bundle" >&2; exit 1; }
-  if RESULT=$( cd "$VERIFY/$NAME" && bash tests/v4/test_wi.sh 2>&1 ); then
-    echo "$RESULT" | sed 's/^/    /'
-  else
-    echo "$RESULT" | sed 's/^/    /'
-    echo "FAIL verifier regression fails inside the extracted bundle" >&2
-    exit 1
-  fi
+  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh; do
+    if RESULT=$( cd "$VERIFY/$NAME" && bash "$SUITE" 2>&1 ); then
+      echo "$RESULT" | sed 's/^/    /'
+    else
+      echo "$RESULT" | sed 's/^/    /'
+      echo "FAIL $SUITE fails inside the extracted bundle" >&2
+      exit 1
+    fi
+  done
 fi
 
 echo "    bundle verified"

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/source_artifact.schema.json",
+  "title": "SourceArtifactV5",
+  "description": "A supplied source as a durable identity across every byte state it ever has. This node exists so the question 'is this the same document?' can be answered separately from 'is this the same bytes?' — only the second is hashable, and conflating them is how a proof silently carries forward onto a source that was replaced. Emitted as a `source.artifact` node by `register_sources()` in `scripts/wi.py` during `wi ingest`; consumed by `wi anchor`, `wi impact`, `wi graph` and the `sources/sources.lock` member of a `.wiab` bundle. The v5.0 core populates `logical_id`, `path`, `title` and `media_type` only; `confidentiality`, `rights` and `identity` are specified in references/v5/WORKSPACE.md and references/v5/RIGHTS_AND_CONSENT.md and are declared by a human, never inferred.",
+  "type": "object",
+  "required": ["logical_id", "path", "title", "media_type"],
+  "additionalProperties": false,
+  "properties": {
+    "logical_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Derived by `logical_id(\"source\", <file name>)`. Note that it keys on the file name, not the full path or the bytes: two versions of the same file share this id, which is exactly what makes supersession expressible."
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "POSIX-normalized path the source was ingested from, relative to the workspace root where possible. Provenance and human navigation; the anchor system addresses bytes, not paths."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Display name for the source, defaulting to the file name. What appears in a proof line a reader will actually read."
+    },
+    "media_type": {
+      "type": "string",
+      "description": "IANA media type of the source as ingested. `wi ingest` records `text/plain` for every source it can read as text in v5.0; binary adapters are specified and report `WI_SOURCE_UNSUPPORTED` rather than guessing."
+    },
+    "confidentiality": {
+      "$ref": "#/$defs/confidentiality",
+      "description": "Disclosure classification that rides with this source through every derived object. It governs what a bundle profile may include: a `restricted` source's bytes must never appear in a `full` bundle. Specified in references/v5/WORKSPACE.md; not populated by the v5.0 ingest path."
+    },
+    "rights": {
+      "$ref": "#/$defs/rights",
+      "description": "On what footing this source is held and what that footing permits. Present so that 'may we redistribute this?' is a recorded answer rather than an assumption made at bundle time."
+    },
+    "identity": {
+      "$ref": "#/$defs/identity",
+      "description": "Whether an identifiable person appears in this source and on what basis they appear. Kept separate from `rights` because permission to use a document and consent from a person depicted in it are different permissions from different parties."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    },
+    "confidentiality": {
+      "type": "string",
+      "enum": ["public", "internal", "confidential", "restricted"],
+      "description": "`public` may appear anywhere; `internal` may not leave the organization; `confidential` may not leave the workspace in a bundle profile that carries bytes; `restricted` may not have its bytes carried by any profile, and only hash-only or approved redacted excerpts may reference it."
+    },
+    "rights": {
+      "type": "object",
+      "required": ["basis"],
+      "additionalProperties": false,
+      "description": "The rights block. `unknown` is a legitimate value and must never be silently upgraded: no inference path exists from `unknown` to any other value, and a basis changes only by a recorded human declaration.",
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": ["owned", "licensed", "public_domain", "permission", "unknown"],
+          "description": "On what footing the source is held. `unknown` records the true state — that nobody has established the footing — and is a value a gate can act on, unlike a guess."
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "What the basis actually permits. Free text plus structured facets, because a gate can evaluate the facets and a human needs the sentence.",
+          "properties": {
+            "text": {"type": "string", "description": "The permission in the operator's own words, as declared."},
+            "publication": {"type": "boolean", "description": "Whether the basis permits publishing content derived from this source."},
+            "redistribution": {"type": "boolean", "description": "Whether the basis permits shipping the source bytes themselves. A `full` bundle requires this to be true for every source it carries."},
+            "derivative_works": {"type": "boolean", "description": "Whether the basis permits derivative works."},
+            "territory": {"type": "string", "description": "Territorial limit of the basis, or `unrestricted`."}
+          }
+        },
+        "expires_at": {
+          "anyOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}],
+          "description": "When the basis stops being true, or null when it does not expire. A date in the past is a gate condition, not a footnote."
+        },
+        "declared_by": {
+          "type": "string",
+          "description": "Actor id of the person who declared this basis. A rights basis is only ever produced by a person."
+        },
+        "declared_at": {
+          "$ref": "#/$defs/timestamp",
+          "description": "When the declaration was made."
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": ["contains_identifiable_person"],
+      "additionalProperties": false,
+      "description": "Whether a person is recognizable in the source, and on what footing they appear.",
+      "properties": {
+        "contains_identifiable_person": {
+          "type": "string",
+          "enum": ["true", "false", "unknown"],
+          "description": "Recorded as a three-valued string rather than a boolean precisely so that `unknown` is expressible. A boolean would force a guess at ingestion, which is the moment the person entering it knows least."
+        },
+        "consent_basis": {
+          "type": "string",
+          "enum": ["self", "contract", "explicit_permission", "public_figure_context", "unknown"],
+          "description": "On what footing the identifiable person appears. `self` is the author appearing in their own material; `public_figure_context` is the narrowest of the non-consent bases and does not extend past the context recorded here."
+        },
+        "subject_label": {
+          "type": "string",
+          "description": "A pseudonymous handle for the person, used in reports so a proof line never has to print a real name."
+        },
+        "consent_record": {
+          "type": "string",
+          "description": "Object reference (`obj:sha256:...`) to the stored consent artifact, so the basis points at a document rather than at a memory."
+        }
+      }
+    }
+  }
+}

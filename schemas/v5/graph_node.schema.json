@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/graph_node.schema.json",
+  "title": "GraphNodeV5",
+  "description": "One row of the authorship graph's node index: a typed, addressable thing a proof can point at, named by its stable logical id and pinned to its current state digest. It exists so that a source, a paragraph, a claim, a decision and a release artifact all live in ONE identity system — the v4 failure was that the same claim had a different name in every artifact, so nothing could propagate and verification expired silently. Emitted by `Workspace.put_node()` into the `node`, `node_state` and `current_state` tables in `scripts/wi.py`, projected by `build_bundle()` into the `graph/nodes.jsonl` member of a `.wiab` bundle, and read back by `verify_bundle()` when it checks that no edge dangles and no check references a claim that is not in the graph. This record carries identity and state, not payload: the payload lives in `node_state.payload_json` under the schema named in `schema`.",
+  "type": "object",
+  "required": ["logical_id", "type", "state_digest", "schema", "stale"],
+  "additionalProperties": false,
+  "properties": {
+    "logical_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "The node's durable identity across every state it ever has, produced by `logical_id()` from whatever makes it the same node across versions. Content-derived rather than random, because random ids would make every build produce a different graph and a published bundle checksum meaningless."
+    },
+    "type": {
+      "$ref": "#/$defs/node_type",
+      "description": "The node family and granularity. Each type exists because some check, policy or invalidation rule needs to address exactly that granularity and nothing coarser."
+    },
+    "state_digest": {
+      "anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}],
+      "description": "Digest of the node's CURRENT state, from `current_state`. Null only when a node identity exists with no state recorded against it, which is a graph integrity fault worth seeing rather than hiding. This is the value a verification record, a proposal or a waiver binds to: a proof is about a state, never about an identity."
+    },
+    "schema": {
+      "anyOf": [{"$ref": "#/$defs/schema_id"}, {"type": "null"}],
+      "description": "The schema id the current state's payload was written and digested under. It is part of the `state_digest` preimage, so the same payload under a different schema is a different state by construction. Null when no state is recorded."
+    },
+    "stale": {
+      "type": "boolean",
+      "description": "Whether an unresolved invalidation names this node. Computed by `build_bundle()` from `Workspace.stale_nodes()`, which reads the `invalidation` table. True means the node was verified against a state that has since changed and the verification does not carry forward. `verify_bundle()` fails `release.stale_closure` if any node in a bundle is stale, so this flag is the mechanism by which a release cannot quietly ship on an expired proof."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "schema_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Schema identifier bound into the state digest preimage. The v5.0 core writes `source_artifact`, `source_version`, `evidence_anchor`, `structure_work`, `structure.paragraph`, `meaning.claim_atom`, `verification_record` and `release_target`. Note that the core is not uniform about the separator: two of those ids use a dot and the rest use an underscore. The value is opaque to consumers and must be compared literally, never normalized, because normalizing it would change every digest that was taken over it."
+    },
+    "node_type": {
+      "type": "string",
+      "description": "Every node family defined in references/v5/AUTHORSHIP_GRAPH.md, namespaced `family.type`. The v5.0 core creates `source.artifact`, `source.version`, `source.segment`, `structure.work`, `structure.paragraph`, `meaning.claim_atom`, `verification.result` and `release.target`; the rest are specified so that anchors, renderers and policies have somewhere to land.",
+      "enum": [
+        "source.artifact",
+        "source.version",
+        "source.segment",
+        "source.table",
+        "source.audio_segment",
+        "source.video_segment",
+        "source.image_region",
+        "source.web_capture",
+
+        "meaning.claim_atom",
+        "meaning.premise",
+        "meaning.inference",
+        "meaning.definition",
+        "meaning.term",
+        "meaning.constraint",
+        "meaning.promise",
+        "meaning.obligation",
+        "meaning.recommendation",
+        "meaning.rhetoric",
+
+        "structure.work",
+        "structure.volume",
+        "structure.part",
+        "structure.chapter",
+        "structure.section",
+        "structure.paragraph",
+        "structure.scene",
+        "structure.beat",
+        "structure.dialogue_exchange",
+
+        "authorship.snapshot",
+        "authorship.proposal",
+        "authorship.decision",
+        "authorship.waiver",
+        "authorship.protected_span",
+        "authorship.voice_constraint",
+
+        "verification.check",
+        "verification.result",
+        "verification.judgment",
+        "verification.conflict",
+        "verification.gate",
+        "verification.invalidation",
+
+        "canon.character",
+        "canon.location",
+        "canon.event",
+        "canon.object",
+        "canon.motif",
+        "canon.plant",
+        "canon.payoff",
+        "canon.rule",
+        "canon.timeline_point",
+
+        "media.asset",
+        "media.shot",
+        "media.frame",
+        "media.track",
+        "media.caption",
+        "media.storyboard_panel",
+        "media.slide",
+        "media.chart",
+
+        "release.target",
+        "release.build",
+        "release.artifact",
+        "release.attestation",
+        "release.signature"
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# Writing tests for the Delta fixture.
+#
+# These are software tests for prose. They are small, composable, and they run
+# in CI next to everything else. A number that governs money, eligibility or a
+# promise should not be free to drift between the narrative, the deck and the
+# website — and nothing but a test will notice when it does.
+
+concepts:
+  households_served:
+    canonical: "11,800"
+    kind: integer_invariant
+    aliases:
+      allowed:
+        - "11800"
+      forbidden:
+        - "12,400"
+
+tests:
+  - id: every_sourced_claim_has_support
+    assert: evidence.coverage
+    equals: 1.0
+
+  - id: no_orphan_citations
+    assert: citations.orphans
+
+  - id: households_figure_does_not_drift
+    assert: concept.equals
+    concept: households_served
+    in:
+      - "drafts/report.md"
+
+  - id: outcomes_section_present
+    assert: structure.required_section
+    section: outcomes
+    in:
+      - "drafts/report.md"
+
+  - id: no_legacy_brand_term
+    assert: terminology.forbidden
+    term: "Legacy Program Name"
+    in:
+      - "drafts/*.md"

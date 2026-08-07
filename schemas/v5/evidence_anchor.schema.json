@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/evidence_anchor.schema.json",
+  "title": "EvidenceAnchorV5",
+  "description": "A machine-resolvable pointer from a claim to the exact region of an exact source state that bears it out. The anchor is the only object in v5 that can turn an assertion into support, and it exists so that support is a thing a stranger can re-resolve rather than a thing the producer asserts. Every anchor names the source state it was taken against, so an anchor never silently follows a source into a new version. `text_span` is emitted by `make_anchor()` in `scripts/wi.py` during `wi anchor` and is the only executable type in v5.0; the other six are specified in references/v5/EVIDENCE_ANCHORS.md with their adapter contracts and are reported as unavailable rather than faked. Consumed by `anchor_and_check()`, `compute_impact()` (byte-range overlap is what makes the unaffected set provable), `wi graph`, and the `sources/anchor-index.json` member of a `.wiab` bundle.",
+  "type": "object",
+  "oneOf": [
+    {"$ref": "#/$defs/text_span"},
+    {"$ref": "#/$defs/pdf_region"},
+    {"$ref": "#/$defs/sheet_range"},
+    {"$ref": "#/$defs/image_region"},
+    {"$ref": "#/$defs/audio_time"},
+    {"$ref": "#/$defs/video_time"},
+    {"$ref": "#/$defs/data_pointer"}
+  ],
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    },
+    "basis": {
+      "type": "string",
+      "enum": ["verified", "measured", "judged", "human_declared"],
+      "description": "The reliability type of a derived value, from references/v5/RELIABILITY_TYPES.md. `verified` is a deterministic comparison that actually ran and passed; `measured` is a quantity computed against a stated baseline with a visible denominator; `judged` is a reasoned assessment with no external comparison behind it; `human_declared` is a named person asserting on their own authority. These never collapse into one score. The doctrine prose spells the fourth type `human-declared`; the machine-readable form uses an underscore."
+    },
+    "extractor": {
+      "type": "object",
+      "required": ["id", "version"],
+      "additionalProperties": false,
+      "description": "Identity of the adapter that produced a derived value from a source. Recorded so an extractor upgrade is a visible, separate change rather than a silent shift in what a source 'says'.",
+      "properties": {
+        "id": {"type": "string", "description": "Adapter identifier, for example `wi-pdftext`."},
+        "version": {"type": "string", "description": "Adapter version. A different version is a different producer."},
+        "basis": {"$ref": "#/$defs/basis", "description": "Reliability type of the adapter's output. Transcription, OCR and vision description are always `judged`."}
+      }
+    },
+    "anchor_base": {
+      "type": "object",
+      "required": ["anchor_id", "source_logical_id", "source_state_digest", "anchor_type"],
+      "description": "Fields every anchor of every type carries. Shared here so that a consumer can read the identity and target of an anchor it does not know how to resolve.",
+      "properties": {
+        "anchor_id": {
+          "$ref": "#/$defs/logical_id",
+          "description": "Content-derived identity of the anchor. For `text_span` the core derives it from `logical_id(\"anchor\", <source logical id>, <start_byte>, <end_byte>)`, so the same span of the same source is always the same anchor and a re-run does not multiply anchors."
+        },
+        "source_logical_id": {
+          "$ref": "#/$defs/logical_id",
+          "description": "Logical id of the source the anchor points into. In the v5.0 executable path this is the `source.artifact` id (derived from the file name); the byte state actually resolved against is pinned by `source_state_digest`."
+        },
+        "source_state_digest": {
+          "$ref": "#/$defs/digest",
+          "description": "Digest of the exact source state the anchor was taken against. In the v5.0 executable path this is the source's raw-bytes blob digest. It is what makes an anchor honest across time: if the source moves, this digest no longer matches the current version and the anchor is stale rather than quietly re-pointed."
+        },
+        "anchor_type": {
+          "type": "string",
+          "enum": ["text_span", "pdf_region", "sheet_range", "image_region", "audio_time", "video_time", "data_pointer"],
+          "description": "Which resolution procedure applies. A consumer that does not implement the named type must report the anchor unresolvable, never treat it as resolved."
+        }
+      }
+    },
+
+    "text_span": {
+      "description": "A contiguous byte range of a text source version. EXECUTABLE IN v5.0 — this is exactly the object `make_anchor()` emits during `wi anchor`. Byte offsets, not character offsets and not line/column, because bytes are what the digest was taken over. `quote` is present so a human can read the evidence without the tool; `quote_digest` is present so a machine can confirm the quote was not edited after the fact.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "type", "anchor_type", "source_logical_id", "source_state_digest", "start_byte", "end_byte", "quote", "quote_digest", "state_digest"],
+      "properties": {
+        "anchor_type": {"const": "text_span", "description": "Discriminator. Fixed for this variant."},
+        "type": {
+          "type": "string",
+          "const": "source.segment",
+          "description": "The graph node family this anchor materializes as. A resolved text span becomes a `source.segment` node, which is what a `supports` edge originates from."
+        },
+        "start_byte": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Inclusive start offset, in UTF-8 bytes, from the beginning of the source text."
+        },
+        "end_byte": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Exclusive end offset, in UTF-8 bytes. Byte ranges are what `compute_impact()` intersects against the changed regions of an edited source, which is how the provably-unaffected set is computed rather than guessed."
+        },
+        "quote": {
+          "type": "string",
+          "description": "The literal source text in the span, whitespace-trimmed at the edges. Human-readable evidence, carried so a proof line can be checked by eye."
+        },
+        "quote_digest": {
+          "$ref": "#/$defs/digest",
+          "description": "SHA-256 over the whitespace-folded quote, UTF-8 encoded. Folding is applied here — and only here — so that a reflowed line break does not falsely invalidate an anchor, while any change to the words does."
+        },
+        "state_digest": {
+          "$ref": "#/$defs/digest",
+          "description": "`state_digest()` over the anchor payload of `source_state_digest`, `start_byte`, `end_byte` and `quote_digest`, under schema id `evidence_anchor`. This is the anchor's state identity in the graph."
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "pdf_region": {
+      "description": "A rectangular region of one page of a PDF source version. SPECIFIED ONLY in v5.0 — the adapter contract is defined in references/v5/EVIDENCE_ANCHORS.md and no extractor ships; `wi anchor` reports it in `checks_not_run`. Carries two independent hashes on purpose: `text_hash` over the extracted text and `region_render_hash` over the rendered image of the region, so a text extractor is never the sole root of trust and an extractor upgrade cannot silently change what a page says.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "anchor_type", "source_logical_id", "source_state_digest", "page", "bbox", "extracted_text", "text_hash", "extractor"],
+      "properties": {
+        "anchor_type": {"const": "pdf_region", "description": "Discriminator. Fixed for this variant."},
+        "page": {"type": "integer", "minimum": 1, "description": "One-based page index within the PDF."},
+        "bbox": {
+          "type": "object",
+          "required": ["x0", "y0", "x1", "y1", "units"],
+          "additionalProperties": false,
+          "description": "Region rectangle in the page's own coordinate space.",
+          "properties": {
+            "x0": {"type": "number", "description": "Left edge."},
+            "y0": {"type": "number", "description": "Bottom edge."},
+            "x1": {"type": "number", "description": "Right edge."},
+            "y1": {"type": "number", "description": "Top edge."},
+            "units": {"type": "string", "enum": ["pt"], "description": "Coordinate units. PDF user-space points."}
+          }
+        },
+        "extracted_text": {"type": "string", "description": "Text the extractor read from the region. A derived claim about the region, not the region itself."},
+        "text_hash": {"$ref": "#/$defs/digest", "description": "Digest over the extracted text."},
+        "extractor": {"$ref": "#/$defs/extractor", "description": "Which adapter read the region, and at what version."},
+        "region_render_hash": {"$ref": "#/$defs/digest", "description": "Digest over a rasterized image of the region. Pins the visual state independently of any extraction, so the extractor's output stays a derived claim."},
+        "render": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Rasterization parameters, without which a render hash is not reproducible.",
+          "properties": {
+            "dpi": {"type": "integer", "minimum": 1, "description": "Render resolution."},
+            "colorspace": {"type": "string", "description": "Colorspace of the render, for example `gray`."},
+            "renderer": {"type": "string", "description": "Renderer identity and version."}
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "sheet_range": {
+      "description": "A cell range of a named sheet in a spreadsheet source version. SPECIFIED ONLY in v5.0. Records `display_values` and `raw_values` separately because they are different evidence: a claim quoting '38%' is a claim about the display value, while a claim computing from the figure is a claim about the raw value, and 0.38 and 0.3849 both display as 38%.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "anchor_type", "source_logical_id", "source_state_digest", "sheet", "range", "cell_values_hash", "extractor"],
+      "properties": {
+        "anchor_type": {"const": "sheet_range", "description": "Discriminator. Fixed for this variant."},
+        "sheet": {"type": "string", "description": "Sheet name within the workbook."},
+        "range": {"type": "string", "description": "A1-style cell range, for example `D14:D14`."},
+        "cell_values_hash": {"$ref": "#/$defs/digest", "description": "Digest over the canonical serialization of the cell values in the range."},
+        "display_values": {"type": "array", "items": {"type": "string"}, "description": "What the cells show, in range order. Evidence for a claim that quotes the figure as displayed."},
+        "raw_values": {"type": "array", "items": {"type": ["number", "string", "boolean", "null"]}, "description": "What the cells hold, in range order. Evidence for a claim that computes from the figure."},
+        "number_formats": {"type": "array", "items": {"type": "string"}, "description": "Per-cell number format strings, which are what turn a raw value into a display value."},
+        "extractor": {"$ref": "#/$defs/extractor", "description": "Which spreadsheet adapter read the range, and at what version."}
+      },
+      "unevaluatedProperties": false
+    },
+
+    "image_region": {
+      "description": "A normalized rectangular region of an image source version. SPECIFIED ONLY in v5.0. Coordinates are normalized so the anchor survives a resolution change and `region_hash` pins the pixels regardless. Any description of the region is `judged` and carries `supports_claims: false` — an image does not prove an interpretation merely because a model described it, and a description of a picture of a number is three removes from the number.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "anchor_type", "source_logical_id", "source_state_digest", "region", "region_hash"],
+      "properties": {
+        "anchor_type": {"const": "image_region", "description": "Discriminator. Fixed for this variant."},
+        "region": {
+          "type": "object",
+          "required": ["x", "y", "w", "h", "coords"],
+          "additionalProperties": false,
+          "description": "Region rectangle in normalized image coordinates.",
+          "properties": {
+            "x": {"type": "number", "minimum": 0, "maximum": 1, "description": "Left edge as a fraction of image width."},
+            "y": {"type": "number", "minimum": 0, "maximum": 1, "description": "Top edge as a fraction of image height."},
+            "w": {"type": "number", "minimum": 0, "maximum": 1, "description": "Width as a fraction of image width."},
+            "h": {"type": "number", "minimum": 0, "maximum": 1, "description": "Height as a fraction of image height."},
+            "coords": {"type": "string", "const": "normalized", "description": "Coordinate convention. Normalized only, so a re-encode at another resolution does not move the anchor."}
+          }
+        },
+        "region_hash": {"$ref": "#/$defs/digest", "description": "Digest over the pixels of the region as extracted."},
+        "region_render": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "How the region was extracted, without which the region hash is not reproducible.",
+          "properties": {
+            "resample": {"type": "string", "description": "Resampling filter applied, or `none`."},
+            "colorspace": {"type": "string", "description": "Colorspace of the extracted region, for example `srgb`."}
+          }
+        },
+        "description": {
+          "type": "object",
+          "required": ["text", "basis", "supports_claims"],
+          "additionalProperties": false,
+          "description": "A description of what the region shows. Recorded because it is useful, labeled because it is not evidence.",
+          "properties": {
+            "text": {"type": "string", "description": "The description in words."},
+            "basis": {"const": "judged", "description": "Always `judged`. There is no configuration under which a description of an image becomes a verified fact about it."},
+            "produced_by": {"type": "string", "description": "Which capability produced the description."},
+            "supports_claims": {"const": false, "description": "Always false. A description never carries a `supports` edge on its own; if the underlying numbers matter they need a `sheet_range` or `data_pointer` anchor into the data behind the picture."}
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "audio_time": {
+      "description": "A time interval of an audio source version. SPECIFIED ONLY in v5.0. Carries two hashes for the same reason as `pdf_region`: `audio_segment_hash` pins the bytes of the interval independently of any transcription of them. A transcript is a derived object produced by a fallible process and its basis is `judged`, never `verified`; the audio remains available for a human to check.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "anchor_type", "source_logical_id", "source_state_digest", "start_ms", "end_ms", "audio_segment_hash"],
+      "properties": {
+        "anchor_type": {"const": "audio_time", "description": "Discriminator. Fixed for this variant."},
+        "start_ms": {"type": "integer", "minimum": 0, "description": "Inclusive interval start, in milliseconds from the start of the asset."},
+        "end_ms": {"type": "integer", "minimum": 0, "description": "Exclusive interval end, in milliseconds."},
+        "channel": {"type": "string", "description": "Which channel or mixdown the interval was taken from."},
+        "transcript": {"type": "string", "description": "Transcribed speech for the interval. Derived, fallible, and labeled as such."},
+        "transcript_hash": {"$ref": "#/$defs/digest", "description": "Digest over the transcript text, so the transcript that was relied on is pinned."},
+        "transcriber": {"$ref": "#/$defs/extractor", "description": "Which ASR adapter produced the transcript, at what version, with basis `judged`."},
+        "audio_segment_hash": {"$ref": "#/$defs/digest", "description": "Digest over the decoded audio samples of the interval. Independent of any transcription."},
+        "segment_encoding": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Decode parameters, without which the segment hash is not reproducible.",
+          "properties": {
+            "format": {"type": "string", "description": "Sample format, for example `pcm_s16le`."},
+            "rate_hz": {"type": "integer", "minimum": 1, "description": "Sample rate in hertz."},
+            "channels": {"type": "integer", "minimum": 1, "description": "Channel count of the decoded segment."}
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "video_time": {
+      "description": "A time interval of a video source version, with representative frames. SPECIFIED ONLY in v5.0. `ocr_overlay` is present only when the frame carries burned-in text — the most commonly cited part of a video and the least reliable to read, so it is hashed and labeled `judged` like every other extraction.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "anchor_type", "source_logical_id", "source_state_digest", "start_ms", "end_ms"],
+      "properties": {
+        "anchor_type": {"const": "video_time", "description": "Discriminator. Fixed for this variant."},
+        "start_ms": {"type": "integer", "minimum": 0, "description": "Inclusive interval start, in milliseconds."},
+        "end_ms": {"type": "integer", "minimum": 0, "description": "Exclusive interval end, in milliseconds."},
+        "shot_id": {"type": "string", "description": "Identity of the `media.shot` the interval falls within, when shot detection has run."},
+        "representative_frames": {
+          "type": "array",
+          "description": "Frames hashed so the visual state of the interval is pinned without shipping the video.",
+          "items": {
+            "type": "object",
+            "required": ["index", "frame_hash"],
+            "additionalProperties": false,
+            "properties": {
+              "index": {"type": "integer", "minimum": 0, "description": "Frame index within the asset."},
+              "pts_ms": {"type": "integer", "minimum": 0, "description": "Presentation timestamp of the frame, in milliseconds."},
+              "frame_hash": {"$ref": "#/$defs/digest", "description": "Digest over the decoded frame pixels."}
+            }
+          }
+        },
+        "transcript_interval": {
+          "type": "object",
+          "required": ["text", "transcript_hash", "basis"],
+          "additionalProperties": false,
+          "description": "Speech transcribed for the interval.",
+          "properties": {
+            "text": {"type": "string", "description": "Transcribed speech."},
+            "transcript_hash": {"$ref": "#/$defs/digest", "description": "Digest over the transcript text."},
+            "basis": {"const": "judged", "description": "Always `judged`. Transcription is interpretation."}
+          }
+        },
+        "ocr_overlay": {
+          "type": "object",
+          "required": ["text", "ocr_hash", "basis"],
+          "additionalProperties": false,
+          "description": "Burned-in on-screen text read from the frames, when present.",
+          "properties": {
+            "text": {"type": "string", "description": "Text read from the frame."},
+            "ocr_hash": {"$ref": "#/$defs/digest", "description": "Digest over the OCR output."},
+            "basis": {"const": "judged", "description": "Always `judged`. OCR is interpretation."}
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+
+    "data_pointer": {
+      "description": "A pointer into structured data — a location in a JSON document, a record addressed by its declared primary key, or a recorded query with its result digest. SPECIFIED ONLY in v5.0. `row_key` exists so an inserted row does not silently move the anchor. A `recorded_query` is evidence about a result at a moment and says so: re-running it later and getting a different digest is not a bug, it is the anchor doing its job.",
+      "allOf": [{"$ref": "#/$defs/anchor_base"}],
+      "type": "object",
+      "required": ["anchor_id", "anchor_type", "source_logical_id", "source_state_digest", "pointer_kind"],
+      "properties": {
+        "anchor_type": {"const": "data_pointer", "description": "Discriminator. Fixed for this variant."},
+        "pointer_kind": {
+          "type": "string",
+          "enum": ["json_pointer", "row_key", "recorded_query"],
+          "description": "Which addressing scheme applies. `json_pointer` addresses a location in a structured document; `row_key` addresses a record by declared primary key rather than by position; `recorded_query` stores the query text, the engine identity and a digest of the result set."
+        },
+        "pointer": {"type": "string", "description": "The pointer expression, for `json_pointer` and `row_key` kinds."},
+        "value": {"type": ["number", "string", "boolean", "null"], "description": "The value found at the pointer at anchoring time."},
+        "value_digest": {"$ref": "#/$defs/digest", "description": "Digest over the canonical serialization of the value, so the value relied on is pinned."},
+        "query": {"type": "string", "description": "The query text, for `recorded_query` kind. Recorded verbatim; a query nobody can read is not evidence."},
+        "engine": {"$ref": "#/$defs/extractor", "description": "Query engine identity and version, for `recorded_query` kind."},
+        "result_digest": {"$ref": "#/$defs/digest", "description": "Digest over the canonical serialization of the result set, for `recorded_query` kind."},
+        "executed_at": {"$ref": "#/$defs/timestamp", "description": "When the recorded query ran. A query result is evidence about a moment, and the moment is part of the evidence."}
+      },
+      "unevaluatedProperties": false
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/decision.schema.json",
+  "title": "DecisionV5",
+  "description": "The record of an actor accepting, rejecting or waiving a proposal against one exact state. It exists so that the question every audit begins with — who did this — has an answer that is not forgeable by the component with the most output. A DECISION RECORD IS WORTH EXACTLY AS MUCH AS THE IDENTITY ATTACHED TO IT, so the actor type is an enforced type and not a label: A MODEL CANNOT MASQUERADE AS A HUMAN ACTOR. An actor of type `judgment_provider` may not write a record typed `human`, `team_member` or `authorized_editor`, may not sign a decision, and may not be the actor on an acceptance — regardless of who or what invoked it and regardless of how the request was phrased, because a document that appears to have been approved by a person and was not is not a recoverable failure. `automated_policy` exists so that 'the system did it under a rule you set' is sayable without pretending a person was present: a real actor with real authority that is honestly not a human. Because the record binds both `proposal_state` and `target_state`, a decision does not carry forward onto text that changed after it was made — it goes stale, and the author decides again. The `.wiab` bundle reserves `decisions/decisions.jsonl` for these records; `build_bundle()` in `scripts/wi.py` writes it empty in v5.0, where the decision loop is specified rather than executable.",
+  "type": "object",
+  "required": ["decision_id", "proposal_state", "target_state", "actor", "decision", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Addressable identity of the decision, so it can be cited by a waiver, an attestation or an audit."
+    },
+    "proposal_state": {
+      "$ref": "#/$defs/digest",
+      "description": "State digest of the exact proposal that was decided. Deciding a proposal is deciding a specific before, after and reason; if any of them changed, this is not that decision."
+    },
+    "target_state": {
+      "$ref": "#/$defs/digest",
+      "description": "State digest of the node state the proposal targeted at the moment of the decision. If the target has moved since, the decision is stale and does not authorize applying the change to the new state."
+    },
+    "actor": {
+      "$ref": "#/$defs/actor",
+      "description": "Who decided. Not optional, not defaultable, and not inferable from context."
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["accepted", "rejected", "waived"],
+      "description": "`accepted` — the change is applied. `rejected` — the change is not applied, and the record is kept, because what an author declined is evidence about the document. `waived` — a HOLD condition was passed deliberately; the hold is not erased, it is recorded as passed by this actor against this exact state, and it does not carry forward when the state changes."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Why, in the actor's words. Required by policy for `waived` at regulated mode, where a proceed-anyway with no stated reason is the failure the mode exists to prevent."
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When the decision was made."
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    },
+    "actor": {
+      "type": "object",
+      "required": ["type", "id"],
+      "additionalProperties": false,
+      "description": "An attributed actor. Every state change in a v5 workspace is attributed to one.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["human", "team_member", "authorized_editor", "automated_policy", "deterministic_engine", "judgment_provider", "external_import"],
+          "description": "`human` — a named individual acting on their own authority. `team_member` — a named individual acting under a project's policy. `authorized_editor` — a delegate with explicit, recorded authority to accept changes. `automated_policy` — a rule the project configured, acting without a person present. `deterministic_engine` — the core, executing a check. `judgment_provider` — a third-party inference service, named; it may never hold any of the first three types, may never sign, and may never be the actor on an acceptance. `external_import` — state that arrived from outside this workspace and has not been adopted by anyone inside it."
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable identifier of the actor within the workspace. For a human actor this is a person a reader could contact; for an engine or provider it is the named implementation and version."
+        }
+      }
+    }
+  }
+}

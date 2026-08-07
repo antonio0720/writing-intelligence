@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/concept_registry.schema.json",
+  "title": "ConceptRegistryV5",
+  "description": "The registry of concepts that must not drift across artifacts, plus the writing tests that enforce them. It exists because the same number, date or defined term appears in a contract, a grant narrative, a deck, a web page and a board memo, and nothing in an ordinary toolchain joins those seven use sites — so seven defensible readings of a fuzzy history coexist, one of them is in front of a funder, and no artifact anywhere in the organization states what the answer is. The registry makes the CONCEPT the primary object and every artifact a use site: change the concept once and every use site is either correct, mechanically updated, or reported as failing. Written as `.wi/concepts.yaml` or as the `concepts` and `tests` blocks of `wi.project.yaml`; read by `run_writing_tests()` in `scripts/wi.py` under `wi test`. Full commentary in references/v5/CONCEPT_REGISTRY.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Registry format identifier, for example `wi-concepts-1`."
+    },
+    "concepts": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/concept"},
+      "description": "Concepts keyed by name. The key is the concept's identity and is what a `uses_term` edge binds to."
+    },
+    "tests": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/test"},
+      "description": "Writing tests, executed in order by `run_writing_tests()`. Small, composable, and visible in the release report. Five assertions are implemented; ANY OTHER ASSERTION RETURNS `unavailable` RATHER THAN PASSING — an unimplemented check must never be indistinguishable from a satisfied one, which is the whole reason the result carries a basis."
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "concept": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One registered concept: what it is, what it may be called, what it may never be called, and the digest of the definition every use site is bound to.",
+      "properties": {
+        "canonical": {
+          "type": ["string", "number", "boolean"],
+          "description": "The canonical rendering or value of the concept — the string a `concept.equals` test looks for in every artifact under its scope. This is the field `run_writing_tests()` reads."
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["temporal", "integer", "number", "money", "defined_term", "entity", "canon_fact"],
+          "description": "What sort of concept this is, which determines what equality means for it. `temporal` compares at a stated granularity; `money` compares amount, currency and basis year together; `defined_term` compares the binding, not the surface token."
+        },
+        "value": {
+          "type": ["string", "number", "boolean", "null"],
+          "description": "The concept's value where it has one — a date for `temporal`, a count for `integer`."
+        },
+        "granularity": {
+          "type": "string",
+          "description": "For `temporal` concepts, the unit at which the value is meaningful, for example `day`. Present so that a document saying `2019` and a registry saying `2019-01-01` are not reported as a conflict when the concept is only meaningful to the year."
+        },
+        "amount": {"type": "number", "description": "For `money` concepts, the numeric amount."},
+        "currency": {"type": "string", "description": "For `money` concepts, the ISO 4217 currency code."},
+        "basis_year": {"type": "integer", "description": "For `money` concepts, the year the amount is expressed in. Two amounts in the same currency and different basis years are different concepts."},
+        "invariant": {
+          "type": "string",
+          "description": "A stated relationship the value must satisfy, for example that a count must equal the row count of a data file. Recorded in words; enforcement of arbitrary invariants is specified, not executable."
+        },
+        "aliases": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "What the concept may and may not be called.",
+          "properties": {
+            "allowed": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Renderings that still bind to this concept. A renderer may use one for brevity — `HH` in a four-character column header is not a different concept from `household`, and forcing the full term produces worse documents rather than more rigorous ones. Registered so a use site written with an alias still participates in impact analysis."
+            },
+            "forbidden": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Renderings that fail the terminology test AS RENDERINGS OF THIS CONCEPT. This is the interesting half of the pair. `family` is not a synonym for `household`: it is warmer, shorter, reads better in a grant narrative, and asserts a relationship the registered definition does not. `client` imports a service relationship; `case` imports a file. Each substitution is a small improvement in prose and a small unregistered change in what is being claimed, and the sum of forty of them across nine artifact families is an organization whose headline number means something different in every document that carries it. The registry does not forbid the words; it forbids them as renderings of this concept."
+            }
+          }
+        },
+        "allowed_aliases": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Flat alternate spelling of `aliases.allowed`, as written in the reference registry examples."
+        },
+        "forbidden_aliases": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Flat alternate spelling of `aliases.forbidden`. This is the key `run_writing_tests()` actually reads when a `concept.equals` test checks for forbidden alias use."
+        },
+        "definition": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "What the concept means, in words that a person outside the project could apply.",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The definition itself. Written to exclude the near-misses explicitly — the date the program began serving households under its own operating authority, NOT the date of incorporation and NOT the date of the first grant award. A definition that does not rule anything out has not defined anything."
+            }
+          }
+        },
+        "definition_state": {
+          "$ref": "#/$defs/digest",
+          "description": "Digest of the canonical definition payload. It is what a `uses_term` edge binds to, so a change to the definition TEXT — not to its formatting — puts every use site into review under the per-edge invalidation policy. This is the field that makes a definition change propagate instead of being an edit somebody made in a document nobody re-read."
+        },
+        "scope": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Glob patterns naming the artifacts this concept governs. A concept with no scope is a note; a concept with a scope is a contract."
+        },
+        "realm": {
+          "type": "string",
+          "enum": ["external_fact", "author_observation", "fictional_canon", "hypothetical", "simulation", "rhetorical"],
+          "description": "Which epistemic realm the concept lives in. A canon fact and an external fact are governed alike and confused never."
+        },
+        "anchors": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Anchor ids that establish the concept's value. A registered number with no anchor is an assertion the registry is repeating, not one it is grounding."
+        },
+        "legal_force": {
+          "type": "string",
+          "description": "What the concept commits the author to when it appears, for example `representation_in_funding_application`. Present so a change to it can be routed to an authority rule."
+        },
+        "owner": {
+          "type": "string",
+          "description": "Who decides this concept's value. A concept whose owner is unnamed will drift, because nobody will feel entitled to stop it."
+        }
+      }
+    },
+    "test": {
+      "type": "object",
+      "required": ["assert"],
+      "additionalProperties": false,
+      "description": "One writing test. Each result names its basis, never a score.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Test identifier as it appears in the release report. `run_writing_tests()` falls back to `name` and then to the literal `unnamed`."
+        },
+        "name": {
+          "type": "string",
+          "description": "Alternate spelling of `id`, accepted for readability."
+        },
+        "assert": {
+          "type": "string",
+          "description": "Which assertion to run. FIVE ARE IMPLEMENTED in `run_writing_tests()`:\n\n`evidence.coverage` — the ratio of `sourced_fact` claim atoms whose status is `supported`, `quote_verified` or `span_supported` to all `sourced_fact` atoms, compared against `equals` (default 1.0). Fails with every uncovered atom listed by document, line and truncated text. The denominator is visible in the detail line, because a coverage percentage without a denominator is not a fact about a count.\n\n`terminology.forbidden` — case-insensitive search for `term` across the documents matched by `in` (default `**/*.md`). Fails with every hit as `path:line`.\n\n`concept.equals` — checks that the concept's `canonical` value appears in every document matched by `in`, and that no `forbidden_aliases` entry appears in any of them. Files missing the canonical value and files using a forbidden alias are both reported as misses.\n\n`structure.required_section` — checks that every document matched by `in` contains a Markdown heading whose text includes `section`, case-insensitively.\n\n`citations.orphans` — scans every ledger for a `citation.resolution` check with result `fail` and reports each one by document, line and text. This is the fabrication test.\n\nANY OTHER VALUE returns result `fail` with basis `unavailable` and the detail 'assertion is not implemented in this tier'. It does not pass, and it does not silently disappear from the report.",
+          "examples": ["evidence.coverage", "terminology.forbidden", "concept.equals", "structure.required_section", "citations.orphans"]
+        },
+        "equals": {
+          "type": ["string", "number", "boolean"],
+          "description": "The expected value. For `evidence.coverage` this is the minimum acceptable ratio, compared with `>=`. For `concept.equals` it is the fallback canonical value when the named concept is not in the registry."
+        },
+        "concept": {
+          "type": "string",
+          "description": "Concept name to look up in the registry, for `concept.equals`."
+        },
+        "term": {
+          "type": "string",
+          "description": "The literal term to search for, for `terminology.forbidden`. Matched case-insensitively as a literal, not as a pattern."
+        },
+        "section": {
+          "type": "string",
+          "description": "Heading text that must be present, for `structure.required_section`. Matched case-insensitively as a substring of a Markdown heading line."
+        },
+        "in": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Glob patterns, relative to the workspace root, naming the documents the assertion applies to. Defaults to `**/*.md`."
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["block", "hold", "advisory"],
+          "description": "What a failure of this test does to the release verdict. Specified; the v5.0 core reports test results and leaves the verdict to the atom gate."
+        }
+      }
+    },
+    "test_result": {
+      "type": "object",
+      "required": ["id", "result", "basis", "detail", "members"],
+      "additionalProperties": false,
+      "description": "The shape `run_writing_tests()` returns for each test. Included here so a consumer of `wi test --json` has the contract.",
+      "properties": {
+        "id": {"type": "string", "description": "The test's id, name, or the literal `unnamed`."},
+        "result": {"type": "string", "enum": ["pass", "fail"], "description": "Whether the assertion held. An unimplemented assertion returns `fail`, distinguished from a real failure by its basis."},
+        "basis": {"type": "string", "enum": ["verified", "measured", "judged", "human_declared", "unavailable"], "description": "How the result was produced. `verified` for all five implemented assertions; `unavailable` for anything else, which is how an unimplemented check is prevented from reading as a satisfied one."},
+        "detail": {"type": "string", "description": "What the test found, with its denominator where it has one."},
+        "members": {"type": "array", "items": {"type": "string"}, "description": "The specific failures — file and line, or document, line and claim text. Empty on pass."}
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/workspace.schema.json",
+  "title": "WorkspaceV5",
+  "description": "The root identity record of a Writing Intelligence v5 workspace. It exists so that every node, edge, proof and release bundle produced under a `.wi/` directory can name the workspace it belongs to, the schema generation it was written under, and the core build that wrote it. One row of the `workspace` table in `scripts/wi.py` (`DDL`), created by `wi init` and read by every later command. Without this record a bundle could be verified for internal consistency and still not say which project it describes or which rules generation produced it.",
+  "type": "object",
+  "required": ["id", "title", "created_at", "schema_version", "core_version", "mode"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the workspace, derived by `logical_id(\"workspace\", <absolute root path>)`. Content-derived rather than random so that re-initializing the same directory yields the same identity and a rebuilt bundle stays byte-reproducible."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable project title. Defaults to the workspace directory name when `wi init --title` is not given. Display only; nothing keys off it."
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "UTC ISO-8601 instant at which `wi init` created the workspace. The earliest point any state in this workspace can honestly claim."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "5.0.0",
+      "description": "The v5 schema generation these records were written under. Bound into every `state_digest` preimage, so a schema bump changes every state digest by construction rather than by convention."
+    },
+    "core_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version of the deterministic core (`scripts/wi.py`) that created the workspace. Recorded so a reviewer can tell which build produced a given proof, and so a version skew is visible instead of inferred."
+    },
+    "mode": {
+      "$ref": "#/$defs/evidence_mode",
+      "description": "The workspace default evidence mode, set by `wi init --mode`. A project-level policy file may narrow it further; individual commands may override it per invocation, and the override is recorded in the release manifest rather than in this row."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`. Stable across states of the same thing; never random."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset, as emitted by `_now()`."
+    },
+    "evidence_mode": {
+      "type": "string",
+      "enum": ["off", "light", "standard", "strict", "regulated"],
+      "description": "The five evidence modes from references/v5/POLICY_AS_CODE.md. `off` runs craft passes only; `light` extracts and lists claims without a verdict; `standard` classifies and flags but the verdict is advisory; `strict` enforces the verdict and requires a resolvable anchor or a stated qualification for every factual claim; `regulated` is strict plus contradictions blocking rather than holding and every proceed-anyway recorded as a waiver. The executable gate in `scripts/wi.py` accepts light, standard, strict and regulated."
+    }
+  }
+}

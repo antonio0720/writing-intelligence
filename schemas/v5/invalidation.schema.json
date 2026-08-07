@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/invalidation.schema.json",
+  "title": "InvalidationV5",
+  "description": "A record that a specific prior state's verification no longer applies, naming what caused it and why. It is the object that turns staleness from something a person is supposed to remember into something the system computes. An author who checked a figure in March and ships the deck in July has, without this record, no mechanism connecting the July artifact to the March check — so the check simply carries forward into a document nobody re-examined. Emitted by `Workspace.mark_stale()` in `scripts/wi.py` into the `invalidation` table, written by `wi impact --apply` after `compute_impact()` walks `depends_on` edges outward from the anchors whose byte ranges overlap the changed regions of a replaced source. Consumed by `Workspace.stale_nodes()`, by `gate_atoms()` (which HOLDS on any stale claim, and BLOCKS at regulated mode), and by `build_bundle()`, which sets `stale: true` on the affected node rows; `verify_bundle()` then fails `release.stale_closure` if any stale node reaches the release. The rule that makes this useful rather than alarming: an anchor whose byte range lies outside every changed region is provably unaffected, and propagation stops there.",
+  "type": "object",
+  "required": ["invalidation_id", "cause_state_digest", "affected_state_digest", "affected_logical_id", "reason_code", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "invalidation_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Derived by `logical_id(\"inv\", <cause_state_digest>, <affected_logical_id>, <reason_code>)`. Content-derived, so re-running the same impact analysis records the same invalidation once rather than accumulating duplicates of the same finding."
+    },
+    "cause_state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "Digest of the state whose change caused this invalidation — in the executable path, the raw-bytes blob digest of the new source version passed to `wi impact`. This is what makes an invalidation answerable: a reader can ask what moved, and get an exact answer rather than a date."
+    },
+    "affected_state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "Digest of the affected node's state at the moment it was invalidated. Recorded so that repairing the node produces a new state and the invalidation demonstrably no longer describes it, rather than being cleared by a flag someone flipped."
+    },
+    "affected_logical_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the node whose verification no longer applies. Anything reachable by `depends_on` from the cause can appear here: evidence anchors first, then the claim atoms bound to them, then paragraphs, verification records and release targets."
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": ["source_version_changed", "claim_state_changed", "anchor_state_changed", "policy_changed", "judgment_expired", "decision_stale", "waiver_stale", "definition_changed"],
+      "description": "Why the verification stopped applying, as a stable machine-readable code rather than a sentence. `source_version_changed` is the only code the v5.0 core writes, from `wi impact --apply`; the others are the propagation causes specified in references/v5/STALENESS.md — a claim rewritten out from under its proof, an anchor rebound, a policy tightened, a judgment past its `expires_if` contract, a decision or waiver made against a state that has since moved, and a registered definition whose binding changed under every use site."
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When the invalidation was recorded. Not when the cause happened — a source can have been replaced long before anyone ran the analysis, and conflating the two would let a system claim it noticed sooner than it did."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    }
+  }
+}

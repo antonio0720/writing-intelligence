@@ -10,3 +10,8 @@ dist/
 *.claims.json
 __pycache__/
 *.pyc
+
+# v5 workspace. The index and object store are local build state; wi.project.yaml,
+# wi.tests.yaml, wi.policy.yaml and wi.lock are the parts you commit.
+.wi/
+!wi.lock

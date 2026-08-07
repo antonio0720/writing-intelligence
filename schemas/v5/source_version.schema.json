@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/source_version.schema.json",
+  "title": "SourceVersionV5",
+  "description": "One exact byte state of a source artifact. This node is what an evidence anchor is ultimately about: an anchor that resolved against these bytes stays true about these bytes forever, and a later version does not silently inherit that truth. Emitted as a `source.version` node by `register_sources()` in `scripts/wi.py` during `wi ingest`; consumed by `wi impact` (which diffs two versions to compute the exact stale set), `wi anchor`, and the `sources/sources.lock` member of a `.wiab` bundle. Every version of an artifact shares the artifact's logical id in `artifact` and has its own version logical id derived from the file name plus the blob digest, so supersession is a chain rather than an overwrite.",
+  "type": "object",
+  "required": ["logical_id", "artifact", "blob_digest", "byte_length"],
+  "additionalProperties": false,
+  "properties": {
+    "logical_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Derived by `logical_id(\"source_version\", <file name>, <blob_digest>)`. Two ingests of identical bytes produce the same version id, so re-ingesting an unchanged file is a no-op rather than a new state."
+    },
+    "artifact": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the SourceArtifactV5 this is a version of. The join that lets 'the same document' and 'the same bytes' be asked separately."
+    },
+    "blob_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "SHA-256 over the source's RAW BYTES, taken before any decoding, Unicode normalization, whitespace folding or text extraction. This is deliberate and load-bearing: normalizing first would mean an upgrade to the normalizer could change a source's identity without the source changing, so a proof could move while no source moved. Every derived, normalized object is hashed separately with `state_digest()`, which is domain-separated from this value so a byte stream and a semantic object can never be confused for one another. See references/v5/CANONICAL_HASHING.md section 3."
+    },
+    "byte_length": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Length of the raw bytes. Recorded alongside the digest so a truncated fetch is visible as a length mismatch before anyone has to compare hashes, and so byte offsets in an anchor can be bounds-checked without loading the source."
+    },
+    "state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "Digest of this version node's canonical payload under `state_digest(payload, \"source_version\")`, binding schema id and normalization version into the preimage. This is the node's state identity in the graph and is NOT the same value as `blob_digest`, which addresses the bytes."
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/logical_id"},
+      "uniqueItems": true,
+      "description": "Logical ids of earlier versions of the same artifact that this version replaces. In the executable core this relation is stored as `supersedes` edges rather than as a field on the node payload; it is expressed here as an array because a consumer reading a version record in isolation still needs the chain to know whether an anchor is pointing at current bytes."
+    },
+    "media_type": {
+      "type": "string",
+      "description": "Media type as ingested for this specific byte state. Present because an artifact can change format between versions without changing identity."
+    },
+    "ingested_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When these bytes entered the workspace object store."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form used everywhere in v5."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    }
+  }
+}

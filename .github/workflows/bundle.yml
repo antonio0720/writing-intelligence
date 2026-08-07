@@ -1,0 +1,85 @@
+name: Bundle
+
+# The committed `writing-intelligence.skill` at the repo root is what README.md
+# and docs/INSTALL.md tell people to download. That instruction is only safe
+# while the committed bundle is the tree it claims to be.
+#
+# Relying on a human to remember `bash scripts/build-skill.sh` after every
+# doctrine edit is exactly the class of failure this project exists to catch:
+# a stale artifact that installs identically to a current one and says nothing.
+# So main rebuilds it here, and pull requests are gated by the freshness check
+# in ci.yml. Neither mechanism alone is sufficient; together they are.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "SKILL.md"
+      - "README.md"
+      - "CHANGELOG.md"
+      - "CHEATSHEET.md"
+      - "USER_GUIDE.md"
+      - "ROADMAP.md"
+      - "CONTRIBUTING.md"
+      - "LICENSE"
+      - "agents/**"
+      - "benchmarks/**"
+      - "certification/**"
+      - "docs/**"
+      - "examples/**"
+      - "governance/**"
+      - "references/**"
+      - "release/**"
+      - "schemas/**"
+      - "scripts/**"
+      - "tests/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bundle-main
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    name: rebuild the committed bundle if it drifted
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # build-skill.sh refuses to build if either regression suite fails, so a
+      # broken tree cannot produce a bundle for this job to commit.
+      - name: Build
+        run: bash scripts/build-skill.sh
+
+      - name: Commit only if the bytes actually changed
+        run: |
+          if git diff --quiet -- writing-intelligence.skill; then
+            echo "committed bundle already matches the tree; nothing to do"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add writing-intelligence.skill
+          git commit \
+            -m "chore(bundle): rebuild writing-intelligence.skill" \
+            -m "The committed bundle is the download path documented in README.md, so it has to be the tree it claims to be. Rebuilt because a payload file changed."
+          git push
+          echo "rebuilt and pushed"
+
+      - name: Summary
+        run: |
+          {
+            echo "### Skill bundle"
+            echo
+            echo "- sha256 \`$(cut -d' ' -f1 dist/writing-intelligence.skill.sha256)\`"
+            echo "- $(stat -c%s dist/writing-intelligence.skill) bytes"
+          } >> "$GITHUB_STEP_SUMMARY"

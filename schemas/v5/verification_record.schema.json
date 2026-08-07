@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/verification_record.schema.json",
+  "title": "VerificationRecordV5",
+  "description": "The outcome of running one deterministic check against one exact state of one claim. It exists so that a check result is a first-class, addressable object rather than a line in a report: a proof that cannot be pointed at cannot be contested, cannot be shipped inside a bundle, and cannot be marked stale when the thing it was about moves. Because the record binds `claim_state` and not just `claim`, a verification never silently follows a claim into a new wording — edit the claim and the record still describes the state it was taken against, which is exactly what makes staleness computable. Emitted by `anchor_and_check()` in `scripts/wi.py` as entries in a claim atom's `checks` array, materialized as `verification.result` graph nodes by `write_ledger_to_graph()`, and flattened one row per check into the `proof/checks.jsonl` member of a `.wiab` bundle by `build_bundle()`. Consumed by `verify_bundle()`, which fails `proof.dependencies` if any row references a claim that is not in the graph.",
+  "type": "object",
+  "required": ["claim", "claim_state", "check", "result", "basis"],
+  "additionalProperties": false,
+  "properties": {
+    "claim": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the ClaimAtomV5 the check ran against."
+    },
+    "claim_state": {
+      "$ref": "#/$defs/digest",
+      "description": "State digest of the exact claim state the check ran against. The load-bearing field: a result about state A says nothing about state B, and pairing the two is how a rewrite invalidates its own proof without anyone remembering to."
+    },
+    "check": {
+      "type": "string",
+      "enum": ["anchor.integrity", "quote.verbatim", "citation.resolution", "numeric.value", "date.range", "entity.presence", "source.digest", "source.quarantine", "graph.reference_integrity", "release.closure", "release.artifact_digest"],
+      "description": "Which check ran. The first six are the atom-level checks `anchor_and_check()` runs during `wi anchor`: `anchor.integrity` (was a locating span found), `quote.verbatim` (does quoted text appear verbatim in a supplied source), `citation.resolution` (does a citation-shaped reference resolve to anything supplied — the fabrication check), `numeric.value`, `date.range`, `entity.presence`. The remaining five are workspace- and release-level checks reported by `capabilities()` and run by `wi ingest`, `wi graph` and `wi verify-release`."
+    },
+    "result": {
+      "type": "string",
+      "enum": ["pass", "fail", "candidate", "unavailable"],
+      "description": "`pass` and `fail` are outcomes of a comparison that actually executed. `unavailable` means the check could not run — no readable source, no configured capability — and is recorded rather than omitted, because an absent check and a passing check must never look the same to a reader. `candidate` marks a retrieval hit offered for human inspection and explicitly not counted as support; the v5.0 core carries candidacy in the claim atom's `status` (`candidate_support`) and emits only `pass`, `fail` and `unavailable` in this field."
+    },
+    "basis": {
+      "$ref": "#/$defs/basis",
+      "description": "How the result was produced. Every record the v5.0 core emits carries `verified`, because every check it runs is a deterministic comparison that actually executed."
+    },
+    "detail": {
+      "type": ["string", "null"],
+      "description": "What the check found, in words: which figures were absent from every source, which years did not appear, whether a match was inside the anchor span or merely somewhere in the corpus. The distinction between 'within the anchor span' and 'present in the corpus but not inside the anchor span' is carried here and is the difference between `span_supported` and `candidate_support` upstream. Null or absent when there is nothing specific to add."
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When the check ran. The v5.0 core does not stamp individual check entries; the containing ledger carries `anchored_at` and the `verification.result` graph node carries the workspace row's `created_at`, so a consumer reading a `proof/checks.jsonl` row alone will not find this field."
+    },
+    "status": {
+      "$ref": "#/$defs/claim_status",
+      "description": "The claim's overall proof state at the moment the check set completed. Present on the `verification.result` NODE payload, which aggregates all checks for one claim state; not present on the flattened per-check rows in a bundle."
+    },
+    "checks": {
+      "type": "array",
+      "items": {"type": "object"},
+      "description": "The full set of check entries this record aggregates. Present on the `verification.result` node payload written by `write_ledger_to_graph()`; not present on the flattened per-check rows."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    },
+    "basis": {
+      "type": "string",
+      "enum": ["verified", "measured", "judged", "human_declared"],
+      "description": "The reliability type of the result, from references/v5/RELIABILITY_TYPES.md. `verified` names how the result was produced — a deterministic comparison that ran and passed — not how sure anyone is. There is no confidence threshold that promotes a `judged` result into a `verified` one, and a provider that emits `verified` is rejected at the schema boundary rather than coerced."
+    },
+    "claim_status": {
+      "type": "string",
+      "enum": ["unverified", "supported", "span_supported", "quote_verified", "candidate_support", "author_asserted", "inference", "recommendation", "needs_source", "conflicted", "unsafe", "stale"],
+      "description": "The claim atom proof states. Defined in full in claim_atom.schema.json."
+    }
+  }
+}

@@ -1,0 +1,299 @@
+### wi init --title "Delta Regional Capacity" --mode strict
+initialized workspace: /tmp/w5/.wi
+  index    /tmp/w5/.wi/workspace.db
+  objects  /tmp/w5/.wi/objects/sha256
+  project  /tmp/w5/wi.project.yaml
+  mode     strict
+
+Next: `wi ingest sources/` then `wi atomize drafts/your-draft.md`
+
+### wi ingest sources/
+ingested 2 file(s); 2 readable, 0 need extraction first
+  board_update.txt                              sha256:b2d644993ddb       267 B  new
+  outcomes_report.txt                           sha256:4f4f6c8d11d7       529 B  new
+
+Sources are stored by content digest. The raw bytes are hashed before
+any normalization, so an extractor upgrade is a separate, visible change.
+
+### wi atomize drafts/report.md
+6 claim atom(s) from 8 paragraph(s) -> /tmp/w5/.wi/graph/ledger-3c060a94921699b4.json
+  observed_fact    1
+  sourced_fact     5
+  2 atom(s) came from splitting a compound sentence
+script tier: tier1 (space-delimited script; word metrics available)
+graph: meaning.claim_atom 6, source.artifact 2, source.version 2, structure.paragraph 8, structure.work 1
+
+### wi anchor .wi/graph/ledger-*.json sources/
+anchored 6 atom(s) against 2 readable source(s) -> .wi/graph/ledger-3c060a94921699b4.json
+6 evidence anchor(s) bound (text_span)
+  author_asserted    1
+  quote_verified     1
+  span_supported     2
+  supported          2
+
+Checks not run:
+  - paraphrase entailment (judgment tier; no provider configured)
+  - pdf_region / sheet_range / audio_time / video_time / image_region anchors (specified, not executable in this build)
+
+graph: meaning.claim_atom 6, source.artifact 2, source.segment 6, source.version 2, structure.paragraph 8, structure.work 1, verification.result 6
+
+### wi explain drafts/report.md:5
+drafts/report.md:5
+
+a0001  sourced_fact
+  "Between 2019 and 2022, the Delta Regional Capacity Program served 11,800 households across seven counties"
+  status   supported
+  realm    external_fact
+  quantity 11800 households
+  when     2019 to 2022
+  modality is
+  anchors:
+    outcomes_report.txt  bytes 66-171  sha256:347be3eca9f7
+      > Between 2019 and 2022, the Delta Regional Capacity Program served 11,800 households across seven counties
+  checks:
+    anchor.integrity       pass       verified
+    numeric.value          pass       verified
+    date.range             pass       verified
+    entity.presence        pass       verified
+  used by  1 structure.paragraph, 1 verification.result
+
+a0002  sourced_fact
+  "median wait time for intake fell from 42 days to 26 days."
+  status   span_supported
+  realm    external_fact
+  quantity 42 days, 26 days
+  modality is
+  anchors:
+    outcomes_report.txt  bytes 173-278  sha256:2cde015f183e
+      > Median wait time for intake fell from 42 days to 26 days over the same period, a reduction of 38 percent.
+  checks:
+    anchor.integrity       pass       verified
+    numeric.value          pass       verified
+  note     every checkable component appears inside one span of one source; whether that span entails the sentence is a judgment-tier question and was not evaluated
+  used by  1 structure.paragraph, 1 verification.result
+
+Support is verified within the sources you supplied. It does not mean
+the sources are correct.
+
+### wi gate .wi/graph/ledger-*.json
+# Release gate: RELEASE
+
+Evidence mode: `strict` · 6 claim atom(s) · 2 readable source(s) · 0 stale node(s)
+
+Checks run: anchor integrity · quotation · numeric · date · entity · citation resolution.
+Not run: paraphrase entailment (judgment tier; no provider configured)
+Not run: pdf_region / sheet_range / audio_time / video_time / image_region anchors (specified, not executable in this build)
+
+| Status | Count |
+|---|---|
+| `author_asserted` | 1 |
+| `quote_verified` | 1 |
+| `span_supported` | 2 |
+| `supported` | 2 |
+
+Nothing outstanding at this evidence mode.
+
+Every claim atom is supported *within the sources you supplied*, 
+marked as your own assertion, or classified as reasoning rather 
+than fact. It does not mean the sources are correct.
+
+### wi graph
+Authorship graph — /tmp/w5
+
+| Node type | Count |
+|---|---|
+| `meaning.claim_atom` | 6 |
+| `source.artifact` | 2 |
+| `source.segment` | 6 |
+| `source.version` | 2 |
+| `structure.paragraph` | 8 |
+| `structure.work` | 1 |
+| `verification.result` | 6 |
+
+| Edge relation | Count |
+|---|---|
+| `asserted_in` | 14 |
+| `depends_on` | 33 |
+| `derived_from` | 8 |
+| `supports` | 7 |
+
+31 node(s), 62 edge(s), 0 marked stale
+
+### wi test --tests wi.tests.yaml
+# Writing tests
+
+PASS  every_sourced_claim_has_support        5 of 5 required claim atoms carry a verbatim span (1.000)
+PASS  no_orphan_citations                    0 citation(s) resolve to nothing supplied
+PASS  households_figure_does_not_drift       concept 'households_served' canonical value present in 1 file(s)
+PASS  outcomes_section_present               required section 'outcomes' missing from 0 file(s)
+PASS  no_legacy_brand_term                   forbidden term 'Legacy Program Name' found 0 time(s)
+
+5 passed · 0 failed · 0 unavailable
+
+### wi bundle out/delta.wiab --artifact drafts/report.md
+built out/delta.wiab (10787 bytes, profile: hash-only)
+  verdict          RELEASE
+  claim atoms      5 required, 5 permitted
+  graph            31 nodes, 62 edges
+  stale nodes      0
+  proof closure    sha256:4eda4da4d91aa89e
+  sha256           sha256:007ccb9e36ce7534da8bff9a1592c71450647abccc83187d312ea1ee81bc1c0a
+
+This is a hash-only bundle. A reviewer who does not already hold the
+sources cannot inspect them from it, and the manifest says so.
+
+Verify anywhere: python3 wi.py verify-release out/delta.wiab
+
+### wi verify-release out/delta.wiab
+# Release verification: delta.wiab
+
+project   delta-regional-capacity
+built by  wi.py 5.0.0
+profile   hash-only
+verdict   RELEASE
+
+PASS  archive.integrity            
+PASS  bundle.completeness          
+PASS  manifest.format              wi-release-manifest
+PASS  object.digests               
+PASS  release.artifact_digest      
+PASS  graph.reference_integrity    0 dangling edge(s)
+PASS  proof.dependencies           0 check(s) reference a claim not in the graph
+PASS  release.stale_closure        0 stale node(s)
+PASS  manifest.counts              manifest says 31 nodes / 62 edges; bundle has 31 / 62
+PASS  core.version                 5.0.0
+SKIP  release.signature            unsigned bundle
+
+Checks the producer states were NOT run:
+  - paraphrase entailment (judgment tier; no provider configured)
+  - pdf_region / sheet_range / audio_time / video_time / image_region anchors (specified, not executable in this build)
+
+RELEASE MANIFEST VALID
+
+Verified by recomputing digests. No model, no network, no trust in
+whoever produced this bundle. It does not mean the sources are correct.
+
+### wi diff drafts/report.md drafts/report-v2.md --semantic
+# Semantic diff
+
+drafts/report.md -> drafts/report-v2.md
+6 changed · 0 added · 0 removed · 2 change(s) invalidate existing proof
+
+BEFORE  Between 2019 and 2022, the Delta Regional Capacity Program served 11,800 households across seven counties
+AFTER   Between 2019 and 2022, the Delta Regional Capacity Program served 12,400 households across seven counties
+EFFECT  quantity_changed
+PROOF   existing support does not carry forward (quantity_changed)
+
+BEFORE  median wait time for intake fell from 42 days to 26 days.
+AFTER   median wait time for intake fell from 42 days to 26 days.
+EFFECT  none detected
+PROOF   unaffected
+
+BEFORE  The independent evaluator concluded that "sustained case management was the decisive factor in retention."
+AFTER   The independent evaluator concluded that "sustained case management was the decisive factor in retention."
+EFFECT  none detected
+PROOF   unaffected
+
+BEFORE  Staff retention at partner agencies held at 84 percent through 2022.
+AFTER   Staff retention at partner agencies held at 84 percent through 2022.
+EFFECT  none detected
+PROOF   unaffected
+
+BEFORE  Sustained case management may reduce median intake wait time by 38 percent in programs of this size.
+AFTER   Sustained case management reduces median intake wait time by 38 percent in programs of this size.
+EFFECT  certainty_strengthened
+PROOF   existing support does not carry forward (certainty_strengthened)
+
+BEFORE  We have operated in the Delta since 2014.
+AFTER   We have operated in the Delta since 2014.
+EFFECT  none detected
+PROOF   unaffected
+
+deterministic classes only; paraphrase equivalence is a judgment-tier question and was not evaluated
+
+### the governing source changes: 11,800 -> 11,240
+### wi impact sources/outcomes_report.txt --apply
+Source changed: outcomes_report.txt
+  was  66f7d08b
+  now  6faba17a  sha256:a8a1aaedb4b4
+  1 changed byte range(s)
+
+Affected:
+     1  claim atom
+     1  evidence anchor
+     1  paragraph
+     1  document
+     1  verification record
+
+Unaffected:
+     4  evidence anchor(s) provably outside the change
+     5  claim atom(s) still verified
+
+Cheapest safe repair (cost 4):
+  1. re-anchor 1 claim(s) to the current source version
+  2. re-run deterministic checks on 1 claim atom(s)
+
+Marked 5 node(s) stale. `wi gate` will hold until they are repaired.
+
+### wi gate .wi/graph/ledger-*.json
+# Release gate: HOLD
+
+Evidence mode: `strict` · 6 claim atom(s) · 2 readable source(s) · 5 stale node(s)
+
+Checks run: anchor integrity · quotation · numeric · date · entity · citation resolution.
+Not run: paraphrase entailment (judgment tier; no provider configured)
+Not run: pdf_region / sheet_range / audio_time / video_time / image_region anchors (specified, not executable in this build)
+
+| Status | Count |
+|---|---|
+| `author_asserted` | 1 |
+| `quote_verified` | 1 |
+| `span_supported` | 2 |
+| `supported` | 2 |
+
+## Holding (1)
+
+You can proceed; you are choosing to, with these outstanding.
+
+**a0001** — verified against an earlier source version
+
+> Between 2019 and 2022, the Delta Regional Capacity Program served 11,800 households across seven counties
+
+- Repairs: attach a source that states this · qualify the claim to match what your sources actually say · cut the claim · proceed with a stated caveat (records a waiver)
+
+
+### wi doctor
+Writing Intelligence 5.0.0 — capability report
+
+python            3.11.15
+schema            5.0.0
+canonicalization  wi-json-v1
+workspace         /tmp/w5
+network           disabled
+
+Deterministic checks available (11):
+  source.digest
+  source.quarantine
+  anchor.integrity
+  quote.verbatim
+  numeric.value
+  date.range
+  entity.presence
+  citation.resolution
+  graph.reference_integrity
+  release.closure
+  release.artifact_digest
+
+Evidence anchor types available: text_span
+
+Not available here — and therefore never reported as done:
+  audio_time             adapter specified, not executable in this build
+  external_signing       Sigstore and C2PA paths are specified, not executable
+  image_region           adapter specified, not executable in this build
+  paraphrase_entailment  no judgment provider is configured
+  pdf_region             adapter specified, not executable in this build
+  sheet_range            adapter specified, not executable in this build
+  video_time             adapter specified, not executable in this build
+
+This report is Law C as protocol: a surface states what it cannot do
+rather than degrading quietly into looking like it did it.

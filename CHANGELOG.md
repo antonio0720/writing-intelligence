@@ -7,6 +7,136 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [5.0.0] — 2026-08-07 — **Proof-Carrying Authorship OS**
+
+### The Leap
+
+v1.0 proved AI-sounding prose can be defeated by compilation instead of cosmetic cleanup.
+v2.0 proved fiction can be engineered as a living architecture.
+v3.0 proved authorship can be governed without being flattened.
+v4.0 proved it can be held accountable.
+**v5.0 proves the account can be carried, checked and re-checked by someone who was never in the room.**
+
+v4 verifies a document at a moment. v5 keeps the verification bound to the things it depended on, so an edit made three weeks after a check cannot quietly inherit the check's result — and packages the whole account into an artifact a stranger can verify offline, with no model and no network.
+
+**The v5 law:** *A reader can point at any sentence, number or quotation and ask why it is here, what supports it, what depends on it, and what breaks if it changes — and another machine can independently verify the answer.*
+
+The v4 layer is preserved in force. Laws A through F are unchanged; v5 adds Laws G through L above them, in `references/v5/CONSTITUTION.md`.
+
+### Added
+
+**Six new system laws — G through L** (`references/v5/CONSTITUTION.md`)
+- **Law G** — Meaning has identity independent of wording *(claim atoms executable; the full concept registry specified)*
+- **Law H** — Every consequential transformation declares its semantic delta *(executable)*
+- **Law I** — Verification is dependency-aware *(executable)*
+- **Law J** — Human decisions are first-class artifacts *(specified)*
+- **Law K** — One proof engine, many surfaces *(the canonical core is `scripts/wi.py`; no second implementation exists)*
+- **Law L** — A release must be explainable without trusting the model that helped create it *(bundle build and offline verification executable; judgment records specified)*
+
+**`scripts/wi.py` — the deterministic core, now 5.0.0**
+Still one stdlib-only file, still Python 3.8+, still no dependencies, no network, no model, no telemetry. About 3,500 lines. Twelve new subcommands beside the five it already had, for seventeen in total.
+
+- `init` — create a `.wi/` workspace: a SQLite index, a content-addressed object store under `.wi/objects/sha256`, a `wi.project.yaml` and a `wi.lock`
+- `ingest` — content-address sources. **Raw bytes are hashed before any normalization**, so an extractor upgrade is a separate, visible change rather than a silent digest shift. Each distinct byte state becomes an immutable `source.version`
+- `atomize` — split sentences into independently checkable claim atoms. A compound sentence asserting three things becomes three atoms, verified separately, invalidated separately, repaired separately. Each atom carries a structured proposition: quantity, unit, temporal scope, modality, negation, attribution, entities, realm
+- `anchor` — bind atoms to evidence anchors with byte offsets and quote digests, then run the deterministic check set. `text_span` only; the other six anchor kinds are specified and are reported as unavailable rather than approximated
+- `graph` — the authorship graph. Node families `source.artifact` · `source.version` · `source.segment` · `meaning.claim_atom` · `structure.paragraph` · `structure.work` · `verification.result`; edge relations `asserted_in` · `depends_on` · `derived_from` · `supports`. Every node carries **two identities**: a content-derived logical id and an immutable state digest
+- `impact` — staleness and the **minimum repair frontier**. A changed source reports exactly which anchors, atoms, paragraphs, documents and verification records it broke — **and how many it provably did not** — plus a costed repair plan. The provably-unaffected count is the load-bearing half: a checker that turns the whole document red on every save is one somebody switches off
+- `diff --semantic` — deterministic semantic diff over the Law H axes. `may reduce → reduces` classifies as `certainty_strengthened`; `11,800 → 12,400` classifies as `quantity_changed`; each change states whether existing proof carries forward. Paraphrase equivalence is not evaluated and the output says so
+- `test` — writing tests as declarative rules over graph state: evidence coverage **with a visible denominator**, forbidden terminology, concept-registry drift with named forbidden aliases, required sections, orphan citations
+- `bundle` — build a `.wiab` proof-carrying release in three profiles: `full` (source bytes travel), `hash-only` (digests only; a reviewer who does not hold the sources cannot inspect them, and the manifest says so), `redacted` (excerpts, no source blobs)
+- `verify-release` — verify a `.wiab` **offline, with no model, on a machine that has never seen the workspace**, by recomputing every digest. Eleven checks: archive integrity, bundle completeness, manifest format, object digests, release artifact digest, graph reference integrity, proof dependencies, stale closure, manifest counts, core version, signature *(skipped — unsigned)*. A tampered artifact is rejected with `WI_RELEASE_TAMPERED`
+- `explain path:line` — why this sentence is here: class, status, realm, extracted quantity and temporal scope, every anchor with byte range and quote digest, every check with its result and reliability type, and what depends on it
+- `doctor` — capability negotiation. Reports the eleven available deterministic checks, the one available anchor type, and the seven capabilities that are **not** available here with a reason for each. Law C as protocol
+- `preserve` — unchanged in behaviour, now workspace-aware
+
+**A new claim status: `span_supported`**
+Every checkable component of a claim was found co-located inside **one span of one source**. It is distinct from `supported` (verbatim presence of the claim itself) and distinct from `candidate_support` (components found, but scattered across the corpus). Whether that span *entails* the sentence is a judgment-tier question, and the output says it was not evaluated. This status exists because collapsing it into `supported` overstates and collapsing it into `needs_source` understates, and both errors are silent.
+
+**Canonical serialization and domain-separated digests** (`references/v5/CANONICAL_HASHING.md`)
+- RFC 8785-shaped canonical JSON: NFC, sorted keys, no insignificant whitespace
+- Two digests per object — a content digest and a domain-separated state digest under `wi-state-v5`, with the schema identifier and schema version inside the preimage
+- Error taxonomy with a repair route on every code: `WI_INPUT_INVALID` · `WI_SOURCE_UNREADABLE` · `WI_SOURCE_VERSION_MISSING` · `WI_GRAPH_INTEGRITY` · `WI_RELEASE_TAMPERED` · `WI_BUILD_FAILED` · `WI_DIR`
+
+**The `.wi/` workspace** (`references/v5/WORKSPACE.md`)
+SQLite index, content-addressed object store, `snapshots/`, `graph/`, `decisions/`, and a `wi.lock` that pins the core version and every ingested source digest.
+
+**Twenty doctrine documents** — `references/v5/`
+CONSTITUTION · NON_GOALS · RELIABILITY_TYPES · AUTHORSHIP_GRAPH · SEMANTIC_IR · EVIDENCE_ANCHORS · CANONICAL_HASHING · CONCEPT_REGISTRY · SEMANTIC_DIFF · STALENESS · JUDGMENT_TIER · PROOF_CARRYING_RELEASE · POLICY_AS_CODE · WORKSPACE · STORYWORLD_OS · MULTIMODAL · RIGHTS_AND_CONSENT · SECURITY_MODEL · ARCHITECTURE · SURFACES, indexed by `references/v5/README.md`.
+
+Every section of every one of them carries one of exactly two status markers on its first line: **executable in `scripts/wi.py`** or **specified**. No document in that directory describes a capability as though it ships when it does not.
+
+**Fifteen JSON Schemas** — `schemas/v5/`
+`claim_atom` · `concept_registry` · `decision` · `evidence_anchor` · `graph_edge` · `graph_node` · `invalidation` · `judgment_record` · `policy` · `proposal` · `release_manifest` · `source_artifact` · `source_version` · `verification_record` · `workspace`. The v3 schemas are unchanged and remain valid under their own namespace.
+
+**Eight new permanent refusals** (`references/v5/NON_GOALS.md`)
+No hosted-account dependency · no proprietary-model dependency · no vector database as the truth layer · no blockchain · no public transparency log by default · no autonomous source approval · no automatic legal or medical adjudication · no claim of invention over prior art. The v4 refusals carry forward unchanged. Embeddings are candidate retrieval and never evidence: a similarity score may not appear in a proof record, and would happily rank 11,800 as support for 12,400 — the exact fixture this project ships to prove the point.
+
+**Tests**
+- `tests/v5/test_wi5.sh` — 32 checks, each with a negative twin. A tampered bundle must be rejected *for the right reason*; an unchanged sentence must **not** be reported as a change; a concept registry that cannot fail is decoration
+- `tests/v5/world/` — a full worked fixture: two sources, two draft revisions, a tests file, a concept registry
+- `tests/v5/EXPECTED_TRANSCRIPT.txt` — a real end-to-end session, command by command
+- `tests/v4/test_wi.sh` — the 3-check v4 adversarial suite, unchanged and still required to pass
+
+**Documentation**
+- `docs/MIGRATION_v4_to_v5.md` — staged adoption path in six steps
+- `docs/INSTALL.md` extended to eight surfaces with a v5 capability matrix
+- `release/RELEASE_NOTES_v5.0.0.md`
+
+### Changed
+
+- **`scripts/wi.py` reports version `5.0.0`.** Release tooling checks the tag, `wi.py --version` and the `CHANGELOG.md` heading against one another, so this is a breaking version for anything that pinned the string
+- **`gate` accepts both ledger shapes.** A v4 sentence ledger and a v5 atom ledger are both valid input. The output adapts: sentences and claim counts for the former, claim atoms plus a stale-node count for the latter. Existing CI jobs and git hooks keep working with no edit
+- **`gate --mode` now defaults to the project's `evidence.default_mode`** instead of `standard`. Where there is no project file, the default is still `standard`. **This is a behaviour change for anyone who ran `gate` inside a workspace and relied on the old implicit default** — a project initialized with `--mode strict` now gates at `strict` without the flag
+- **The claim status vocabulary gained `span_supported` and `candidate_support`.** Anything consuming the status strings must handle both. `span_supported` counts toward evidence coverage; `candidate_support` holds the gate
+- **`preserve` writes into `.wi/snapshots/` when a workspace exists**, rather than beside the file. Outside a workspace the v4 behaviour is unchanged
+- **The verification unit is the claim atom, not the sentence.** A sentence asserting three things used to get one status, which meant an author told `needs_source` could not tell which third of their sentence failed
+- Reliability types are now enforced types in the record format rather than adjectives in a report: `verified` · `measured` · `judged` · `human-declared`. They never collapse into one score, and a judgment can never emit a `verified` record
+- `references/v5/` supersedes nothing in `references/v4/`; the v4 documents remain the normative text for Laws A through F
+
+### Fixed
+
+Pre-release testing of the v5 core caught and fixed six defects. They are recorded because a release that only lists what was added is describing a system nobody stress-tested.
+
+- **YAML flow-mapping crash in `wi test`.** The minimal stdlib YAML reader did not handle inline flow mappings, so a tests file written with `{ }` syntax aborted the run instead of parsing it. A test harness that crashes on valid input reports nothing, which is the most dangerous output it has
+- **Source-version state digests were conflated with raw blob digests.** A `source.version` node was being identified by the digest of its bytes rather than by its own domain-separated state digest. Two objects that mean different things must not share an identity, and version identity is what every staleness computation walks
+- **Anchors bound to the artifact instead of the version.** An anchor that points at a source *artifact* cannot go stale when the artifact's bytes change — it points at a name, not a state. This defeated Law I at its root and is the single most consequential of the six
+- **Schema identifiers inside the digest preimage were inconsistent** between the write path and the verification path, so a digest recomputed by `verify-release` could disagree with the one recorded at build time for an untampered bundle. A verifier that fails on honest artifacts is as useless as one that passes on dishonest ones
+- **`realm` mislabelled inferences as rhetorical.** Atoms classified `inference` fell through to the `rhetorical` default, which removes a claim from checking entirely — an inference about the world is an `external_fact` realm claim whose support is reasoning, not a figure of speech
+- **`wi test` miscounted unavailable tests.** Assertions that could not run were being counted in the passed total. An unimplemented assertion is `unavailable`, never a pass and never a fail; reporting it either way is the exact confusion Law C forbids
+
+### Deprecated
+
+Nothing is removed in 5.0.0. Two things are superseded and will keep working:
+
+- **The sentence as the verification unit.** `extract-claims` and `verify` still operate on sentences and still ship. New work should use `atomize` and `anchor`, which produce atoms with persistent identity inside a workspace. There is no converter and none is needed — re-run `atomize` on the draft; the old `claims.json` is not consumed, migrated or deleted
+- **Standalone `claims.json` ledgers outside a workspace.** Still valid input to `verify` and `gate` forever, but nothing outside a workspace can be dependency-aware, so a ledger with no workspace cannot go stale and cannot be bundled
+
+`services/api/` remains the **v3 craft kernel** and still does not expose the accountability or proof tier. That is Law K, not an oversight.
+
+### Not yet implemented
+
+Specified in this repository, normatively described, and **not executable anywhere**. Each is labelled at the point of description, and `wi doctor` reports the live list on any machine.
+
+- **A compiled Rust/WASM core.** Nothing in this release is written in Rust. Every `crates/` path in `references/v5/ARCHITECTURE.md` §4 is a target, not a directory that exists
+- **PDF, DOCX, XLSX, image, audio and video anchors.** Six of the seven anchor kinds. `text_span` is the one that runs
+- **Any judgment provider.** Paraphrase entailment is not evaluated by anything in this release. The provider ABI and the judgment record format are written to bind an implementation that does not exist
+- **Proposal and decision objects as persisted records.** Laws A and J are conduct today, not stored artifacts. The proposal object and the decision record are specified; the object store does not yet contain them
+- **External signing** — Sigstore, C2PA and PROV export. `release.signature` reports `SKIP — unsigned bundle`
+- **The Workbench desktop app**
+- **The MCP server.** `docs/mcp/MCP_SPEC.md` specifies the interface; no implementation ships
+- **REST v5.** `services/api/` is the v3 craft surface
+- **Multi-actor authority policy.** The seven actor types are specified; delegated authority is not enforced
+- **At-rest encryption of the workspace**
+- **`wi migrate`.** No schema migration is required for this release, so the command does not exist yet rather than existing and doing nothing
+
+### Created by
+
+**Antonio T. Smith Jr. / Density6 LLC**
+[densitysix.com](https://densitysix.com)
+
+---
+
 ## [4.0.0] — 2026-08-06 — **Accountable Authorship System**
 
 ### The Leap

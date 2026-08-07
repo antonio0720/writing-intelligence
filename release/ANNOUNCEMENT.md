@@ -1,229 +1,111 @@
-# Writing Intelligence v3.0 — The Move Most Builders Will Miss
+# Writing Intelligence v5.0 — The Sentence You Can Defend
 
 **By Antonio T. Smith Jr. — Founder & CEO, Density6 LLC**
 
 ---
 
-You can tell when something was written by a person.
+Every writing tool on the market makes prose sound better.
 
-You may not be able to name what tipped you off. The cadence is wrong. The sentences are the same length. The arguments march in formation. The "insights" turn out to be slogans. The opening over-promises. The closing has already given up.
+Not one of them can tell you whether the sentence you are about to send is one you can defend.
 
-You don't read it. You scroll past it.
+That is the whole gap. A confident paragraph with a fabricated citation looks exactly like a confident paragraph with a real one. A number that was checked in March looks exactly like a number that was checked in March and then quietly edited in June. A hedge somebody tightened from *may reduce* to *reduces* looks like a copy edit and is a change of claim. The reader cannot tell the difference. Increasingly, neither can the author.
 
-That is the cost the rest of the world is paying for free AI writing tools. They strip the AI tells. They leave behind generic. Generic gets ignored. Ignored doesn't get funded, hired, opened, read, or remembered.
-
-I built Writing Intelligence because someone had to put the floor under that.
+Fluency reads as diligence. That is the con, and nobody is running it on purpose.
 
 ---
 
-## What v1.0 Proved
+## What v4 did, and where it stopped
 
-Cleanup is not enough. Compilation is.
+v4 put a floor under it. Support had to be a verbatim span from a source you supplied, or the claim came back `needs_source`. Every edit arrived as a proposal with the original intact. Every supplied document got scanned for injection before it could reach anything. Every draft ended in `RELEASE`, `HOLD` or `BLOCK` with named repairs.
 
-v1.0 ran every piece of writing through a six-pass pipeline. It removed slop. It restored voice. It enforced evidence. It graded the result on a hundred-point scorecard. It worked. Fifty-two files. Forty-two thousand words. Free.
+It worked, and it stopped at two places.
 
-People started using it on their grants. Their sermons. Their pitch decks. Their college essays. Their cold emails. Their chapters. The detectors that flagged everyone else's prose stopped flagging theirs.
+It verified a document **at a moment**. Nothing bound the check to the things it depended on, so an edit made three weeks later inherited a result that no longer applied. A green badge over changed text is worse than no badge at all.
 
-## What v2.0 Proved
-
-Fiction is engineering.
-
-v2.0 added a Fiction Intelligence Engine. Chapter Construction Doctrine. Twelve character role archetypes. Dialogue warfare. Power dynamics through props, space, and gesture. The eight-phase tension compression model. Thriller scene architecture. Transmedia character deepening. Seven independent scoring systems, each scored to one hundred.
-
-People started running their novels through it. Their screenplays. Their audio dramas. Their game cutscenes. The stories started feeling lived in, not assembled.
-
-## What v3.0 Proves
-
-**Authorship can be governed without being flattened.**
-
-That is the line. That is the move. That is what no other tool on the planet does today, and what no other tool on the planet will do tomorrow either — because they are all still trying to win the "make it sound human" race that we exited three years ago.
-
-v3.0 is not v2.0 with more packs.
-v3.0 is the operating system underneath the writing.
+And it could not hand anybody anything. The proof lived on your screen. A reader who did not trust you had no way to check it without trusting your tooling, which is the same thing.
 
 ---
 
-## The Eleven-Pass Kernel
+## What v5 changes
 
-You stop guessing what the system did. You watch it work.
+v5 makes the account a thing that travels.
 
-Pass 0: every request becomes a governed task object.
-Pass 1: mission lock.
-Pass 2: corpus governance — no source confusion, no hallucinated context, no accidental blending.
-Pass 3: diagnostic scan.
-Pass 4: explicit architecture graph — sections, paragraphs, claims, scenes, plants, payoffs.
-Pass 5: epistemic ledger — every claim classified, every source status flagged, every fabrication blocked.
-Pass 6: sentence surgery, logged, voice-impact-aware.
-Pass 7: voice restoration against a measurable fingerprint with drift detection.
-Pass 8: arena delivery — one piece, many bundles, channel-constraint-enforced.
-Pass 9: adversarial stress battery.
-Pass 10: score and deliver.
-Pass 11: memory and benchmark update.
+Every proof binds four dependencies: the exact source state, the exact anchor, the exact claim state, and the chain of accepted changes that produced the current wording. Change any one and the proof is stale — **unless the engine can prove the dependency was unaffected**. That exception is the whole reason it is usable rather than exhausting.
 
-Eleven artifacts. All schema-validated. All auditable. All reproducible.
-
-## Twelve Engines
-
-Intake Contract. Corpus Governance. Voice Fingerprint. Genre Stack. Architecture Graph. Epistemic Ledger. Prose Compiler. Narrative Intelligence. Arena Delivery. Benchmark and Regression. Agent Orchestration. Certification and Governance.
-
-Each one carries a doctrine file. Each one carries a schema. Each one can be invoked alone or composed into the full board.
-
-## Twelve Specialist Agents
-
-I decomposed the kernel into a writing board: Intake Architect, Corpus Auditor, Voice Fingerprinter, Genre Marshal, Structure Engineer, Evidence Prosecutor, Sentence Surgeon, Dialogue Commander, Narrative Architect, Stress Tester, Scorekeeper, Delivery Packager.
-
-Each agent owns one job and emits one artifact. The Scorekeeper cannot override the Evidence Prosecutor's caps. The Delivery Packager cannot invent content. The user constraint always beats the auto-detected genre. The conflict resolution is in the manifest. You can read it.
-
-## Eleven Schemas
-
-`intake_contract` · `corpus_map` · `voice_fingerprint` · `genre_stack` · `architecture_graph` · `epistemic_ledger` · `prose_rewrite_log` · `storyworld_memory` · `delivery_bundle` · `benchmark_result` · `agent_task`.
-
-This is the part the world will miss the longest. Schemas don't sound exciting. Schemas are the moat.
-
-Schemas are how you build a CLI for it. Schemas are how you build an MCP server for it. Schemas are how a CI pipeline can refuse to ship a PR that contains fabricated copy. Schemas are how a publishing operation enforces team voice across forty writers. Schemas are how a small business owner gets the same delivery bundle for LinkedIn, Twitter, YouTube, and their newsletter — without me writing four times.
-
-Without schemas, v3.0 is a brilliant skill. With schemas, v3.0 is infrastructure.
-
-## Twenty-Seven Genre Packs
-
-Sixteen from v2.0. Eleven new in v3.0:
-
-Grant / NOFO writing.
-Technical documentation.
-Journalism.
-Resume and cover letter.
-Social media.
-YouTube script.
-Newsletter.
-Real estate.
-Loan officer.
-Church leadership.
-Small business operator.
-
-I chose these by market utility, not novelty. Real people use these every week. The grant writer at the deadline. The pastor before Sunday. The loan officer at the closing table. The first-time founder hiring their first employee. The local agent listing their first investor property. The Substack writer at one thousand subscribers trying to get to ten thousand without losing their voice.
-
-The system now serves them.
-
-## The Voice Fingerprint Engine
-
-Voiceprints used to be descriptions. Cold authority. Strategic compression. Useful for human readers. Opaque to machines.
-
-In v3.0, voiceprints are measurements. Average sentence length. Variance. Compression ratio. Abstraction tolerance. Metaphor density. Question frequency. Authority posture on a zero-to-one-hundred dial. Dominant syntactic structures. Transition top-five.
-
-This means three things that did not exist before:
-
-1. Your voice drift is detectable. If a rewrite flattens you, the system tells you exactly which dimension drifted.
-2. Your team voice is enforceable. Forty writers can share one fingerprint and the editor watches the deltas.
-3. Your characters are distinguishable. In fiction, "can you tell who is speaking with names removed?" is now a measurable question.
-
-## The Epistemic Ledger
-
-I made evidence a first-class system primitive.
-
-In every academic, medical, legal, government, grant, or financial piece, the system classifies every major sentence. Observed fact. Sourced fact. Inference. Synthesis. Recommendation. Rhetoric.
-
-Every classification carries a source status. Verified. User-provided. Assumed. Inferred. Missing. Unsafe.
-
-Universal quantifiers — every, all, never, always — are flagged. Inflated verbs — revolutionize, transform, disrupt — are flagged. Fabricated citations are hard-blocked. The delivery bundle refuses to ship if a ledger block stands open.
-
-This is the part that protects the writer. The grant writer who couldn't quite remember whether the number was 312 households or 412 households. The dissertation writer who needed the inline citation tightened. The agency principal whose junior wrote "studies show" without telling her which studies.
-
-The ledger keeps the receipts.
-
-## The Arena Delivery Engine
-
-One approved piece. Many delivery bundles. Voice fingerprint preserved across all of them.
-
-You write the 1,500-word memo. The system emits the LinkedIn post at the 1,200-character ceiling, the Twitter thread at eight tweets, the YouTube short script at ninety seconds, the newsletter section at four hundred and fifty words, the internal Slack BLUF at two hundred words, the investor-update paragraph at one hundred and eighty.
-
-The Delivery Packager cannot invent. It only formats approved content. So the voice survives. The claims survive. The ledger survives. What changes is the arena.
-
-That is what every distribution-heavy team has been asking for since the beginning of content marketing. v3.0 ships it free.
-
-## The Benchmark Harness
-
-A release cannot ship until benchmark gates pass.
-
-Sixty cases. Twelve categories. Five gates. Score improvement (v3 must beat v2 by at least five points on at least seventy percent of cases). No regression (no case drops more than three points without documented reason). Evidence safety (one hundred percent fabrication-trap recall). Voice preservation (at least eighty percent drift-direction recall). Output packaging (every bundle validates).
-
-This is how you know the system actually got better. Not because I said so. Not because beta users felt good. Because the gates passed.
-
-Every release ships its benchmark report.
-
-## Operator Certification
-
-Free. Optional. Three tiers.
-
-Apprentice — has demonstrated baseline use of the eleven-pass kernel on real work.
-Operator — has shipped five-plus deliverables scored at eighty-five-plus on prose quality and epistemic integrity across three or more arenas.
-Architect — has extended the system through accepted RFCs and merged contributions, can teach others.
-
-This is for the agencies, the editorial teams, the ghostwriters, the grant consultants, the ministry communications staff, the content shops, the freelance operators. Be discoverable. Be hireable. Be verifiable.
-
-This is for the people who want to put a flag in the ground that says: I run this skill at this level.
-
-## Governance
-
-RFC process. ADR template. Release checklist. Versioning rules. Every substantive contribution comes through a real process. The v3.0 Law sits above all of it: if a rule cannot be applied, audited, scored, tested, or explained, it is not a v3.0 rule yet.
-
-The doctrine stops drifting. The community gets a real way to contribute. The repo gets a real moat.
+And the account packages into a `.wiab` bundle that a stranger verifies offline, by recomputing every digest, with no model and no network and no reason to trust whoever built it.
 
 ---
 
-## What You Do Now
+## Three things you can do that you could not do before
 
-You go to the repo. You read the README. You read the SKILL.md. You install the skill or you clone the repo. You point it at the next piece of writing you have to ship.
+**1. Ask what a source change actually broke — and what it did not.**
 
-If you write grants, you start with the grant_nofo pack and the investor_precision voice and you turn on the epistemic ledger and you watch the system surface every claim you were about to make without evidence.
+Change one number in one source and `wi impact` reports, on the shipped fixture: one claim atom, one anchor, one paragraph, one document and one verification record went stale. And **four anchors are provably outside the change; five claim atoms are still verified.** Then it names the cheapest safe repair and costs it.
 
-If you run a church, you start with the church_leadership pack and the sermon voice and you watch your bulletin announcement, your Sunday sermon notes, your weekly devotional, and your pastoral letter all hold together while you keep your voice.
+The negative half is the part that matters. Any system can turn a document red when a source moves. That system gets switched off in a week, and the rule it was enforcing goes with it.
 
-If you write a Substack, you start with the newsletter pack and the courageous_builder voice and you watch your subject lines stop sounding like everyone else and your P.S. start carrying weight.
+**2. Ask what a rewrite did to the meaning.**
 
-If you sell loans, you start with the loan_officer pack and the rate-and-APR pairing rule and the no-guarantee compliance discipline and you watch your borrower trust go up because you stopped sounding like a hype merchant.
+`wi diff --semantic` classifies `may reduce → reduces` as `certainty_strengthened` and `11,800 → 12,400` as `quantity_changed`, and says which proofs carry forward and which do not. A character diff reports typography. This reports whether you still have support for what the sentence now says.
 
-If you list houses, you start with the real_estate pack and the no-cliche rule and the comps-and-fair-housing audit and your listings stop reading like every other listing.
+**3. Hand someone proof they can check without trusting you.**
 
-If you write a novel, you start by initializing a storyworld memory and you run every chapter through the kernel and you watch your foreshadowing ledger close every plant and your characters stop sounding the same and your series stop plateauing.
+`wi bundle` builds the release. `wi verify-release` checks it on a machine that has never seen your workspace — archive integrity, object digests, artifact digest, graph reference integrity, proof dependencies, stale closure, manifest counts, core version. Change one number inside a sealed bundle and it fails with `WI_RELEASE_TAMPERED` and exits `2`. The regression suite proves that failure on every run, because a verifier that cannot fail is decoration.
 
-If you build product, you start with the technical_documentation pack and the run-the-example rule and your docs stop being a punishment for your engineers and start being the thing your users actually read.
-
-If you're a small business operator at a kitchen table somewhere writing the offer that has to land — you get the same skill as the Fortune 100 communications team. Free. Forever.
+There is a fourth thing, quieter than the others. Point at any line — `wi explain draft.md:5` — and get the claim, its status, its realm, every anchor with byte offsets and a quote digest, every check with its result, and what depends on it.
 
 ---
 
-## What I Want From You
+## What it will not do
 
-Use it.
+These are refusals, not unbuilt features.
 
-Then tell someone who is drowning in their own writing that it exists.
+It will never construct a citation. There is no code path in which a well-formed anchor can be produced for a source that was never ingested. It does not verify truth — it verifies support **within the sources you supplied**, and it says so every single time proof appears, because an author who believes reality is being checked will trust it in exactly the situation where it cannot help. It will not evade detectors. It will not give you one blended score for the slide. Embeddings are candidate retrieval and never evidence: `11,800` and `12,400` are neighbours in embedding space and a career-ending difference in a grant narrative.
 
-Then if you have something to contribute — a genre pack you need that I haven't built, a voiceprint that would change your industry, a schema that would let you wire this into your CI — open an RFC. The doctrine has a door now.
+And it says what it did not do. `wi doctor` lists the eleven deterministic checks this machine can run, the one anchor type it has, and the seven capabilities it does not have with a reason for each. Paraphrase entailment is not evaluated by anything in this release, six of the seven anchor kinds do not execute, and there is no compiled core, no Workbench, no MCP server and no judgment provider. All of it is specified in twenty doctrine documents where every section is marked *executable* or *specified*, and none of it is described as shipping.
 
----
-
-## Receipts
-
-**Install**: [github.com/antonio0720/writing-intelligence](https://github.com/antonio0720/writing-intelligence)
-**Releases**: [Releases page](https://github.com/antonio0720/writing-intelligence/releases)
-**License**: MIT — free, forever, no asterisks
-**Author**: Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
-**Contact**: [densitysix.com](https://densitysix.com) · [@theatsjr](https://instagram.com/theatsjr)
+A release that only lists what it added is describing a system nobody stress-tested.
 
 ---
 
-Most builders will look at v3.0 and see eleven passes and twelve agents and eleven schemas and they will say the system got more complicated.
+## Get it
 
-It didn't get more complicated.
+One stdlib-only Python file. Python 3.8+. No dependencies, no account, no server, no API key, no telemetry. It runs air-gapped.
 
-It got harder to fake.
+```bash
+curl -O https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/scripts/wi.py
+python3 wi.py --version
+python3 wi.py doctor
+```
 
-That is what the world needed.
+Or install the whole skill:
 
-That is what I built.
+```bash
+git clone https://github.com/antonio0720/writing-intelligence \
+  ~/.claude/skills/writing-intelligence
+```
 
-That is v3.0.
+Eight surfaces, with a matrix telling you exactly which half of the system each one can physically give you: [github.com/antonio0720/writing-intelligence](https://github.com/antonio0720/writing-intelligence)
+
+Verify the claims above rather than believing them:
+
+```bash
+bash tests/v4/test_wi.sh     # 3 checks — the v4 adversarial floor
+bash tests/v5/test_wi5.sh    # 32 checks — each one with a negative twin
+```
+
+---
+
+## Free, MIT, and staying that way
+
+No paid tier. No hosted dependency. No account gate arriving in version six.
+
+The documents that most need this are the ones that cannot leave the building — sealed bids, pre-publication investigations, privileged work, unannounced filings. A tool that requires an account excludes exactly the people whose stakes justify it, and a proof that expires when a vendor does was never a proof.
+
+If you write grants, sermons, filings, briefs, journalism, medical or legal copy, investor material, technical docs, or anything a hostile reader might question, it is yours. Free. Forever.
+
+Use it. Then tell one person who has to defend what they write.
 
 **Antonio T. Smith Jr.**
-*May 26, 2026*
-*Density6 LLC*
+*August 7, 2026*
+*Founder & CEO, Density6 LLC* · [densitysix.com](https://densitysix.com) · MIT

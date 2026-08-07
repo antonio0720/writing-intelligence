@@ -64,6 +64,9 @@ jobs:
       - name: Verifier regression must pass
         run: bash tests/v4/test_wi.sh
 
+      - name: v5 regression must pass
+        run: bash tests/v5/test_wi5.sh
+
       - name: Every link resolves
         run: python3 scripts/check-links.py
 

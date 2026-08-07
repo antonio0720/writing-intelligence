@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/proposal.schema.json",
+  "title": "ProposalV5",
+  "description": "A proposed change to one exact node state, carrying what it would replace, what it would put there, why, what class of semantic move it is, and which existing proofs it would break. It exists to enforce Law A — propose, never overwrite. An author handed a rewritten document has exactly one decision available, accept everything, and their voice erodes one invisible edit at a time; granularity is authority. A proposal with no decision is an OPEN proposal, never a silent acceptance, and the decision is never removed, inferred, defaulted or batched without being shown as a batch. Because the proposal binds `target_state_digest` and not merely `target_logical_id`, a proposal against a state the author has since edited is `stale` rather than quietly applied to text nobody proposed it against. The `semantic_delta` and `proof_impact` blocks are produced by the engine — `compare_atoms()` in `scripts/wi.py` — not written by whoever wrote the proposal. In v5.0 `wi diff --semantic` computes exactly these two blocks over two document states; the persisted proposal object and its decision loop are specified.",
+  "type": "object",
+  "required": ["proposal_id", "target_logical_id", "target_state_digest", "before", "after", "why", "semantic_delta", "proof_impact", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Addressable identity of the proposal, so a decision, a waiver and an audit trail can all name the same object."
+    },
+    "target_logical_id": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the node the change applies to — usually a ClaimAtomV5 or a `structure.paragraph`."
+    },
+    "target_state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "State digest of the EXACT state the proposal was computed against. If the current state of the target no longer matches this value, the proposal is stale: it was written about text that no longer exists, and applying it would be applying an edit nobody proposed."
+    },
+    "before": {
+      "type": "string",
+      "description": "The text that would be replaced, verbatim. Present so the author can see what they are giving up, not a summary of it."
+    },
+    "after": {
+      "type": "string",
+      "description": "The proposed text, verbatim."
+    },
+    "why": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The reason for the change, in the operator's words. A proposal without a reason asks the author to trust rather than to decide."
+    },
+    "semantic_delta": {
+      "type": "array",
+      "minItems": 1,
+      "description": "What kind of change this is, classified against the semantic IR field by field. The engine emits one entry per detected class. `compare_atoms()` in the v5.0 core emits these as bare class strings in its `deltas` array; the fuller object form records which IR dimension moved, the before and after values on that dimension, the reliability basis of the classification and whether it was detected deterministically or escalated. Both forms are accepted here.",
+      "items": {
+        "anyOf": [
+          {"$ref": "#/$defs/delta_class"},
+          {
+            "type": "object",
+            "required": ["class"],
+            "additionalProperties": false,
+            "properties": {
+              "class": {"$ref": "#/$defs/delta_class", "description": "The delta class."},
+              "dimension": {"type": "string", "description": "Which semantic IR field moved — `modality`, `quantity`, `temporal_scope`, `attribution`, `surface`, and so on."},
+              "before": {"type": ["string", "number", "boolean", "null"], "description": "The value on that dimension before the change."},
+              "after": {"type": ["string", "number", "boolean", "null"], "description": "The value on that dimension after the change."},
+              "basis": {"$ref": "#/$defs/basis", "description": "How the classification was produced. A field comparison is `verified`; a paraphrase assessment is `judged`."},
+              "detected_by": {"type": "string", "enum": ["deterministic", "escalated"], "description": "`deterministic` means a field comparison decided it. `escalated` means it was referred to the judgment tier — and with no provider configured, it comes back needing review rather than resolved."},
+              "result": {"type": "string", "description": "Outcome of an escalation, for example `needs_review`."},
+              "note": {"type": "string", "description": "Why the classification is what it is, in words."}
+            }
+          }
+        ]
+      }
+    },
+    "proof_impact": {
+      "type": "object",
+      "required": ["invalidates", "requires_recheck", "unaffected"],
+      "additionalProperties": false,
+      "description": "Which proofs this change would break, which it would put under review, and which it provably leaves intact. Naming the unaffected set is as important as naming the damage: a dependency engine that reports only damage produces a wall of red on every edit, the rational response is to stop reading it, and the first thing lost is the finding that mattered. The unaffected block therefore carries a basis — no dependency path exists from the changed state to those nodes — and not just a count.",
+      "properties": {
+        "invalidates": {
+          "type": "array",
+          "items": {"anyOf": [{"$ref": "#/$defs/delta_class"}, {"type": "object"}]},
+          "description": "Proofs whose support does not carry forward across this change, or the delta classes that cause that. Hard policy: re-evaluation is required before any gate can pass."
+        },
+        "requires_recheck": {
+          "type": "array",
+          "items": {"anyOf": [{"$ref": "#/$defs/delta_class"}, {"type": "object"}]},
+          "description": "Nodes or classes that enter review. A human decision clears them; nothing clears itself."
+        },
+        "unaffected": {
+          "type": "array",
+          "items": {"anyOf": [{"$ref": "#/$defs/delta_class"}, {"type": "object"}]},
+          "description": "What this change provably does not touch, with the reason it does not. In the ledger form these are the delta classes whose proof impact is `unaffected`; in the full report form these are counts of claim atoms, anchors and release artifacts with a stated basis."
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "accepted", "rejected", "stale", "superseded"],
+      "description": "`proposed` — open, awaiting a decision; it is not a pending acceptance and no timeout converts it into one. `accepted` — a recorded decision applied it. `rejected` — a recorded decision declined it, and the record is kept, because a rejection is evidence about what the author chose. `stale` — the target state changed after the proposal was computed, so the proposal describes text that no longer exists and must be recomputed rather than applied. `superseded` — a later proposal against the same target replaced this one."
+    },
+    "created_at": {
+      "$ref": "#/$defs/timestamp",
+      "description": "When the proposal was computed."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 instant with an explicit UTC offset."
+    },
+    "basis": {
+      "type": "string",
+      "enum": ["verified", "measured", "judged", "human_declared"],
+      "description": "The reliability type of a result, from references/v5/RELIABILITY_TYPES.md. These never collapse into one score."
+    },
+    "delta_class": {
+      "type": "string",
+      "description": "Every semantic delta class in references/v5/SEMANTIC_DIFF.md, including the twenty classes `DELTA_PROOF_IMPACT` in `scripts/wi.py` maps to a proof consequence.\n\nINVALIDATES existing support: `quantity_changed`, `unit_changed`, `date_changed`, `temporal_scope_changed`, `entity_changed`, `attribution_changed`, `certainty_strengthened`, `negation_changed`, `causality_added`, `scope_broadened`, `obligation_added`, `citation_binding_changed`.\n\nREQUIRES RECHECK: `certainty_weakened`, `causality_removed`, `scope_narrowed`, `obligation_removed`, `recommendation_changed`.\n\nUNAFFECTED: `compression`, `expansion`, `wording_only`.\n\nAlso defined in SEMANTIC_DIFF.md and classified when the registry they depend on is populated: `definition_changed`, `terminology_changed`, `canon_changed`, `evidence_binding_changed`, `voice_only`, `structure_only`, and the three no-op classes `format_only`, `whitespace_only` and `punctuation_only`. `wording_only` is the only class an ordinary auto-accept policy may contain, and under Law E an uncertain classification resolves AWAY from it — a misclassification then costs a click rather than a career.",
+      "enum": [
+        "wording_only",
+        "compression",
+        "expansion",
+        "voice_only",
+        "structure_only",
+        "format_only",
+        "whitespace_only",
+        "punctuation_only",
+        "scope_narrowed",
+        "scope_broadened",
+        "quantity_changed",
+        "unit_changed",
+        "date_changed",
+        "temporal_scope_changed",
+        "entity_changed",
+        "attribution_changed",
+        "certainty_strengthened",
+        "certainty_weakened",
+        "negation_changed",
+        "causality_added",
+        "causality_removed",
+        "recommendation_changed",
+        "obligation_added",
+        "obligation_removed",
+        "definition_changed",
+        "terminology_changed",
+        "canon_changed",
+        "evidence_binding_changed",
+        "citation_binding_changed"
+      ]
+    }
+  }
+}

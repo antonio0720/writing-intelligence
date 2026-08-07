@@ -54,6 +54,44 @@ jobs:
           test "$n" -eq 3 \
             || { echo "::error::expected 3 PASS lines, got $n"; cat /tmp/out.txt; exit 1; }
 
+      # The v5 core is the part of this release that is new, so it is the part
+      # most likely to be wrong. Every assertion in this suite has a negative
+      # twin: it checks that a tampered bundle is REJECTED, that a stale source
+      # HOLDS the gate, and that concept drift FAILS — not merely that the happy
+      # path prints something.
+      - name: v5 regression (workspace, staleness, bundles)
+        run: bash tests/v5/test_wi5.sh | tee /tmp/v5.txt
+
+      - name: The v5 suite did not stop early
+        run: |
+          n=$(grep -c '^PASS' /tmp/v5.txt || true)
+          test "$n" -eq 32 \
+            || { echo "::error::expected 32 PASS lines, got $n"; cat /tmp/v5.txt; exit 1; }
+
+      # A suite must be able to fail. Break the artifact digest check and the
+      # tamper assertions have to go red; if they do not, they were never
+      # testing anything and the green build above meant nothing.
+      - name: The suite can fail (mutation check)
+        shell: bash
+        run: |
+          cp scripts/wi.py /tmp/wi.py.bak
+          python3 - <<'MUT'
+          from pathlib import Path
+          p = Path("scripts/wi.py"); s = p.read_text()
+          s = s.replace('add("release.artifact_digest", not art_bad,',
+                        'add("release.artifact_digest", True,', 1)
+          p.write_text(s)
+          MUT
+          set +e
+          bash tests/v5/test_wi5.sh > /tmp/mut.txt 2>&1
+          code=$?
+          set -e
+          cp /tmp/wi.py.bak scripts/wi.py
+          test "$code" -ne 0 || {
+            echo "::error::the tamper check was disabled and the suite still passed"
+            cat /tmp/mut.txt; exit 1; }
+          echo "mutation caught: disabling the artifact-digest check turns the suite red"
+
       - name: Gate exit codes are wired
         run: |
           set +e
@@ -65,6 +103,44 @@ jobs:
           test "$code" -eq 2 || { echo "::error::expected BLOCK (exit 2), got $code"; exit 1; }
           echo "gate returned BLOCK (exit 2) as expected"
 
+  schemas:
+    name: schemas · parse and self-describe
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Every schema is valid JSON with an $id and a title
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          bad = []
+          files = sorted(Path("schemas").rglob("*.schema.json"))
+          assert files, "no schemas found"
+          for f in files:
+              try:
+                  d = json.loads(f.read_text())
+              except Exception as exc:
+                  bad.append("%s does not parse: %s" % (f, exc)); continue
+              for key in ("$schema", "$id", "title", "description"):
+                  if key not in d:
+                      bad.append("%s has no %s" % (f, key))
+          print("checked %d schema(s)" % len(files))
+          if bad:
+              for b in bad: print("::error::" + b)
+              sys.exit(1)
+          PY
+
+      # The state digest binds the schema id. A schema the code never names is
+      # documentation of something that does not exist.
+      - name: v5 schema family is complete
+        run: |
+          n=$(ls schemas/v5/*.schema.json | wc -l)
+          test "$n" -ge 14 || { echo "::error::expected >=14 v5 schemas, got $n"; exit 1; }
+          echo "v5 schemas: $n"
+
   docs:
     name: docs · links resolve
     runs-on: ubuntu-latest
@@ -75,6 +151,35 @@ jobs:
           python-version: "3.12"
       - name: Every link resolves
         run: python3 scripts/check-links.py
+
+      # Documentation that describes a subcommand the CLI does not have is the
+      # same failure this project exists to catch, one level up.
+      - name: Every documented subcommand exists
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, sys
+          from pathlib import Path
+          help_text = subprocess.run([sys.executable, "scripts/wi.py", "--help"],
+                                     capture_output=True, text=True).stdout
+          have = set(re.findall(r"[a-z][a-z-]+", help_text.split("{",1)[1].split("}",1)[0]))
+          claimed, bad = set(), []
+          for f in [Path("README.md"), Path("CHEATSHEET.md"), Path("USER_GUIDE.md"),
+                    Path("docs/INSTALL.md")]:
+              if not f.exists():
+                  continue
+              # Only command-shaped mentions: `wi gate ...` or `wi.py gate ...`.
+              # Prose like "the .wi workspace layout" is not a claim about a
+              # subcommand and must not be treated as one.
+              for m in re.finditer(r"(?:\bwi\.py|`wi|\$ wi)[ \t]+([a-z][a-z-]{2,})", f.read_text()):
+                  claimed.add(m.group(1))
+          ignore = {"py", "the", "and", "run", "can", "does", "was", "not", "has"}
+          for c in sorted(claimed - have - ignore):
+              bad.append(c)
+          print("CLI provides:", " ".join(sorted(have)))
+          if bad:
+              print("::error::documented but not implemented: " + ", ".join(bad))
+              sys.exit(1)
+          PY
 
   bundle:
     name: bundle · build and verify
@@ -105,7 +210,14 @@ jobs:
       # reference doc and does not rebuild silently ships a stale skill to every
       # Claude.ai and Cowork user — and nothing anywhere would say so, because a
       # stale bundle installs exactly like a current one.
+      # Runs on pull requests and side branches, where a human is about to
+      # merge and the bundle must already be correct. It is skipped on pushes
+      # to main because bundle.yml rebuilds and commits there — running both on
+      # the same commit would fail the build for a drift that is being fixed in
+      # the next thirty seconds. The reproducibility and extraction checks above
+      # run everywhere, on every event, without exception.
       - name: Committed bundle matches the tree
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: |
           A=$(sha256sum dist/writing-intelligence.skill | cut -d' ' -f1)
           B=$(sha256sum writing-intelligence.skill      | cut -d' ' -f1)

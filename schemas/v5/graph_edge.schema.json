@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v5/graph_edge.schema.json",
+  "title": "GraphEdgeV5",
+  "description": "One typed, directed relation between two nodes of the authorship graph, carrying its own state digest. Edges are what make invalidation computable: each relation declares how a change at one end propagates to the other, so `wi impact` can walk from a changed source to the exact set of claims, paragraphs and release targets that no longer stand — and, just as importantly, to the set that provably still does. Emitted by `Workspace.put_edge()` in `scripts/wi.py`, projected by `build_bundle()` into the `graph/edges.jsonl` member of a `.wiab` bundle, and read by `verify_bundle()` when it checks reference integrity. NOTE ON `illustrates`: it is not `supports`. A media node connected to a meaning node by `illustrates` contributes nothing to that meaning's proof state; it carries invalidation policy `none` precisely so that nothing in a proof can depend on it. A decorative or generated image sitting beside a number reads to a human as evidence for that number, and if that edge could enter a proof closure then a picture becomes a citation. The separation is enforced by the relation type, not by the judgment of whoever wired the graph.",
+  "type": "object",
+  "required": ["from", "to", "relation", "state_digest"],
+  "additionalProperties": false,
+  "properties": {
+    "from": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the origin node. Direction is meaningful for every relation in the enum; reversing an edge asserts a different thing."
+    },
+    "to": {
+      "$ref": "#/$defs/logical_id",
+      "description": "Logical id of the target node."
+    },
+    "relation": {
+      "$ref": "#/$defs/relation",
+      "description": "Which relation holds, and by implication which invalidation policy governs propagation across it."
+    },
+    "state_digest": {
+      "$ref": "#/$defs/digest",
+      "description": "`state_digest()` over the payload `{from, to, relation, payload}` under schema id `graph_edge`. An edge has state because rewiring the graph is itself a change a proof can be stale against."
+    },
+    "payload": {
+      "type": ["object", "null"],
+      "description": "Relation-specific detail: the policy under which a `supports` edge was drawn, the scope of a `qualifies` edge, the reason on a `supersedes` edge. The v5.0 core stores this in the `edge` table's `payload_json` column and writes `{}` for every edge it creates; `build_bundle()` does NOT project it into `graph/edges.jsonl`, so a bundle carries the four required fields only."
+    }
+  },
+  "$defs": {
+    "logical_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived logical identity produced by `logical_id()`."
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form."
+    },
+    "relation": {
+      "type": "string",
+      "description": "Every edge family defined in references/v5/AUTHORSHIP_GRAPH.md. Invalidation policies, in order of severity: `hard` voids downstream verification immediately; `review` marks downstream state review-required and only a human decision clears it; `soft` annotates without gate consequence; `none` does not propagate at all.\n\nEVIDENTIAL — `supports` (hard), `contradicts` (hard), `qualifies` (hard), `derived_from` (review), `summarizes` (review), `translates` (review), `cites` (hard).\n\nRENDERING AND DEPENDENCY — `renders_as` (review), `asserted_in` (review), `depends_on` (review), `built_from` (hard), `illustrates` (none).\n\nDEFINITIONAL — `defines` (review), `uses_term` (review), `same_meaning_as` (review), `narrows` (review), `broadens` (hard — the most dangerous edit direction).\n\nAUTHORSHIP — `proposed_change_to` (hard), `accepted_by` (hard), `rejected_by` (none), `waived_by` (hard), `invalidates` (hard), `supersedes` (soft).\n\nNARRATIVE — `causes` (review), `precedes` (review), `foreshadows` (soft), `pays_off` (review), `depicts` (soft), `narrates` (review), `signed_by` (hard).\n\nThe v5.0 core writes six of these: `supports`, `derived_from`, `supersedes`, `asserted_in`, `renders_as` and `depends_on`. `depends_on` is the generic dependency the impact walker traverses — X `depends_on` Y means a change in Y invalidates X unless X is provably unaffected.",
+      "enum": [
+        "supports",
+        "contradicts",
+        "qualifies",
+        "derived_from",
+        "summarizes",
+        "translates",
+        "cites",
+
+        "renders_as",
+        "asserted_in",
+        "depends_on",
+        "built_from",
+        "illustrates",
+
+        "defines",
+        "uses_term",
+        "same_meaning_as",
+        "narrows",
+        "broadens",
+
+        "proposed_change_to",
+        "accepted_by",
+        "rejected_by",
+        "waived_by",
+        "invalidates",
+        "supersedes",
+
+        "causes",
+        "precedes",
+        "foreshadows",
+        "pays_off",
+        "depicts",
+        "narrates",
+        "signed_by"
+      ]
+    }
+  }
+}
