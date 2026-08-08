@@ -60,11 +60,39 @@ PAYLOAD=(
   agents
   docs
   governance
-  references
+  plans
+  references/v4
+  references/v5
+  references/v6
   schemas
   scripts/wi.py
   tests/v4
   tests/v5
+  tests/v6
+)
+
+# The second bundle: the craft library.
+#
+# At v5 the single bundle was 182 files against a 200-file ceiling — eighteen
+# files of headroom for a system that grows by adding doctrine. v6 adds 24
+# reference documents, 20 schemas and a regression suite, which is 45 files on
+# its own. There is no arrangement of one bundle that fits.
+#
+# So the library splits from the runtime. This is not a downgrade dressed as
+# an architecture decision; it is the only shape that leaves both halves able
+# to grow, and it is what `references/v6/PACKAGE_SYSTEM.md` argues for on
+# independent grounds: the skill bundle is not the product payload.
+CRAFT_NAME="writing-intelligence-craft"
+CRAFT_SKILL=packs/craft/SKILL.md
+CRAFT_PAYLOAD=(
+  LICENSE
+  references/academic
+  references/anti_patterns
+  references/compiler
+  references/diagnostics
+  references/genre_packs
+  references/positive_patterns
+  references/voiceprints
 )
 
 # The upload limit. Not a style preference — a bundle over this does not load.
@@ -155,6 +183,22 @@ V5_SCHEMAS=$(ls schemas/v5/*.json 2>/dev/null | wc -l | tr -d ' ')
   || { echo "FAIL expected >=14 v5 schemas, found $V5_SCHEMAS" >&2; exit 1; }
 echo "    v5 schemas: $V5_SCHEMAS"
 
+# v6 doctrine and schemas are the release. A bundle that ships the v6 command
+# surface without the documents that govern it would be a skill naming laws it
+# cannot cite, which is the failure this project exists to catch.
+V6_DOCS=$(ls references/v6/*.md 2>/dev/null | wc -l | tr -d ' ')
+[ "$V6_DOCS" -ge 23 ] \
+  || { echo "FAIL expected >=23 v6 reference docs, found $V6_DOCS" >&2; exit 1; }
+echo "    v6 reference docs: $V6_DOCS"
+
+V6_SCHEMAS=$(ls schemas/v6/*.json 2>/dev/null | wc -l | tr -d ' ')
+[ "$V6_SCHEMAS" -ge 20 ] \
+  || { echo "FAIL expected >=20 v6 schemas, found $V6_SCHEMAS" >&2; exit 1; }
+echo "    v6 schemas: $V6_SCHEMAS"
+
+[ -f "$CRAFT_SKILL" ] \
+  || { echo "FAIL missing craft bundle skill: $CRAFT_SKILL" >&2; exit 1; }
+
 # The version in the CLI, the skill and the changelog must be one number.
 CLI_V=$(python3 scripts/wi.py --version 2>/dev/null | awk '{print $2}')
 grep -q "^\*\*Version:\*\* $CLI_V" SKILL.md \
@@ -164,7 +208,7 @@ grep -q "## \[$CLI_V\]" CHANGELOG.md \
 echo "    version consistent: $CLI_V"
 
 if command -v python3 >/dev/null 2>&1; then
-  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh; do
+  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh tests/v6/test_wi6.sh; do
     if RESULT=$(bash "$SUITE" 2>&1); then
       echo "$RESULT" | sed 's/^/    /'
     else
@@ -256,7 +300,9 @@ unzip -qq "$BUNDLE" -d "$VERIFY"
 [ -f "$VERIFY/$NAME/scripts/wi.py" ]        || { echo "FAIL bundle has no scripts/wi.py" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/references/v4" ]        || { echo "FAIL bundle has no references/v4" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/references/v5" ]        || { echo "FAIL bundle has no references/v5" >&2; exit 1; }
+[ -d "$VERIFY/$NAME/references/v6" ]        || { echo "FAIL bundle has no references/v6" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/schemas/v5" ]           || { echo "FAIL bundle has no schemas/v5" >&2; exit 1; }
+[ -d "$VERIFY/$NAME/schemas/v6" ]           || { echo "FAIL bundle has no schemas/v6" >&2; exit 1; }
 [ ! -d "$VERIFY/$NAME/services" ]           || { echo "FAIL bundle contains services/" >&2; exit 1; }
 [ ! -d "$VERIFY/$NAME/.git" ]               || { echo "FAIL bundle contains .git" >&2; exit 1; }
 
@@ -264,7 +310,7 @@ unzip -qq "$BUNDLE" -d "$VERIFY"
 if command -v python3 >/dev/null 2>&1; then
   ( cd "$VERIFY/$NAME" && python3 scripts/wi.py --version >/dev/null ) \
     || { echo "FAIL wi.py does not run from the extracted bundle" >&2; exit 1; }
-  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh; do
+  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh tests/v6/test_wi6.sh; do
     if RESULT=$( cd "$VERIFY/$NAME" && bash "$SUITE" 2>&1 ); then
       echo "$RESULT" | sed 's/^/    /'
     else
@@ -276,6 +322,81 @@ if command -v python3 >/dev/null 2>&1; then
 fi
 
 echo "    bundle verified"
+
+# --------------------------------------------------------------------------
+# The craft library bundle.
+#
+# Built and verified with the same rigour as the runtime, because the failure
+# mode is identical: an over-ceiling bundle does not load, and a repository
+# that tells people to install two skills has to be right about both.
+# --------------------------------------------------------------------------
+echo "==> Craft bundle"
+
+CSTAGE="$(mktemp -d)"
+CROOT="$CSTAGE/$CRAFT_NAME"
+mkdir -p "$CROOT"
+cp -L "$CRAFT_SKILL" "$CROOT/SKILL.md"
+for p in "${CRAFT_PAYLOAD[@]}"; do
+  [ -e "$p" ] || { echo "FAIL missing craft payload path: $p" >&2; exit 1; }
+  mkdir -p "$CROOT/$(dirname "$p")"
+  if [ -d "$p" ]; then cp -RL "$p" "$CROOT/$(dirname "$p")/"; else cp -L "$p" "$CROOT/$p"; fi
+done
+find "$CROOT" \( -name '__pycache__' -o -name '.DS_Store' -o -name '*.pyc' \) \
+     -exec rm -rf {} + 2>/dev/null || true
+
+CFILES=$(find "$CROOT" -type f | wc -l | tr -d ' ')
+echo "    staged $CFILES files (limit $MAX_FILES)"
+if [ "$CFILES" -gt "$MAX_FILES" ]; then
+  echo "FAIL craft bundle has $CFILES files; the skill upload limit is $MAX_FILES" >&2
+  exit 1
+fi
+
+# Same frontmatter arithmetic as the runtime skill. Both are uploaded, so both
+# are rejected on the same rules.
+CRAFT_SKILL_PATH="$CROOT/SKILL.md" python3 - <<'CRAFTFM' || exit 1
+import os, re, sys
+MAX_NAME, MAX_DESC = 64, 1024
+src = open(os.environ["CRAFT_SKILL_PATH"], encoding="utf-8").read()
+if not src.startswith("---\n"):
+    sys.exit("FAIL craft SKILL.md has no YAML frontmatter")
+fm = src[4:src.find("\n---", 4)]
+bad = []
+for key, limit in (("name", MAX_NAME), ("description", MAX_DESC)):
+    m = re.search(r"^%s:[ \t]+(.*)$" % key, fm, re.M)
+    if not m:
+        sys.exit("FAIL craft SKILL.md frontmatter has no %s:" % key)
+    v = m.group(1).strip().strip('"\'')
+    if len(v) > limit:
+        bad.append("%s is %d characters, over by %d; the limit is %d"
+                   % (key, len(v), len(v) - limit, limit))
+    if key == "description" and ": " in v:
+        bad.append("description contains ': ' — unquoted plain scalars must not")
+    if key == "name" and not re.match(r"^[a-z0-9][a-z0-9-]*$", v):
+        bad.append("name %r must be lowercase letters, digits and hyphens" % v)
+if bad:
+    for b in bad:
+        print("FAIL " + b, file=sys.stderr)
+    sys.exit(1)
+print("    craft SKILL.md frontmatter intact")
+CRAFTFM
+
+find "$CROOT" -exec touch -t 200001010000.00 {} + 2>/dev/null || true
+CRAFT_BUNDLE="$OUT_DIR/$CRAFT_NAME.skill"
+rm -f "$CRAFT_BUNDLE"
+( cd "$CSTAGE" && find "$CRAFT_NAME" -print | sort | zip -qX9 "$CRAFT_BUNDLE" -@ )
+CSIZE=$(wc -c < "$CRAFT_BUNDLE" | tr -d ' ')
+echo "    $CRAFT_BUNDLE ($CSIZE bytes)"
+
+CVERIFY="$(mktemp -d)"
+unzip -qq "$CRAFT_BUNDLE" -d "$CVERIFY"
+[ -f "$CVERIFY/$CRAFT_NAME/SKILL.md" ] \
+  || { echo "FAIL craft bundle has no SKILL.md" >&2; exit 1; }
+[ -d "$CVERIFY/$CRAFT_NAME/references/genre_packs" ] \
+  || { echo "FAIL craft bundle has no genre packs" >&2; exit 1; }
+[ ! -d "$CVERIFY/$CRAFT_NAME/scripts" ] \
+  || { echo "FAIL craft bundle contains scripts/ — the verifier belongs to the runtime" >&2; exit 1; }
+rm -rf "$CSTAGE" "$CVERIFY"
+echo "    craft bundle verified"
 
 if [ "$CHECK_ONLY" -eq 1 ]; then
   echo "==> --check: no artifacts written"
@@ -296,11 +417,24 @@ else
 fi
 [ -f "$OUT_DIR/$NAME.skill.sha256" ] && cat "$OUT_DIR/$NAME.skill.sha256" | sed 's/^/    /'
 
+if command -v shasum >/dev/null 2>&1; then
+  ( cd "$OUT_DIR" && shasum -a 256 "$CRAFT_NAME.skill" > "$CRAFT_NAME.skill.sha256" )
+elif command -v sha256sum >/dev/null 2>&1; then
+  ( cd "$OUT_DIR" && sha256sum "$CRAFT_NAME.skill" > "$CRAFT_NAME.skill.sha256" )
+fi
+[ -f "$OUT_DIR/$CRAFT_NAME.skill.sha256" ] \
+  && cat "$OUT_DIR/$CRAFT_NAME.skill.sha256" | sed 's/^/    /'
+
 if [ "$UPDATE_ROOT" -eq 1 ]; then
   cp "$BUNDLE" "$REPO/$NAME.skill"
+  cp "$CRAFT_BUNDLE" "$REPO/$CRAFT_NAME.skill"
   echo "    updated $REPO/$NAME.skill"
+  echo "    updated $REPO/$CRAFT_NAME.skill"
 fi
 
 echo
-echo "Built $NAME.skill — $FILES files, $SIZE bytes."
+echo "Built $NAME.skill        — $FILES files, $SIZE bytes."
+echo "Built $CRAFT_NAME.skill — $CFILES files, $CSIZE bytes."
+echo
+echo "Install both. They are two halves of one system."
 echo "Upload path: Claude → Settings → Capabilities → Skills → Upload skill"

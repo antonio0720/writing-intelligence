@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/extension.schema.json",
+  "title": "ExtensionV6",
+  "description": "Everything a third party contributes and the boundary it contributes across: ingestion adapters, plugins, doctrine packs, the derivation records that make an extractor's output traceable, and the concept mappings that let two workspaces agree about one thing without agreeing about everything. THE INGESTION BOUNDARY IS THE MOST DANGEROUS SURFACE IN THE SYSTEM, which is why no adapter runs in the core process: an adapter is handed a read-only blob and declared limits, and it runs with no network, scratch filesystem only, and ceilings on time, memory and output. If it crashes the graph is intact; if it times out its partial output is discarded; if it reaches for the network the operation FAILS rather than falling back. Every extension declares its capabilities in a manifest, and the declaration is a ceiling rather than a description — capability is granted from the manifest and never inferred from behaviour. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "AdapterManifest": {
+      "type": "object",
+      "required": ["adapter_id", "version", "accepts", "capabilities", "limits", "derived_types"],
+      "additionalProperties": false,
+      "description": "What an ingestion adapter is permitted to do and what it produces. Declared up front so the host can enforce before running rather than observing after: an adapter that declares no network gets no network, and one that turns out to want it fails rather than being granted it because it asked at an inconvenient moment.",
+      "properties": {
+        "adapter_id": {"type": "string", "minLength": 1, "description": "Stable identifier, recorded in every derivation record it produces so an extractor upgrade is a visible dependency transition rather than an unexplained change in output."},
+        "version": {"type": "string", "minLength": 1, "description": "The adapter's version. Load-bearing rather than informational: two versions extracting the same PDF can produce different segmentation, and a claim anchored under one may not resolve under the other."},
+        "accepts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "The media types it handles. Minimum one, and matched against the DETECTED type rather than a file extension — an adapter selected by filename is an adapter selected by whoever named the file."
+        },
+        "capabilities": {"$ref": "#/$defs/CapabilityProfile", "description": "What the host will permit. A ceiling, not a description: an adapter cannot acquire a capability at runtime by needing one."},
+        "limits": {"$ref": "#/$defs/ResourceLimits", "description": "The ceilings the host enforces. Declared by the adapter and enforced by the host, so that a decompression bomb is refused by a limit rather than by the adapter's own good manners."},
+        "derived_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "semantic_node.schema.json#/$defs/NodeType"},
+          "description": "The node types it may produce. Minimum one, and enforced: an adapter emitting a type it did not declare has its output rejected, because the declaration is what lets a workspace know what admitting this adapter admits."
+        },
+        "deterministic": {"type": "boolean", "description": "Whether the same input under the same configuration always produces the same output. An adapter that is not deterministic makes every downstream digest unreproducible, and declaring it here lets a policy refuse one rather than discovering the problem at a re-verification months later."},
+        "signature": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the signature envelope over this manifest, where the deployment requires signed extensions."}
+      }
+    },
+    "PluginManifest": {
+      "type": "object",
+      "required": ["plugin_id", "version", "abi", "capabilities", "extension_points"],
+      "additionalProperties": false,
+      "description": "A plugin's declared identity, contract version and permissions. Held apart from an adapter because the trust question differs: an adapter interprets bytes somebody else wrote, and a plugin participates in the system's own reasoning — a check, a renderer, a policy evaluator — so what it may touch and whether it is deterministic matter in different ways.",
+      "properties": {
+        "plugin_id": {"type": "string", "minLength": 1, "description": "Stable identifier."},
+        "version": {"type": "string", "minLength": 1, "description": "The plugin's version, bound into any result it produces so a check's answer is attributable to an exact implementation."},
+        "abi": {"type": "string", "minLength": 1, "description": "The host contract version it was built against. Checked before loading: a plugin compiled against an older ABI is refused rather than loaded and hoped for, because the failure mode of a mismatch is a plugin that runs and returns nonsense."},
+        "capabilities": {"$ref": "#/$defs/CapabilityProfile", "description": "What it may do. A plugin that may write to the graph is a fundamentally different proposition from one that may only read, and the manifest is where that is decided rather than discovered."},
+        "extension_points": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Where it plugs in — a check id, a renderer backend, a policy evaluator. Minimum one: a plugin extending nothing is loaded, occupies trust, and does nothing."
+        },
+        "determinism": {"$ref": "#/$defs/DeterminismProfile", "description": "What must be removed from its environment for its output to be reproducible. FOR A DETERMINISTIC PLUGIN THE WALL CLOCK AND THE RANDOM SOURCE ARE REMOVED unless they are explicitly part of the input, because otherwise the same graph state produces different proof output on two runs and reproducibility is gone — silently, and in the direction that looks like flakiness rather than like a design error."},
+        "produces_basis": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "proof.schema.json#/$defs/BasisKind"},
+          "description": "The reliability types it may emit. A plugin declaring `Verified` must be deterministic and is held to constraint C004; one that is not deterministic may not declare it at all, which is where the reliability model is enforced at the extension boundary rather than downstream of it."
+        },
+        "signature": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the signature envelope over this manifest."}
+      }
+    },
+    "CapabilityProfile": {
+      "type": "object",
+      "required": ["network", "filesystem", "graph_write"],
+      "additionalProperties": false,
+      "description": "What an extension is permitted to touch. Every field REQUIRED and none defaulted, because a defaulted permission is one nobody chose: an omitted `network` read as false is right by luck, and read as true is a manifest that granted egress by saying nothing.",
+      "properties": {
+        "network": {"type": "boolean", "description": "Whether network access is permitted. False for every ingestion adapter without exception — an adapter that can reach the network can exfiltrate the document it was handed, and no format genuinely requires it. AN ATTEMPT UNDER A FALSE DECLARATION FAILS THE OPERATION rather than being denied and continuing, because a partial extraction from a component that just tried to phone out is not something to build a graph on."},
+        "filesystem": {"$ref": "#/$defs/FilesystemAccess", "description": "What of the filesystem it may see. `scratch-only` for adapters, so a parser cannot read the workspace it is being run inside."},
+        "graph_write": {"type": "boolean", "description": "Whether it may write graph state directly. False for adapters and for almost every plugin: an extension proposes and the core writes, so that a transition from an extension passes the same constraints and authority checks as one from a person."},
+        "sign": {"type": "boolean", "description": "Whether it may produce signatures. Effectively always false: a signature is an assertion by an identity, and an extension that could sign would be signing with somebody else's."},
+        "subprocess": {"type": "boolean", "description": "Whether it may spawn processes. Named explicitly because it is the capability that makes every other one negotiable — a component that can spawn can reach whatever the child can."},
+        "environment": {"type": "boolean", "description": "Whether it may read process environment. False by default, since the environment is where credentials live."}
+      }
+    },
+    "FilesystemAccess": {
+      "type": "string",
+      "description": "How much of the filesystem an extension may see. Three levels rather than a boolean, because `none` and `scratch-only` differ in what a format decoder can do at all — some genuinely need a temporary file, and refusing that would exclude them while refusing them the workspace loses nothing.",
+      "oneOf": [
+        {"const": "none", "description": "No filesystem access. The strictest and correct for anything that can work on a buffer."},
+        {"const": "scratch-only", "description": "A private scratch directory, discarded afterwards, with nothing else visible. The adapter default: a decoder may spill to disk and may not read the workspace it is running inside."},
+        {"const": "workspace-read", "description": "Read access to workspace files. Requires an explicit grant and should be rare — an extension that can read the workspace can read every source in it, including the ones it was not handed."}
+      ]
+    },
+    "ResourceLimits": {
+      "type": "object",
+      "required": ["max_input_bytes", "max_output_bytes", "timeout_ms"],
+      "additionalProperties": false,
+      "description": "The ceilings the host enforces on one extension run. Enforced by the HOST from these declared values, never by the extension on itself: a decompression bomb, a pathological page count and an infinite loop are all things the component under attack cannot be relied on to notice about itself.",
+      "properties": {
+        "max_input_bytes": {"type": "integer", "minimum": 1, "description": "Largest input accepted. Refused before the adapter is invoked at all."},
+        "max_output_bytes": {"type": "integer", "minimum": 1, "description": "Largest output accepted. The limit that stops a small archive expanding into everything the host has, and exceeding it discards the run rather than truncating the output — a truncated extraction is a source that appears to have ended early."},
+        "timeout_ms": {"type": "integer", "minimum": 1, "description": "Wall-clock ceiling. ON TIMEOUT THE PARTIAL OUTPUT IS DISCARDED: partial derived objects from an unfinished extraction are indistinguishable from a complete extraction of a shorter document, and anchoring into them produces evidence that points at a fragment nobody meant to keep."},
+        "max_units": {"type": "integer", "minimum": 1, "description": "A format-specific ceiling — pages, sheets, frames, records. Named generically because the unit differs and the need does not."},
+        "max_memory_bytes": {"type": "integer", "minimum": 1, "description": "Memory ceiling, where the host can enforce one. Absent means the host applies its own default rather than none, since an unbounded declaration would be a request for the host's whole allocation."}
+      }
+    },
+    "DeterminismProfile": {
+      "type": "object",
+      "required": ["deterministic"],
+      "additionalProperties": false,
+      "description": "Whether an extension's output is reproducible and what had to be withheld to make it so. Declared because reproducibility is a property somebody depends on rather than one anybody can test by observation: two identical runs proving nothing about the third.",
+      "properties": {
+        "deterministic": {"type": "boolean", "description": "Whether the same input under the same configuration yields the same output. A plugin producing a Verified basis must be true here, and a plugin that is false here may not produce one — enforced at load rather than at first divergence."},
+        "clock": {"type": "boolean", "description": "Whether it may read the wall clock. False for anything deterministic: a check that stamps the current time into its own output produces a different digest every run, and the failure surfaces as a graph that appears to change while nothing changes."},
+        "random": {"type": "boolean", "description": "Whether it may use a random source. False for anything deterministic, for the same reason, and worse — a sampling difference produces a different ANSWER rather than a different digest."},
+        "declared_inputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Inputs beyond the primary blob that the output depends on — a configuration, a locale, a seed. Every one is bound into the derivation record; an undeclared input is exactly what makes a supposedly deterministic component produce two answers with nothing to point at."
+        }
+      }
+    },
+    "DerivationRecord": {
+      "type": "object",
+      "required": ["source_state", "adapter_id", "adapter_version", "output_state", "executed_at"],
+      "additionalProperties": false,
+      "description": "How a derived object came to exist: from which source state, by which extractor at which version, under which configuration. What makes an extractor upgrade a VISIBLE DEPENDENCY TRANSITION rather than an unexplained change in output — without it, better segmentation in a new adapter version silently invalidates every anchor into the old one and nothing in the graph says why.",
+      "properties": {
+        "source_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The exact source state extracted from."},
+        "adapter_id": {"type": "string", "minLength": 1, "description": "Which adapter."},
+        "adapter_version": {"type": "string", "minLength": 1, "description": "Which version. The field an invalidation names when an upgrade changes extraction, and the reason a re-anchor can be scoped to the affected sources rather than run over everything."},
+        "adapter_binary_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the binary that ran. Stronger than the version string, which is a claim the adapter makes about itself, and it is what allows a reproducibility failure to be attributed to a build rather than argued about."},
+        "config_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the configuration used. Two runs of one adapter version under different configurations are different derivations, and a record omitting this would present them as the same."},
+        "output_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The derived state produced."},
+        "executed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When."},
+        "limits_applied": {"$ref": "#/$defs/ResourceLimits", "description": "The ceilings in force for this run. Recorded because a run that completed under a tight limit and one that completed under a generous one may have produced different output from the same input."},
+        "truncated": {"type": "boolean", "description": "Whether a limit was reached. A derivation that hit a ceiling is INCOMPLETE and must be marked, never silently accepted: an anchor into the last segment of a truncated extraction points at the place the extractor stopped rather than at the end of the document."}
+      }
+    },
+    "PackManifest": {
+      "type": "object",
+      "required": ["name", "version", "abi", "requires", "capabilities"],
+      "additionalProperties": false,
+      "description": "A doctrine pack: schemas, policies, checks, renderers, voice profiles, genres, benchmarks and docs, versioned and digested as one unit. Packs exist so the repository stops copying doctrine into every surface, and their digests enter the release closure so that a style rule changing six months later cannot retroactively change what `passed` meant for an older release.",
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "description": "The pack's name."},
+        "version": {"type": "string", "minLength": 1, "description": "Its version."},
+        "abi": {"type": "string", "minLength": 1, "description": "The pack contract version. Checked before loading."},
+        "requires": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "minLength": 1},
+          "description": "Version ranges the pack requires — of the host, and of other packs. Enforced at load: a pack loaded against an unsupported host will fail somewhere later and less legibly."
+        },
+        "capabilities": {"$ref": "#/$defs/CapabilityProfile", "description": "What the pack's contents may do. A pack containing checks and renderers is executable content, and it is governed like any other extension rather than treated as configuration."},
+        "license": {"type": "string", "description": "The pack's license. Recorded because a release closure naming a pack is a release depending on it, and a deployment may need to know on what terms."},
+        "provides": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "What it contributes — check ids, renderer backends, policy documents. Declared so that two packs contributing the same identifier are a conflict at load rather than a race at use."
+        },
+        "digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the pack contents. WHAT THE RELEASE CLOSURE BINDS: a release names the exact pack digests it was built under, so re-verifying an old release runs the rules that actually governed it and not their successors."},
+        "signature": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the signature envelope over the pack, where the deployment requires signed packs."}
+      }
+    },
+    "PackRef": {
+      "type": "object",
+      "required": ["name", "version", "digest"],
+      "additionalProperties": false,
+      "description": "A pinned reference to a pack. Name, version AND digest all required: the name says what it is, the version says what it claims to be, and the digest is the only one of the three that cannot be wrong. A lockfile entry that named a version without a digest would resolve to whatever is published under that version today."
+      ,
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "description": "The pack's name."},
+        "version": {"type": "string", "minLength": 1, "description": "The version resolved."},
+        "digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The digest resolved. A mismatch at load raises `WI_PACK_DIGEST_MISMATCH` and the load fails rather than proceeding with what was found."},
+        "source": {"type": "string", "description": "Where it was obtained. Recorded for reproducibility of the ACQUISITION rather than of the content, which the digest already settles."}
+      }
+    },
+    "ConceptMapping": {
+      "type": "object",
+      "required": ["local", "external_namespace", "external_id", "relation", "basis"],
+      "additionalProperties": false,
+      "description": "A statement that a local node corresponds to something in another workspace's vocabulary. Explicit mappings exist so that federation does not require a shared ontology: forcing one global vocabulary makes federation brittle and makes every participant's local modelling somebody else's business. A model may PROPOSE a mapping, and the mapping stays Judged until an authorized actor accepts it or a shared identifier establishes it deterministically.",
+      "properties": {
+        "local": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The local node."},
+        "external_namespace": {"type": "string", "minLength": 1, "description": "Whose vocabulary the external identifier belongs to. Required, because an external id without a namespace is a string that means something to somebody and cannot be resolved."},
+        "external_id": {"type": "string", "minLength": 1, "description": "The identifier in that namespace."},
+        "relation": {"$ref": "#/$defs/MappingRelation", "description": "How the two correspond. The reason this is not a simple alias table: most cross-organization correspondences are not equalities, and treating a narrower concept as an exact match is how a claim about a subset comes to be reported about the whole."},
+        "basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How the mapping came to be relied on. Judged when a model proposed it, Verified only when a shared identifier establishes it, HumanDeclared when somebody with standing asserted it. A mapping's basis propagates to everything reasoned across it, which is why it is required."},
+        "accepted_by": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision accepting the mapping, where one was required. Absent means proposed rather than accepted, and a proposed mapping must not be traversed silently in a query."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical mapping state."}
+      }
+    },
+    "MappingRelation": {
+      "type": "string",
+      "description": "How a local concept relates to an external one. `Unresolved` is a first-class value and the honest answer in most first passes: a mapping known to be needed and not yet established is information, and forcing it into `Related` would let a query traverse a correspondence nobody has made.",
+      "oneOf": [
+        {"const": "Exact", "description": "The same concept. The only relation across which a claim transfers without qualification, and therefore the one asserted least often and checked most carefully."},
+        {"const": "Narrower", "description": "The local concept is a subset of the external one. A claim about the local transfers to the external only as a claim about part of it, which is the distinction that stops a regional figure being reported nationally."},
+        {"const": "Broader", "description": "The local concept contains the external one. The mirror case, and the one where an external claim must not be transferred to the local whole."},
+        {"const": "Related", "description": "Connected without either containing the other. Traversable for discovery and never for inference: finding a related concept is a lead, and reasoning across it is a category error."},
+        {"const": "Unresolved", "description": "A correspondence is suspected and not established. Recorded so the open question is visible rather than absent, and it licenses nothing at all."}
+      ]
+    }
+  }
+}

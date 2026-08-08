@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/meaning.schema.json",
+  "title": "MeaningV6",
+  "description": "The fourteen node types that are not claims but govern them: what words mean, what is being taken for granted, what somebody must do, what is being predicted, what is being measured against, and what is still open. They live in one document because they share a property no claim has — each one, when it moves, changes the meaning of sentences that were not edited. Change a definition and every claim using the term asserts something different while reading identically; weaken an assumption and every conclusion resting on it loses its footing with no word of the conclusion touched. THAT INVISIBILITY IS WHY THESE ARE NODES RATHER THAN PROSE: a thing that can silently change what other things mean has to be addressable, versioned and reachable by a dependency walk. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "Definition": {
+      "type": "object",
+      "required": ["logical_id", "term", "definition_text", "scope", "authority"],
+      "additionalProperties": false,
+      "description": "What a term means inside this work, and on whose authority. The most propagating node in v6: a definition change is the only edit that alters what a hundred untouched sentences assert, which is why `definition_changed` is its own delta class and why claims carry `terms_used`. A definition also fixes a document's most common self-inflicted failure — using one word for two things — because two meanings require two definitions and the collision becomes a graph fact rather than a reader's confusion.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the term, the scope and the definition text. Rewording a definition without changing what it picks out is a different state of the same definition; changing what it picks out is a different definition, and every claim bound to the old one must be re-examined rather than silently re-pointed."},
+        "term": {"type": "string", "minLength": 1, "description": "The term being defined, as written."},
+        "definition_text": {"type": "string", "minLength": 1, "description": "What the term means, in the words that govern. Carried verbatim rather than paraphrased: in a regulated or legal context a paraphrase of a definition is a new definition, and the substitution is invisible to everybody who did not have the original in front of them."},
+        "scope": {"type": "string", "enum": ["work", "section", "jurisdiction", "domain", "project", "external_standard"], "description": "Where this definition governs. `external_standard` marks a definition imported from a standard or statute, which may not be edited locally — an imported definition that a project quietly adjusted is the same failure as a paraphrased one, and the scope value is what makes editing it refusable."},
+        "authority": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "On whose authority the definition holds — a named person for a project term, an anchored source for an imported one. Required, because an unattributed definition is a decision about meaning that nobody can be asked about, and definitions are exactly where that question gets asked in a dispute."},
+        "supersedes": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The definition this one replaces. A chain rather than an overwrite, so that a claim written under the earlier meaning stays interpretable under the meaning it was written under."},
+        "distinguished_from": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Definitions this one is deliberately NOT the same as. Present because near-synonyms are where terminological drift starts, and stating the distinction once is cheaper than adjudicating it in every review."
+        },
+        "examples": {"type": "array", "items": {"type": "string"}, "description": "Things the term covers, stated by whoever defined it."},
+        "counterexamples": {"type": "array", "items": {"type": "string"}, "description": "Things the term explicitly does NOT cover. Frequently the load-bearing half of a definition: the boundary cases are what a reader argues about, and a definition that names none has not settled anything."}
+      }
+    },
+    "Term": {
+      "type": "object",
+      "required": ["logical_id", "surface", "definition"],
+      "additionalProperties": false,
+      "description": "One USE of a defined term at a place in the work, binding a surface form to the definition in force there. Separate from Definition because the same word can be governed by different definitions in different sections, and because a use site is what an impact walk needs to reach: without use sites, a definition change knows it happened and cannot say where it lands.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the surface form, the binding site and the definition it resolves to."},
+        "surface": {"type": "string", "minLength": 1, "description": "The term as it appears at this site, which may be an inflection or an abbreviation of the defined form."},
+        "definition": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The definition governing this use. The edge a definitional invalidation travels along."},
+        "site": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The structural node — usually a paragraph — where the use occurs."},
+        "first_use": {"type": "boolean", "description": "Whether this is the term's first appearance in the work, which is where a definition is conventionally introduced and where an editorial check asks whether one was."},
+        "ambiguous_with": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Other definitions this surface form could plausibly resolve to at this site. A non-empty list is a finding rather than an error: the resolution may be right and the ambiguity still worth a reader's attention, because a term a document uses in two senses will eventually be read in the wrong one."
+        }
+      }
+    },
+    "Premise": {
+      "type": "object",
+      "required": ["logical_id", "statement", "status"],
+      "additionalProperties": false,
+      "description": "A statement an argument depends on, recorded so that the dependence is visible. A conclusion whose premises are unlisted looks equally strong whether its premises are verified or invented, and the whole point of separating them is that a premise can fail on its own — at which point every conclusion resting on it needs re-examination even though none of them was edited.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the statement and its scope."},
+        "statement": {"type": "string", "minLength": 1, "description": "What is being taken as given, in words."},
+        "status": {"type": "string", "enum": ["supported", "assumed", "stipulated", "contested", "unexamined"], "description": "How the premise stands. `supported` is anchored to evidence. `assumed` is taken without evidence and acknowledged as such. `stipulated` is agreed for the sake of the argument, which is legitimate and must never render as established. `contested` is known to be disputed. `unexamined` is honest about the commonest case — nobody has looked — and exists so that unexamined premises are countable rather than indistinguishable from assumed ones."},
+        "claim": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The claim node stating this premise, when the premise is itself a checkable assertion. Present so a premise inherits its claim's evidence rather than carrying a second, divergent copy of it."},
+        "load_bearing": {"type": "boolean", "description": "Whether the argument fails without this premise. Marks the difference between a premise whose failure is fatal and one whose failure weakens: both matter, and a review with limited time must be able to sort them."}
+      }
+    },
+    "Constraint": {
+      "type": "object",
+      "required": ["logical_id", "statement", "constraint_kind"],
+      "additionalProperties": false,
+      "description": "A limit the work states on itself or on what it describes — a boundary condition, an eligibility rule, a technical limit. Distinguished from Obligation because a constraint describes what IS bounded while an obligation prescribes what somebody MUST do, and merging them produces a document that reads a description of a limit as a requirement to enforce one.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the statement, kind and bound."},
+        "statement": {"type": "string", "minLength": 1, "description": "The constraint as written."},
+        "constraint_kind": {"type": "string", "enum": ["eligibility", "boundary_condition", "technical_limit", "resource_limit", "temporal_limit", "definitional_limit"], "description": "What sort of limit. Kinds are separated because they fail differently: a resource limit is exceeded, an eligibility rule is failed, and a definitional limit is not a limit on the world at all but on what the document is talking about."},
+        "bound": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The numeric bound, when the constraint has one. Exact decimal, so a comparison against it is exact — a threshold checked in floating point is a threshold that behaves differently at its own boundary."},
+        "comparator": {"type": "string", "enum": ["at_most", "at_least", "less_than", "greater_than", "exactly", "between"], "description": "How the bound applies. Named explicitly because `no more than 40` and `under 40` differ at exactly the value that will be argued about, and prose routinely conflates them."},
+        "upper_bound": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The second bound when `comparator` is `between`. Inclusivity of both ends is stated in `statement`, because the two conventions differ by jurisdiction and guessing is how an off-by-one becomes a compliance finding."},
+        "applies_to": {"$ref": "claim.schema.json#/$defs/ScopeConstraint", "description": "Who or what the constraint binds. A constraint with an unstated subject will be applied to everybody by some reader and to nobody by another."}
+      }
+    },
+    "Promise": {
+      "type": "object",
+      "required": ["logical_id", "statement", "promisor", "beneficiary"],
+      "additionalProperties": false,
+      "description": "A commitment the work makes on behalf of somebody, to somebody. Recorded as a node because promises are the sentences most likely to be read back to their author under adverse conditions, and because a promise made in a proposal has to be traceable into the deliverable that has to keep it. Distinguished from Obligation by direction: a promise is offered, an obligation is imposed.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the promisor, the beneficiary and the substance of the commitment."},
+        "statement": {"type": "string", "minLength": 1, "description": "What is promised, in words."},
+        "promisor": {"$ref": "claim.schema.json#/$defs/EntityRef", "description": "Who is committing. Required, because a promise with no promisor is a sentence that reads as a commitment and binds nobody, which is the specific failure that makes proposals unenforceable."},
+        "beneficiary": {"$ref": "claim.schema.json#/$defs/EntityRef", "description": "To whom. Required for the same reason: a commitment nobody can call in is not one."},
+        "conditions": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "What must hold for the promise to be owed. Recorded separately from the statement so that a condition dropped in an edit is a detectable change — dropping one converts a conditional commitment into an unconditional one and reads as tightening the prose."
+        },
+        "deadline": {"$ref": "common.schema.json#/$defs/TimePoint", "description": "When the promise comes due, when a time was stated."},
+        "measurable_by": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The metric node by which fulfilment is judged. A promise with no measure is one whose fulfilment is a matter of opinion, and marking that absence is more useful than inventing a measure for it."},
+        "enforceable": {"type": "boolean", "description": "Whether the promise is stated in terms somebody could act on. False is a legitimate and common value — aspirational language is not fraud — and recording it stops an aspiration being read as a warranty."}
+      }
+    },
+    "Obligation": {
+      "type": "object",
+      "required": ["logical_id", "statement", "bearer", "force"],
+      "additionalProperties": false,
+      "description": "Something somebody must, may or may not do, and how strongly. The field that carries the most consequence here is `force`, because the same conduct can be recommended in one document and required in another, and an edit that moves it is a change of legal meaning that a line diff shows as one word. `obligation_strengthened` and `legal_force_strengthened` are separate delta classes for the same reason: what somebody must do and how binding the requirement is move independently.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the bearer, the conduct, the force and the jurisdiction."},
+        "statement": {"type": "string", "minLength": 1, "description": "The obligation as written."},
+        "bearer": {"$ref": "claim.schema.json#/$defs/EntityRef", "description": "Who is bound. Required: an obligation with no bearer is a requirement that every reader will assume falls on somebody else."},
+        "force": {"type": "string", "enum": ["must", "must_not", "should", "should_not", "may", "need_not"], "description": "How strongly. The six values are kept distinct and none is a synonym for another: `may` grants a permission, `need_not` removes a requirement, and a document that treats them as interchangeable has said two different things about what happens when the conduct is omitted."},
+        "legal_force": {"type": "string", "enum": ["binding", "advisory", "contractual", "statutory", "policy", "unstated"], "description": "The kind of authority behind the obligation, which is independent of `force`: a `must` in an internal policy and a `must` in a statute are the same word and different consequences. `unstated` is a value rather than an absence, so that an obligation whose basis nobody recorded is countable."},
+        "jurisdiction": {"$ref": "common.schema.json#/$defs/Jurisdiction", "description": "Where the obligation binds. A requirement that holds in one territory and not another is two claims, and a document that merges them asserts something false in at least one place."},
+        "conditions": {"type": "array", "items": {"type": "string"}, "description": "When the obligation applies. Dropping a condition strengthens the obligation invisibly."},
+        "consequence": {"type": "string", "description": "What follows from non-compliance, when stated. Its absence is worth seeing: an obligation with no stated consequence is frequently one nobody can enforce."},
+        "source_authority": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The source node the obligation derives from, for an imported requirement. What makes it checkable that a document's restatement of a rule still matches the rule."}
+      }
+    },
+    "Recommendation": {
+      "type": "object",
+      "required": ["logical_id", "statement", "audience"],
+      "additionalProperties": false,
+      "description": "Advice the work gives. Held apart from Obligation and from claims because the evidence burden falls differently: the ADVICE is the author's to give and carries no evidence burden of its own, while the factual premises under it are separate nodes each carrying theirs. A system that demanded a citation for the advice would be demanding a source for a judgment, and one that demanded none for its premises would let an unsupported figure travel inside a recommendation unexamined.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the recommended action, the audience and the conditions."},
+        "statement": {"type": "string", "minLength": 1, "description": "The recommendation as written."},
+        "audience": {"$ref": "claim.schema.json#/$defs/EntityRef", "description": "Who is being advised. Required, because advice with no audience is advice whose appropriateness cannot be assessed — the same sentence is sound guidance for one reader and dangerous for another."},
+        "strength": {"type": "string", "enum": ["strong", "conditional", "weak", "against"], "description": "How firmly the recommendation is made, including `against`, which is a recommendation not to act and is routinely lost when advice is summarized."},
+        "premises": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "The factual premises the advice rests on, which carry the evidence burden. The list is what makes a recommendation reviewable: its soundness is a question about these nodes, and without them a reviewer can only agree or disagree with a conclusion."
+        },
+        "alternatives_considered": {"type": "array", "items": {"type": "string"}, "description": "Options weighed and not recommended. Present because advice that names no alternative is advice a reader cannot calibrate, and because recording them stops the same options being re-litigated at every review."},
+        "risks": {"type": "array", "items": {"type": "string"}, "description": "What could go wrong if the advice is taken. Recorded rather than omitted for the same reason `checks_not_run` is recorded elsewhere in this family: a recommendation listing only upside is the visual language of diligence over an absence of it."}
+      }
+    },
+    "Hypothesis": {
+      "type": "object",
+      "required": ["logical_id", "statement", "testable"],
+      "additionalProperties": false,
+      "description": "A proposition the work advances for testing rather than asserting. Its own node type because the single most damaging thing that happens to a hypothesis in editing is that it becomes a finding — the hedge is removed, the tense firms up, and a claim nobody tested is now stated as established. Keeping hypotheses typed means that promotion is a node type change rather than a wording change, and therefore something a gate can see.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the proposition and its test conditions."},
+        "statement": {"type": "string", "minLength": 1, "description": "The hypothesis as stated."},
+        "testable": {"type": "boolean", "description": "Whether the hypothesis states conditions under which it could be found false. An untestable hypothesis is not thereby worthless, but it must never be presented as a finding-in-waiting, and this flag is what stops that."},
+        "falsification_condition": {"type": "string", "description": "What observation would refute it. The field that makes `testable` honest rather than declared: a hypothesis marked testable with no falsification condition is a claim about the author's confidence."},
+        "status": {"type": "string", "enum": ["proposed", "under_test", "supported", "refuted", "abandoned", "inconclusive"], "description": "Where the hypothesis stands. `inconclusive` is a real outcome and is kept distinct from `abandoned`: a test that could not decide and a line of inquiry somebody dropped are different facts, and reporting the first as the second erases a result."},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes bearing on the hypothesis, whether for or against. Both directions, because a list containing only supporting evidence is how a hypothesis becomes a conclusion without anybody deciding it should."
+        }
+      }
+    },
+    "Forecast": {
+      "type": "object",
+      "required": ["logical_id", "statement", "horizon", "basis"],
+      "additionalProperties": false,
+      "description": "A statement about the future, which is the one category of assertion that CANNOT be verified against a source at the time it is made and can only be scored afterwards. It is a distinct node type so that a forecast is never counted in the same coverage figure as a checkable fact — a document reporting `92% of claims supported` where a third of them are projections has reported a number that means nothing.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the predicted quantity, the horizon and the model basis."},
+        "statement": {"type": "string", "minLength": 1, "description": "The forecast as written."},
+        "horizon": {"$ref": "time.schema.json#/$defs/ValidInterval", "description": "The period the forecast is about. Required, because a prediction with no horizon can never be scored and therefore can never be wrong, which is the property that makes unfalsifiable forecasting attractive."},
+        "basis": {"type": "string", "enum": ["model", "extrapolation", "expert_judgment", "scenario", "stated_plan", "unstated"], "description": "How the forecast was produced. `stated_plan` is separated from the rest because `we will serve 4,000 households` is a commitment rather than a prediction and belongs to a different review. `unstated` is recorded rather than guessed."},
+        "predicted_value": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The predicted quantity, when one is stated."},
+        "interval": {
+          "type": "object",
+          "required": ["low", "high"],
+          "additionalProperties": false,
+          "description": "The stated range around the prediction. Carried as two exact quantities rather than as a confidence percentage, because a percentage without a stated method is a number that sounds like a measurement.",
+          "properties": {
+            "low": {"$ref": "common.schema.json#/$defs/Quantity", "description": "Lower end of the stated range."},
+            "high": {"$ref": "common.schema.json#/$defs/Quantity", "description": "Upper end of the stated range."},
+            "method": {"type": "string", "description": "How the range was derived, in words. Without it the interval is decoration."}
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Assumption nodes the forecast depends on. The list is what makes a forecast reviewable rather than merely disputable, and what lets an assumption's failure invalidate a projection without anybody re-reading it."
+        },
+        "outcome": {"type": "string", "enum": ["pending", "realized", "missed", "unmeasurable"], "description": "How the forecast turned out, once the horizon has passed. `unmeasurable` is honest about the common case where nobody set up the measurement, and it is kept distinct from `missed` so that a forecast nobody checked is not scored as a failure or, worse, quietly as a success."}
+      }
+    },
+    "Metric": {
+      "type": "object",
+      "required": ["logical_id", "name", "definition_text", "unit"],
+      "additionalProperties": false,
+      "description": "How something is measured — the definition of a number rather than the number itself. Separated from any particular measurement because the same name means different things under different definitions, and a metric whose definition changed mid-document produces a series that looks continuous and is not. Every measurement in a work should point at one of these, so that `served` means one thing throughout or is visibly two metrics.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the name, the unit and the computation."},
+        "name": {"type": "string", "minLength": 1, "description": "What the metric is called."},
+        "definition_text": {"type": "string", "minLength": 1, "description": "How it is computed, in words. Required, because a metric named and not defined is the mechanism by which two teams report the same figure and mean different things."},
+        "unit": {"$ref": "common.schema.json#/$defs/Unit", "description": "What the metric is measured in."},
+        "numerator_definition": {"type": "string", "description": "What is counted in the numerator, for a ratio metric."},
+        "denominator_definition": {"type": "string", "description": "What is counted in the denominator. THE FIELD THAT MOST OFTEN DECIDES WHETHER A RATE IS HONEST: a completion rate over enrollees and one over completers are both defensible and only one of them is what a reader assumes."},
+        "collection_method": {"type": "string", "description": "How the underlying data is gathered, since a self-reported figure and an administratively recorded one are different evidence bearing the same name."},
+        "cadence": {"type": "string", "description": "How often the metric is measured, which bounds what a change between two readings can mean."},
+        "supersedes": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The metric definition this replaces. A redefinition breaks comparability, and recording the chain is what lets a report say so rather than presenting a discontinuity as a trend."}
+      }
+    },
+    "Target": {
+      "type": "object",
+      "required": ["logical_id", "metric", "value", "by_when"],
+      "additionalProperties": false,
+      "description": "A value somebody intends a metric to reach by a time. Distinct from both Forecast and Promise: a forecast predicts, a promise commits to somebody, and a target states an intention that may be missed without anybody having broken a commitment. Conflating them is how an internal goal is read back as a guarantee.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the metric, the value and the deadline."},
+        "metric": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which metric the target is set against. Required, because a target with no metric definition behind it can be reported met under any reading of the number."},
+        "value": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The intended value, as an exact decimal."},
+        "comparator": {"type": "string", "enum": ["at_least", "at_most", "exactly", "within"], "description": "How the target is satisfied. `within` requires a tolerance, and a target stated without a comparator is one that will be reported met by whichever reading is convenient."},
+        "tolerance": {"$ref": "common.schema.json#/$defs/Quantity", "description": "Permitted deviation, when `comparator` is `within`."},
+        "by_when": {"$ref": "common.schema.json#/$defs/TimePoint", "description": "The deadline. Required, because a target with no date cannot be missed."},
+        "baseline": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The value the target is measured from. Its absence is what lets an improvement be described without saying improvement from what."},
+        "owner": {"$ref": "claim.schema.json#/$defs/EntityRef", "description": "Who is accountable for the target, when anybody is. Recording that nobody is named is more useful than leaving the question unasked."},
+        "status": {"type": "string", "enum": ["set", "on_track", "at_risk", "met", "missed", "withdrawn", "unmeasured"], "description": "Where the target stands. `unmeasured` is distinct from `at_risk`: one says the measurement has not been taken and the other says it has and looks bad, and a status vocabulary without the first will report unmeasured targets as fine."}
+      }
+    },
+    "Assumption": {
+      "type": "object",
+      "required": ["logical_id", "statement", "criticality"],
+      "additionalProperties": false,
+      "description": "Something the work takes as given without establishing it. Recorded because the assumptions of a document are almost never in the document — they are in the heads of the people who wrote it, and every reader supplies their own. Writing them down converts a disagreement about conclusions into a disagreement about premises, which is the one that can be settled.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the statement and its scope."},
+        "statement": {"type": "string", "minLength": 1, "description": "What is being assumed."},
+        "criticality": {"type": "string", "enum": ["load_bearing", "material", "incidental"], "description": "What breaks if the assumption is false. `load_bearing` means the conclusion fails outright, `material` means it changes, `incidental` means it does not. The classification is what makes a long assumptions list usable rather than ignorable — a reviewer with an hour reads the load-bearing ones."},
+        "held_by": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who is making the assumption, when it is attributable. An assumption attributed to nobody tends to be defended by everybody."},
+        "testable": {"type": "boolean", "description": "Whether the assumption could be checked. Marking an assumption testable and untested is a specific, actionable finding; marking it untestable is an honest statement about the limits of the work."},
+        "if_false": {"type": "string", "description": "What follows if the assumption does not hold, in words. The sentence that makes an assumptions list worth reading, and the one most often omitted."},
+        "dependents": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes that rest on this assumption. The edge an invalidation travels: withdrawing an assumption must reach the conclusions built on it, none of which will have been edited."
+        }
+      }
+    },
+    "Exception": {
+      "type": "object",
+      "required": ["logical_id", "statement", "excepts"],
+      "additionalProperties": false,
+      "description": "A carve-out from a rule, obligation or claim. A node rather than a clause because exceptions are routinely stated far from the rules they modify — an appendix, a footnote, a later section — and a system that cannot connect them will report the rule as unqualified. An exception separated from its rule is also the most common way a document becomes internally inconsistent without any single sentence being wrong.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from what is excepted and the condition."},
+        "statement": {"type": "string", "minLength": 1, "description": "The exception as written."},
+        "excepts": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The node this exception carves out of. Required: an exception that names nothing narrows nothing, and it will be read as narrowing whatever the reader had in mind."},
+        "condition": {"type": "string", "description": "When the exception applies, in words."},
+        "scope": {"$ref": "claim.schema.json#/$defs/ScopeConstraint", "description": "Who or what the exception covers, structurally, so that overlap between two exceptions is computable rather than a matter of reading."},
+        "authority": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The source or definition granting the exception. An exception with no authority is one a reader has no way to rely on."},
+        "supersedes_rule": {"type": "boolean", "description": "Whether the exception overrides the rule entirely in its scope, as opposed to modifying it. The distinction decides what happens in the overlap and is exactly the question a dispute turns on."}
+      }
+    },
+    "Question": {
+      "type": "object",
+      "required": ["logical_id", "question_text", "status"],
+      "additionalProperties": false,
+      "description": "Something the work does not answer, recorded as a first-class node so that an open question is a graph fact rather than a comment somebody deletes during a tidy-up. It is what makes a document's own uncertainty survive editing: the alternative is that the hedge is smoothed away, the question stops being visible, and the resulting text asserts more than anybody intended.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the question text and what it bears on."},
+        "question_text": {"type": "string", "minLength": 1, "description": "The question, as asked."},
+        "status": {"type": "string", "enum": ["open", "answered", "deferred", "unanswerable", "withdrawn"], "description": "Where the question stands. `unanswerable` and `deferred` are kept apart because they call for different responses: one is a limit of the work and belongs in what it declares it did not examine, and the other is work somebody still intends to do."},
+        "bears_on": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes whose reliability the question affects. An open question bearing on a load-bearing claim is a finding a gate can act on; one bearing on nothing is a note."
+        },
+        "raised_by": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who asked. Present so a question can be taken back to whoever thought it mattered rather than being resolved by whoever finds it inconvenient."},
+        "answer": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The node answering it, when answered. A reference rather than inline text, so the answer carries its own evidence and its own reliability basis."},
+        "blocks_release": {"type": "boolean", "description": "Whether this question must be resolved before the work ships. A question marked blocking is one the gate reads; the flag exists so that `we should look into this` and `we cannot publish until we know` are distinguishable, which they are not in prose."}
+      }
+    }
+  }
+}

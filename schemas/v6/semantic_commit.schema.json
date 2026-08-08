@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/semantic_commit.schema.json",
+  "title": "SemanticCommitV6",
+  "description": "One recorded advance of the authorship graph: a parent history, the graph root it produced, the delta that got there, and the authority under which it happened. A commit in v6 is over MEANING and not over text, and that single difference is what makes branching and merging tractable for prose. A textual version control system merges two edits to the same paragraph by adjudicating characters, which is why prose merges are a manual chore and why a merge can silently produce a sentence neither author wrote; a semantic commit merges two edits by adjudicating what each ASSERTS, so two rewordings of one claim are not a conflict, and two different figures for one quantity are — even when they are three paragraphs apart and no line diff would have noticed. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "SemanticCommit": {
+      "type": "object",
+      "required": ["commit_id", "parents", "graph_root", "delta", "author", "message", "committed_at", "state_digest"],
+      "additionalProperties": false,
+      "description": "One commit. `commit_id` is content-derived over the parents, the graph root and the delta, so the same change applied to the same history yields the same commit — a rebuild is recognizable as the same work rather than as new work, and two people who independently reach an identical state reach an identical id.",
+      "properties": {
+        "commit_id": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Content-derived identity, hashed over the ordered parent list, the graph root digest and the delta digest under a domain separator. Deliberately NOT hashed over the message, the author or the timestamp: two commits differing only in who typed them and when are the same semantic advance, and making them different ids would mean a reproducible pipeline could not confirm it had rebuilt the same graph."},
+        "parents": {"$ref": "#/$defs/CommitParents", "description": "The history this commit extends."},
+        "graph_root": {"$ref": "graph_root.schema.json#/$defs/GraphRoot", "description": "The graph state this commit produced. Carried in full rather than by reference so a commit is self-describing: a reader holding one commit can compare roots without resolving anything else."},
+        "delta": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the GraphDelta that took the parent state to this one. Referenced by digest so a commit stays small while the delta stays exact, and so a delta cannot be edited after the fact without the commit id moving."},
+        "author": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who made the change. Not inferable and not defaultable: an unattributed commit is a state change nobody can be asked about, and there is no context from which the answer could be reconstructed later."},
+        "committer": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who recorded the change, when that is a different actor from its author — a maintainer landing a contributor's work, a worker applying an accepted proposal. Separated so that `who wrote it` and `who put it in` stay two answerable questions, which is the pair an incident review needs."},
+        "authority_receipt": {"$ref": "authority.schema.json#/$defs/AuthorityReceipt", "description": "The receipt proving the author held the capability this commit exercised, checked against an exact grant state. Required by policy on any ref that is not the author's own branch: without it, `who was allowed to do this?` is answered by re-deriving today's grants, which is precisely the reconstruction the receipt exists to make unnecessary."},
+        "message": {"type": "string", "minLength": 1, "description": "Why the change was made, in the author's words. Non-empty because a commit with no stated reason forces every later reader to infer intent from a diff, and the intent is exactly what a diff cannot show."},
+        "ref": {"$ref": "common.schema.json#/$defs/RefName", "description": "The ref this commit was recorded on. Advisory only: refs move, so nothing binds to this field, and a proof that needs to name history binds `commit_id`."},
+        "committed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the commit was recorded. Outside the `commit_id` preimage on purpose, so that reproducing a build does not produce a different history."},
+        "supersedes_commit": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The commit this one replaces after a history rewrite. Present so that a rewritten history keeps a forward pointer from the old commit rather than orphaning every proof taken against it — a proof bound to a superseded commit is stale, which is a state a reader can act on, whereas a proof bound to a commit that no longer exists is unreadable."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "State digest over the full canonical commit payload including author, message and timestamp. Distinct from `commit_id`, which covers only the semantic advance: this value moves when the metadata moves, so tampering with a message is detectable even though it does not change what the commit did."}
+      }
+    },
+    "CommitParents": {
+      "type": "object",
+      "required": ["first"],
+      "additionalProperties": false,
+      "description": "The commits this one extends, with ORDER that is meaningful. An ordinary commit names one parent. A merge names two or more, and `first` is the branch being merged INTO — the mainline. That asymmetry is what makes `what did this merge bring in?` answerable: the answer is everything reachable from the other parents and not from the first, and a parent list that treated all parents as interchangeable could not compute it. A root commit names an empty `first` predecessor by omitting the field entirely rather than by naming a sentinel, since a sentinel digest is a value that can be typed into any other field.",
+      "properties": {
+        "first": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The mainline parent: the commit whose history this one continues. For a merge, the branch being merged into."},
+        "others": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "Additional parents, in the order they were merged. Non-empty exactly when this is a merge commit. Order is retained because a three-way merge resolved in one order and the same merge resolved in another can reach different states, and a history that did not record which was taken cannot be replayed."
+        },
+        "merge_base": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The common ancestor the merge was computed against. Recorded rather than recomputed, because the base is what every conflict determination in this merge was relative to: recomputing it later against a moved history can yield a different base, and then the recorded conflicts no longer describe the merge that happened."},
+        "merge_result": {"$ref": "conflict.schema.json#/$defs/MergeResult", "description": "What the semantic merge found and how it was settled, when this is a merge commit. Carried on the commit so a merge that resolved conflicts by a human decision is distinguishable from one that had none, permanently and without re-running anything."}
+      }
+    }
+  }
+}

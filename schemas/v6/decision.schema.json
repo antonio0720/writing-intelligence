@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/decision.schema.json",
+  "title": "DecisionV6",
+  "description": "The record that an authorized actor accepted, refused or postponed a proposal against an exact state. A decision is the only thing that moves a proposal out of `Open`, and it is a permanent object rather than a status flip, because the question an audit asks is never `is this approved?` but `who approved it, holding what authority, against what, and when`. A DECISION BINDS `target_state_digest`, AND IF THE TARGET HAS MOVED THE DECISION IS REFUSED WITH `WI_DECISION_STALE`. The system does not re-attach the approval to the current state. That refusal looks unhelpful for about one minute and then saves a reviewer from having approved a figure they never saw: an approval that follows its subject around is not an approval, it is a subscription. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "Decision": {
+      "type": "object",
+      "required": ["decision_id", "proposal_digest", "target_state_digest", "outcome", "actor", "authority_receipt", "decided_at"],
+      "additionalProperties": false,
+      "description": "One decision by one actor. Both digests are required and neither is derivable from the other: `proposal_digest` says exactly what was read, and `target_state_digest` says what it was read against. A decision holding only the first would survive the proposal being edited after approval; holding only the second would survive the proposal being swapped for another about the same node.",
+      "properties": {
+        "decision_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity of this decision."},
+        "proposal_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The exact proposal state that was decided on — text, rationale, delta and all. Pinned so that `they approved this` names a document nobody can revise afterwards. A proposal edited after a decision produces a new digest, and the decision then demonstrably describes something else."},
+        "target_state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state of the target at the moment of decision, which MUST equal the proposal's own target binding. Checked rather than copied: if the node has moved since the proposal was written, the decision is refused rather than recorded, because the reviewer's agreement was to a specific transition and the transition on offer is now a different one."},
+        "outcome": {"$ref": "#/$defs/DecisionOutcome", "description": "What was decided. A closed union rather than a string, because a decision surface that could record a free-text outcome would eventually record `approved with comments`, which is not a state the system can act on."},
+        "actor": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who decided. One actor per decision object: a quorum is several decisions, not one decision with several names, so that a later revocation of one signer's authority damages exactly their own decision and leaves the others standing."},
+        "authority_receipt": {"$ref": "authority.schema.json#/$defs/AuthorityReceipt", "description": "Proof that the actor held the capability at the moment of deciding, checked against an exact grant state. Carried on the decision rather than re-derived later, because re-deriving asks `does this actor have authority now?` and the question that matters is `did they have it then?` — and constraint C020 is what refuses a decision taken under a grant that had already been revoked."},
+        "reason": {"type": "string", "description": "Why, in the actor's words. Optional for an acceptance, where the proposal's own rationale carries the argument. Policy SHOULD require it for a rejection and for every deferral: a proposer told only `rejected` has no way to produce a better proposal, and the next attempt will be a guess."},
+        "decided_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the decision was taken. Load-bearing rather than decorative here: authority validity, grant expiry and target currency are all evaluated AT THIS INSTANT, so a decision object that lost its timestamp could never be re-checked."},
+        "signature": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the SignatureEnvelope over this decision, where policy requires a signed approval. Absent means the decision is recorded and unsigned, which is the ordinary case and must never be rendered as signed — an interface that showed a checkmark for both is the failure the field exists to prevent."},
+        "approval_state": {"$ref": "#/$defs/ApprovalState", "description": "Where this decision sits within a multi-actor approval rule, when one governs the target. Present so that a decision which is one of three required is legible as such, rather than appearing to settle a matter it has only advanced."},
+        "supersedes_decision": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The decision this one replaces after a stale target forced a re-review. Retained so the record shows an approval taken twice against two states rather than one approval of uncertain vintage."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical decision state, so a release closure can bind the exact decision it relied on."}
+      }
+    },
+    "DecisionOutcome": {
+      "type": "object",
+      "required": ["kind"],
+      "description": "What was decided. Modelled as a discriminated object rather than a bare enum because one outcome carries a payload: an acceptance conditional on a modification is only meaningful if it names the replacement, and an enum would have left that in a comment.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {"kind": {"const": "Accepted", "description": "The proposal as written was accepted."}},
+          "description": "Accepted exactly as proposed. Says nothing about whether the change has committed; that is a transaction event, and the separation is the whole reason `Applied` is absent from the proposal status enum."
+        },
+        {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "Rejected"},
+            "reopenable": {"type": "boolean", "description": "Whether a reworked proposal on the same subject would be entertained. Recorded because `rejected, do not bring this back` and `rejected as written` are different answers, and a proposer who cannot tell them apart will either waste a week or abandon something that was wanted."}
+          },
+          "description": "Refused. The proposal is retained: a rejection is part of the record of how the current state came to survive."
+        },
+        {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "Deferred"},
+            "until": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it should be looked at again, when a time is known. Absent means deferred pending something other than the calendar, which the reason should name."},
+            "pending": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "What it is waiting on — commonly another proposal or an obligation. Present so a deferral is a link in the graph rather than an item on somebody's private list."}
+          },
+          "description": "Postponed without refusal. A real decision that has been taken by a person with authority, which is why it is here and not a variety of `Open`."
+        },
+        {
+          "type": "object",
+          "required": ["kind", "replacement_proposal"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "AcceptedWithModification"},
+            "replacement_proposal": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The exact proposal state that WAS accepted. Required, because the original was not accepted and recording this outcome without naming what replaced it would leave a record claiming an approval of a proposal nobody approved."}
+          },
+          "description": "The proposal was not accepted; a modified one was, and this decision names it. Kept as its own outcome rather than as a rejection plus a fresh acceptance so that the modification is visibly connected to what it came from — a reviewer six months later needs to see that the accepted figure was the reviewer's, not the proposer's."
+        }
+      ]
+    },
+    "ApprovalState": {
+      "type": "object",
+      "required": ["rule", "satisfied"],
+      "additionalProperties": false,
+      "description": "How a decision stands against a multi-actor approval rule. Carried explicitly because the alternative is a surface that renders any decision as `Approved`, and a regulated release approved by one of three required reviewers would then look exactly like one approved by all three. The actual approval path must remain inspectable; no interface may reduce it to a badge.",
+      "properties": {
+        "rule": {"$ref": "authority.schema.json#/$defs/ApprovalRule", "description": "The rule in force, carried by value rather than by reference so the decision remains readable after the policy has moved on. A decision judged against a rule that has since changed must still be judgeable against the rule that governed it."},
+        "satisfied": {"type": "boolean", "description": "Whether the rule is now satisfied. Derived from the recorded votes and the rule, never asserted: a field somebody could set would make the rule advisory."},
+        "votes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ApprovalVote"},
+          "description": "Every decision counted toward the rule, including the refusals. A rule tracking only assents cannot express a threshold that has become unreachable, and a queue that cannot say `this can no longer pass` will hold a proposal open forever."
+        },
+        "outstanding": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "The roles still required. Named rather than counted, because `two more approvals needed` sends nobody anywhere and `awaiting legal_reviewer` sends somebody to legal."
+        },
+        "sequence_position": {"type": "integer", "minimum": 0, "description": "How far a `Sequence` rule has advanced. Present only for sequenced approvals, where order is the substance of the rule: a legal review taken before the factual review it was supposed to rest on has not satisfied the sequence, however many signatures exist."},
+        "unreachable": {"type": "boolean", "description": "Whether the rule can no longer be satisfied — a threshold with too many refusals left, or a sequenced role whose holder has none of the required capability. Recorded so a doomed approval fails visibly rather than by waiting."}
+      }
+    },
+    "ApprovalVote": {
+      "type": "object",
+      "required": ["decision", "actor", "role", "counted_as"],
+      "additionalProperties": false,
+      "description": "One decision's contribution to an approval rule. A separate object because a vote and a decision are not the same thing: one decision may satisfy a rule for one target and count for nothing under another, and the role it counted UNDER is what makes it legible.",
+      "properties": {
+        "decision": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision state being counted."},
+        "actor": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who cast it."},
+        "role": {"type": "string", "minLength": 1, "description": "The role it counted under. An actor holding two eligible roles casts one vote under one of them, named here, so that a threshold cannot be met by one person appearing twice — which is the failure a rule expressed only in actor identities would permit."},
+        "counted_as": {"$ref": "#/$defs/VoteEffect", "description": "What it did to the rule."},
+        "at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When, which is what a sequenced rule is evaluated against."}
+      }
+    },
+    "VoteEffect": {
+      "type": "string",
+      "description": "What one decision did to an approval rule. Four values, and the last two are why: a decision that was cast but did NOT count is a fact somebody needs, and a rule recording only assents and refusals would silently drop it.",
+      "oneOf": [
+        {"const": "assent", "description": "Counted toward satisfying the rule."},
+        {"const": "refusal", "description": "Counted against it. Under a threshold rule this can make the rule unreachable, which is a determinate outcome and better than an open queue."},
+        {"const": "not_eligible", "description": "Recorded and not counted, because the actor held no eligible role. Retained rather than discarded: somebody with an opinion and no standing has still been heard, and deleting the record makes the same objection arrive again next quarter."},
+        {"const": "superseded", "description": "Counted once and then displaced — most often because the actor decided again after the target moved. Kept so that the count is auditable rather than merely correct."}
+      ]
+    }
+  }
+}

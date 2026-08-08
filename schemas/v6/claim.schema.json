@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/claim.schema.json",
+  "title": "ClaimV6",
+  "description": "The canonical verification unit of v6: the smallest independently checkable assertion in a document, decomposed into the dimensions along which a change is consequential. It exists because a compound sentence can be partly supported and partly not, and verification at sentence granularity cannot tell an author which half failed — so v6 verifies the halves. The decomposition is the whole design: every field here is a dimension a differ compares, and a claim represented as a string can only be compared as a string, which means a reworded claim looks changed and a reversed one looks similar. THE STRUCTURE IS WHAT MAKES A CONSEQUENTIAL EDIT MECHANICALLY VISIBLE. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "ClaimAtomV6": {
+      "type": "object",
+      "required": ["logical_id", "subject", "predicate", "modality", "polarity", "certainty", "surface_hints", "state_digest"],
+      "additionalProperties": false,
+      "description": "One assertion. The required set is deliberately small — a subject, a predicate and the three fields that determine what kind of assertion it is — because a claim that cannot be represented without inventing a scope it never had is a claim this schema would force somebody to falsify. Every optional field is optional in the sense that its ABSENCE is meaningful and honest: no temporal scope means the source stated none, not that it holds for all time.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Content-derived from the proposition rather than from the wording: subject, predicate, object, quantities, scopes, modality, polarity, causality and attribution. Reword the claim and the identity survives; change what it asserts and a new identity is minted. That single choice is what lets a semantic diff distinguish an edit from a replacement, and it is why the surface text is deliberately excluded from the preimage."},
+        "subject": {"$ref": "#/$defs/EntityRef", "description": "What the claim is ABOUT. Required, because an assertion with no subject cannot be checked against anything: `it increased by 12%` is not a claim until somebody says what did."},
+        "predicate": {"type": "string", "minLength": 1, "description": "What is asserted of the subject, normalized to a stable lemma rather than kept as the surface verb — `serve`, `exceed`, `require` — so that `served`, `serves` and `has served` are one predicate. Normalization here is what stops tense and voice changes from reading as assertion changes."},
+        "object": {"$ref": "#/$defs/SemanticValue", "description": "What the predicate relates the subject to: another entity, a quantity, a time point, a literal or a nested claim. Absent for intransitive assertions, which are real — `the program ended` has no object and forcing one would mean inventing it."},
+        "quantities": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/Quantity"},
+          "description": "Every figure the claim asserts, as exact decimals with units. Kept as a list rather than a single value because one sentence routinely asserts several — a count, a period length and a proportion — and a differ that could only see one would report the others as unchanged. A bare year with no unit belongs in `temporal_scope` and not here: it is when the claim is about, not what it counts."
+        },
+        "temporal_scope": {"$ref": "time.schema.json#/$defs/ValidInterval", "description": "The period the claim is about, when the source stated one. Distinct from the node envelope's `valid_time`, which is when the claim is asserted to hold: a 2024 report may assert TODAY that a program served eleven thousand households IN 2019, and collapsing the two would make the claim unfalsifiable against either period."},
+        "spatial_scope": {"$ref": "#/$defs/ScopeConstraint", "description": "Where the claim holds — a jurisdiction, a named region, a set of sites. Absent means the source stated no geographic limit, which is not the same as claiming the world: a broadening from a stated region to an unstated one is a `scope_broadened` delta and must be visible as one."},
+        "population_scope": {"$ref": "#/$defs/ScopeConstraint", "description": "Which population the claim ranges over — `households below the median`, `patients over 65`, `participants who completed the program`. The most under-recorded dimension in sourced writing and the one that most often makes a true statistic support a false sentence, because a figure computed over completers is routinely restated as a figure about everybody who enrolled."},
+        "modality": {"$ref": "#/$defs/Modality", "description": "The force of the assertion."},
+        "polarity": {"$ref": "#/$defs/Polarity", "description": "Whether the claim asserts or denies."},
+        "certainty": {"$ref": "#/$defs/CertaintyClass", "description": "How firmly the source stated it. Kept apart from `modality` because they move independently: `may be required` and `is possibly required` differ in which dimension carries the hedge, and a representation with one field for both cannot tell a reader which one an edit changed."},
+        "causality": {"$ref": "#/$defs/CausalRelation", "description": "The causal relation asserted, when one is. Absent means none is asserted, and the difference between absent and `correlation` is exactly the misreporting this field exists to catch: promoting a source's correlation into a document's causation is the most common serious error in evidence-based writing and the least visible in a line diff."},
+        "attribution": {"$ref": "#/$defs/EntityRef", "description": "Who the claim is credited to, when the surface names them. REMOVING AN ATTRIBUTION IS A SEMANTIC CHANGE: it converts a reported claim into an asserted one, moving the evidence burden from the named source onto the author, and it looks like a copy edit."},
+        "qualifiers": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/Qualifier"},
+          "description": "Conditions the source attached that narrow the assertion without being part of its scope — `under the pilot methodology`, `as reported at the time`, `excluding administrative costs`. Recorded structurally because a qualifier dropped in an edit produces a stronger claim than the source made, and nothing about the resulting sentence looks wrong."
+        },
+        "exceptions": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Logical ids of exception nodes that carve cases out of this claim. Held as references rather than inline because an exception is frequently stated in a different part of a document from the rule it qualifies, and it must be possible for an edit to one to invalidate the other."
+        },
+        "terms_used": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Definitions this claim depends on. The join that makes constraint C-level definitional propagation work: changing what a registered term means changes every claim that uses it WITHOUT ANY OF THOSE CLAIMS BEING EDITED, and without this list that change is undetectable — the sentences are all identical afterwards."
+        },
+        "surface_hints": {"$ref": "#/$defs/SurfaceHints", "description": "Where the claim came from and how it was worded, kept apart from the proposition so that the identity and the rendering never contaminate each other."},
+        "realm": {"$ref": "common.schema.json#/$defs/Realm", "description": "The claim's epistemic realm, when it differs from the enclosing node's. Ordinarily inherited from the envelope; carried here for a claim embedded in a payload that is read without its envelope."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical proposition AND the folded surface text under this schema id. Note what is inside and what is not: the proposition and the wording are, and the anchors, checks and status are not — the digest names the CLAIM'S state, and a verification record points at it, which is why re-running verification does not move the digest a proof was recorded against."}
+      }
+    },
+    "EntityRef": {
+      "type": "object",
+      "required": ["surface"],
+      "additionalProperties": false,
+      "description": "A reference to a thing in the world, a work or a constructed world. Carries the surface form always and a resolved identity when one exists, because entity resolution is frequently unavailable and a schema that required it would force a producer to invent an identifier — which is worse than an honest unresolved reference, since an invented identifier joins to things it should not.",
+      "properties": {
+        "surface": {"type": "string", "minLength": 1, "description": "The entity as written. Required, because this is what a reader will recognize and what a check searches a source for."},
+        "entity_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Logical id of the resolved entity node, when resolution succeeded. Absent means unresolved, which is a legitimate and common state."},
+        "kind": {"type": "string", "enum": ["person", "organization", "place", "program", "document", "product", "concept", "event", "character", "unresolved"], "description": "What sort of entity. `unresolved` is a real value rather than an absence, so that `we do not know what kind of thing this is` is stated rather than inferred from a missing field."},
+        "canonical_name": {"type": "string", "description": "The resolved entity's canonical name, when different from the surface. Present so a report can show both, which is how a reader catches a wrong resolution — the two names sitting side by side is the check."},
+        "identifier": {
+          "type": "object",
+          "required": ["scheme", "value"],
+          "additionalProperties": false,
+          "description": "An external identifier for the entity, in a named scheme.",
+          "properties": {
+            "scheme": {"type": "string", "minLength": 1, "description": "Identifier system, for example `orcid`, `lei`, `doi`, `wikidata`."},
+            "value": {"type": "string", "minLength": 1, "description": "The identifier within that scheme."}
+          }
+        }
+      }
+    },
+    "SemanticValue": {
+      "description": "The object slot of a claim: whatever the predicate relates the subject to. A closed union rather than a free string, because the object is frequently the part that changes and a string comparison cannot tell `12,000` from `12,000 households` from `about 12,000`. The nested-claim variant exists because reported speech is a claim about a claim, and flattening it loses which of the two an edit touched.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["value_kind", "entity"],
+          "additionalProperties": false,
+          "description": "The object is a thing.",
+          "properties": {
+            "value_kind": {"const": "entity", "description": "Discriminator. Fixed for this variant."},
+            "entity": {"$ref": "#/$defs/EntityRef", "description": "The entity."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["value_kind", "quantity"],
+          "additionalProperties": false,
+          "description": "The object is a measured or counted amount.",
+          "properties": {
+            "value_kind": {"const": "quantity", "description": "Discriminator. Fixed for this variant."},
+            "quantity": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The exact decimal amount with its unit."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["value_kind", "time_point"],
+          "additionalProperties": false,
+          "description": "The object is a moment.",
+          "properties": {
+            "value_kind": {"const": "time_point", "description": "Discriminator. Fixed for this variant."},
+            "time_point": {"$ref": "common.schema.json#/$defs/TimePoint", "description": "The moment, at the precision the source stated."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["value_kind", "literal"],
+          "additionalProperties": false,
+          "description": "The object is a word or phrase that is neither an entity nor a measurement — a status, a category, a name of a state.",
+          "properties": {
+            "value_kind": {"const": "literal", "description": "Discriminator. Fixed for this variant."},
+            "literal": {"type": "string", "minLength": 1, "description": "The literal value, normalized for case and whitespace so that presentation differences do not read as assertion differences."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["value_kind", "boolean"],
+          "additionalProperties": false,
+          "description": "The object is a truth value, for predicates that assert one directly.",
+          "properties": {
+            "value_kind": {"const": "boolean", "description": "Discriminator. Fixed for this variant."},
+            "boolean": {"type": "boolean", "description": "The value. Note that this is NOT how negation is expressed — negation is `polarity`, because `X is not required` and `X is required to be false` are different claims."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["value_kind", "claim"],
+          "additionalProperties": false,
+          "description": "The object is another claim, as in reported speech or a conditional consequent.",
+          "properties": {
+            "value_kind": {"const": "claim", "description": "Discriminator. Fixed for this variant."},
+            "claim": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Logical id of the nested claim. Held by reference so the nested claim carries its own scope, certainty and evidence rather than inheriting the outer claim's, which is what keeps `the report states that X` verifiable separately from `X`."}
+          }
+        }
+      ]
+    },
+    "Modality": {
+      "type": "string",
+      "enum": ["is", "may", "should", "will", "must"],
+      "description": "The force of the assertion, on an ORDERED lattice: `may` < `should` < `will` = `is` < `must`. The ordering is what makes strengthening detectable — moving up invalidates existing support, because a source stating a thing MAY happen does not support a claim that it DOES, while moving down is a weakening whose support usually carries but whose meaning has still changed. `will` and `is` sit at the same rank deliberately: a future assertion and a present one make the same commitment about what is the case, differing only in when, and that difference is carried by temporal scope rather than by force."
+    },
+    "Polarity": {
+      "type": "string",
+      "enum": ["affirmative", "negative"],
+      "description": "Whether the claim asserts or denies. Two values and no third, because `unspecified polarity` is not a thing a sentence can have — a claim whose polarity cannot be determined has not been decomposed and must not be admitted as an atom. Polarity is a separate dimension from certainty and from the object's value because it INVERTS THE SIGN of every other dimension at once: flipping it makes every quantity, scope and qualifier mean the opposite, which is why `polarity_flipped` is its own delta class and why this is the field a hurried review is most likely to skim past."
+    },
+    "CertaintyClass": {
+      "type": "string",
+      "enum": ["asserted", "hedged", "attributed", "estimated", "disputed", "unknown"],
+      "description": "How firmly the SOURCE stated the claim, which is not how confident anybody is. `asserted` is stated flatly. `hedged` carries the source's own hedge (`approximately`, `is likely to`) and removing that hedge produces a stronger claim than the source made. `attributed` is stated as somebody else's position, so the author is reporting rather than asserting. `estimated` is explicitly a projection or a modeled figure, which must never be rendered as an observation. `disputed` is recorded as contested by the source itself. `unknown` means the surface gave no signal — an honest absence, and it is a value rather than a missing field so that `nobody looked` and `we looked and the source was flat` do not read identically."
+    },
+    "CausalRelation": {
+      "type": "object",
+      "required": ["relation", "cause", "effect"],
+      "additionalProperties": false,
+      "description": "The causal structure a claim asserts, when it asserts one. Present as a structured value rather than a flag because the interesting failures are about STRENGTH and DIRECTION, not about presence: a source reporting correlation restated as causation, and a cause and effect swapped, are both catastrophic and both survive every proofreading pass.",
+      "properties": {
+        "relation": {"type": "string", "enum": ["causes", "contributes_to", "correlates_with", "precedes", "prevents", "enables", "no_effect"], "description": "The asserted relation, ordered by strength for the classifier: `correlates_with` and `precedes` assert no causation at all; `enables` and `contributes_to` assert partial causation; `causes` and `prevents` assert it fully. Moving up this ordering is a `causality_changed` delta that invalidates support, because evidence for co-occurrence is not evidence for production."},
+        "cause": {"$ref": "#/$defs/EntityRef", "description": "What is asserted to do the causing."},
+        "effect": {"$ref": "#/$defs/EntityRef", "description": "What is asserted to be caused. Naming both explicitly is what makes a reversal detectable: swapped, the sentence often still reads well and asserts the opposite mechanism."},
+        "mechanism": {"type": "string", "description": "The mechanism the source stated, in words, when it stated one. A causal claim with no mechanism is weaker than one with a mechanism, and recording the difference stops a mechanism being supplied by an editor who found the sentence unsatisfying."},
+        "confounders_stated": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Confounders the source itself named. Recorded because dropping them is the standard way a careful finding becomes an overclaim, and because their absence in the source is itself worth knowing."
+        }
+      }
+    },
+    "ScopeConstraint": {
+      "type": "object",
+      "required": ["kind", "description"],
+      "additionalProperties": false,
+      "description": "A limit on what a claim ranges over, in space or population. Carries a human description always and a structured restriction when one is available, because most scopes in real prose are stated in a way no vocabulary will capture and the honest response is to record what was said rather than to coerce it into the nearest enumerated value.",
+      "properties": {
+        "kind": {"type": "string", "enum": ["universal", "restricted", "sampled", "unstated"], "description": "`universal` — the claim explicitly ranges over everything in its domain, which is refuted by a single counterexample and therefore almost never carries its old evidence forward when a claim is broadened into it. `restricted` — a stated subset. `sampled` — a subset selected for measurement, where the generalization to the whole is a separate inferential step somebody has to be willing to defend. `unstated` — the source named no limit, recorded as a value so that an unstated scope is never silently read as a universal one."},
+        "description": {"type": "string", "minLength": 1, "description": "The scope as the source expressed it. Required even when a structured restriction is present, because the structured form is an interpretation and the reader is entitled to see what was interpreted."},
+        "jurisdiction": {"$ref": "common.schema.json#/$defs/Jurisdiction", "description": "The territory, when the scope is geographic and resolvable to a coded one."},
+        "population_size": {"$ref": "common.schema.json#/$defs/Quantity", "description": "How many members the scope contains, when the source stated it. The denominator behind every proportion in the claim, and its absence is why so many true percentages support false sentences."},
+        "selection_basis": {"type": "string", "description": "How members were selected, for a `sampled` scope. A convenience sample and a randomized one support very different generalizations, and a schema that recorded only `sampled` would make them indistinguishable."}
+      }
+    },
+    "Qualifier": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "description": "One condition attached to a claim that narrows it without being a scope. Recorded individually rather than concatenated so that dropping one is a detectable change rather than a shorter string.",
+      "properties": {
+        "text": {"type": "string", "minLength": 1, "description": "The qualifier as written."},
+        "kind": {"type": "string", "enum": ["methodological", "temporal", "definitional", "source_stated", "editorial"], "description": "What sort of condition it is. `source_stated` and `editorial` are kept apart because a qualifier the source attached and one an author added carry different weight in a dispute — and only the first can be dropped without changing what is being reported."},
+        "affects": {"type": "string", "enum": ["quantity", "scope", "certainty", "attribution", "whole_claim"], "description": "Which dimension the qualifier bears on, so a differ can attribute its removal to the right delta class rather than reporting a generic wording change."}
+      }
+    },
+    "SurfaceHints": {
+      "type": "object",
+      "required": ["text", "document"],
+      "additionalProperties": false,
+      "description": "Where the claim came from and how it was worded. Kept in its own block, outside the proposition, so that the identity and the presentation never contaminate each other: the surface is what a report shows an author, and the proposition is what the system reasons about. A representation that mixed them would make every rewording a new claim.",
+      "properties": {
+        "text": {"type": "string", "minLength": 1, "description": "The claim's own surface text, which may be shorter than the sentence it came from. What every textual check runs against."},
+        "sentence": {"type": "string", "description": "The full sentence the claim was decomposed out of. Kept so a report can show the claim in the context an author will recognize, and so a decomposition that produced a misleading fragment is visible rather than buried."},
+        "document": {"type": "string", "minLength": 1, "description": "POSIX-normalized path of the document the claim was extracted from."},
+        "paragraph": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Logical id of the `structure.paragraph` the claim is asserted in. The join that lets an impact report say which paragraphs a source change reaches, which is the difference between a useful report and a list of identifiers."},
+        "byte_offset": {"type": "integer", "minimum": 0, "description": "Offset of the claim within the document, in UTF-8 bytes. Bytes rather than characters because bytes are what a digest was taken over and what an anchor range is expressed in; mixing the two units is how an offset lands mid-codepoint."},
+        "line": {"type": "integer", "minimum": 1, "description": "One-based line number, for a report an author can act on without counting bytes."},
+        "signals": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "enum": ["quotation", "percentage", "currency", "date", "numeral", "attribution", "superlative", "comparative", "causal", "categorical", "citation", "hedged", "modal", "conditional"]},
+          "description": "Checkable features detected in the surface. They explain why this fragment was treated as a claim at all, which is what lets an author argue with the decomposition rather than only with its conclusions."
+        }
+      }
+    }
+  }
+}

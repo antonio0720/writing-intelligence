@@ -1,0 +1,309 @@
+# v6.manifest.yaml — the implementation program as an inspectable object.
+#
+# A roadmap written only in prose can hide a dependency cycle, a wave with no
+# exit condition, and a claim that something shipped. This file cannot: CI
+# validates it on every push, and `references/v6/BUILD_MANIFEST.md` is the
+# document it governs rather than the other way round.
+#
+# Rules enforced by scripts/check-manifest.py:
+#   * every `depends_on` names a wave that exists
+#   * the dependency graph is acyclic
+#   * every wave declares at least one exit condition
+#   * `status` is one of shipped | in_progress | planned
+#   * every wave marked `shipped` names the commands or artifacts that prove it,
+#     and each named command exists in `scripts/wi.py --help`
+#
+# That last rule is Law C compiled. A wave cannot be marked shipped in this
+# file unless the thing it claims to have shipped answers when called.
+
+schema: wi.build-manifest/v1
+program: writing-intelligence-v6
+horizon: 2029-08
+core_version: 6.0.0
+
+waves:
+  # ------------------------------------------------------------------------
+  # Shipped in 6.0.0
+  # ------------------------------------------------------------------------
+  - id: W00
+    name: Freeze the v5 behaviour contract
+    status: shipped
+    depends_on: []
+    proves:
+      commands: [verify-release, gate]
+    exit:
+      - the v4 fixture suite passes unchanged
+      - the v5 fixture suite passes unchanged, all 32 assertions
+      - existing .wiab bundles verify under the v6 core with no migration
+
+  - id: W01
+    name: Canonical primitives and domain-separated digests
+    status: shipped
+    depends_on: [W00]
+    proves:
+      commands: [canon]
+    exit:
+      - the same canonical state always produces the same digest
+      - key order and Unicode normalization do not move a digest
+      - a v5 digest and a v6 digest of identical bytes differ by domain
+
+  - id: W02
+    name: Immutable v6 object store and refs
+    status: shipped
+    depends_on: [W01]
+    proves:
+      commands: [branch, log]
+    exit:
+      - objects are content-addressed and never rewritten
+      - a ref moves only under compare-and-set
+      - branch creation is O(1) and copies nothing
+
+  - id: W03
+    name: The v6 semantic IR
+    status: shipped
+    depends_on: [W01]
+    proves:
+      artifacts: [schemas/v6, references/v6/SEMANTIC_IR.md]
+    exit:
+      - 20 schema documents parse and carry $schema, $id, title and description
+      - consequential quantities are decimal, never binary floating point
+      - the reliability basis set is closed at four members
+
+  - id: W04
+    name: Bitemporal state
+    status: shipped
+    depends_on: [W03]
+    proves:
+      commands: [as-of]
+    exit:
+      - valid time and knowledge time are queryable independently
+      - a correction supersedes a prior state without erasing it
+      - a contradiction is declared only after interval intersection
+
+  - id: W05
+    name: Graph roots and semantic commits
+    status: shipped
+    depends_on: [W02, W03, W04]
+    proves:
+      commands: [commit, log]
+    exit:
+      - a graph root is pure state, so identical meaning yields an identical root
+      - every commit names its parents, its root and its delta
+      - a commit records the decisions it applied
+
+  - id: W06
+    name: The graph constraint engine
+    status: shipped
+    depends_on: [W05]
+    proves:
+      commands: [constraints]
+    exit:
+      - at least fourteen of the twenty constraints evaluate
+      - a constraint that cannot run reports why, and is never counted as passing
+      - no aggregate score is emitted
+
+  - id: W07
+    name: Authority — grants, scope, expiry, revocation, delegation
+    status: shipped
+    depends_on: [W05]
+    proves:
+      commands: [authority]
+    exit:
+      - no grant, expired, revoked and out-of-scope are four distinguishable refusals
+      - a child grant can never exceed its parent in capability, scope or lifetime
+      - a judgment provider cannot be issued a grant at all
+
+  - id: W08
+    name: Proposals and decisions
+    status: shipped
+    depends_on: [W07]
+    proves:
+      commands: [propose, proposals, decide]
+    exit:
+      - a proposal changes nothing until it is committed
+      - a decision binds to the exact target state digest it approved
+      - a decision on a moved target is refused rather than reattached
+
+  - id: W09
+    name: Conflict-preserving semantic merge
+    status: shipped
+    depends_on: [W05, W08]
+    proves:
+      commands: [merge, conflicts]
+    exit:
+      - a quantity disagreement produces a typed conflict object
+      - no value that neither branch asserted appears in the result
+      - wording-only auto-merge fires only when typed state is proven identical
+
+  - id: W10
+    name: Counterfactual simulation and repair planning
+    status: shipped
+    depends_on: [W06, W07, W08, W09]
+    proves:
+      commands: [simulate]
+    exit:
+      - simulation writes nothing and the branch root is unchanged after it runs
+      - the report names the provably unaffected remainder as prominently as the breakage
+      - repair cost is reported per category and never summed into one score
+
+  - id: W11
+    name: Proof obligations derived from typed state
+    status: shipped
+    depends_on: [W03, W06]
+    proves:
+      commands: [obligations, why]
+    exit:
+      - obligations follow from node type, realm, basis and mode
+      - a node with no quantity owes no numeric check
+      - explanation runs backward from a state to its basis and its authority
+
+  - id: W12
+    name: Merkle proof closure and selective disclosure
+    status: shipped
+    depends_on: [W05]
+    proves:
+      commands: [capsule]
+    exit:
+      - a disclosed leaf carries an inclusion proof that reaches the closure root
+      - a tampered capsule is rejected and never reports VERIFIED
+      - a redacted leaf states what it does and does not prove
+
+  # ------------------------------------------------------------------------
+  # Not shipped. Specified in references/v6/ and nothing executes them.
+  # ------------------------------------------------------------------------
+  - id: W13
+    name: Judgment provider gateway
+    status: planned
+    depends_on: [W11]
+    exit:
+      - a provider returns values and can never write graph state
+      - every judgment record names provider, model, policy and input state
+      - a judged result can never be typed as verified
+
+  - id: W14
+    name: Judgment routing policy
+    status: planned
+    depends_on: [W07, W13]
+    exit:
+      - routing is a policy function, not a per-feature choice
+      - a regulated workspace can require two providers and block on disagreement
+
+  - id: W15
+    name: Sandboxed ingestion adapters
+    status: planned
+    depends_on: [W02, W06]
+    exit:
+      - adapters run out of process with no network and a scratch filesystem
+      - a crashed or timed-out adapter leaves no partial derived object reachable
+      - every extraction records the adapter binary digest it came from
+
+  - id: W16
+    name: Multimodal anchor execution
+    status: planned
+    depends_on: [W15]
+    exit:
+      - a PDF region anchor pins the rendered region a human sees
+      - an XLSX anchor carries the formula dependency closure
+      - a model description of an image is judged, never verified
+
+  - id: W17
+    name: Capability-limited WASM plugin host
+    status: planned
+    depends_on: [W06, W07]
+    exit:
+      - a plugin receives only what its manifest declares
+      - a deterministic plugin has no wall clock and no randomness
+
+  - id: W18
+    name: Compiler core and backends
+    status: planned
+    depends_on: [W03, W06, W11]
+    exit:
+      - a renderer that would change semantic state emits a proposal and stops
+      - every backend returns bytes and a source map
+      - incremental rebuild is dependency-based, never timestamp-based
+
+  - id: W19
+    name: Semantic source maps across heterogeneous renderings
+    status: planned
+    depends_on: [W18]
+    exit:
+      - one semantic state maps into exact locations in every artifact that renders it
+      - explanation runs backward from released bytes into the graph
+
+  - id: W20
+    name: Autonomous execution DAG and worker capability tokens
+    status: planned
+    depends_on: [W07, W10, W13, W18]
+    exit:
+      - every step declares its effect class
+      - a worker holds no main-write authority and is still useful
+      - a run replays from immutable inputs
+
+  - id: W21
+    name: Watch mode and continuous rebuild
+    status: planned
+    depends_on: [W10, W15, W20]
+    exit:
+      - a changed dependency opens a maintenance branch, never a silent edit
+      - only explicitly permitted delta classes auto-accept
+
+  - id: W22
+    name: External signing and release attestation
+    status: planned
+    depends_on: [W07, W12]
+    exit:
+      - the signature subject is the attestation digest, not a filename
+      - signing keys are never loaded into the worker runtime
+
+  - id: W23
+    name: Semantic remotes, signed deltas and federation
+    status: planned
+    depends_on: [W12, W22]
+    exit:
+      - nothing fetched can mutate main
+      - a partner's approval is evidence, never authority over your workspace
+
+  - id: W24
+    name: The pack system
+    status: planned
+    depends_on: [W17, W22]
+    exit:
+      - a lockfile binds every pack to an exact digest
+      - a release closure names the pack digests that governed it
+
+  - id: W25
+    name: The compiled Rust core and the parity gate
+    status: planned
+    depends_on: [W01, W05, W11]
+    exit:
+      - byte-identical canonical output and digests on every shared fixture
+      - identical verdicts on every v4 and v5 fixture
+      - both cores in CI for one full release cycle after parity
+      - no silent fallback to Python inside the compiled CLI
+      - doctor names which core produced each result
+
+  - id: W26
+    name: WASM verifier and browser capability profile
+    status: planned
+    depends_on: [W12, W25]
+    exit:
+      - a missing capability is declared, never guessed
+      - a browser build never implies native parsing it does not have
+
+  - id: W27
+    name: Surfaces — REST v6, MCP v6, the Workbench
+    status: planned
+    depends_on: [W20, W25]
+    exit:
+      - no surface contains proof logic
+      - structured output and prose derive from one result object
+
+  - id: W28
+    name: Migration and dual-core certification
+    status: planned
+    depends_on: [W25]
+    exit:
+      - a dry run reports zero silent reinterpretations
+      - no v6 field is invented for historical data v5 never recorded
+      - the v5 verifier can independently audit the migration evidence

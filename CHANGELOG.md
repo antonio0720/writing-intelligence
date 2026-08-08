@@ -7,6 +7,162 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [6.0.0] — 2026-08-08 — **The Sovereign Meaning Runtime**
+
+### The Leap
+
+v1.0 proved AI-sounding prose can be defeated by compilation instead of cosmetic cleanup.
+v2.0 proved fiction can be engineered as a living architecture.
+v3.0 proved authorship can be governed without being flattened.
+v4.0 proved it can be held accountable.
+v5.0 proved the account can be carried, checked and re-checked by someone who was never in the room.
+**v6.0 proves meaning can be changed by more than one person without anybody losing track of who changed what, what it cost, and what is still true afterward.**
+
+v5 answers *is this supported?* v6 answers *what changed, what did that break, who was allowed to do it, and what would it cost to accept?* That is not a larger feature set. It is a different kind of program: the first question can be answered by a verifier, and the second requires the system to hold state across time and to have an opinion about who may move it.
+
+**The v6 law:** *No consequential state transition may become authoritative unless the system can identify the exact prior state, the proposed next state, the semantic delta between them, the dependency impact of that delta, the acting authority, the decision basis and the resulting proof closure.*
+
+Seven identifications, each with a mechanism behind it and a failure code when it is absent. The v4 layer and the v5 layer are preserved in force: Laws A through L are unchanged, and v6 adds M through R **beneath** them rather than above — they govern the runtime the earlier laws now have to survive, which is many authors, many branches, many processes and many machines instead of a single author working alone.
+
+### Added
+
+**Six new system laws — M through R** (`references/v6/CONSTITUTION.md`)
+
+- **Law M** — The semantic state is canonical; renderings are builds. A `.docx`, a deck, a site or a filing is a build from a named graph root, and an edit made inside one is a proposal against the graph rather than a change to it *(`wi canon` executable; the renderer boundary specified)*
+- **Law N** — Time is part of meaning. Valid time is when a claim held in the world; knowledge time is when this workspace believed it. A correction supersedes and never erases *(`wi as-of` executable)*
+- **Law O** — Authority is explicit, scoped and expiring. Nobody holds authority because of what they are; a grant names subject, capability, scope and a window, and a delegation may narrow it but never widen it *(`wi authority` executable)*
+- **Law P** — Autonomy produces replayable proposals, not invisible mutations. Anything automated may plan, retrieve, draft, judge, simulate and propose, and may not bypass the machinery a person uses *(the proposal path executable; the autonomous worker specified)*
+- **Law Q** — Semantic disagreement is preserved until resolved. A merge may never manufacture consensus by averaging, smoothing or generalizing two incompatible states *(`wi merge` executable)*
+- **Law R** — Freshness is a property of dependencies, not a green badge. Time passing does not make a verified thing false, and a stale dependency may not hide behind an artifact that was once green *(`wi constraints`, `wi obligations` executable)*
+
+Law M rests on G, N on G and I, O on J, P on A and J, Q on H and I, R on I. Each takes an existing law from a statement about one document to a statement about a body of meaning that several people are allowed to change at once.
+
+**`scripts/wi.py` — the deterministic core, now 6.0.0**
+Still one stdlib-only file, still Python 3.8+, still no dependencies, no network, no model, no telemetry. Sixteen new subcommands beside the seventeen it already had, for thirty-three in total.
+
+*Canonicalization*
+
+- `canon` — canonical JSON under `wi-json-v1` and a domain-separated state digest for any state document. NFC, sorted keys, normalized decimals, the schema identifier inside the preimage. It emits the v5 digest beside the v6 digest, so a v5 object's identity is still computable rather than silently reassigned
+
+*Semantic version control*
+
+- `branch` — create, list, switch and delete named movable pointers into the immutable object store. A branch is a pointer; nothing is copied and nothing is rewritten
+- `propose` — a change written against an **exact target state digest**. Nothing moves. A proposal is not an edit, and the command says so on every run rather than leaving it to be inferred
+- `proposals` — proposals and their status: `open` · `accepted` · `rejected` · `deferred` · `superseded` · `applied`
+- `decide` — an actor with a valid grant accepts, rejects or defers. The decision binds to the state the actor actually reviewed, and a target that has moved since is refused with `WI_DECISION_STALE` rather than re-attached to the new state. A proposal computed against one state is not evidence about a different one
+- `commit` — every accepted proposal applies as one transaction, recording the prior root, the next root, the actor and the decisions it carried
+- `log` — semantic commit history: root digests, deltas, actors, decision counts
+
+*Counterfactual simulation*
+
+- `simulate` — what a change would do, **before the change exists**. Candidate root, semantic delta per node, the authority each delta would require and whether the actor holds it, the stale frontier, the conflicts it would cause, a costed minimum safe repair frontier — and the **provably unaffected count, reported with the same prominence as the breakage**. It writes nothing, and it prints the candidate root with a line saying the root exists only to be compared. This is the command that changes how the work feels
+
+*Conflict-preserving merge*
+
+- `merge` — a semantic three-way merge over meaning rather than lines. Two branches asserting incompatible quantities produce a typed conflict carrying both values verbatim, the merge exits 2, the root does not move, and the output states that the engine did not average. **There is no flag that makes it pick one**, and the absence is the feature
+- `conflicts` — unresolved semantic conflicts, and `--resolve ID --take ours|theirs --actor` to settle one under a named grant. A branch carrying an unresolved conflict cannot be rendered as agreed
+
+*Authority*
+
+- `authority` — `issue`, `delegate`, `revoke`, `check` and `list` over capability grants. A grant names subject, subject kind, capability, scope, scope value, issuer and a window. Delegation is monotone: a child grant may narrow capability, scope or lifetime and may never widen any of them, and an attempt exits with `WI_GRANT_SCOPE_EXCEEDED`. Absence of a grant is a refusal, never a default-allow
+
+*Proof planning*
+
+- `obligations` — what must be proved before this ships, **derived from typed state, release target and policy** rather than read off a checklist hard-coded inside a command. A claim atom in the `external_fact` realm derives twelve obligations, each naming why it applies; a node of a different type derives a different set, because the derivation reads the type
+
+*Bitemporal query*
+
+- `as-of` — query the graph by `--valid-at` and `--known-at` independently. *What did we believe in March about what was true in 2019* is a query rather than an act of memory, and a state valid only in 2022 is not returned for 2019
+
+*The graph constraint engine*
+
+- `constraints` — C001 through C020 evaluated over the current branch. **A constraint that could not run says so and says why.** There is no fourth status and no aggregate score — the run reports how many evaluated, how many did not, and how many failed, and refuses to average them into a number
+
+*Merkle closure and selective disclosure*
+
+- `capsule` — `create`, `inspect` and `verify` a `.wic` proof closure for the party you cannot hand a workspace to. Leaves are Merkleized, disclosure is per-leaf across four profiles, and verification recomputes leaf digests, state digests, inclusion proofs and the leaf count against the declared total. A redacted leaf proves it was inside the producer's closure and **proves nothing about its content — and the artifact says that itself**, in `declared_omissions`, rather than leaving a reader to assume
+
+*Backward explanation*
+
+- `why` — run backward from a node to its basis, its valid and knowledge intervals, the commit that introduced it, the actor who did so and the grant that permitted it. `wi explain` answers *what supports this*; `wi why` answers *how did this get here and who was allowed*
+
+**Twenty-four v6 doctrine documents** — `references/v6/`
+Twenty-three documents and an index. CONSTITUTION · EXECUTABLE_MEANING · NON_GOALS · SECURITY_MODEL · SEMANTIC_IR · BITEMPORAL_STATE · PROOF_OBLIGATIONS · ARGUMENT_GRAPH · RELIABILITY_RENDERING · AUTHORITY_MODEL · SEMANTIC_VERSION_CONTROL · MERGE_PROTOCOL · COUNTERFACTUAL_SIMULATION · AUTONOMOUS_EXECUTION · COMPILER_MODEL · SEMANTIC_SOURCE_MAPS · CAPABILITY_SECURITY · PACKAGE_SYSTEM · PROOF_CAPSULES · FEDERATION · SURFACES · MIGRATION_V5_TO_V6 · BUILD_MANIFEST.
+
+The v5 rule is carried forward unamended: **every section describing a mechanism carries one of exactly two status markers on its first line** — *executable in `scripts/wi.py`* or *specified*. There is no third marker, and no document in that directory describes a capability as though it ships when it does not.
+
+**Twenty JSON Schemas** — `schemas/v6/`
+`actor` · `argument` · `authority` · `claim` · `common` · `compile` · `conflict` · `constraint` · `decision` · `extension` · `graph_delta` · `graph_root` · `meaning` · `proof` · `proposal` · `release` · `semantic_commit` · `semantic_node` · `simulation` · `time`. The v3 craft schemas and the fifteen v5 state schemas are unchanged and remain valid under their own namespaces.
+
+**Tests** — `tests/v6/test_wi6.sh`
+**70 assertions, every one with a negative twin.** The v6 layer exists to refuse things, so a suite that only checked the happy path would stay green with every refusal deleted — which is worse than no suite, because it certifies nothing while looking like assurance. So the suite checks that an unauthorized acceptance is denied with `WI_AUTHORITY_DENIED`, that a widening delegation is refused with `WI_GRANT_SCOPE_EXCEEDED`, that a decision against a moved target is refused with `WI_DECISION_STALE`, that a conflicted merge **does not move the root**, that a tampered capsule fails verification, that a constraint which could not run is not counted as a pass, and — the assertion that matters most in the file — that **no value neither branch asserted appears anywhere in the merge output**. It asserts the absence of `12100` and of `12000` given branches holding `11800` and `12400`, because the failure this release exists to prevent is a plausible middle number nobody wrote.
+
+`tests/v4/test_wi.sh` (3 checks) and `tests/v5/test_wi5.sh` (32 checks) are unchanged and still required to pass.
+
+**Distribution: the bundle is now two bundles**
+
+The installable payload reached **229 files**. A skill bundle may hold at most **200**, and a bundle over the ceiling does not degrade — it does not load, which would make every install instruction in this repository false. That is the same failure this project exists to catch, turned inward, and it was already the subject of two fixes in the 5.0 line.
+
+Trimming again was available and was the wrong answer: what would have to go is the craft library, which is the half of this system that does the writing. So the payload splits along the seam that was already there:
+
+- **`writing-intelligence.skill`** — the runtime. 150 files: the skill, the v4, v5 and v6 doctrine, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works
+- **`writing-intelligence-craft.skill`** — the craft library. 79 files: 27 genre packs, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern detectors, the 19 compiler references and the diagnostic set
+
+**Install both.** They are one system in two artifacts, and splitting is what keeps each under the ceiling with room to grow rather than living one document away from the wall. If only the runtime is present, the craft doctrine summarized in `SKILL.md` still governs and the packs are a `git clone` away — degraded, and honestly degraded, rather than a broken upload.
+
+### Breaking changes
+
+- **`wi commit` is a new v6 subcommand name.** Any wrapper, alias, shell function or CI job that resolved `commit` through this CLI to something else — a git shim in the same `PATH`, a make target, a local convenience alias — now resolves to the semantic commit. Nothing else in the surface changed name or meaning
+- **`scripts/wi.py` reports version `6.0.0`.** Release tooling checks the tag, `wi.py --version` and this heading against one another, so this is breaking for anything that pinned the string
+
+Nothing else breaks, and this is the part worth being exact about because a governance system that invalidates its own history has no business asking anyone to trust its history:
+
+- **The v4 and v5 command surfaces are unchanged.** All seventeen earlier subcommands take the same arguments, write the same files and print the same shapes
+- **Exit codes are unchanged.** `gate --exit-code` is still 0 RELEASE, 1 HOLD, 2 BLOCK
+- **Digests are unchanged.** The v5 state digest domain is untouched; `wi canon` emits the v6 digest **beside** it rather than in place of it, so nothing computed under v5 is silently reassigned an identity
+- **`.wiab` bundles are unchanged.** A v5 bundle verifies under the v6 core, and a bundle built by the v6 core verifies under the same eleven checks
+- **Every v4 and v5 fixture still verifies.** The 3-check and 32-check suites run against the v6 core unmodified
+
+### Changed
+
+- **The claim status vocabulary gained `conflicted` as a branch-level state.** Two branches asserting incompatible states produce a conflict that blocks until an authorized decision resolves it. It is distinct from the v5 `conflicted`, which describes two supplied sources disagreeing; both hold the gate, and the reason is reported so an author is not sent to look at the wrong thing
+- **A proposal is now an object with an identity**, not conduct. Law A was a rule about how a tool behaves; it is a stored record bound to a target state digest, which is what makes Law P possible — an autonomous process cannot be held to a queue that does not exist
+- **A decision is now bound to what was reviewed.** Law J was a rule that decisions are first-class; a decision now names the exact target state digest, and a target that moved afterward invalidates the decision rather than inheriting it. An approval that does not say what state it approved is a signature on a blank page
+- **Freshness has three answers, not two.** `fresh`, `stale`, and — where a closure cannot be walked because a source version is missing or an adapter is unavailable — `WI_FRESHNESS_UNCOMPUTED` with the reason. It is never `fresh` and never `stale`, because both are claims and neither was earned
+
+### Unchanged
+
+Deliberately, and stated because a release note that lists only what moved leaves a reader to guess about everything else.
+
+- **The eleven craft passes, twelve engines, twelve agents, 27 genre packs, eight voiceprints, the 24 rewrite operators, the language tiers and the anti-slop doctrine.** The craft kernel is v3 and remains the authority on how the writing itself gets built. v6 governs what may become true about it, and would be worthless attached to prose nobody wants to read
+- **Laws A through F** (`references/v4/`) and **Laws G through L** (`references/v5/`), in force unamended. Not softened, not reinterpreted, not superseded
+- **The v5 authorship graph, evidence anchors, semantic diff, staleness and the minimum repair frontier.** v6 builds on them; it does not replace them
+- **`text_span` is still the only executing anchor type.** Six others remain specified
+- **`services/api/` remains the v3 craft kernel** and still does not expose the accountability, proof or state tier. That is Law K, not an oversight
+- **The refusals.** Every v4 and v5 non-goal carries forward without exception, and `references/v6/NON_GOALS.md` adds twelve more
+
+### Not yet implemented
+
+Specified in this repository, normatively described, and **not executable anywhere**. Each is labelled at the point of description, and `wi doctor` reports the live list on the machine you are standing on.
+
+- **The compiled Rust core and its WASM build.** `scripts/wi.py` is the canonical core. There is no Rust, no WASM, no daemon and no single-binary distribution. Every `crates/` path in the v6 documents is a target, not a directory that exists
+- **Compiler backends.** Meaning does not compile to DOCX, PDF, EPUB, slides or subtitles, and there are no render source maps. The Markdown and HTML renderers from v5 are what exists
+- **The judgment tier.** No provider ships. Paraphrase entailment is not evaluated by anything in this release
+- **Sandboxed ingestion adapters and the WASM plugin host.** PDF, XLSX, DOCX, image, audio and video anchors are specified only
+- **External signing, semantic remotes, signed graph deltas, federation and watch mode.** `wi capsule` produces and verifies a portable closure on a local filesystem; everything about moving one between organizations is specified
+- **The Workbench, REST v6 and MCP v6**
+- **The reverse-proposal round trip from a rendering.** Law M's renderer boundary is specified; nothing parses an edited artifact back into a candidate delta today
+- **At-rest encryption of the workspace**
+
+A capsule built by this core declares its own omissions. A missing capability is declared, never guessed.
+
+### Created by
+
+**Antonio T. Smith Jr. / Density6 LLC**
+[densitysix.com](https://densitysix.com)
+
+---
+
 ## [5.0.1] — 2026-08-07
 
 Packaging only. No change to the core, the doctrine, the schemas or any verdict

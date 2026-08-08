@@ -68,6 +68,21 @@ jobs:
           test "$n" -eq 32 \
             || { echo "::error::expected 32 PASS lines, got $n"; cat /tmp/v5.txt; exit 1; }
 
+      # The v6 layer is the part of this release that is new, so it is the part
+      # most likely to be wrong. Every assertion in this suite has a negative
+      # twin: an unauthorized acceptance is REFUSED, a decision on a moved
+      # target is REFUSED, a merge that would average two numbers is REFUSED,
+      # and a tampered capsule is REJECTED — not merely that the happy path
+      # prints something.
+      - name: v6 regression (branches, authority, simulation, merge, capsules)
+        run: bash tests/v6/test_wi6.sh | tee /tmp/v6.txt
+
+      - name: The v6 suite did not stop early
+        run: |
+          n=$(grep -c '^PASS' /tmp/v6.txt || true)
+          test "$n" -eq 70 \
+            || { echo "::error::expected 70 PASS lines, got $n"; cat /tmp/v6.txt; exit 1; }
+
       # A suite must be able to fail. Break the artifact digest check and the
       # tamper assertions have to go red; if they do not, they were never
       # testing anything and the green build above meant nothing.
@@ -91,6 +106,32 @@ jobs:
             echo "::error::the tamper check was disabled and the suite still passed"
             cat /tmp/mut.txt; exit 1; }
           echo "mutation caught: disabling the artifact-digest check turns the suite red"
+
+      # The one control this release exists to provide is that a merge will not
+      # invent a number neither branch asserted. Delete it and the suite has to
+      # go red; if it does not, the green build above meant nothing.
+      - name: The merge cannot be quietly taught to average (mutation check)
+        shell: bash
+        run: |
+          cp scripts/wi.py /tmp/wi6.py.bak
+          python3 - <<'MUT'
+          from pathlib import Path
+          p = Path("scripts/wi.py"); s = p.read_text()
+          s = s.replace('        pb = v6.get(b)["payload"] if b else None\n        conflicts.append({',
+                        '        pb = v6.get(b)["payload"] if b else None\n'
+                        '        auto.append({"logical_id": lid, "took": "theirs", "why": "mutation"})\n'
+                        '        continue\n        conflicts.append({', 1)
+          p.write_text(s)
+          MUT
+          set +e
+          bash tests/v6/test_wi6.sh > /tmp/mut6.txt 2>&1
+          code=$?
+          set -e
+          cp /tmp/wi6.py.bak scripts/wi.py
+          test "$code" -ne 0 || {
+            echo "::error::conflict preservation was disabled and the suite still passed"
+            cat /tmp/mut6.txt; exit 1; }
+          echo "mutation caught: auto-resolving a semantic conflict turns the suite red"
 
       - name: Gate exit codes are wired
         run: |
@@ -140,6 +181,26 @@ jobs:
           n=$(ls schemas/v5/*.schema.json | wc -l)
           test "$n" -ge 14 || { echo "::error::expected >=14 v5 schemas, got $n"; exit 1; }
           echo "v5 schemas: $n"
+
+      - name: v6 schema family is complete
+        run: |
+          n=$(ls schemas/v6/*.schema.json | wc -l)
+          test "$n" -ge 20 || { echo "::error::expected >=20 v6 schemas, got $n"; exit 1; }
+          echo "v6 schemas: $n"
+
+  plan:
+    name: plan · the build manifest cannot lie
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # A wave marked `shipped` must name a command that answers when called.
+      # Without this, the roadmap could claim a capability the CLI does not
+      # have — which is the failure this project exists to catch, one level up.
+      - name: Every shipped wave names something that runs
+        run: python3 scripts/check-manifest.py
 
   docs:
     name: docs · links resolve
@@ -228,12 +289,36 @@ jobs:
             exit 1
           }
 
+      # README tells people to install two skills. Both have to be under the
+      # installer's ceiling, and the arithmetic is done here rather than
+      # discovered by whoever tries to upload them.
+      - name: Both bundles are under the 200-file ceiling
+        run: |
+          for B in writing-intelligence writing-intelligence-craft; do
+            n=$(unzip -Z1 "dist/$B.skill" | grep -vc '/$' || true)
+            echo "$B: $n files"
+            test "$n" -le 200 \
+              || { echo "::error::$B has $n files; the skill upload limit is 200"; exit 1; }
+          done
+
+      - name: The committed craft bundle matches the tree
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+        run: |
+          A=$(sha256sum dist/writing-intelligence-craft.skill | cut -d' ' -f1)
+          B=$(sha256sum writing-intelligence-craft.skill      | cut -d' ' -f1)
+          test "$A" = "$B" || {
+            echo "::error::writing-intelligence-craft.skill is stale — run: bash scripts/build-skill.sh"
+            exit 1
+          }
+
       - uses: actions/upload-artifact@v4
         with:
           name: writing-intelligence-skill
           path: |
             dist/writing-intelligence.skill
             dist/writing-intelligence.skill.sha256
+            dist/writing-intelligence-craft.skill
+            dist/writing-intelligence-craft.skill.sha256
           if-no-files-found: error
 
   api:

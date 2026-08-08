@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/compile.schema.json",
+  "title": "CompileV6",
+  "description": "Meaning becomes compilable: a build plan selects governed nodes, a backend renders them, and every renderer returns BOTH bytes and a source map. THE COMPILER MAY NOT INVENT SEMANTIC FACTS. A renderer may choose sentence order, choose paragraph boundaries, select among approved wording variants, apply a voice profile, format citations, shorten within declared constraints, choose a chart type from bound data and localize supported expression. A renderer may NOT create a factual claim, widen scope, remove a qualifying exception, strengthen certainty, change a quantity, change legal force, invent a citation, or hide a realm marker where policy requires one. When a model-backed renderer proposes wording that would change semantic state, COMPILATION STOPS AND EMITS A PROPOSAL — it does not quietly finish the document, because a document that finished itself is one nobody decided to say. The source map is what makes all of this checkable and what makes multi-output invalidation precise. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "BuildPlan": {
+      "type": "object",
+      "required": ["graph_root", "target", "selected_nodes", "renderer", "policy_digest", "input_digest"],
+      "additionalProperties": false,
+      "description": "Exactly what will be compiled, from what, under what rules. Every input that could change the bytes is named and digested, so that `rebuild this release` is a definite instruction: a plan that could not name its policy or its packs would rebuild under today's rules and produce different bytes with no explanation available.",
+      "properties": {
+        "graph_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph state to compile from. Pinned rather than a branch name: a branch moves, and a build plan naming one describes a build nobody can repeat."},
+        "target": {"type": "string", "minLength": 1, "description": "Which release target — the book, the website, the board deck, the filing. Targets differ in policy, in audience and in what they may omit, so the target is what makes a build plan more than a rendering request."},
+        "selected_nodes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "The nodes this target includes. Minimum one, and recorded rather than recomputed: selection can depend on policy that later changes, and a release must be able to say which nodes it actually carried rather than which a fresh selection would produce today."
+        },
+        "renderer": {"$ref": "#/$defs/CompilerIdentity", "description": "The backend that will produce the bytes, at an exact version. A renderer upgrade changes output, and a plan that named only a backend family would make that change invisible."},
+        "style_pack": {"$ref": "extension.schema.json#/$defs/PackRef", "description": "The doctrine pack governing presentation, pinned by digest. What keeps a style rule changed six months later from retroactively altering what an older release looked like or what passed in it."},
+        "policy_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The policy in force. Decides what may be omitted, which realms must be marked and which obligations apply, so two builds of one graph under two policies are legitimately different documents."},
+        "input_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical compile input — the selection, the policy, the pack and the backend identity together. THE REPRODUCIBILITY KEY: two builds sharing this digest must produce identical bytes, and when they do not, something in the pipeline is reading state nobody declared."},
+        "mission": {"$ref": "#/$defs/MissionContract", "description": "What the output is meant to accomplish, where the project has stated it. Present so that required content and protected constraints are checkable at build rather than remembered at review."},
+        "voice": {"$ref": "#/$defs/VoiceContract", "description": "The voice constraints in force, where one governs this target."}
+      }
+    },
+    "CompilerIdentity": {
+      "type": "object",
+      "required": ["backend_id", "version"],
+      "additionalProperties": false,
+      "description": "Which renderer produced or will produce the bytes. Recorded in the build plan and again in the release manifest, because `which compiler made this file?` is a question somebody asks precisely when the answer has become surprising.",
+      "properties": {
+        "backend_id": {"type": "string", "minLength": 1, "description": "The backend — markdown, json, html, docx, pdf. Markdown is the reference renderer used in parity tests; a backend disagreeing with it about semantic content has a defect rather than a style."},
+        "version": {"type": "string", "minLength": 1, "description": "Its version. Bound into the release closure so re-verification runs against the renderer that actually produced the artifact."},
+        "binary_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the renderer binary, where the deployment can produce one. Turns a version claim into a fact."},
+        "deterministic": {"type": "boolean", "description": "Whether the backend produces identical bytes from identical input. A backend that is not deterministic cannot support constraint C010 in the strong sense — the approved bytes and the shipped bytes can differ for reasons nobody introduced — and a policy for a regulated target should refuse one."}
+      }
+    },
+    "ArtifactSet": {
+      "type": "object",
+      "required": ["artifacts", "source_map", "findings"],
+      "additionalProperties": false,
+      "description": "What a compilation produced. `findings` is REQUIRED rather than optional, because an empty findings array is a statement that the renderer found nothing to report and an absent one is a renderer that does not report — and a build pipeline cannot tell those apart if the key may be missing.",
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/Artifact"},
+          "description": "The files produced. Plural because one target can produce several — a document and its figures, a page and its assets — and each is digested independently since each can be circulated independently."
+        },
+        "source_map": {"$ref": "#/$defs/RenderSourceMap", "description": "Where every rendered piece came from. REQUIRED, not optional: without it the honest answer to `which documents does this claim appear in?` is `rebuild them all and look`, and multi-output invalidation degrades from precise to approximate."},
+        "findings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/RenderFinding"},
+          "description": "What the renderer noticed — content it could not place, a constraint it could not satisfy, a proposal it emitted instead of guessing. The channel by which a renderer says `I stopped rather than inventing something`, which is the behaviour the whole compiler model depends on."
+        },
+        "halted": {"type": "boolean", "description": "Whether compilation stopped before completing. True when a renderer met something it could only have resolved by changing meaning; the artifacts present are partial and MUST NOT be released. A partial artifact that shipped would be a document missing the paragraph nobody could render — indistinguishable, to a reader, from a document that never had one."}
+      }
+    },
+    "Artifact": {
+      "type": "object",
+      "required": ["artifact_id", "media_type", "digest", "byte_length"],
+      "additionalProperties": false,
+      "description": "One produced file. The digest is over the exact bytes, and it is what constraint C010 compares at release: approved bytes and shipped bytes are the same bytes or the release is refused.",
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1, "description": "Identifier within the set — `book.pdf`, `site.html`, `board.pptx`."},
+        "media_type": {"type": "string", "minLength": 1, "description": "What kind of file it is."},
+        "digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the raw bytes with NO normalization of any kind. Unlike a state digest, which is over canonical form: an artifact is bytes somebody receives, and normalizing before hashing would let two different files satisfy one approval."},
+        "byte_length": {"type": "integer", "minimum": 0, "description": "Size in bytes. Cheap to carry and it catches the class of failure where a truncated file digests to something plausible and nobody notices until a reader opens it."},
+        "locale": {"type": "string", "description": "The locale rendered, where the target is localized. A localized artifact is a distinct artifact with a distinct digest, and it carries its own obligations — a translation is a rendering that can drop an exception clause more easily than any other."}
+      }
+    },
+    "RenderSourceMap": {
+      "type": "object",
+      "required": ["artifact_digest", "mappings"],
+      "additionalProperties": false,
+      "description": "Which semantic node produced which region of which artifact. The object that makes `wi explain final.pdf:412` possible — moving BACKWARD from a released file into the graph, so a reader who has only the document can reach the claim, its evidence and its proof state without knowing anything about the source manuscript.",
+      "properties": {
+        "artifact_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The artifact these mappings describe. Bound to the digest rather than the filename, so a source map cannot be read against a file it does not describe."},
+        "mappings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/RenderMapping"},
+          "description": "One entry per rendered piece of meaning."
+        },
+        "unmapped_regions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ArtifactLocator"},
+          "description": "Regions of the artifact that correspond to no semantic node — boilerplate, generated headings, a template's own furniture. NAMED rather than left implicit, because a region with no mapping is either legitimate furniture or content the renderer produced from nowhere, and only an explicit list distinguishes them."
+        }
+      }
+    },
+    "RenderMapping": {
+      "type": "object",
+      "required": ["semantic_node", "semantic_state", "artifact_locator", "expression_digest"],
+      "additionalProperties": false,
+      "description": "One node, one place it appears, and the exact expression used. `semantic_state` is pinned so that a mapping made against one state of a claim is legible as stale when the claim moves — which is precisely how a released document comes to be known to contain a superseded figure.",
+      "properties": {
+        "semantic_node": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which node was rendered."},
+        "semantic_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Which exact state. The field that makes multi-output invalidation precise: when the state moves, every artifact carrying this mapping is known to be out of date, by arithmetic, without rebuilding anything."},
+        "artifact_locator": {"$ref": "#/$defs/ArtifactLocator", "description": "Where in the artifact it appears."},
+        "expression_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the exact wording used. Separate from the semantic state because one meaning has many lawful expressions, and this is what lets a check confirm that the same claim was rendered CONSISTENTLY across outputs rather than merely rendered in all of them."},
+        "realm_marked": {"type": "boolean", "description": "Whether the node's epistemic realm was marked in this rendering. Recorded per mapping because constraint C011 is evaluated per rendering: a claim correctly marked in the report and unmarked on the slide has a violation in exactly one place, and only a per-mapping record can say which."}
+      }
+    },
+    "ArtifactLocator": {
+      "type": "object",
+      "required": ["kind"],
+      "description": "Where in an artifact something sits. A discriminated union because the coordinate systems are genuinely different — a PDF has pages and bounding boxes, an HTML document has selectors, a presentation has slides and shapes — and a single `location: string` would be a format nobody can parse without knowing which format it came from.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "page"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "pdf_region"},
+            "page": {"type": "integer", "minimum": 1, "description": "One-based page number, matching what a reader sees rather than what an array index would give."},
+            "bbox": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}, "description": "The region as [x0, y0, x1, y1] in the page's coordinate space. Absent means the whole page, which is a weaker but honest locator for content the renderer could not place more precisely."}
+          },
+          "description": "A region of a PDF page."
+        },
+        {
+          "type": "object",
+          "required": ["kind", "selector"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "html_node"},
+            "selector": {"type": "string", "minLength": 1, "description": "A selector resolving to the element. Stable because the renderer emitted the markup and can guarantee its own identifiers — a selector derived from document structure would break on the next unrelated edit."},
+            "text_range": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 0}, "description": "Character offsets within the element, for a mapping finer than one element."}
+          },
+          "description": "An element or range within an HTML artifact."
+        },
+        {
+          "type": "object",
+          "required": ["kind", "line_start", "line_end"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "text_lines"},
+            "line_start": {"type": "integer", "minimum": 1, "description": "First line, one-based."},
+            "line_end": {"type": "integer", "minimum": 1, "description": "Last line, inclusive. Inclusive rather than exclusive because this locator is read by people as often as by machines, and `lines 144-151` should mean what a person means by it."}
+          },
+          "description": "A line range in a plain-text or Markdown artifact."
+        },
+        {
+          "type": "object",
+          "required": ["kind", "slide"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "slide_shape"},
+            "slide": {"type": "integer", "minimum": 1, "description": "One-based slide number."},
+            "shape": {"type": "integer", "minimum": 0, "description": "Shape index on the slide. Absent means the whole slide."}
+          },
+          "description": "A shape on a presentation slide."
+        },
+        {
+          "type": "object",
+          "required": ["kind", "path"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"const": "json_pointer"},
+            "path": {"type": "string", "minLength": 1, "description": "An RFC 6901 pointer into the artifact."}
+          },
+          "description": "A location within a structured export. Used by the JSON backend, which is a machine surface rather than a presentation format and needs a locator that resolves exactly."
+        }
+      ]
+    },
+    "RenderFinding": {
+      "type": "object",
+      "required": ["kind", "detail"],
+      "additionalProperties": false,
+      "description": "Something the renderer noticed and would not resolve on its own. The mechanism by which a compiler declines to invent: a renderer meeting content it can only place by changing meaning reports it here and, where the change is worth proposing, emits a proposal rather than making it.",
+      "properties": {
+        "kind": {"$ref": "#/$defs/RenderFindingKind", "description": "What kind of finding."},
+        "detail": {"type": "string", "minLength": 1, "description": "What happened, specifically enough to act on."},
+        "semantic_node": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The node involved, where one is."},
+        "locator": {"$ref": "#/$defs/ArtifactLocator", "description": "Where in the artifact, where the finding has a place."},
+        "emitted_proposal": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The proposal the renderer emitted instead of making the change. Present for `semantic_change_required`, and it is what turns a halted build into an actionable one: the renderer has written down what it would have needed, and a person decides."},
+        "blocking": {"type": "boolean", "description": "Whether this finding prevents release. A renderer may legitimately report a constraint it could not satisfy and still produce usable bytes for a draft target; the same finding blocks a regulated one, and the policy rather than the renderer decides which."}
+      }
+    },
+    "RenderFindingKind": {
+      "type": "string",
+      "description": "The kinds of thing a renderer reports. Enumerated because they route differently: one is a content problem, one is a policy problem, one is a defect in the renderer, and a single `warning` channel would send all three to whoever is least able to fix them.",
+      "oneOf": [
+        {"const": "semantic_change_required", "description": "The renderer could only proceed by changing what something means. It stopped and emitted a proposal. THE MOST IMPORTANT FINDING IN THE SET: this is the point at which a model-backed renderer would otherwise have quietly finished the document."},
+        {"const": "constraint_unsatisfiable", "description": "A declared constraint could not be met — a length limit that cannot hold the required content, a voice rule that cannot apply to a protected span. A real conflict between two things somebody asked for, and it needs a person."},
+        {"const": "content_omitted", "description": "Something selected was not rendered. Always reported, never silent: a claim that vanished from an output is invisible in the output by definition, and this finding is the only evidence it was ever meant to be there."},
+        {"const": "realm_marker_dropped", "description": "A realm marker required by policy could not be placed. Constraint C011, surfaced at render time so it blocks rather than being discovered by a reader who took a scenario figure for a measurement."},
+        {"const": "protected_span_conflict", "description": "A protected span could not be rendered without alteration. Constraint C016: the span is not altered, and the finding says so rather than the renderer choosing to improve it."},
+        {"const": "backend_limitation", "description": "The backend cannot express something the graph holds — a table structure a format has no way to carry. A defect report about the renderer rather than about the content, and it should route to whoever maintains the backend."}
+      ]
+    },
+    "MissionContract": {
+      "type": "object",
+      "required": ["intended_outcomes", "release_targets"],
+      "additionalProperties": false,
+      "description": "What a piece of writing is meant to accomplish, made into a project object without pretending mission satisfaction is deterministic. Required content and protected constraints are checkable; WHETHER THE WRITING WILL ACTUALLY PERSUADE A READER REMAINS JUDGED OR HUMAN-DECLARED, and nothing here promotes it. The value is that the governing intent lives in the same inspectable system as everything else rather than in a brief somebody wrote once.",
+      "properties": {
+        "audience": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Who it is for. Not checkable and worth recording: most disagreements about a draft turn out to be disagreements about this."
+        },
+        "intended_outcomes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "What must become true after somebody reads it. Minimum one, because a document with no stated purpose cannot be reviewed against anything except taste."
+        },
+        "prohibited_outcomes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Readings the document must not produce. Frequently more useful than the intended outcomes and almost always left unwritten, which is why it has a field: `must not read as a commitment to a date` is a constraint a reviewer can apply."
+        },
+        "required_content": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes that must appear. Deterministically checkable against the source map, which is the part of a mission contract a machine can genuinely enforce."
+        },
+        "protected_voice_constraints": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Constraints that may not be relaxed to satisfy the mission. The guard against a compiler optimizing toward an outcome by abandoning the way the author writes."
+        },
+        "evidence_mode": {"$ref": "#/$defs/EvidenceMode", "description": "How much support the target requires. What makes one graph produce a strictly-evidenced filing and a loosely-evidenced draft without either being a different document."},
+        "release_targets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Which outputs this mission governs. Minimum one: a mission contract governing nothing constrains nothing."
+        }
+      }
+    },
+    "EvidenceMode": {
+      "type": "string",
+      "description": "How much support a target requires. Named on the mission rather than assumed globally, because the same claim may legitimately appear in a strictly-evidenced filing and in an internal note, and a system with one setting forces every document to the strictness of the most demanding one — which in practice means the setting is lowered.",
+      "oneOf": [
+        {"const": "strict", "description": "Every factual claim requires verified support. For regulated and external-facing targets, where an unsupported sentence is a liability rather than a rough edge."},
+        {"const": "standard", "description": "Factual claims require support; entailment may be judged. The ordinary working mode."},
+        {"const": "exploratory", "description": "Claims may be unsupported and MUST BE MARKED as such. Legitimate for a draft and dangerous only if the marking is dropped — which is exactly what constraint C011 refuses at render time."}
+      ]
+    },
+    "VoiceContract": {
+      "type": "object",
+      "required": ["sample_set_digest"],
+      "additionalProperties": false,
+      "description": "Voice as a compilation constraint rather than prompt flavour. THREE KINDS OF THING ARE KEPT APART HERE: features MEASURED from a sample set, preferences the author DECLARED, and resemblance a model JUDGED. They are never blended into a single voice score, because a score cannot be argued with and each of the three is disputed differently — a measurement by re-measuring, a preference by asking the author, a judgment by disagreeing with it. A backend may use this to choose among semantically equivalent renderings; IF A REQUESTED VOICE CHANGE REQUIRES A SEMANTIC CHANGE IT BECOMES A PROPOSAL.",
+      "properties": {
+        "protected_phrases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "Phrases that may not be rewritten under any voice transform. Constraint C016 in the voice layer: a formulation the author chose deliberately survives every improvement a renderer could offer."
+        },
+        "forbidden_patterns": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Patterns the voice excludes. Deterministically checkable, and the most reliably enforceable part of a voice contract."
+        },
+        "measured_features": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/MeasuredFeature"},
+          "description": "Features measured from the sample set, each carrying its own measurement. Measured rather than declared, and never presented as the author's stated preference — an author whose sentences average nineteen words has not asked for nineteen-word sentences."
+        },
+        "declared_preferences": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "What the author has actually asked for. HumanDeclared, and it OUTRANKS a measured feature wherever the two disagree: the sample shows what was written and the preference states what was wanted, and only the second is an instruction."
+        },
+        "sample_set_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the sample set the measurements came from. Required, because a measured feature without its sample is an assertion, and re-measuring against a different sample produces a different voice with the same name."}
+      }
+    },
+    "MeasuredFeature": {
+      "type": "object",
+      "required": ["feature", "value", "basis"],
+      "additionalProperties": false,
+      "description": "One feature measured from a sample set. Carries its own basis so that a measurement stays a measurement everywhere it is used — a voice contract is exactly the kind of object whose contents get flattened into a prompt, and a flattened measurement loses the fact that it was one.",
+      "properties": {
+        "feature": {"type": "string", "minLength": 1, "description": "What was measured."},
+        "value": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The measured value as an exact quantity. Exact rather than floating point for the same reason everywhere else in v6: a value that serializes differently on two machines makes the contract's digest unstable."},
+        "basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How it was established. Measured, with its denominator, so `average sentence length 19.2 words` carries the sample size that makes it meaningful."}
+      }
+    },
+    "ExecutionPlan": {
+      "type": "object",
+      "required": ["run_id", "base_root", "steps", "policy_digest"],
+      "additionalProperties": false,
+      "description": "Autonomous work modelled as a DAG of typed steps rather than one agent loop. The difference is that every step declares its side effects in advance, so a provider call cannot hide inside a step declared pure, a network fetch cannot hide inside a renderer, and a signature cannot happen as a side effect of a release build. An opaque loop can do all three and nothing in the record would show it.",
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1, "description": "Identity of this run, carried by every step and every object the run produces so that `what did this run do?` is one query."},
+        "base_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph state the run starts from. Pinned, so a run is a definite piece of work rather than one whose meaning depends on when it happened to start."},
+        "objective": {"$ref": "#/$defs/MissionContract", "description": "What the run is for. Present so the run's own output can be checked against what it was asked to do rather than against what it turned out to produce."},
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ExecutionStep"},
+          "description": "The typed steps. Minimum one, and a DAG rather than a sequence because the ordering constraints are real and partial — two retrievals genuinely are independent, and forcing them into a line hides which dependencies matter."
+        },
+        "policy_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The policy governing the run. Decides which effect classes are permitted at all, which is how an autonomous run is bounded before it starts rather than interrupted partway."},
+        "worker": {"$ref": "common.schema.json#/$defs/ActorId", "description": "The worker executing it. Attributable in every object the run produces: a worker's proposals must never be readable as a person's own, and this is where that begins."},
+        "capability_token": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The grant the run holds, giving it the MINIMUM power the plan requires — read the graph, retrieve approved sources, request entailment judgments, create proposals, run simulations, and nothing else. A worker that could sign decisions or delegate authority would be a worker that could approve its own work."}
+      }
+    },
+    "ExecutionStep": {
+      "type": "object",
+      "required": ["step_id", "kind", "effect_class"],
+      "additionalProperties": false,
+      "description": "One step in a run. `effect_class` is REQUIRED and declared rather than inferred: the whole value of typing the DAG is that a step's effects are known before it runs, and a step that could discover its own effect class while executing would be back to the opaque loop.",
+      "properties": {
+        "step_id": {"type": "string", "minLength": 1, "description": "Identifier within the plan."},
+        "kind": {"$ref": "#/$defs/ExecutionStepKind", "description": "What kind of work the step does."},
+        "effect_class": {"$ref": "release.schema.json#/$defs/EffectClass", "description": "What the step is permitted to affect. ONLY `AuthoritativeWrite` REQUIRES A SUCCESSFUL TRANSITION AUTHORIZATION, which is what makes the classification load-bearing rather than descriptive: a step declared `Pure` that attempts a provider call is stopped, because the declaration is a ceiling and not a hint."},
+        "depends_on": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Steps that must complete first, by plan-local id. Explicit rather than implied by array order, since the array is a set of steps and the ordering is a separate fact about them."
+        },
+        "inputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "The exact states the step reads. Declared so a run is reproducible: a step reading whatever is current at the moment it runs makes the whole plan a function of timing."
+        },
+        "produces": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "The kinds of object the step produces. A step producing something it did not declare has its output rejected, for the same reason an adapter does."
+        },
+        "requires_authority": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "authority.schema.json#/$defs/Capability"},
+          "description": "Capabilities the step needs. Checked against the run's token BEFORE the run starts, so a plan whose eleventh step needs authority the worker does not hold fails at planning rather than after ten steps of work."
+        }
+      }
+    },
+    "ExecutionStepKind": {
+      "type": "string",
+      "description": "The kinds of step a run can contain. Closed, and each maps to a narrow effect class: the enumeration is what makes an autonomous run auditable, because a plan of nine typed steps can be read before it runs and a loop cannot.",
+      "oneOf": [
+        {"const": "Retrieve", "description": "Fetch a source. `ExternalRead` at most — a retrieval that could write would be an ingestion nobody approved."},
+        {"const": "DeterministicCheck", "description": "Run a deterministic check. `Pure`, and it is the only step kind that may produce a Verified basis."},
+        {"const": "Judgment", "description": "Request an assessment from a provider. `JudgmentCall`, declared so a provider call cannot hide inside anything else — it costs money, it is not reproducible, and constraint C008 means the provider gets no authority from having been asked."},
+        {"const": "Transform", "description": "Derive new state from existing state without asserting anything new. `Pure`, and any transform that would assert something becomes a `Propose` instead."},
+        {"const": "Propose", "description": "Create a proposal. `ProposalWrite`: the ceiling for autonomous work, and the reason a worker can be given real capability safely — it can prepare any amount of change and commit none of it."},
+        {"const": "Simulate", "description": "Run a counterfactual. `Pure` by construction, since a simulation commits nothing."},
+        {"const": "AwaitDecision", "description": "Wait for a person. The step that makes a run's dependence on human judgment explicit in the plan rather than implicit in a queue — a run whose plan contains none of these is a run that expects nobody to look."},
+        {"const": "Compile", "description": "Build an artifact. `ArtifactWrite`, kept apart from graph writes: producing a file changes nothing about what is true."},
+        {"const": "VerifyRelease", "description": "Verify a release closure. `Pure`, and separate from `Signature`, which is never a side effect of a build."}
+      ]
+    }
+  }
+}

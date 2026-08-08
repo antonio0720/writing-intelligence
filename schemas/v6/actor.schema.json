@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/actor.schema.json",
+  "title": "ActorV6",
+  "description": "Who or what performed an action, as a typed record rather than a label on a log line. It exists because the question every audit begins with — who did this — must have an answer that is not forgeable by the component with the most output. THE CENTRAL RULE OF THIS DOCUMENT IS THAT ACTOR KIND IS DESCRIPTIVE AND NEVER BY ITSELF AUTHORITATIVE: being a `Human` confers no capability, being a `Service` denies none, and nothing in v6 decides what an actor may do by reading this record. Authority comes from a CapabilityGrant in `authority.schema.json` and from nowhere else, which is what stops the two most common failures — a system that trusts anything typed human, and a system in which a component quietly acquires powers by being renamed. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "ActorKind": {
+      "type": "string",
+      "enum": [
+        "Human",
+        "Team",
+        "Service",
+        "AutomatedPolicy",
+        "AutonomousWorker",
+        "JudgmentProvider",
+        "ExternalSigner"
+      ],
+      "description": "What sort of thing the actor is. This is a DESCRIPTION for a reader, not a permission for the engine — the engine reads grants, never kinds. `Human` is a named individual acting on their own authority, and a reader must be able to contact them. `Team` is a named group whose members are separately identified; it exists so `the review board accepted this` is sayable without pretending one person did. `Service` is deterministic software acting under configuration. `AutomatedPolicy` is a rule the project configured, acting with no person present — it exists so that `the system did this under a rule you set` is sayable honestly rather than being dressed up as a decision somebody made. `AutonomousWorker` is software that plans and acts across multiple steps without a person in the loop for each one; it is separated from `Service` because the blast radius of a wrong step is different and the effect classes it may reach are bounded differently. `JudgmentProvider` is a third-party inference service, named exactly as a PDF decoder is named — infrastructure to be audited, replaced and disagreed with. `ExternalSigner` is a key holder outside this workspace, such as a notary or a counterparty. The kinds that matter most are the ones a reader would otherwise assume were human: an automated policy and an autonomous worker are real actors with real authority that are honestly not people, and saying so is the point."
+    },
+    "Actor": {
+      "type": "object",
+      "required": ["actor_id", "kind", "display_name"],
+      "additionalProperties": false,
+      "description": "One attributed actor. Every state change in a v6 workspace names one, and no field here is inferable from context or defaultable — an action whose actor had to be guessed is an action nobody can be asked about. Note what this record deliberately does NOT carry: no capability list, no permission set, no trust level and no role that an engine reads. All four would be a second, softer authority system running beside the grant system, and the softer one always wins the argument at the moment it should not.",
+      "properties": {
+        "actor_id": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Stable identity within the workspace. Stable across renames, because attribution that breaks when somebody changes their display name is attribution that quietly stops working."},
+        "kind": {"$ref": "#/$defs/ActorKind", "description": "What sort of actor this is. Descriptive. An engine that branches on this field to decide whether an action is permitted has reimplemented authority in the wrong place, and constraint C008 exists because that reimplementation is exactly how a judgment provider ends up holding a decision."},
+        "display_name": {"type": "string", "minLength": 1, "description": "The name a reader sees. For a person, the name they are known by; for software, the implementation name. Never used for comparison or joining — `actor_id` is."},
+        "software_version": {"type": "string", "description": "Version of the implementation, for every kind that is software. Required by policy for `Service`, `AutomatedPolicy`, `AutonomousWorker` and `JudgmentProvider`: a different version is a different producer, and a defect found later has to be attributable to a specific build rather than to a name."},
+        "operated_by": {"$ref": "common.schema.json#/$defs/ActorId", "description": "The human or team accountable for a software actor. Present so that `an autonomous worker did this` is never the end of the sentence — somebody configured it, somebody may stop it, and that person is named here rather than reconstructed from a deployment history."},
+        "members": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/ActorId"},
+          "description": "For a `Team`, the actors it comprises. Required for a team that signs or decides, because an approval rule counting distinct approvers cannot count a team as one signature and as three at the same time, and which one it is has to be readable rather than assumed."
+        },
+        "public_keys": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/PublicKeyRef"},
+          "description": "Keys this actor signs with. An actor with no key may still act and still be attributed; it simply cannot produce a signature, and a signature is what an offline reader can check without trusting this workspace at all."
+        },
+        "organization": {"type": "string", "description": "The organization the actor belongs to, for display and for conflict-of-interest review. Never used to confer authority."},
+        "contactable_at": {"type": "string", "description": "How a reader reaches a human actor. Present because the difference between an attributed decision and an unattributable one is, in practice, whether anybody can be asked about it a year later."},
+        "created_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the actor record entered the workspace."},
+        "retired_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the actor stopped being able to act. Stamped, never deleted: an actor record is removed only in the sense that it stops being usable, because deleting it would orphan every decision they ever made and turn a signed history into an anonymous one."}
+      }
+    },
+    "PublicKeyRef": {
+      "type": "object",
+      "required": ["key_id", "algorithm", "public_key_digest"],
+      "additionalProperties": false,
+      "description": "A reference to a signing key, by identity and digest rather than by embedded key material. The digest form means a manifest can name the key a signature was made under without the manifest becoming a key distribution channel, and it means key rotation is a visible event: a new key is a new digest, so a signature verified under an old key stays verifiable and is not silently re-attributed to the new one.",
+      "properties": {
+        "key_id": {"type": "string", "minLength": 1, "description": "Stable identifier of the key, unique within the actor. What a signature envelope names."},
+        "algorithm": {"type": "string", "enum": ["ed25519", "ecdsa-p256", "ecdsa-p384", "rsa-pss-sha256"], "description": "Signature algorithm. Named in the record rather than inferred from key length, because inferring it is how a verifier ends up accepting a signature made under an algorithm it did not intend to accept."},
+        "public_key_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "SHA-256 over the DER-encoded public key. The comparison a verifier makes when deciding whether the key that signed is the key it expected."},
+        "valid_from": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the key became usable for signing."},
+        "valid_until": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the key expires. A signature made before this instant stays valid afterwards; expiry stops new signatures, it does not retroactively unmake old ones, and a verifier that treats it otherwise invalidates history every time a key rolls."},
+        "revoked_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the key was revoked. Revocation is different from expiry and is deliberately kept in its own field: a revoked key means signatures made under it are suspect from the compromise onward, and a verifier must be able to tell the two situations apart rather than seeing one `unusable` flag."},
+        "revocation_reason": {"type": "string", "description": "Why the key was revoked, in words. A revocation with no reason gives a downstream reader no way to decide whether prior signatures are still worth anything."},
+        "location": {"type": "string", "description": "Where the public key itself may be retrieved, when it is published somewhere. Advisory: a verifier that cannot reach it must report the signature unverifiable rather than treat an unreachable key as an absent requirement."}
+      }
+    }
+  }
+}

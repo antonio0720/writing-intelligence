@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/graph_root.schema.json",
+  "title": "GraphRootV6",
+  "description": "The whole authorship graph reduced to one digest, over two Merkle indexes — one for nodes, one for edges. It exists so that `is this the same graph?` is a single comparison rather than a walk, and so that a capsule can prove one node was in a graph without shipping the graph: an inclusion proof against a published root is what lets a reader confirm a claim was part of a release when the release itself is a hash-only export. The two indexes are kept separate rather than folded into one tree because nodes and edges change at very different rates — rewiring a graph touches edges and leaves node states alone — and a single tree would recompute both roots on every edit, destroying the cheap `have the facts moved, or only the wiring?` comparison. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "GraphRoot": {
+      "type": "object",
+      "required": ["root_digest", "node_index", "edge_index", "schema_generation"],
+      "additionalProperties": false,
+      "description": "The root commitment over one exact graph state. `root_digest` is the value a semantic commit records and an inclusion proof terminates at, so every downstream claim about membership resolves to comparing one string against a published one.",
+      "properties": {
+        "root_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "SHA-256 over a domain-separated preimage binding the schema generation, the node index root and the edge index root in that fixed order. Domain-separated so that a graph root can never collide with a node state digest or a raw source blob digest — a single hash space shared by different kinds of object is how a value from one context is accepted in another."},
+        "node_index": {"$ref": "#/$defs/NodeIndexRoot", "description": "Commitment over every node identity and its current state."},
+        "edge_index": {"$ref": "#/$defs/EdgeIndexRoot", "description": "Commitment over every edge."},
+        "schema_generation": {"type": "string", "const": "6.0.0", "description": "The schema generation this root was computed under. Bound into the preimage because a graph read under different schema semantics is a different graph even when every byte matches, and a root that did not carry it would silently compare equal across a semantic change."},
+        "realm_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0},
+          "description": "How many nodes sit in each realm, keyed by realm. Present as visible denominators for every coverage statement made about this graph: a coverage figure whose denominator is not in the same document as the figure is a percentage a reader cannot check."
+        },
+        "stale_count": {"type": "integer", "minimum": 0, "description": "How many nodes carry an unresolved invalidation at this root. Carried at the root so that `does this graph contain expired proof?` is answerable without walking it, and so a release check has a number to compare against zero."},
+        "computed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the root was computed. Never part of the preimage: including it would make the same graph produce a different root on every rebuild, which would destroy reproducibility and make a published root meaningless."}
+      }
+    },
+    "NodeIndexRoot": {
+      "type": "object",
+      "required": ["root", "leaf_count", "leaf_ordering", "hash_algorithm", "domain_separator"],
+      "additionalProperties": false,
+      "description": "The Merkle commitment over node identity and state. Each leaf is a hash over one node's logical id, its state digest and its schema id together, so that a node whose payload moved, a node whose schema was reinterpreted, and a node that was replaced by a different node with the same content are three distinguishable events rather than one.",
+      "properties": {
+        "root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Root hash of the node tree."},
+        "leaf_count": {"type": "integer", "minimum": 0, "description": "Number of leaves. Required so that a verifier checking an inclusion proof can confirm the tree shape rather than accepting a proof of any depth, which is what stops a forged path through a tree of a different size."},
+        "leaf_ordering": {"type": "string", "const": "logical_id_ascending", "description": "Leaves are sorted by logical id, ascending, byte-wise. Fixed rather than configurable: two implementations that order leaves differently produce different roots from identical graphs, and the resulting disagreement looks exactly like tampering."},
+        "hash_algorithm": {"type": "string", "const": "sha256", "description": "The hash used for leaves and interior nodes. Named in the structure rather than assumed, so that admitting a second algorithm later does not make the existing corpus ambiguous."},
+        "domain_separator": {"type": "string", "const": "wi-node-leaf-v6", "description": "The literal prefix hashed before each leaf's content. Present because a Merkle tree without distinct leaf and interior prefixes admits second-preimage attacks in which an interior node is presented as a leaf; the interior prefix is `wi-node-interior-v6`."},
+        "odd_leaf_rule": {"type": "string", "const": "promote", "description": "How an odd node count is handled: the unpaired leaf is PROMOTED to the next level unchanged rather than duplicated. Duplication is the common alternative and it is unsafe — it makes a tree with a repeated final leaf produce the same root as one without, so two different graphs commit to one value."}
+      }
+    },
+    "EdgeIndexRoot": {
+      "type": "object",
+      "required": ["root", "leaf_count", "leaf_ordering", "hash_algorithm", "domain_separator"],
+      "additionalProperties": false,
+      "description": "The Merkle commitment over the graph's wiring. Each leaf hashes the origin, the target, the relation and the edge's own state digest, so that reversing an edge, retyping a relation and rewiring an endpoint all move the root. Edges carry state and are committed separately from nodes because rewiring is itself a change a proof can be stale against: a claim can keep its exact wording and stop being supported because the edge that supported it was retyped.",
+      "properties": {
+        "root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Root hash of the edge tree."},
+        "leaf_count": {"type": "integer", "minimum": 0, "description": "Number of edge leaves."},
+        "leaf_ordering": {"type": "string", "const": "from_to_relation_ascending", "description": "Leaves are sorted by origin logical id, then target logical id, then relation name, each ascending and byte-wise. A total order is required, and this one is total because the triple is unique per edge."},
+        "hash_algorithm": {"type": "string", "const": "sha256", "description": "The hash used for leaves and interior nodes."},
+        "domain_separator": {"type": "string", "const": "wi-edge-leaf-v6", "description": "The literal prefix hashed before each edge leaf, distinct from the node leaf prefix so that a node leaf can never be presented as an edge leaf or the reverse. The interior prefix is `wi-edge-interior-v6`."},
+        "odd_leaf_rule": {"type": "string", "const": "promote", "description": "The unpaired leaf is promoted unchanged, for the same second-preimage reason as in the node index."},
+        "dangling_permitted": {"type": "boolean", "const": false, "description": "Whether an edge may name an endpoint that is not in the node index. Always false: a dangling edge is a graph integrity fault, and admitting one at the index level would let a release commit to a proof path that terminates in nothing."}
+      }
+    }
+  }
+}

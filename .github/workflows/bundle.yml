@@ -28,6 +28,8 @@ on:
       - "docs/**"
       - "examples/**"
       - "governance/**"
+      - "packs/**"
+      - "plans/**"
       - "references/**"
       - "release/**"
       - "schemas/**"
@@ -62,13 +64,13 @@ jobs:
 
       - name: Commit only if the bytes actually changed
         run: |
-          if git diff --quiet -- writing-intelligence.skill; then
+          if git diff --quiet -- writing-intelligence.skill writing-intelligence-craft.skill; then
             echo "committed bundle already matches the tree; nothing to do"
             exit 0
           fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add writing-intelligence.skill
+          git config user.name  "Antonio T. Smith Jr."
+          git config user.email "antonio@antoniotsmithjr.com"
+          git add writing-intelligence.skill writing-intelligence-craft.skill
           git commit \
             -m "chore(bundle): rebuild writing-intelligence.skill" \
             -m "The committed bundle is the download path documented in README.md, so it has to be the tree it claims to be. Rebuilt because a payload file changed."
@@ -80,6 +82,8 @@ jobs:
           {
             echo "### Skill bundle"
             echo
-            echo "- sha256 \`$(cut -d' ' -f1 dist/writing-intelligence.skill.sha256)\`"
-            echo "- $(stat -c%s dist/writing-intelligence.skill) bytes"
+            echo "- runtime sha256 \`$(cut -d' ' -f1 dist/writing-intelligence.skill.sha256)\`"
+            echo "- runtime $(stat -c%s dist/writing-intelligence.skill) bytes"
+            echo "- craft sha256 \`$(cut -d' ' -f1 dist/writing-intelligence-craft.skill.sha256)\`"
+            echo "- craft $(stat -c%s dist/writing-intelligence-craft.skill) bytes"
           } >> "$GITHUB_STEP_SUMMARY"

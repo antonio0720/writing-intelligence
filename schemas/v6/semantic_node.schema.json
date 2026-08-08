@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/semantic_node.schema.json",
+  "title": "SemanticNodeV6",
+  "description": "The envelope every addressable thing in the v6 graph wears: identity, schema, realm, jurisdiction, both temporal clocks, reliability, and a typed payload. It exists so that a source, a definition, a claim, a decision and a release artifact all live in ONE identity system with ONE set of temporal and epistemic properties — the failure it is built against is a system in which the same claim has a different name in every artifact, so nothing joins, nothing propagates, and verification expires silently because no mechanism connects the March check to the July document. Note what the envelope carries and the payload does not: realm, jurisdiction and both time intervals are OUTSIDE the payload, so a consumer can decide whether a node is relevant, current and admissible without understanding the payload schema at all. That is what lets a reader of a node family it has never seen do the right thing with it rather than guessing. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "SemanticNode": {
+      "type": "object",
+      "required": ["logical_id", "schema", "node_type", "realm", "valid_time", "knowledge_time", "reliability", "payload", "state_digest"],
+      "additionalProperties": false,
+      "description": "One node. `logical_id` answers which thing this is across every state it ever has; `state_digest` answers whether this is the same verified state. Confusing them is the failure the two-identity model exists to prevent, and it is why a proof binds the digest and a reference binds the id: a verification about state A says nothing about state B, and pairing them is what makes staleness computable rather than something somebody is supposed to remember.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity across every state. Content-derived from whatever makes this the same node across versions — for a claim, its proposition and not its wording."},
+        "schema": {"$ref": "common.schema.json#/$defs/SchemaId", "description": "The version-pinned schema the payload is written under, bound into the state digest preimage. The same payload bytes under a different schema id are a different state by construction rather than by convention, which is what stops a reinterpretation from passing as a non-change."},
+        "node_type": {"$ref": "#/$defs/NodeType", "description": "The family and granularity of the node. Each type exists because some check, policy or invalidation rule needs to address exactly that granularity and nothing coarser: a rule that can only name a document cannot say which paragraph went stale."},
+        "realm": {"$ref": "common.schema.json#/$defs/Realm", "description": "Which epistemic realm this node lives in, and therefore what verification means for it. On the envelope rather than in the payload because a renderer must be able to honor it without parsing the payload — constraint C011 forbids dropping realm in rendering, and a renderer that had to understand every payload schema to find it would drop it by accident."},
+        "jurisdiction": {"$ref": "common.schema.json#/$defs/Jurisdiction", "description": "The legal territory this node is scoped to, when it is scoped to one. Absent means the node makes no jurisdictional claim, which is different from claiming to hold everywhere: a universal claim states its scope in the payload rather than by leaving this field empty."},
+        "valid_time": {"$ref": "time.schema.json#/$defs/ValidInterval", "description": "When this node's content is asserted to be true OF THE WORLD."},
+        "knowledge_time": {"$ref": "time.schema.json#/$defs/KnowledgeInterval", "description": "When this workspace HELD the content. The second clock, and the one that makes a past release re-verifiable against what was known at the time rather than against what has since been corrected."},
+        "reliability": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How the node's content came to be relied on — a deterministic comparison, a measurement with its denominator, a named provider's assessment, or a named person's declaration. A type, never a score, and required rather than optional: a node whose reliability is unstated is one every downstream consumer will assume the most convenient answer about."},
+        "payload": {"type": "object", "description": "The node's own content, whose shape is governed by `schema`. Deliberately unconstrained here: this envelope is meant to be readable by a consumer that does not know the payload type, and constraining it would mean the envelope had to be revised every time a node family was added."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over a domain-separated preimage binding the canonical payload, the schema id and the normalization version. What every proof, proposal and decision binds to."},
+        "stale": {"type": "boolean", "description": "Whether an unresolved invalidation names this node. Derived from the invalidation records rather than set by hand, so it cannot be cleared by somebody flipping it: repairing a node produces a new state, and the invalidation then demonstrably no longer describes it."},
+        "protected": {"type": "boolean", "description": "Whether the node carries a protected span that may not be automatically rewritten. Constraint C016 refuses an automatic rewrite of a protected span — the mechanism by which a quotation, a legal formula or a name stays exactly as written no matter how confident a rewriter is."},
+        "derived_from": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes this one was derived from. Present on the envelope so a dependency walk can proceed without payload knowledge, which is what lets an impact computation cross node families it does not understand rather than stopping at them."
+        }
+      }
+    },
+    "NodeType": {
+      "type": "string",
+      "description": "Every node family in v6, namespaced `family.type`. The families answer different questions and are kept apart for that reason: `source.*` is what was supplied, `meaning.*` is what is being asserted, `structure.*` is where it sits in a work, `authorship.*` is who changed what, `verification.*` is what was checked, `canon.*` is what is true inside a constructed world, `media.*` is what was rendered, `policy.*` is under what rules, `extension.*` is what a third party contributed, and `release.*` is what was shipped. A type absent from this list cannot enter the graph: constraint C018 requires an imported object's schema to be known or the object to be quarantined, and an open type vocabulary would make that check unenforceable.",
+      "enum": [
+        "source.artifact",
+        "source.version",
+        "source.segment",
+        "source.table",
+        "source.audio_segment",
+        "source.video_segment",
+        "source.image_region",
+        "source.web_capture",
+        "source.dataset",
+
+        "meaning.claim_atom",
+        "meaning.definition",
+        "meaning.term",
+        "meaning.premise",
+        "meaning.constraint",
+        "meaning.promise",
+        "meaning.obligation",
+        "meaning.recommendation",
+        "meaning.hypothesis",
+        "meaning.forecast",
+        "meaning.metric",
+        "meaning.target",
+        "meaning.assumption",
+        "meaning.exception",
+        "meaning.question",
+        "meaning.argument",
+        "meaning.warrant",
+        "meaning.defeater",
+        "meaning.counterargument",
+        "meaning.rhetoric",
+
+        "structure.work",
+        "structure.volume",
+        "structure.part",
+        "structure.chapter",
+        "structure.section",
+        "structure.paragraph",
+        "structure.scene",
+        "structure.beat",
+        "structure.dialogue_exchange",
+        "structure.protected_span",
+
+        "authorship.snapshot",
+        "authorship.commit",
+        "authorship.proposal",
+        "authorship.decision",
+        "authorship.waiver",
+        "authorship.voice_constraint",
+        "authorship.grant",
+        "authorship.receipt",
+
+        "verification.obligation",
+        "verification.check",
+        "verification.result",
+        "verification.judgment",
+        "verification.conflict",
+        "verification.gate",
+        "verification.invalidation",
+        "verification.simulation",
+
+        "canon.character",
+        "canon.location",
+        "canon.event",
+        "canon.object",
+        "canon.motif",
+        "canon.plant",
+        "canon.payoff",
+        "canon.rule",
+        "canon.timeline_point",
+
+        "media.asset",
+        "media.shot",
+        "media.frame",
+        "media.track",
+        "media.caption",
+        "media.storyboard_panel",
+        "media.slide",
+        "media.chart",
+
+        "policy.document",
+        "policy.rule",
+        "policy.constraint",
+
+        "extension.adapter",
+        "extension.plugin",
+        "extension.pack",
+        "extension.derivation",
+
+        "release.target",
+        "release.plan",
+        "release.build",
+        "release.artifact",
+        "release.attestation",
+        "release.signature",
+        "release.capsule"
+      ]
+    },
+    "NodeRef": {
+      "type": "object",
+      "required": ["logical_id"],
+      "additionalProperties": false,
+      "description": "A pointer to a node, optionally pinned to one of its states. The distinction is the whole point: a reference with no `state_digest` follows the node as it changes, which is what a navigational link wants, and a reference WITH one names an exact state, which is what a proof requires. A single reference type that silently did one or the other is how a verification comes to describe text nobody checked.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which node."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Which exact state, when the reference is pinned. Absent means the reference follows the node, and any consumer using an unpinned reference in a proof context must refuse it rather than resolving it to the current state."},
+        "node_type": {"$ref": "#/$defs/NodeType", "description": "The expected family, so a reference into a graph that has moved can fail with `wrong type` rather than resolving to something structurally similar and semantically unrelated."}
+      }
+    }
+  }
+}

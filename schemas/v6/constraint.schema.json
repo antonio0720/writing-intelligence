@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/constraint.schema.json",
+  "title": "ConstraintV6",
+  "description": "The deterministic constraint engine and the twenty invariants it enforces. Schema validity is not enough: a graph can be perfectly valid JSON and still be epistemically impossible — a result typed Verified that a judgment provider produced, a decision approving a state that no longer exists, a release whose closure omits half of what it depends on. Every one of those parses. THE CONSTRAINT ENGINE RUNS BEFORE COMMIT, AND A TRANSITION THAT VIOLATES A HARD INVARIANT NEVER REACHES GRAPH STATE. That ordering is the entire value: a constraint checked after the fact is a report, and a report is something somebody has to read, whereas a constraint checked before the write is a property the graph simply has. The twenty are mandatory and the set is closed at this version; a deployment may add constraints and may not remove one. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "ConstraintId": {
+      "type": "string",
+      "description": "The twenty mandatory v6 graph constraints. Each is stated as what it FORBIDS, because that is the form a violation report has to take: a person told `C013 failed` learns nothing and a person told `a rate measured on one population was compared against another` knows what to fix. The numbering is stable and permanent — a constraint that is later superseded keeps its identifier and is marked retired rather than being reused, since old violation records name these identifiers and a reused number would silently repoint them at a different rule.",
+      "oneOf": [
+        {"const": "C001", "description": "source-version-raw-digest-unique. Forbids two source versions claiming distinct identity while carrying identical raw bytes. Without it the same document ingested twice becomes two histories, and an anchor into one is silently unsupported by the other."},
+        {"const": "C002", "description": "anchor-source-state-exists. Forbids an evidence anchor that points at a source state not in the graph. An anchor into nothing is an unsupported claim wearing a citation, and it renders exactly like a supported one."},
+        {"const": "C003", "description": "anchor-source-state-current-or-explicitly-historical. Forbids an anchor into a superseded source version unless the historical reference is declared. Quoting a withdrawn edition is legitimate; doing it by accident, and rendering it as current, is not."},
+        {"const": "C004", "description": "verified-result-produced-by-deterministic-engine. Forbids a result typed Verified whose producer is not a deterministic engine. This is the floor under the entire reliability model: without it, Verified is a label anything may apply to itself."},
+        {"const": "C005", "description": "judged-result-never-typed-verified. Forbids a judgment record being carried as verification, at any confidence, from any provider, under any configuration. No threshold promotes a judgment, no agreement between providers promotes it, and there is no setting that changes this."},
+        {"const": "C006", "description": "decision-target-state-exists. Forbids a decision naming a target state absent from the graph. An approval of a state nobody can produce is unauditable, and it reads on every screen as an approval."},
+        {"const": "C007", "description": "decision-target-state-not-superseded-at-decision-time. Forbids recording a decision whose target had already moved. The reviewer agreed to a specific transition; if the target advanced, the transition on offer is a different one and the approval is not transferable to it."},
+        {"const": "C008", "description": "provider-has-no-authority-grants. Forbids any judgment provider holding a capability grant. A provider may assess and may never decide, approve, commit or sign — and the enforcement is structural rather than procedural, because a provider that could be granted authority eventually would be."},
+        {"const": "C009", "description": "release-closure-is-complete. Forbids a release whose proof closure omits a dependency it relies on. An incomplete closure is a release that cannot be independently verified while presenting itself as one that can."},
+        {"const": "C010", "description": "release-artifact-digest-matches. Forbids a release whose shipped bytes differ from the approved bytes. The single check that makes an approval mean anything about the file a reader actually received."},
+        {"const": "C011", "description": "claim-realm-cannot-disappear-in-rendering. Forbids a rendering that drops a claim's epistemic realm where policy requires it. A scenario figure rendered without its realm marker reads as a measurement, and no reader can recover the difference from the sentence."},
+        {"const": "C012", "description": "temporal-validity-overlap-detects-contradiction. Forbids two assertions with overlapping valid intervals that cannot both hold, passing undetected. Contradictions separated by a hundred pages are invisible to every reader and obvious to an interval comparison."},
+        {"const": "C013", "description": "unit-dimension-matches-comparison. Forbids comparing or combining quantities whose dimensions differ. A rate compared against a count produces an arithmetically clean number that means nothing."},
+        {"const": "C014", "description": "obligation-authority-is-known. Forbids an obligation whose responsible actor cannot be resolved. A duty assigned to nobody is a duty nobody performs, and it reads in the document as though somebody will."},
+        {"const": "C015", "description": "semantic-conflict-cannot-be-rendered-as-resolved. Forbids rendering a node with an unresolved conflict as settled. The rule that makes conflict preservation more than bookkeeping: an unresolved disagreement must remain visible in every surface that shows the disputed content."},
+        {"const": "C016", "description": "protected-span-cannot-be-auto-rewritten. Forbids an automatic rewrite of a protected span. A quotation, a legal formula and a person's name stay exactly as written no matter how confident a rewriter is that it could be improved."},
+        {"const": "C017", "description": "source-data-cannot-create-system-instruction. Forbids content from an ingested source being treated as an instruction to the system. Ingested material is DATA; a document that can issue instructions by containing them is a document that can rewrite the rules governing it."},
+        {"const": "C018", "description": "imported-object-schema-must-be-known-or-quarantined. Forbids an object with an unknown schema entering graph state rather than quarantine. An object nothing can parse cannot be checked, and admitting it means every downstream report is silently incomplete."},
+        {"const": "C019", "description": "policy-state-is-part-of-proof-closure. Forbids a proof closure that omits the policy under which the proof was taken. Without it, a rule changed six months later retroactively alters what `passed` meant for an older release."},
+        {"const": "C020", "description": "actor-cannot-exercise-revoked-or-expired-grant. Forbids an act carried out under a grant that had lapsed at the time. Authority is evaluated at the moment of the act, not at the moment somebody looks."}
+      ]
+    },
+    "ConstraintDeclaration": {
+      "type": "object",
+      "required": ["constraint_id", "enforcement", "applies_to"],
+      "additionalProperties": false,
+      "description": "A constraint as the engine holds it: what it is, when it runs, and what it applies to. Declared rather than compiled in so that a deployment's active constraint set is inspectable — an engine whose rules can only be discovered by triggering them is one nobody can reason about before writing.",
+      "properties": {
+        "constraint_id": {"$ref": "#/$defs/ConstraintId", "description": "Which constraint."},
+        "enforcement": {"$ref": "#/$defs/EnforcementLevel", "description": "Whether a violation blocks. Every one of the twenty mandatory constraints is `hard` and none may be lowered; the level exists so that deployment-specific additions can be introduced as `advisory` and promoted once their false-positive rate is known."},
+        "applies_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "semantic_node.schema.json#/$defs/NodeType"},
+          "description": "The node types this constraint evaluates. Minimum one: a constraint applying to nothing runs on every transition, finds nothing, and reports clean forever — indistinguishable from one that works."
+        },
+        "evaluation_phase": {"$ref": "#/$defs/EvaluationPhase", "description": "When it runs. Most constraints run pre-commit, which is what keeps an impossible state out of the graph rather than reporting it afterwards."},
+        "retired_in": {"type": "string", "description": "The version that retired this constraint, when one has. Retirement is by marking and never by deletion: violation records name constraint identifiers, and removing the declaration would leave historical findings pointing at nothing."},
+        "superseded_by": {"$ref": "#/$defs/ConstraintId", "description": "The constraint that replaced it, when it was retired in favour of another rather than dropped."},
+        "description": {"type": "string", "minLength": 1, "description": "What it forbids, stated as a prohibition. Non-empty, and it is what a violation report shows: the identifier is for the engine and this sentence is for the person."}
+      }
+    },
+    "EnforcementLevel": {
+      "type": "string",
+      "description": "What a violation does. Three levels rather than a boolean, because the middle one is how a new constraint earns its place: a rule introduced as hard on day one will be disabled the first afternoon it produces a false positive, and disabling is permanent in a way that observing is not.",
+      "oneOf": [
+        {"const": "hard", "description": "A violation prevents the transition. The level of all twenty mandatory constraints, and it is what makes them properties of the graph rather than warnings about it."},
+        {"const": "advisory", "description": "A violation is recorded and the transition proceeds. For deployment-specific constraints under evaluation, and never for one of the twenty."},
+        {"const": "review_required", "description": "A violation requires a decision by an actor with standing before the transition proceeds. Between the other two, for rules where the exception is legitimate and should be recorded rather than either blocked or waved through."}
+      ]
+    },
+    "EvaluationPhase": {
+      "type": "string",
+      "description": "When a constraint runs. Named because the phase decides what the constraint can protect: a rule evaluated after a commit can report a problem and cannot prevent one, and the two are not substitutes.",
+      "oneOf": [
+        {"const": "pre_commit", "description": "Before the transition is written. The default and the only phase at which an impossible state can be kept out of graph state entirely."},
+        {"const": "pre_release", "description": "Before a release is built. For constraints about closure and artifact identity, which cannot be evaluated until there is something to release."},
+        {"const": "pre_render", "description": "Before an artifact is produced. Where the rendering constraints live, since what a renderer will drop cannot be known before it runs."},
+        {"const": "continuous", "description": "Whenever the graph changes, including from causes outside any one transition. For constraints like temporal overlap, which can begin to fail because a third assertion arrived rather than because anybody edited the two involved."}
+      ]
+    },
+    "ConstraintViolation": {
+      "type": "object",
+      "required": ["constraint_id", "subjects", "detail", "detected_at"],
+      "additionalProperties": false,
+      "description": "One violation. `subjects` is plural because most of these constraints are about RELATIONS — a temporal overlap involves two assertions and a dimension mismatch involves two quantities — and a report naming one of the pair sends somebody to look at a node that may be perfectly correct.",
+      "properties": {
+        "constraint_id": {"$ref": "#/$defs/ConstraintId", "description": "Which constraint was violated."},
+        "subjects": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "semantic_node.schema.json#/$defs/NodeRef"},
+          "description": "The nodes involved, pinned to the states that violated. Pinned because a violation is about exact states: a report that pointed at the current state would, after a repair, describe a violation that no longer exists."
+        },
+        "detail": {"type": "string", "minLength": 1, "description": "What is wrong, in words that name the actual values. `households per year compared against households` is a repair; `C013 violation` is a search through a rule table."},
+        "detected_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it was found."},
+        "transition": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The transition that would have introduced it, for a pre-commit violation. Absent for a continuous constraint, which can begin failing with no transition responsible — and that absence is itself the useful signal."},
+        "remediation": {"type": "string", "description": "What would resolve it, where the engine can say. Many of these have exactly one repair, and stating it turns a refusal into an instruction."},
+        "review": {"$ref": "#/$defs/ViolationReview", "description": "The decision permitting this violation, for a `review_required` constraint. Never available for a `hard` one: there is no override path, because an override that existed would be used."}
+      }
+    },
+    "ViolationReview": {
+      "type": "object",
+      "required": ["decision", "reason", "reviewed_at"],
+      "additionalProperties": false,
+      "description": "The record of a violation permitted by decision. Requires a decision digest rather than an acknowledgement, so that permitting a violation goes through the same authority path as any other consequential act — the alternative is a dismiss button, and a dismiss button is a second governance model.",
+      "properties": {
+        "decision": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision, carrying its own authority receipt."},
+        "reason": {"type": "string", "minLength": 1, "description": "Why this violation is acceptable here. Non-empty, because the next person to meet it will meet it in six months and the reason is the only thing standing between them and re-litigating it."},
+        "reviewed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When."},
+        "scope": {"$ref": "#/$defs/ReviewScope", "description": "How far the permission extends. Defaults to this instance alone: a review that silently applied to every future violation of the same constraint would turn one accepted exception into a disabled rule."}
+      }
+    },
+    "ReviewScope": {
+      "type": "string",
+      "description": "How far a permitted violation extends. Narrow by default, because the natural drift of any exception mechanism is toward the broadest reading and the broadest reading here is indistinguishable from turning the constraint off.",
+      "oneOf": [
+        {"const": "this_instance", "description": "These exact states only. Recurs if the same violation arises again, which is the correct behaviour: the same problem returning is information."},
+        {"const": "this_subject", "description": "This subject, until its state changes. For a node with a known and durable peculiarity."},
+        {"const": "this_release", "description": "This release only, and it lapses afterwards. The scope a schedule pressure most often calls for, and the one that cannot quietly become permanent."}
+      ]
+    },
+    "ConstraintEvaluation": {
+      "type": "object",
+      "required": ["evaluated", "violations", "not_evaluated", "evaluated_at"],
+      "additionalProperties": false,
+      "description": "The result of running the constraint engine over a transition. `not_evaluated` is REQUIRED rather than optional, and that is the whole design of this object: a run that checked eighteen of twenty constraints and found nothing is not a clean run, and an evaluation shape that could omit the two would report it as one.",
+      "properties": {
+        "evaluated": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ConstraintId"},
+          "description": "Which constraints actually ran. Minimum one: an evaluation that ran nothing has established nothing, and reporting it as a pass would be the most consequential empty result in the system."
+        },
+        "violations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ConstraintViolation"},
+          "description": "What was found. Empty means clean AGAINST THE EVALUATED SET, which is why the two arrays have to be read together."
+        },
+        "not_evaluated": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/SkippedConstraint"},
+          "description": "Which constraints did not run, each with a reason. Never silently omitted: a constraint that could not run because a dependency was unavailable leaves a hole in exactly the guarantee somebody is relying on, and it must be as visible as a violation."
+        },
+        "transition_admitted": {"type": "boolean", "description": "Whether the transition was allowed. Derived from the violations and their enforcement levels rather than set, so that a hard violation cannot coexist with an admitted transition in any record the system produces."},
+        "evaluated_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When."},
+        "engine_version": {"type": "string", "description": "The constraint engine version. Recorded because a constraint's implementation can be improved, and a transition admitted under an earlier engine was not admitted under this one — which is a fact worth being able to establish rather than assume."}
+      }
+    },
+    "SkippedConstraint": {
+      "type": "object",
+      "required": ["constraint_id", "reason"],
+      "additionalProperties": false,
+      "description": "A constraint that did not run, with why. Its own type rather than a bare identifier list, because the reasons lead to different actions: one is a graph with nothing of that type in it, and one is a broken installation.",
+      "properties": {
+        "constraint_id": {"$ref": "#/$defs/ConstraintId", "description": "Which constraint."},
+        "reason": {"$ref": "#/$defs/SkipReason", "description": "Why it did not run."},
+        "detail": {"type": "string", "description": "What specifically was missing."}
+      }
+    },
+    "SkipReason": {
+      "type": "string",
+      "description": "Why a constraint did not run. The first is ordinary and the rest are not, which is precisely why they are separate values: a report where everything is `not_applicable` is healthy, and one where anything is `unavailable` is an installation somebody needs to look at.",
+      "oneOf": [
+        {"const": "not_applicable", "description": "No node in scope is of a type the constraint applies to. The ordinary and expected reason, and it establishes nothing about the constraint's health."},
+        {"const": "unavailable", "description": "A dependency the constraint needs could not be reached. UNAVAILABLE IS NOT PASSING: the guarantee is simply absent for this transition, and a surface that folded this into a clean run would be claiming a check that never happened."},
+        {"const": "phase_mismatch", "description": "The constraint runs in a different phase and will be evaluated there. Recorded so a pre-commit report is not read as covering the rendering constraints, which it cannot."},
+        {"const": "error", "description": "The constraint ran and failed to complete. A finding about the engine rather than about the graph, and the transition must be refused rather than admitted — an engine that admitted transitions when its own checks crashed would fail open at precisely the worst moment."}
+      ]
+    }
+  }
+}

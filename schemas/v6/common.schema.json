@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/common.schema.json",
+  "title": "CommonPrimitivesV6",
+  "description": "The primitive value types every other v6 document builds on: the two identity forms, the digest form, the reliability union, the temporal point, the unit and the exact decimal quantity. It exists as one document because these shapes are the vocabulary in which every proof in v6 is stated, and a vocabulary that is redefined per file drifts one field at a time until two documents that appear to agree do not. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root, which deliberately constrains nothing. Every other v6 schema references these by relative pointer, for example `common.schema.json#/$defs/DigestRef`, so the family resolves from a directory on disk with no network retrieval.",
+  "$defs": {
+    "DigestRef": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "A SHA-256 digest in the canonical `sha256:<64 lowercase hex>` form. The algorithm is named in the value rather than assumed, so that the day a second algorithm is admitted the existing corpus does not become ambiguous and no consumer has to guess from a string's length what produced it. Uppercase hex is rejected rather than folded, because a digest that compares equal under one implementation and unequal under another is worse than a digest that fails everywhere."
+    },
+    "LogicalId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "A UUID-shaped, content-derived identity answering `which thing is this?` across every state the thing ever has. Derived by hashing what makes a thing the same thing across versions — for a claim, its proposition skeleton and not its wording — so a reword keeps the identity and a change of assertion mints a new one. Content-derived rather than random on purpose: random identities would make every rebuild produce a different graph, which would make a published bundle digest meaningless and a reproducible build impossible."
+    },
+    "SchemaId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*@[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "The dotted, version-pinned identifier of the schema a payload was written and digested under, for example `meaning.claim_atom@6.0.0`. It is bound into the state digest preimage, so the same bytes under a different schema id are a different state by construction rather than by convention. The version is part of the identifier and not a sibling field because a payload interpreted under a different schema version is a different claim about what the payload means. Compare literally and never normalize: normalizing would change every digest already taken over the value."
+    },
+    "ActorId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._:-]{0,127}$",
+      "description": "Stable identifier of an actor within a workspace. For a person this must resolve to somebody a reader could contact; for a service, a worker or a judgment provider it names the implementation and version. It is a plain identifier rather than a content hash because an actor is not defined by its current attributes — a person who changes their display name is the same person, and the whole point of attribution is that it survives cosmetic change."
+    },
+    "GrantId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Content-derived identity of a capability grant, hashed over the grantor, the grantee, the sorted capability set and the scope. Issuing the same authority twice therefore produces one grant rather than two, which matters because an authority audit that has to reason about duplicates is an authority audit nobody finishes."
+    },
+    "RefName": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._/-]{0,127}$",
+      "description": "A named pointer to a semantic commit — a branch, in the ordinary sense, but over meaning rather than over text. Lowercase and slash-separated so that a ref is a path a person can type and a filesystem can hold without case-folding surprises. Refs are mutable by design and are therefore never what a proof binds to: a proof binds a commit or a state digest, and a ref merely says where a person was last looking."
+    },
+    "Realm": {
+      "type": "string",
+      "enum": [
+        "external_fact",
+        "author_observation",
+        "inference",
+        "fictional_canon",
+        "hypothetical"
+      ],
+      "description": "The epistemic realm a statement lives in, which determines what verification even MEANS for it and what a renderer is permitted to present it as. `external_fact` is checkable against sources outside the work and carries the evidence burden. `author_observation` is the author's own attested record, where the author is the source and demanding somebody else's document for it is both wrong and insulting. `inference` is a conclusion the author reached rather than a source stated, so its premises carry the burden and the conclusion is labeled rather than sourced. `fictional_canon` is checked against a canon registry and is TRUE INSIDE A CONSTRUCTED WORLD; it must never render as externally verified fact. `hypothetical` has checkable premises and an uncheckable conditional. Realm is a graph property, not a formatting decision: constraint C011 forbids a renderer from dropping it, because a canon fact and a sourced fact set in the same typeface are the same sentence to a reader."
+    },
+    "ReliabilityBasis": {
+      "description": "How a result was produced — a TYPE, never a score. This is a closed four-variant union and there is deliberately no fifth variant, no numeric confidence, and no arithmetic that combines two variants into one. A single blended number containing one string comparison, one benchmark measurement, one model opinion and one author assertion has a meaning nobody can recover, including whoever computed it, and the first thing such a number destroys is the reader's ability to ask which part of it was mechanical. The four do not collapse and there is no threshold that promotes one into another: a `Judged` result at any confidence remains judged, and constraint C004 requires that a `Verified` basis originate only from the deterministic engine.",
+      "oneOf": [
+        {"$ref": "#/$defs/Verified"},
+        {"$ref": "#/$defs/Measured"},
+        {"$ref": "#/$defs/Judged"},
+        {"$ref": "#/$defs/HumanDeclared"}
+      ]
+    },
+    "Verified": {
+      "type": "object",
+      "required": ["basis", "engine", "check"],
+      "additionalProperties": false,
+      "description": "A deterministic comparison that actually executed and passed. `verified` names how the result was produced, not how sure anybody is. A provider that emits this basis for anything other than an engine-executed comparison is rejected at the schema boundary rather than coerced, because a producer that tried has a defect worth seeing.",
+      "properties": {
+        "basis": {"const": "verified", "description": "Discriminator. Fixed for this variant."},
+        "engine": {"type": "string", "minLength": 1, "description": "Identity and version of the deterministic engine that ran the comparison. Anonymous verification cannot be reasoned about when a defect is later found in a specific build."},
+        "check": {"type": "string", "minLength": 1, "description": "Identifier of the check that produced the result, so the comparison can be re-run by a reader who has the inputs."}
+      }
+    },
+    "Measured": {
+      "type": "object",
+      "required": ["basis", "numerator", "denominator", "population"],
+      "additionalProperties": false,
+      "description": "A quantity computed against a stated baseline, carrying its own denominator. The denominator is required rather than optional because a percentage without one is the most persuasive way to say nothing: `94% coverage` over a population of seventeen and over a population of four hundred thousand are different facts wearing the same sentence.",
+      "properties": {
+        "basis": {"const": "measured", "description": "Discriminator. Fixed for this variant."},
+        "numerator": {"type": "integer", "minimum": 0, "description": "How many members of the population satisfied the measured property."},
+        "denominator": {"type": "integer", "minimum": 1, "description": "How many members were examined. Minimum one, because a ratio over an empty population is not a small number, it is an absence, and rendering it as zero or as one hundred percent both assert something nobody measured."},
+        "population": {"type": "string", "minLength": 1, "description": "What was counted, in words. Two measurements with identical numerators and denominators over different populations are not comparable, and this field is what makes that visible rather than something a reader has to reconstruct."}
+      }
+    },
+    "Judged": {
+      "type": "object",
+      "required": ["basis", "provider"],
+      "additionalProperties": false,
+      "description": "A reasoned assessment with no external comparison behind it — paraphrase entailment, tone, whether a scope narrowing is material. The provider is named because an unnamed judgment cannot be audited, compared or replaced. A judgment provider is third-party infrastructure in this architecture, exactly like a text extractor: never an author, never a signer, and never the actor on an acceptance.",
+      "properties": {
+        "basis": {"const": "judged", "description": "Discriminator. Fixed for this variant."},
+        "provider": {"$ref": "#/$defs/ActorId", "description": "Identity of the judgment provider that produced the assessment. Constraint C008 forbids a provider from holding any capability grant, so naming one here confers no authority."}
+      }
+    },
+    "HumanDeclared": {
+      "type": "object",
+      "required": ["basis", "actor"],
+      "additionalProperties": false,
+      "description": "A named person asserting on their own authority. This is a legitimate and often the only honest basis — for an author's own observation, for a rights determination, for a redaction approval — and it is kept distinct from the other three precisely so that a reader can see that a person, rather than a comparison, is what stands behind the value.",
+      "properties": {
+        "basis": {"const": "human_declared", "description": "Discriminator. Fixed for this variant."},
+        "actor": {"$ref": "#/$defs/ActorId", "description": "Who declared it. A declaration attributed to nobody is an assertion with no one to ask about it."}
+      }
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "An ISO-8601 instant with an explicit UTC offset. The offset is required rather than assumed because a bare local time is unorderable against a timestamp recorded elsewhere, and ordering is exactly what a decision, an expiry and a revocation depend on."
+    },
+    "TimePoint": {
+      "description": "One end of a temporal interval, expressed at the precision the source actually stated rather than coerced into an instant. A source that says `2019` has not said `2019-01-01T00:00:00Z`, and a system that stores it that way has invented a precision it can never distinguish from a real one afterwards. The `unbounded` variant exists so an open interval is expressed by a value rather than by a null, which keeps `until` required and removes the ambiguity between `this never ends` and `nobody recorded an end`.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["precision", "instant"],
+          "additionalProperties": false,
+          "description": "A point known to the instant.",
+          "properties": {
+            "precision": {"const": "instant", "description": "Discriminator. Fixed for this variant."},
+            "instant": {"$ref": "#/$defs/Timestamp", "description": "The instant itself."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["precision", "date"],
+          "additionalProperties": false,
+          "description": "A point known to the calendar day.",
+          "properties": {
+            "precision": {"const": "date", "description": "Discriminator. Fixed for this variant."},
+            "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "description": "Proleptic Gregorian calendar date."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["precision", "year"],
+          "additionalProperties": false,
+          "description": "A point known only to the year, which is what most prose actually states.",
+          "properties": {
+            "precision": {"const": "year", "description": "Discriminator. Fixed for this variant."},
+            "year": {"type": "string", "pattern": "^[0-9]{4}$", "description": "Four-digit year."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["precision", "direction"],
+          "additionalProperties": false,
+          "description": "An unbounded end. Used for `since 2019` and for a fact asserted to hold indefinitely.",
+          "properties": {
+            "precision": {"const": "unbounded", "description": "Discriminator. Fixed for this variant."},
+            "direction": {"type": "string", "enum": ["past", "future"], "description": "Which way the interval runs without a bound."}
+          }
+        }
+      ]
+    },
+    "Unit": {
+      "type": "object",
+      "required": ["symbol", "dimension"],
+      "additionalProperties": false,
+      "description": "What a quantity counts or measures. Carried as a structured value rather than a string because unit identity is checked SEPARATELY from magnitude: `11,800 households` becoming `11,800 individuals` is a different claim with the same number, and a line diff shows nothing. Constraint C013 compares `dimension` and not `symbol`, so a conversion between compatible units is a computation while a change of dimension is a change of claim.",
+      "properties": {
+        "symbol": {"type": "string", "minLength": 1, "description": "The unit as written, for example `USD`, `households`, `mg/dL`, `ratio`. This is what a renderer prints."},
+        "dimension": {"type": "string", "minLength": 1, "description": "The physical or conceptual dimension the symbol belongs to, for example `currency`, `count`, `mass_concentration`, `dimensionless`. Two symbols sharing a dimension may be converted between; two that do not, may not, and a proposal that silently crosses dimensions is caught here rather than by a reader."},
+        "system": {"type": "string", "description": "The unit system the symbol is drawn from, for example `SI`, `ISO-4217`, `UCUM`, or `project` for a project-local counting unit. Present so that an ambiguous symbol is resolvable — `t` is a tonne in one system and something else in another."},
+        "ucum": {"type": "string", "description": "The UCUM code for the unit when one exists, so machine conversion has an unambiguous handle that does not depend on parsing the display symbol."}
+      }
+    },
+    "Quantity": {
+      "type": "object",
+      "required": ["coefficient", "scale", "unit"],
+      "additionalProperties": false,
+      "description": "An exact decimal quantity, equal to `coefficient × 10^scale`, with its unit. BINARY FLOATING POINT IS BANNED FOR CONSEQUENTIAL QUANTITIES AND THIS TYPE IS WHY: a proof digest must not depend on how an implementation serializes a float. The decimal 0.1 has no exact binary representation, so two conforming JSON writers may emit `0.1`, `0.1000000000000000055511151231257827` or `1e-1` for the same in-memory value, and every one of those hashes differently — which would mean a bundle verified on one machine and failed on another with no source having changed and nothing to point at. Integers hash identically everywhere. The cost is that a producer must decide where the decimal point goes, which is the correct place for that decision to be made: `$1,200.50` is `{coefficient: 120050, scale: -2}` and `11,800 households` is `{coefficient: 11800, scale: 0}`.",
+      "properties": {
+        "coefficient": {"type": "integer", "description": "The significant digits as an integer, sign included. JSON integers are exact in every conforming implementation, which is the entire reason this type is shaped this way."},
+        "scale": {"type": "integer", "description": "The power of ten the coefficient is multiplied by. Negative for fractional values. Trailing zeros are significant: `{coefficient: 1200, scale: -2}` and `{coefficient: 12, scale: 0}` are equal in value and are NOT the same quantity, because `12.00 mg` asserts a precision `12 mg` does not, and flattening them would erase a claim the source made."},
+        "unit": {"$ref": "#/$defs/Unit", "description": "What is being counted or measured. Required, because a bare number is not a quantity and the most consequential change a figure can undergo is to keep its magnitude and change what it counts."},
+        "approximate": {"type": "boolean", "description": "Whether the source hedged the figure (`about 12,000`, `nearly half`). Recorded rather than dropped, because a claim that reports an approximation as exact is a stronger claim than the source made, and that strengthening is invisible in every diff that compares numbers alone."}
+      }
+    },
+    "Jurisdiction": {
+      "type": "object",
+      "required": ["system", "code"],
+      "additionalProperties": false,
+      "description": "The legal or regulatory territory a statement is scoped to. Carried as a first-class value because obligation, legal force and rights are all jurisdiction-relative: a requirement that binds in one territory and not another is two different claims, and a document that merges them has asserted something false in at least one place. Constraint C019 uses jurisdiction to scope policy state into a proof closure.",
+      "properties": {
+        "system": {"type": "string", "enum": ["iso_3166_1", "iso_3166_2", "un_m49", "supranational", "project"], "description": "Which coding system the `code` is drawn from. `supranational` covers bodies such as the EU that are not a country code; `project` covers a territory a project defines for itself and must document."},
+        "code": {"type": "string", "minLength": 1, "description": "The territory code within that system, for example `US`, `US-MS`, `EU`."},
+        "name": {"type": "string", "description": "Human-readable name of the territory, for display. Never used for comparison — comparison is on `system` plus `code`, so a renamed territory does not break a proof."}
+      }
+    }
+  }
+}

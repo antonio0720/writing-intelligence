@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/release.schema.json",
+  "title": "ReleaseV6",
+  "description": "What was shipped, what it rests on, and how somebody else can check it. A v6 release answers, without access to the workspace that produced it: which graph root was compiled, which nodes were selected, which backend produced the bytes, which policy was in force, which authority chain approved it, which deterministic checks ran, which judgment checks ran, WHICH CHECKS DID NOT RUN AND WHY, which proof dependencies are in the closure, which exact bytes were approved, and which signatures exist. A DECLARED OMISSION IS STRONGER THAN A MISSING FIELD: a manifest that states `judgment.entailment unavailable — this verifier profile contains no judgment provider` has told the truth, and one that simply omits the section has told a reader nothing while looking complete. The Merkle closure is a local cryptographic commitment to a finite set of dependencies — there is no consensus network, no token, no chain and no global ledger, and calling it one would be a claim about properties it does not have. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "ReleaseManifest": {
+      "type": "object",
+      "required": ["release_id", "graph_root", "commit", "target", "artifact", "compiler", "policy", "proof_closure_root", "authority_closure_root", "capabilities", "omissions", "built_at"],
+      "additionalProperties": false,
+      "description": "One released artifact and everything needed to judge it. Almost every field is required, deliberately: an optional field on a release manifest is a field that will be absent from the release somebody eventually needs to audit, and the difference between `we did not do that` and `we did not record whether we did that` is the difference between a finding and an unanswerable question.",
+      "properties": {
+        "release_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity of this release."},
+        "graph_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph state compiled. What a verifier resolves everything else against."},
+        "commit": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The semantic commit that produced the root. Carried alongside the root because the commit says who and why, and the root says what — an audit needs both and neither implies the other."},
+        "target": {"type": "string", "minLength": 1, "description": "Which release target. Two artifacts from one graph under two targets have legitimately different obligations, and a manifest that could not name its target could not be judged against the right policy."},
+        "artifact": {"$ref": "#/$defs/ArtifactDescriptor", "description": "The exact bytes released. Constraint C010 compares this against what shipped, and it is the check that makes every approval above it mean something about the file a reader received."},
+        "compiler": {"$ref": "compile.schema.json#/$defs/CompilerIdentity", "description": "Which renderer produced the bytes, at an exact version. A re-verification runs against this rather than against today's renderer."},
+        "policy": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The policy in force at build. Inside the closure by constraint C019, so a rule changed later cannot retroactively alter what passing meant here."},
+        "packs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "extension.schema.json#/$defs/PackRef"},
+          "description": "The doctrine packs in force, pinned by digest. A style rule that changes six months later cannot change what this release was judged against, because this release names the exact rules that judged it."
+        },
+        "proof_closure_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Merkle root over every proof dependency. Constraint C009 requires the closure to be COMPLETE: a release whose closure omits something it relies on presents itself as independently verifiable and is not."},
+        "authority_closure_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Merkle root over the grants, receipts and decisions that authorized the release. Separate from the proof closure because they answer different questions — one is `is this true?` and the other is `was this allowed?` — and a release can fail either independently."},
+        "source_map": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the render source map. What lets a reader move from a page of the released artifact back into the graph, and what makes invalidation across outputs precise."},
+        "capabilities": {"$ref": "#/$defs/CapabilityReport", "description": "What the verifying surface could actually do. Required, because a clean report from a surface with no judgment provider means something different from a clean report from one that had every check available."},
+        "omissions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/DeclaredOmission"},
+          "description": "Everything that was not done, each with its reason. REQUIRED EVEN WHEN EMPTY: an empty array asserts that nothing was omitted, and an absent key asserts nothing at all while reading identically on a summary screen."
+        },
+        "verdict": {"$ref": "#/$defs/ReleaseVerdict", "description": "Whether this shipped, held or was blocked. Derived from the obligations and their statuses rather than asserted, so that a manifest cannot claim a verdict its own contents contradict."},
+        "signatures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "Signature envelopes over the release attestation. Empty means unsigned, which is an ordinary state and must never be rendered as signed — an interface showing the same badge for both is the failure this array exists to prevent."
+        },
+        "built_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it was built."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical manifest. THE SIGNATURE SUBJECT: signing binds this attestation, which in turn binds the artifact digest and the proof closure, rather than binding a filename that anybody can point at another file."}
+      }
+    },
+    "ArtifactDescriptor": {
+      "type": "object",
+      "required": ["artifact_id", "media_type", "digest", "byte_length"],
+      "additionalProperties": false,
+      "description": "The exact bytes a release approved. Digested with NO normalization: an artifact is what somebody receives, and a normalized hash would let two files satisfy one approval — which is precisely the gap constraint C010 exists to close.",
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1, "description": "Which artifact within the release."},
+        "media_type": {"type": "string", "minLength": 1, "description": "What kind of file."},
+        "digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the raw bytes."},
+        "byte_length": {"type": "integer", "minimum": 0, "description": "Size in bytes. Catches the truncation case, where a partial file hashes to something perfectly valid and nobody notices until it is opened."},
+        "filename": {"type": "string", "description": "The name it was published under. Advisory only: a filename is not identity, and nothing in verification may depend on one, because the same bytes under two names are one artifact and two files under one name are not."}
+      }
+    },
+    "CapabilityReport": {
+      "type": "object",
+      "required": ["profile", "checks_available", "checks_unavailable"],
+      "additionalProperties": false,
+      "description": "What the surface producing this release was able to do. The object that makes a clean report honest: a verifier profile with no network and no judgment provider will produce a report with no judgment findings, and without this a reader cannot tell that from a document nobody had any concerns about.",
+      "properties": {
+        "profile": {"type": "string", "minLength": 1, "description": "The verifier profile — offline, standard, full. Named so a reader can ask what a profile includes rather than inferring it from what happens to be present."},
+        "checks_available": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Checks the surface could run. The denominator for every pass rate in the release, and a rate reported without it is a number with no meaning."
+        },
+        "checks_unavailable": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/UnavailableCheck"},
+          "description": "Checks the surface could not run, each with why. Required even when empty; UNAVAILABLE IS NOT PASSING, and this is the array that keeps it from becoming so."
+        },
+        "network": {"type": "boolean", "description": "Whether the surface had network access. Decides whether citation resolution could be attempted at all, so a release built offline reports unresolved citations as unavailable rather than as failures."},
+        "judgment_providers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Which providers were reachable. Empty means every judgment-based obligation is unavailable rather than unmet, which is a materially different statement about the document."
+        }
+      }
+    },
+    "UnavailableCheck": {
+      "type": "object",
+      "required": ["check", "reason"],
+      "additionalProperties": false,
+      "description": "One check the surface could not run. Its own object rather than a bare identifier, because the reasons route differently: one is a deliberate profile choice and one is a broken installation, and a list that could not tell them apart would produce a support ticket for the first and silence for the second.",
+      "properties": {
+        "check": {"type": "string", "minLength": 1, "description": "Which check."},
+        "reason": {"type": "string", "minLength": 1, "description": "Why it could not run, specifically. `offline verifier profile contains no judgment provider` is a fact somebody can act on; `unavailable` is a restatement."},
+        "obligations_affected": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Which obligations were left open by its absence. What turns a missing check from a footnote into a measurable hole in the proof."
+        }
+      }
+    },
+    "DeclaredOmission": {
+      "type": "object",
+      "required": ["kind", "status", "reason"],
+      "additionalProperties": false,
+      "description": "Something the release did not do, stated. THE CENTRAL HONESTY MECHANISM OF THE WHOLE DOCUMENT. A release that omits a section is indistinguishable from one that had nothing to put in it; a release that declares the omission has told the reader exactly what it does not know about itself, and that is a stronger artifact than one which is silently complete.",
+      "properties": {
+        "kind": {"type": "string", "minLength": 1, "description": "What was omitted — a check id, an obligation kind, a section of the closure."},
+        "status": {"$ref": "#/$defs/OmissionStatus", "description": "Why it is absent. The field that separates a deliberate policy choice from a capability the surface did not have, which is the distinction a reader most needs and is least able to infer."},
+        "reason": {"type": "string", "minLength": 1, "description": "The specifics. Non-empty always: an omission with no reason is a gap with a label on it."},
+        "waiver": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision that permitted the omission, where policy required one. Its presence is what distinguishes an accepted risk from an unnoticed one."}
+      }
+    },
+    "OmissionStatus": {
+      "type": "string",
+      "description": "Why something is absent from a release. Four values, and every one of them means the reader has less assurance — but they mean it for reasons that lead to four different responses, and a single `omitted` would flatten all four into a shrug.",
+      "oneOf": [
+        {"const": "unavailable_on_surface", "description": "The producing surface could not do it. Nothing is wrong with the document and the assurance is genuinely absent."},
+        {"const": "not_applicable", "description": "There was nothing for it to apply to. The only status that does not reduce assurance, and it is stated rather than left blank so a reader is not left wondering."},
+        {"const": "waived", "description": "Deliberately released with this open, under a recorded decision. An accepted risk, with somebody's name against it."},
+        {"const": "policy_excluded", "description": "The governing policy does not require it for this target. Legitimate and worth stating, because a reader comparing two releases needs to know that a difference in coverage was a rule rather than an accident."}
+      ]
+    },
+    "ReleaseVerdict": {
+      "type": "string",
+      "description": "Whether a release may ship. Three values because the middle one is the useful one: HOLD means nothing is wrong and something is unfinished, and a two-valued verdict forces it into BLOCK, which teaches everybody that blocks are routine.",
+      "oneOf": [
+        {"const": "RELEASE", "description": "Every obligation for this target is satisfied or explicitly waived, and the closure is complete."},
+        {"const": "HOLD", "description": "Open obligations remain that could be satisfied — checks not yet run, a decision outstanding. Not a failure: a state that further work resolves."},
+        {"const": "BLOCK", "description": "Something forbids release — a failed obligation, an unresolved conflict, a hard constraint violation, an authority defect. Distinguished from HOLD because the repair is different in kind: HOLD needs work and BLOCK needs a change to what is being released."}
+      ]
+    },
+    "ClosureLeaf": {
+      "type": "object",
+      "required": ["object_type", "logical_id", "state_digest"],
+      "additionalProperties": false,
+      "description": "One dependency in a release closure, as a Merkle leaf. Leaves are SORTED BY CANONICAL KEY before the tree is built, so the same dependency set always yields the same root regardless of the order it was collected in — without that the root would be a function of traversal order and two identical releases would commit to different values.",
+      "properties": {
+        "object_type": {"$ref": "common.schema.json#/$defs/SchemaId", "description": "The schema of the object. Part of the leaf so that a digest cannot be re-interpreted as a different kind of object, which is the same reason the schema id is inside a state digest preimage."},
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which object."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Which exact state of it."}
+      }
+    },
+    "InclusionProof": {
+      "type": "object",
+      "required": ["leaf", "siblings", "root"],
+      "additionalProperties": false,
+      "description": "Proof that one disclosed object belonged to a release closure, without disclosing the rest of the workspace. What makes selective disclosure possible: a counterparty can be shown one claim, its evidence and its verification, and can confirm those exact states were in the producer's closure — without receiving anything else that was in it.",
+      "properties": {
+        "leaf": {"$ref": "#/$defs/ClosureLeaf", "description": "The leaf being proved."},
+        "siblings": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {"$ref": "#/$defs/MerkleSibling"},
+          "description": "The sibling hashes on the path to the root, ordered leaf-to-root. Not unique-item constrained, because two levels can legitimately carry the same hash — most obviously in a tree where an odd node was promoted."
+        },
+        "root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The root this proof reconstructs to. Checked against the root in the release manifest: a proof that reconstructs to a different root proves membership in a closure nobody released."}
+      }
+    },
+    "MerkleSibling": {
+      "type": "object",
+      "required": ["digest", "position"],
+      "additionalProperties": false,
+      "description": "One sibling on an inclusion path. Position is REQUIRED because concatenation is not commutative: hashing left-then-right and right-then-left give different values, and a sibling without a side would let a verifier reconstruct a root that was never built. LEAF AND INTERIOR HASHES USE DISTINCT DOMAIN SEPARATORS, and an odd node is PROMOTED rather than duplicated — duplicating it is the classic second-preimage weakness that lets one tree be presented as another.",
+      "properties": {
+        "digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The sibling hash."},
+        "position": {"$ref": "#/$defs/SiblingPosition", "description": "Which side the sibling sits on."}
+      }
+    },
+    "SiblingPosition": {
+      "type": "string",
+      "description": "Which side of a concatenation a sibling occupies.",
+      "oneOf": [
+        {"const": "left", "description": "The sibling is the left operand and the running hash is the right."},
+        {"const": "right", "description": "The sibling is the right operand and the running hash is the left."}
+      ]
+    },
+    "SignatureEnvelope": {
+      "type": "object",
+      "required": ["subject_digest", "algorithm", "key_id", "signature", "signed_at", "signer"],
+      "additionalProperties": false,
+      "description": "A signature over an exact digest. STANDARD SIGNATURES AND NOT CUSTOM CRYPTOGRAPHY: a local signer may use Ed25519, and an enterprise deployment integrates its own PKI through an adapter. THE SUBJECT IS AN ATTESTATION DIGEST AND NEVER A FILENAME — the attestation binds the artifact digest and the proof closure, so a signature over it says something about the bytes and their support rather than about a path that can be pointed at another file tomorrow.",
+      "properties": {
+        "subject_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "What was signed."},
+        "algorithm": {"type": "string", "minLength": 1, "description": "The signature algorithm. Required so a verifier does not have to guess, and so that an algorithm later withdrawn can be identified in every signature that used it rather than being discovered by trying."},
+        "key_id": {"type": "string", "minLength": 1, "description": "Which key. What lets a verifier find the public key and a revocation reach every signature made with it."},
+        "signature": {"type": "string", "minLength": 1, "description": "The signature bytes, base64-encoded."},
+        "signed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When. Load-bearing rather than decorative: a signature made before a key's revocation and one made after are different facts, and only the timestamp separates them."},
+        "signer": {"$ref": "common.schema.json#/$defs/ActorId", "description": "The identity signing. Distinct from `key_id`, because a key is a mechanism and an actor is who is answerable — an actor may rotate keys and remains the same signer."},
+        "certificate_chain": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "The chain, base64-encoded, where the deployment uses one. Absent for a bare local key, which is honest rather than deficient — a local Ed25519 signature proves an identity held a key and does not pretend to prove an organizational identity."
+        }
+      }
+    },
+    "CapsuleManifest": {
+      "type": "object",
+      "required": ["capsule_id", "release", "disclosed", "redactions", "policy_summary"],
+      "additionalProperties": false,
+      "description": "A portable, selectively-disclosed proof package. The capsule can prove that an object with a given digest was part of the producer's closure; IT MAY NOT CLAIM THAT A RECIPIENT INDEPENDENTLY VERIFIED THE UNDERLYING CONTENT unless that content is actually disclosed. A redacted source cannot pretend to offer inspectable support, and reliability rendering must preserve that distinction wherever the capsule is displayed.",
+      "properties": {
+        "capsule_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Identity of this capsule."},
+        "release": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The release manifest it discloses part of."},
+        "disclosed": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ClosureLeaf"},
+          "description": "The objects actually included, each with an inclusion proof. Minimum one: a capsule disclosing nothing proves nothing and would be a package whose only content is a claim about content."
+        },
+        "redactions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/RedactionRecord"},
+          "description": "What was withheld and on what terms. REQUIRED EVEN WHEN EMPTY: a recipient must be able to tell a complete capsule from a redacted one, and an absent array leaves them assuming whichever is convenient."
+        },
+        "policy_summary": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the policy summary included in the capsule. A recipient judging a release needs to know what rules it was built under, and a capsule that omitted the policy would be asking them to trust an unstated standard."},
+        "signatures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "Signatures over the capsule."
+        },
+        "mode": {"$ref": "#/$defs/CapsuleMode", "description": "How the capsule is meant to be used, which determines what a verifier can conclude from it."}
+      }
+    },
+    "CapsuleMode": {
+      "type": "string",
+      "description": "What a capsule is for. Named because the modes support different conclusions: a full capsule permits independent verification, and a selective one permits confirmation of membership and nothing more — and a recipient who cannot tell which they hold will over-read the second.",
+      "oneOf": [
+        {"const": "full", "description": "Every closure object is disclosed. The recipient can verify the release independently."},
+        {"const": "selective", "description": "Some objects are disclosed and the rest are proved by inclusion only. The recipient can confirm membership and cannot inspect what was withheld."},
+        {"const": "challenge_response", "description": "The recipient names what they want disclosed and the producer answers with proofs. Useful where the recipient's interest is narrow and the producer's holdings are broad."}
+      ]
+    },
+    "RedactionRecord": {
+      "type": "object",
+      "required": ["leaf", "method"],
+      "additionalProperties": false,
+      "description": "One withheld object, and how it is committed to. FOR A LOW-ENTROPY VALUE A BARE HASH IS NOT A REDACTION: a short secret can be recovered by dictionary attack against its own digest, so such fields are committed with a random salt and the salt is released only when the field is. This is a commitment scheme with selective revelation and it is not a zero-knowledge proof; describing it as one would claim properties it does not have.",
+      "properties": {
+        "leaf": {"$ref": "#/$defs/ClosureLeaf", "description": "The withheld object's leaf, which is what its inclusion proof is against."},
+        "method": {"$ref": "#/$defs/RedactionMethod", "description": "How it is committed."},
+        "reason": {"type": "string", "description": "Why it was withheld. Worth stating: a recipient who knows that a source was withheld under a confidentiality obligation reads the capsule differently from one who does not know why anything is missing."},
+        "commitment": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The salted commitment, where the method is salted. The salt itself is NOT here — it travels only in a disclosure package, and including it would make the commitment a plain hash."}
+      }
+    },
+    "RedactionMethod": {
+      "type": "string",
+      "description": "How a withheld object is committed to. Two methods, and choosing wrongly is a real disclosure: a plain digest over a short, guessable value reveals it to anybody willing to try a dictionary.",
+      "oneOf": [
+        {"const": "digest_only", "description": "The object's state digest stands as the commitment. Sufficient for high-entropy content, where the digest reveals nothing about the bytes."},
+        {"const": "salted_commitment", "description": "A random salt is committed alongside the value. Required for any low-entropy field — a date, a small number, a name, a status — where a bare hash is effectively plaintext to anyone with a wordlist."}
+      ]
+    },
+    "SignedDeltaPackage": {
+      "type": "object",
+      "required": ["base_root", "proposed_delta", "resulting_root", "proposer", "signature"],
+      "additionalProperties": false,
+      "description": "A semantic change proposed by another organization, signed. Organizations exchange changes rather than documents. THE RECEIVER'S FLOW IS FIXED: verify the signature, verify the base root relationship, materialize a proposal branch, run local policy, run local proof obligations, compute local semantic conflicts, require a local authority decision, and merge only after local acceptance. A PARTNER'S APPROVAL IS EVIDENCE THAT THE PARTNER APPROVED IT AND IS NOT AUTHORITY TO MUTATE YOUR WORKSPACE — nothing fetched may touch a main ref, and imported objects land on an inbound branch or in quarantine.",
+      "properties": {
+        "base_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root the change was computed against. Verified against local history before anything else: a delta whose base the receiver does not hold cannot be applied, and applying it anyway would be applying a change to a state that never existed here."},
+        "proposed_delta": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The delta itself."},
+        "resulting_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The root the sender says it produces. Recomputed locally rather than trusted: a mismatch means the delta does not do what the package claims, and the package is refused rather than reconciled."},
+        "proposer": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who proposed it, in the sender's namespace. Not a local actor and it acquires no local standing by appearing here."},
+        "policy_context": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The policy the sender evaluated it under. Informative only: local policy governs what happens locally, and a sender's rules have no force on a receiver's graph."},
+        "signature": {"$ref": "#/$defs/SignatureEnvelope", "description": "The sender's signature over the package. Establishes who sent it and that it was not altered in transit, and establishes nothing whatever about whether it should be accepted."}
+      }
+    },
+    "MigrationReceipt": {
+      "type": "object",
+      "required": ["migration", "source_workspace_root", "target_workspace_root", "tool", "timestamp"],
+      "additionalProperties": false,
+      "description": "The record of a migration between versions. MIGRATION MAY CREATE NEW STATE AND MAY NEVER SILENTLY REINTERPRET OLD STATE. Where an earlier version did not persist something, the migration records its absence rather than inferring it: if v5 held no decision records, v6 does not manufacture decisions from commit authorship or chat logs, and `no history invented` is the line the whole receipt exists to make checkable.",
+      "properties": {
+        "migration": {"type": "string", "minLength": 1, "description": "Which migration — the exact version pair."},
+        "source_workspace_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state migrated from. The source workspace is NOT modified, so this remains resolvable in the original and a migration can be re-run and compared."},
+        "target_workspace_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state produced."},
+        "mapping_manifest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the object-by-object mapping. What makes the migration auditable at the level of individual objects rather than only in totals, which is where a reinterpretation would actually be visible."},
+        "preserved_digests": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0},
+          "description": "Counts of digests preserved byte-for-byte, by kind. Raw source digests and anchor locators must survive migration exactly; a count short of the total is a reinterpretation, and stating both numbers is how that becomes visible rather than arguable."
+        },
+        "unmapped_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Fields the new version has that the old version could not populate — marked absent from the source rather than inferred. The most important array in the receipt: it is the list of everything the migration honestly could not know, and a receipt without it would present a v5 workspace as a complete v6 one."
+        },
+        "reinterpretations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/Reinterpretation"},
+          "description": "Anywhere old state was given new meaning, each with the decision permitting it. A dry run reporting ZERO of these is the acceptance condition for the migration; a non-empty array is not necessarily wrong and is always something a person must have agreed to."
+        },
+        "tool": {"type": "string", "minLength": 1, "description": "The tool and version that performed it."},
+        "timestamp": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical receipt, which is itself retained and content-addressed — a migration receipt that could be edited afterwards would be a claim about history rather than a record of it."}
+      }
+    },
+    "Reinterpretation": {
+      "type": "object",
+      "required": ["subject", "from_meaning", "to_meaning", "decision"],
+      "additionalProperties": false,
+      "description": "One place where migration changed what existing state MEANS. Requires a decision digest, because reinterpreting somebody's historical record is an exercise of authority over the past and must be attributable to a person — a migration that could reinterpret silently would be able to rewrite what an old release asserted while leaving every digest intact.",
+      "properties": {
+        "subject": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "What was reinterpreted."},
+        "from_meaning": {"type": "string", "minLength": 1, "description": "What it meant before."},
+        "to_meaning": {"type": "string", "minLength": 1, "description": "What it means now. Both stated in words, because the whole point is that a person must be able to read the pair and disagree."},
+        "decision": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision permitting it, with its authority receipt."}
+      }
+    },
+    "EffectClass": {
+      "type": "string",
+      "description": "What an operation is permitted to affect, declared in advance. The classification that makes an execution plan auditable before it runs: ONLY `AuthoritativeWrite` REQUIRES A SUCCESSFUL TRANSITION AUTHORIZATION, and every other class is a ceiling the host enforces rather than a hint the step supplies. A PROVIDER CALL CANNOT HIDE INSIDE A `Pure` STEP. A NETWORK FETCH CANNOT HIDE INSIDE A RENDERER. A SIGNATURE CANNOT HAPPEN AS A SIDE EFFECT OF A RELEASE BUILD. Each of those is possible in a system where effects are discovered by observation, and none of them is possible where a step declares its class and is held to it.",
+      "oneOf": [
+        {"const": "Pure", "description": "Reads graph state and produces a result. No network, no provider, no writes. The class a deterministic check runs under, and the one an autonomous run should consist mostly of."},
+        {"const": "ExternalRead", "description": "Reads something outside the workspace. Separated from `Pure` because an external read can fail, can be slow, can be observed by whoever is on the other end, and cannot be replayed to the same answer."},
+        {"const": "JudgmentCall", "description": "Requests an assessment from a provider. Its own class because it costs money, is not reproducible, and sends content outside the workspace — three properties `ExternalRead` does not imply and no caller should have to infer."},
+        {"const": "ProposalWrite", "description": "Creates a proposal and changes no authoritative state. THE CEILING FOR AUTONOMOUS WORK, and the reason a worker can be given real capability safely: it may prepare any amount of change and commit none of it."},
+        {"const": "AuthoritativeWrite", "description": "Changes graph state that others rely on. The only class requiring a transition authorization, and the line separating what a worker may do alone from what needs somebody's decision."},
+        {"const": "ArtifactWrite", "description": "Produces files. Held apart from `AuthoritativeWrite` because building a document changes nothing about what is true — and apart from `Pure` because bytes that exist can be sent to somebody."},
+        {"const": "Signature", "description": "Produces a signature. Its own class so that signing is never incidental to anything: a release build that could sign as a side effect would produce signed artifacts nobody decided to sign."}
+      ]
+    }
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/simulation.schema.json",
+  "title": "SimulationV6",
+  "description": "Counterfactual authorship: what WOULD happen, computed before anything is written. v5 answers `what broke after this source changed?`; a simulation answers, ahead of the mutation, what becomes true, what becomes false, what goes stale, what must be re-proved, which outputs move, which decisions expire, what the repair costs, and — with equal prominence — what remains provably untouched. NOTHING IS COMMITTED. A simulation is an ephemeral branch that produces a report and leaves the graph exactly as it found it. THE UNAFFECTED SET IS NOT A FOOTNOTE. A report that shows only damage teaches its reader that every change is dangerous, and a reader who believes that stops running simulations; `1,806 claim atoms, 74 definitions and 12 release targets are provably untouched` is the sentence that makes a large change safe to attempt, and it is carried here with the same standing as the breakage. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "SimulationRequest": {
+      "type": "object",
+      "required": ["base_root", "proposals", "policy"],
+      "additionalProperties": false,
+      "description": "What to simulate and against what. Every input that could change the answer is named, because a report that cannot say which policy and which targets it was computed under is a report nobody can reproduce — and a simulation somebody cannot reproduce is an opinion with a table in it.",
+      "properties": {
+        "base_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root to simulate from. Pinned rather than taken as `whatever HEAD is`, so a report remains meaningful after the branch has moved: it describes a definite counterfactual rather than a vanishing one."},
+        "proposals": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "The proposal states to apply together. A LIST rather than one, because proposals interact: two changes that are each harmless can conflict with each other, and simulating them separately would report two clean runs and miss the only thing worth knowing."
+        },
+        "release_targets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Which outputs to evaluate impact against. Absent means every target the graph declares, which is the safe default: a simulation narrowed to one target will report a clean result for a change that breaks three others."
+        },
+        "policy": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The policy state in force. Required, because proof obligations are derived from policy and a report generated under a different policy answers a different question — constraint C019 is what keeps the policy state inside the proof closure for exactly this reason."},
+        "include_repair_plan": {"type": "boolean", "description": "Whether to compute a repair plan. Optional because repair planning is the expensive part and an impact scan is often all that is wanted; when false, `repair_plan` is absent rather than empty, so `not computed` and `nothing to repair` stay distinguishable."},
+        "requested_by": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who asked. Recorded even though a simulation is read-only, because a simulation reveals the shape of the graph and the authority model governs reading as well as writing."}
+      }
+    },
+    "SimulationReport": {
+      "type": "object",
+      "required": ["base_root", "candidate_root", "semantic_deltas", "stale_frontier", "unaffected", "conflicts", "computed_at"],
+      "additionalProperties": false,
+      "description": "What the simulation found. Every array here is REQUIRED even when empty, because an omitted key and an empty array are read identically by a careless consumer and mean opposite things — `no conflicts` is a finding, and `conflicts were not computed` is not.",
+      "properties": {
+        "base_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The root simulated from, echoed so the report is self-describing."},
+        "candidate_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The root the change would produce. A candidate that exists nowhere: no ref points at it and nothing may commit it directly, because committing a simulation's output would bypass the decision the simulation exists to inform."},
+        "semantic_deltas": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "graph_delta.schema.json#/$defs/SemanticDelta"},
+          "description": "What changes in meaning. The head of the report, because everything below it is consequence: a reader who cannot see that a target moved from 0.90 to 0.95 cannot judge whether eleven stale results are a reasonable price."
+        },
+        "stale_frontier": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Everything that would go stale. The FRONTIER rather than the transitive closure: the nodes whose own state must be revisited, not every node that transitively mentions them, because a closure on a large graph is a number so big it stops being information."
+        },
+        "unaffected": {"$ref": "#/$defs/UnaffectedReport", "description": "What is provably untouched. Structurally required and never optional, so that no renderer can produce a damage-only view by omitting it. A simulation that reported only breakage would be technically complete and practically useless."},
+        "conflicts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "conflict.schema.json#/$defs/SemanticConflict"},
+          "description": "Contradictions the change would create — including with nodes neither the proposer nor the reviewer was thinking about. This is the single most valuable output of the whole mechanism: a fiscal model asserting a maximum of 0.93 while a target moves to 0.95 is a conflict nobody would have gone looking for."
+        },
+        "proof_obligations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "proof.schema.json#/$defs/ProofObligation"},
+          "description": "What would have to be proved for the candidate state to release. Derived from the policy in the request, so the report answers `could this ship?` and not merely `does this break anything?`"
+        },
+        "expired_decisions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "Approvals the change would invalidate. Carried separately from stale nodes because the repair is different in kind: a stale check is re-run by a machine and an expired approval requires a person's time, and a report that mixed them would understate the cost of the second."
+        },
+        "changed_render_targets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "The outputs whose bytes would change. Answerable only because renderers emit source maps: without them the honest answer to `which documents does this touch?` is `we would have to rebuild them and see`."
+        },
+        "repair_plan": {"$ref": "#/$defs/RepairPlan", "description": "The cheapest legal way back to a releasable state, when one was requested. Absent when not computed; an absent plan never means no repair is needed, and a surface must not render it as though it did."},
+        "unexamined": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/UnexaminedNode"},
+          "description": "What the simulation could not evaluate, each with its reason. NAMED RATHER THAN DROPPED and never counted as unaffected: a node the simulator could not read is not a node it proved safe, and rolling the two together is how a report comes to promise more than it checked."
+        },
+        "computed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When. A simulation is a statement about a moment, and a stale report offered as current is the failure this field exists to expose."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical report, so a proposal binding a predicted impact binds an exact report rather than one that has been regenerated since."}
+      }
+    },
+    "UnaffectedReport": {
+      "type": "object",
+      "required": ["proven_unaffected_count", "basis"],
+      "additionalProperties": false,
+      "description": "What the change provably does not touch. `proven` is the load-bearing word: this counts nodes the dependency walk demonstrated to be outside the impact set, and never nodes nobody looked at. A count that quietly included the unexamined would be the most reassuring lie the system could tell.",
+      "properties": {
+        "proven_unaffected_count": {"type": "integer", "minimum": 0, "description": "How many nodes were shown to lie outside the impact set."},
+        "by_type": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0},
+          "description": "The same total broken down by node type, because `1,806 unaffected` is a number and `1,806 claim atoms, 74 definitions, 36 promises, 12 release targets` is an answer to the question a person actually has."
+        },
+        "unaffected_release_targets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Outputs whose bytes would not change. Frequently the most useful line in the report: knowing the regulatory filing is untouched is what makes a change to the website safe to make this afternoon."
+        },
+        "basis": {"$ref": "#/$defs/UnaffectedBasis", "description": "How the claim of non-impact was established. Required, because `we walked the dependencies and these are not reachable` and `we did not evaluate these` are different statements and only the first belongs in this object at all."},
+        "excluded_from_analysis": {"type": "integer", "minimum": 0, "description": "How many nodes were outside the analysis scope entirely. Reported HERE, adjacent to the unaffected count, so that a narrowed simulation cannot present its narrowness as safety."}
+      }
+    },
+    "UnaffectedBasis": {
+      "type": "string",
+      "description": "How non-impact was established. Two values, and the distinction matters: one is a proof over the dependency graph and the other is a proof over the release closure, and a node unaffected in the first sense may still sit in an artifact that has to be rebuilt.",
+      "oneOf": [
+        {"const": "dependency_closure", "description": "The node is not reachable from any changed state through the dependency graph. The strongest available statement, and it holds only as far as the recorded dependencies do."},
+        {"const": "render_closure", "description": "The node is reachable in meaning but does not participate in any changed rendering, established from the source maps. Weaker and often what a reader actually wants: the claim moved, the brochure did not."}
+      ]
+    },
+    "UnexaminedNode": {
+      "type": "object",
+      "required": ["logical_id", "reason"],
+      "additionalProperties": false,
+      "description": "A node the simulation could not evaluate. Its own type rather than a bare id list so the reason travels with it, because the three reasons lead to three different actions and a flat list would send everybody to guess.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which node."},
+        "reason": {"$ref": "#/$defs/UnexaminedReason", "description": "Why it could not be evaluated."},
+        "detail": {"type": "string", "description": "What specifically was missing — the unknown schema id, the unavailable check, the depth at which the walk stopped."}
+      }
+    },
+    "UnexaminedReason": {
+      "type": "string",
+      "description": "Why a node escaped evaluation. Enumerated because a report full of unexamined nodes for one reason is a broken installation, and full of them for another is a graph that has grown past a configured bound — and the two are fixed by different people.",
+      "oneOf": [
+        {"const": "unknown_schema", "description": "The node's schema is not known to this build. Constraint C018 requires quarantine rather than assumption, and a simulation must not report a node it cannot parse as safe."},
+        {"const": "check_unavailable", "description": "A check needed to evaluate the node could not run — an absent provider, an offline verifier profile. UNAVAILABLE IS NOT PASSING, and this is where that rule is enforced at simulation time rather than discovered at release."},
+        {"const": "depth_limit", "description": "The dependency walk hit its configured bound. Honest and common on a large graph, and the bound is worth reporting so somebody can raise it deliberately rather than wondering why a number looks small."},
+        {"const": "out_of_scope", "description": "The node lies outside the requested targets or realms. Not a defect, and named so it is never counted as proven-unaffected."}
+      ]
+    },
+    "RepairPlan": {
+      "type": "object",
+      "required": ["actions", "ordering", "total_cost"],
+      "additionalProperties": false,
+      "description": "A legal set of actions that would return the candidate state to releasable, with its cost. Produced by an optimizer over TYPED actions and deterministic constraints — a model may propose candidate actions and never selects among them, because a plan chosen by an opaque process cannot be argued with, and the whole purpose of the plan is to be argued with.",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/RepairAction"},
+          "description": "The actions in the plan. Empty means the candidate state is already releasable, which is a finding worth stating rather than an empty section to be skipped past."
+        },
+        "ordering": {"$ref": "#/$defs/SafetyOrdering", "description": "The lexicographic ordering the optimizer minimized under. Recorded, because the same graph under a different ordering produces a different plan, and a plan that could not say which priorities it served is one nobody can disagree with usefully."},
+        "total_cost": {"$ref": "#/$defs/CostVector", "description": "The plan's cost, kept as a vector. NEVER A SINGLE SCORE: a blend would hide the distinction between four machine re-runs and four hours of a reviewer's attention, which is precisely the distinction this system refuses to hide anywhere else."},
+        "satisfies_all_obligations": {"type": "boolean", "description": "Whether executing the plan would discharge every proof obligation. False means the plan is a partial repair and must be labelled as such — a partial plan presented as complete is how a release ships with an obligation nobody remembered."},
+        "unsatisfiable": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/UnsatisfiableObligation"},
+          "description": "Obligations no available action could discharge. The most valuable part of a bad plan: it says the change cannot be made safely as proposed, which is an answer, and it says exactly what is missing, which is a next step."
+        }
+      }
+    },
+    "RepairAction": {
+      "type": "object",
+      "required": ["id", "kind", "targets", "estimated_cost"],
+      "additionalProperties": false,
+      "description": "One typed action in a repair plan. Typed rather than free-text because the optimizer must reason about what an action satisfies and what it invalidates, and a plan of instructions in prose can only be executed by a person reading them carefully — which is the situation the plan exists to improve on.",
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "description": "Identifier within the plan, so ordering and dependencies can reference it."},
+        "kind": {"$ref": "#/$defs/RepairKind", "description": "What the action is."},
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "What it acts on. Minimum one: an action with no target cannot be scheduled, costed or verified as done."
+        },
+        "satisfies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "The proof obligations this action would discharge. The optimizer's currency, and what makes `is the plan complete?` a computation rather than a judgement."
+        },
+        "invalidates": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "What this action would itself take down. Carried because repairs cascade: re-running a fiscal model to satisfy one obligation can invalidate two approvals downstream, and a plan that did not model that would report a cost it cannot honour."
+        },
+        "requires_authority": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "authority.schema.json#/$defs/Capability"},
+          "description": "The capabilities executing it would need. Present so the plan can be checked for feasibility BY THIS ACTOR before it is offered — a plan whose third step needs authority the reader does not hold is worse than no plan, because they will discover it after doing the first two."
+        },
+        "depends_on": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Actions that must complete first, by plan-local id. Ordering constraints are real work products: re-anchoring a claim before the source version it will anchor into has been ingested simply fails."
+        },
+        "estimated_cost": {"$ref": "#/$defs/CostVector", "description": "This action's cost, as a vector."},
+        "note": {"type": "string", "description": "What a person executing this action needs to know that its type does not convey."}
+      }
+    },
+    "RepairKind": {
+      "type": "string",
+      "description": "The kinds of action a repair plan can contain. Closed, because the optimizer reasons over types and an open vocabulary would let an action be added that nothing knows how to cost, schedule or verify. Roughly ordered from cheapest to dearest in human attention, though the ordering carries no weight — the safety ordering does that.",
+      "oneOf": [
+        {"const": "rerun_deterministic_check", "description": "Re-run a check whose subject state moved. The cheapest repair and the one most plans are mostly made of."},
+        {"const": "reanchor_claim", "description": "Point a claim's anchor at the current source version. Cheap when the text survived the version change and a real edit when it did not."},
+        {"const": "reingest_source", "description": "Bring in a new version of a source. Often the root action a long plan hangs from."},
+        {"const": "request_judgment", "description": "Ask a judgment provider for an assessment. Costed separately from a deterministic run because it is neither free nor reproducible, and a plan that counted the two alike would understate what it is asking for."},
+        {"const": "revise_claim", "description": "Change what a claim asserts. A proposal, not an edit: it goes through the same decision path as any other consequential change, which is why it is dear."},
+        {"const": "resolve_conflict", "description": "Settle a semantic conflict by authorized decision. Requires a person with standing and cannot be scheduled around."},
+        {"const": "reapprove_decision", "description": "Obtain a fresh approval for something whose target moved. The action most likely to dominate the true cost of a plan, and the one an unweighted count of steps most badly misrepresents."},
+        {"const": "recompile_target", "description": "Rebuild a release target. Machine work, but it changes bytes somebody may have already circulated."},
+        {"const": "acquire_evidence", "description": "Obtain support that does not currently exist. The only kind whose cost the system genuinely cannot estimate, and it says so rather than guessing."},
+        {"const": "escalate_authority", "description": "Obtain a grant the plan requires. Ranked highest in the safety ordering's minimization for a reason: a plan that quietly widens somebody's authority to become executable has repaired the graph by weakening the thing that governs it."}
+      ]
+    },
+    "CostVector": {
+      "type": "object",
+      "required": ["human_reviews", "deterministic_runs", "judgment_calls", "external_dependencies", "changed_renderings"],
+      "additionalProperties": false,
+      "description": "What a repair costs, in the units it is actually paid in. FIVE NUMBERS AND NEVER ONE. A blended score would let four machine re-runs and four executive re-approvals compare as equal, and the entire difficulty of a repair plan lives in exactly that comparison. All five are required so an absent dimension cannot be read as a zero.",
+      "properties": {
+        "human_reviews": {"type": "integer", "minimum": 0, "description": "Reviews a person must perform. Usually the binding constraint and almost never the largest number."},
+        "deterministic_runs": {"type": "integer", "minimum": 0, "description": "Machine checks to re-run. Usually the largest number and almost never the binding constraint."},
+        "judgment_calls": {"type": "integer", "minimum": 0, "description": "Judgment provider requests. Counted apart from deterministic runs because they cost money, cannot be reproduced, and may return a different answer next week."},
+        "external_dependencies": {"type": "integer", "minimum": 0, "description": "Things outside this workspace that must happen — a source published, a counterparty's confirmation. The dimension that turns a two-hour plan into a two-week plan, and the one a step count hides completely."},
+        "changed_renderings": {"type": "integer", "minimum": 0, "description": "Artifacts whose bytes change. Cheap to produce and expensive when they have already been sent to somebody."}
+      }
+    },
+    "SafetyOrdering": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/SafetyCriterion"},
+      "description": "The lexicographic ordering a repair plan was minimized under, most important first. LEXICOGRAPHIC AND NOT WEIGHTED: a weighted sum permits a plan that escalates somebody's authority in exchange for saving three machine re-runs, and no set of weights makes that trade acceptable. The default ordering is legal and policy feasibility, then proof completeness, then minimum authority escalation, then minimum human review, then minimum recomputation, then minimum external judgment, then minimum rendering churn."
+    },
+    "SafetyCriterion": {
+      "type": "string",
+      "description": "One criterion in a lexicographic safety ordering. The first two are feasibility rather than cost: a plan that is not legally feasible or does not complete the proof is not an expensive plan, it is not a plan.",
+      "oneOf": [
+        {"const": "legal_policy_feasibility", "description": "The plan must be permitted by policy and law. Never traded against anything."},
+        {"const": "proof_completeness", "description": "The plan must discharge every obligation. A cheaper plan that leaves an obligation open is not cheaper, it is incomplete."},
+        {"const": "minimum_authority_escalation", "description": "Prefer plans requiring no new grants. Ranked above human effort deliberately: widening authority to make work easier is how an authority model stops meaning anything, and it is always the convenient answer."},
+        {"const": "minimum_human_review", "description": "Prefer plans asking less of people. The first genuinely economic criterion."},
+        {"const": "minimum_recomputation", "description": "Prefer plans re-running fewer checks."},
+        {"const": "minimum_external_judgment", "description": "Prefer plans making fewer judgment calls. Ranked below recomputation because a judgment call is dearer per unit and rarer."},
+        {"const": "minimum_rendering_churn", "description": "Prefer plans changing fewer artifacts. Last, because rebuilding a document is the cheapest thing on this list — unless somebody has already read it, which the ordering cannot know."}
+      ]
+    },
+    "UnsatisfiableObligation": {
+      "type": "object",
+      "required": ["obligation_id", "reason"],
+      "additionalProperties": false,
+      "description": "An obligation no available action could discharge. Reported rather than dropped, because a plan silently omitting what it cannot fix would present itself as a complete repair — and the reader would find out at the release gate.",
+      "properties": {
+        "obligation_id": {"type": "string", "minLength": 1, "description": "Which obligation."},
+        "reason": {"type": "string", "minLength": 1, "description": "Why nothing available discharges it. `no source asserts this figure` is actionable; `unsatisfiable` is not."},
+        "would_require": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/RepairKind"},
+          "description": "The kinds of action that WOULD discharge it, where they can be named even though no instance is available — commonly `acquire_evidence`. Turning `this cannot be done` into `this needs evidence that does not exist yet` is the difference between a dead end and a task."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/proposal.schema.json",
+  "title": "ProposalV6",
+  "description": "The object every consequential mutation begins life as. A proposal names an exact target state, the state it would produce, the semantic difference between them, and who is asking — and it changes nothing. It exists because a system in which a change and an approval are the same act cannot answer the question that matters after an incident: was this reviewed, by whom, against what. PROPOSE-NEVER-OVERWRITE IS THE RULE THE OBJECT ENFORCES. A proposal binds `target_state_digest`, so if the target moves between proposing and deciding, the proposal is stale by arithmetic rather than by anybody noticing; the system does not helpfully re-attach it to whatever is there now, because the reviewer who agreed to change 15% to 18% did not agree to change 16% to 18%. There is deliberately NO `Applied` status: acceptance is a decision and application is a transaction, and a single status covering both is exactly the ambiguity this document exists to remove. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "Proposal": {
+      "type": "object",
+      "required": ["proposal_id", "target_logical_id", "target_state_digest", "before", "after", "semantic_delta", "rationale", "proposed_by", "created_at", "status"],
+      "additionalProperties": false,
+      "description": "One proposed change to one node. `before` and `after` are both carried even though `before` is derivable from `target_state_digest`: the proposal must be readable by a reviewer who is not holding the graph, and a diff that requires resolving three objects before it can be shown is a diff nobody reads.",
+      "properties": {
+        "proposal_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity of this proposal across every state it takes."},
+        "target_logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which node would change. Named separately from the state digest because the pair is what makes staleness computable: the id says what was under review, the digest says which version, and a system holding only one of the two can answer neither `is this still current?` nor `what was this about?`"},
+        "target_state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "THE EXACT STATE THIS PROPOSAL WAS WRITTEN AGAINST. The single most load-bearing field in the object. A decision on a proposal whose target has moved raises `WI_PROPOSAL_STALE` and the proposal must be reviewed again, because an approval is an approval OF something and the something changed. No rebase happens implicitly; a deterministic rebase policy, where policy allows one, produces a new proposal with a new digest rather than quietly repointing this one."},
+        "before": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the target state as it stands. Equal to `target_state_digest` at creation and retained separately so that a stored proposal is self-describing after the target has moved: a reviewer looking at a stale proposal can still see what it was proposing to replace."},
+        "after": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the state this proposal would produce. Computed rather than promised: the proposer supplies the change, the system canonicalizes the result and digests it, so `after` cannot describe a state the proposal does not actually produce."},
+        "semantic_delta": {"$ref": "graph_delta.schema.json#/$defs/SemanticDelta", "description": "What changes in MEANING, not in wording. The field that makes a reviewer's job possible: two proposals that rewrite the same paragraph are trivial or grave depending entirely on whether the semantic delta is empty, and a reviewer shown only the text cannot tell which they are looking at."},
+        "rationale": {"type": "string", "minLength": 1, "description": "Why the change is proposed, in the proposer's words. Non-empty, because a reviewer approving a change with no stated reason is approving a diff, and a diff cannot say what problem it was meant to solve. This is the field a stale proposal is most often salvaged from six months later."},
+        "evidence_changes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/EvidenceChange"},
+          "description": "What happens to the support underneath the claim. Carried on the proposal because a change that leaves a claim's wording alone while detaching its only anchor is a serious change that a semantic delta alone may report as small — and a reviewer who is not shown it will approve it."
+        },
+        "predicted_impact": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the SimulationReport produced for this proposal, when one has been run. Referenced rather than embedded so the proposal stays readable and the simulation stays exact. Absent means no simulation has been run, which is a different fact from a simulation that found nothing, and policy may require one before a decision on a target of consequence."},
+        "depends_on": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/ProposalDependency"},
+          "description": "Other proposals that must be settled first. Proposal planning is graph data rather than a checklist somebody keeps: a change to a target figure, the six documents that quote it and the fiscal model that must clear it first form a DAG, and a system that could not express the ordering would let the documents be approved against a figure the model has not yet accepted."
+        },
+        "proposed_by": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who is asking. Never defaultable and never inferred: an anonymous proposal is a change request nobody can be asked about, and the answer cannot be reconstructed afterwards from anything."},
+        "on_behalf_of": {"$ref": "common.schema.json#/$defs/ActorId", "description": "The actor whose work this proposal carries, when a worker or maintainer is proposing for somebody else. Held apart from `proposed_by` so that an autonomous worker's proposals are always attributable to the worker as well as to whoever it was running for — a worker's output must never be readable as a person's own."},
+        "created_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the proposal was made. Outside the proposal's own digest preimage, so re-deriving the same proposed change does not produce a different proposal."},
+        "expires_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the proposal lapses if undecided. Optional, and its absence means the proposal stays open indefinitely rather than defaulting to some interval nobody chose — an expiry the system invented would silently discard somebody's work."},
+        "status": {"$ref": "#/$defs/ProposalStatus", "description": "Where the proposal stands. Set by the events that move it and never edited directly, because the only legitimate route from `Open` to `Accepted` is a decision object, and a status field that could be typed would make the decision optional."},
+        "supersedes": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The proposal this one replaces, when a stale proposal has been reworked against the current state. Present so a reviewer can see that this is the third attempt at one change rather than three unrelated requests, which is a distinction a decision-maker is entitled to."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical proposal state. What a decision binds to, so that a decision cannot be shown against a proposal whose text has been altered since."}
+      }
+    },
+    "ProposalStatus": {
+      "type": "string",
+      "description": "The states a proposal can be in. Closed, and DELIBERATELY MISSING `Applied`: acceptance is a decision by an authorized actor, and application is a transaction that either committed or did not. A single status covering both would make it impossible to distinguish an approved change that failed to commit from one nobody approved — and the first is an operational incident while the second is a governance failure.",
+      "oneOf": [
+        {"const": "Open", "description": "Recorded and awaiting a decision. The state every proposal starts in."},
+        {"const": "Simulated", "description": "A simulation has been run and its report is bound. Distinct from `Open` because policy for a target of consequence may require a simulation before a decision may be taken, and a status that could not express `simulated but undecided` would make that requirement unenforceable."},
+        {"const": "Accepted", "description": "An authorized decision accepted it. Says nothing about whether the change has been committed — that is the transaction's business, and conflating the two is what this enum refuses."},
+        {"const": "Rejected", "description": "An authorized decision refused it. The proposal is retained rather than deleted: a rejected proposal is part of how the current state came to be what it is."},
+        {"const": "Deferred", "description": "An authorized decision postponed it without refusing it. A real answer rather than a polite rejection, and kept apart from `Open` because a deferred proposal has been LOOKED AT, which is exactly what a reviewer needs to know when triaging a queue."},
+        {"const": "Superseded", "description": "A later proposal replaced it. Reached without a decision, because withdrawing your own proposal in favour of a better one is not a governance event."},
+        {"const": "Expired", "description": "The stated expiry passed with no decision. Never inferred from age when no expiry was declared: a proposal with no `expires_at` cannot reach this state, and letting it would mean the system quietly discarded work on a timetable nobody set."}
+      ]
+    },
+    "EvidenceChange": {
+      "type": "object",
+      "required": ["kind", "subject"],
+      "additionalProperties": false,
+      "description": "What a proposal does to the support beneath a claim. A separate object because evidence changes and meaning changes fail differently: a claim whose wording is untouched but whose last anchor is being detached has not changed at all by semantic diff, and is about to become an unsupported assertion. A reviewer shown only the semantic delta would approve it without a second thought.",
+      "properties": {
+        "kind": {"$ref": "#/$defs/EvidenceChangeKind", "description": "What is happening to the support."},
+        "subject": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "The claim or node whose support is affected."},
+        "anchor": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "The evidence anchor being attached, detached or repointed. Required in practice for every kind except `weakened_basis`, which is about the reliability type rather than about a particular anchor."},
+        "from_basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "The reliability the subject rests on now."},
+        "to_basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "The reliability it would rest on after. A transition from Verified to Judged is a substantial change that no amount of unchanged wording makes small, and stating both ends is what lets a policy refuse it for a regulated target without a human having to spot it."},
+        "note": {"type": "string", "description": "Why the evidence is changing, when the reason is not evident from the change itself. Most useful for a detachment: a reviewer needs to know whether a source was withdrawn, superseded or found not to say what it was cited for, and those three lead to three different repairs."}
+      }
+    },
+    "EvidenceChangeKind": {
+      "type": "string",
+      "description": "How support is being altered. Enumerated rather than described in prose so that policy can refuse a class of change outright — most usefully, refusing any detachment that would leave a claim in a strict realm with no support at all.",
+      "oneOf": [
+        {"const": "attached", "description": "New support is being added. The only kind that cannot weaken a claim, and therefore the only one a light-touch policy may pass without review."},
+        {"const": "detached", "description": "Support is being removed. Requires knowing what remains: a detachment from a claim with four anchors and a detachment from a claim with one are the same operation and entirely different events."},
+        {"const": "repointed", "description": "Support is being moved to a different location in the same or another source — a re-anchor after a source version changed. The commonest evidence change and the one most likely to be waved through, which is why it is named rather than folded into detach-plus-attach: as two operations it passes through a window in which the claim has no support at all."},
+        {"const": "source_version_advanced", "description": "The underlying source has a new version and the anchor is being moved forward to it. Distinguished from `repointed` because the anchored text may be identical while the surrounding document has changed materially, and constraint C003 requires that an anchor into a superseded version be explicit rather than accidental."},
+        {"const": "weakened_basis", "description": "The reliability type is dropping — Verified to Measured, Measured to Judged, anything to HumanDeclared. Named as its own kind because it can happen with no anchor moving at all, and because it is the change most likely to be invisible in every other view of the proposal."},
+        {"const": "strengthened_basis", "description": "The reliability type is rising because support was found. Recorded for the same reason as the others: a claim that quietly became Verified deserves to be as visible as one that quietly became Judged, and a record that only tracked degradations would read as though the system only ever got worse."}
+      ]
+    },
+    "ProposalDependency": {
+      "type": "object",
+      "required": ["proposal", "relation"],
+      "additionalProperties": false,
+      "description": "An ordering constraint between proposals. Modelled explicitly because the ordering is a real requirement and not a preference: if policy says the fiscal model must clear a target before the documents quoting it may be updated, then approving the documents first produces six artifacts that assert a figure the model has not accepted, and every one of them will read as approved.",
+      "properties": {
+        "proposal": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The proposal this one depends on."},
+        "relation": {"$ref": "#/$defs/DependencyRelation", "description": "The nature of the dependency, which decides what happens when the other proposal is rejected rather than accepted."},
+        "reason": {"type": "string", "description": "Why the ordering is required. Worth stating because a dependency whose reason has lapsed should be removable, and one whose reason is unrecorded will be carried forever by people who cannot tell whether it still matters."}
+      }
+    },
+    "DependencyRelation": {
+      "type": "string",
+      "description": "How one proposal depends on another. The values differ in what a REJECTION of the dependency does, which is the question a queue has to answer and the one a plain edge cannot.",
+      "oneOf": [
+        {"const": "requires_acceptance", "description": "This proposal may only be accepted after the other has been. If the other is rejected, this one cannot proceed as written and must be reworked or withdrawn."},
+        {"const": "requires_settlement", "description": "This proposal may only be accepted after the other has been DECIDED, whichever way. Used where the two changes are alternatives: the second is legitimate whether the first is accepted or refused, but not while it is open."},
+        {"const": "conflicts_with", "description": "The two propose incompatible states for overlapping subjects. Accepting both is refused, and which one proceeds is an authorized decision rather than a matter of arrival order."},
+        {"const": "informs", "description": "The other proposal's outcome should be visible to whoever decides this one, without constraining it. Advisory, and named so that an advisory link cannot be mistaken for a hard ordering — a queue that blocked on these would stall on relationships nobody meant as blocking."}
+      ]
+    }
+  }
+}

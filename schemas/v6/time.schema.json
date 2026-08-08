@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/time.schema.json",
+  "title": "TemporalV6",
+  "description": "The bitemporal machinery of v6: when a statement is true of the world, and when this workspace came to know it. They are different clocks and conflating them is the failure this document exists to prevent — a system with only one of them cannot answer `what did we believe in March?` without lying, because correcting a fact today rewrites what it says we believed then, and every audit that follows is an audit of the correction rather than of the record. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "ValidInterval": {
+      "type": "object",
+      "required": ["from", "until"],
+      "additionalProperties": false,
+      "description": "The period a statement is asserted to be true OF THE WORLD, half-open as `[from, until)`. Half-open is not a stylistic choice: it is the only convention under which adjacent intervals tile a timeline with no overlap and no gap, so `the rate was 4% through 2021` and `the rate was 5% from 2022` do not both claim the boundary and do not leave it unclaimed. A closed interval makes the instant at `until` belong to two states at once, which turns constraint C012 — temporal validity overlap contradiction — into a check that fires on every correctly-recorded succession and therefore gets switched off.",
+      "properties": {
+        "from": {"$ref": "common.schema.json#/$defs/TimePoint", "description": "Inclusive start of the period. Required rather than optional: an interval with no stated start is not an open interval, it is an unrecorded one, and the `unbounded` TimePoint variant is how a genuinely open start is said out loud."},
+        "until": {"$ref": "common.schema.json#/$defs/TimePoint", "description": "Exclusive end of the period. An instant equal to this value is NOT inside the interval. Use the `unbounded` TimePoint variant for a statement asserted to hold indefinitely, so that `still true` and `nobody wrote down when it stopped` remain distinguishable."},
+        "precision_note": {"type": "string", "description": "What the source actually said about the period, when the structured interval is a reading of imprecise prose. Present so a reader can see that `during the 2019 program year` became a calendar interval by an editorial decision somebody made, rather than by the source having said so."}
+      }
+    },
+    "KnowledgeInterval": {
+      "type": "object",
+      "required": ["observed_at"],
+      "additionalProperties": false,
+      "description": "The period this workspace HELD the statement — the second clock. A statement enters at `observed_at` and leaves at `superseded_at` when a later statement replaced it. Nothing is ever deleted to record a correction: the superseded statement keeps its knowledge interval and the correction opens a new one, which is what lets a release built in March stay verifiable in July against exactly what was known in March. A system that overwrites instead cannot distinguish `we were right` from `we have since been corrected`, and the second is the one that matters in an audit.",
+      "properties": {
+        "observed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When this workspace first held the statement. Not when the statement became true of the world — that is `ValidInterval.from`, and a source published in 2024 about 2019 has a knowledge time in 2024 and a valid time in 2019."},
+        "superseded_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When a later statement replaced this one. Absent means the statement is still current knowledge. A correction stamps this field on the old record and creates a new one; it never edits the old record's content, because a record edited in place cannot be evidence about what was believed before the edit."},
+        "superseded_by": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Logical id of the statement that replaced this one. Present so a reader who finds the old record can walk forward to the current one in a single step rather than searching, which is the difference between a superseded record being informative and being a trap."},
+        "supersession_reason": {"type": "string", "description": "Why this statement stopped being held, in words — a source was corrected, a figure was restated, an author withdrew an observation. Required by policy at regulated mode, where a supersession with no stated reason is indistinguishable from a quiet retraction."}
+      }
+    },
+    "TemporalQuery": {
+      "type": "object",
+      "required": ["valid_at", "known_at"],
+      "additionalProperties": false,
+      "description": "A request to read the graph as of two points at once: what was true of the world at `valid_at`, according to what this workspace knew at `known_at`. Both are required, because a query that names only one silently defaults the other, and the two most useful defaults disagree — `now/now` is the current picture, while `then/then` is the picture a past release was built from, and a reader handed one when they asked for the other has no way to tell. Naming both is also what makes a stale-proof question answerable mechanically: a release verified at knowledge time T is re-checkable at T forever, regardless of every correction since.",
+      "properties": {
+        "valid_at": {"$ref": "common.schema.json#/$defs/TimePoint", "description": "The point in world time to evaluate against. A statement is returned when this point falls inside its `ValidInterval`."},
+        "known_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "The point in knowledge time to evaluate against. A statement is returned when this instant falls inside its `KnowledgeInterval` — at or after `observed_at`, and before `superseded_at` if one is set."},
+        "realms": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/Realm"},
+          "description": "Restrict the answer to these realms. Present because a query that mixes `external_fact` and `fictional_canon` returns a result set in which the same sentence means two incompatible things, and the caller almost always wanted one of them."
+        },
+        "jurisdiction": {"$ref": "common.schema.json#/$defs/Jurisdiction", "description": "Restrict the answer to statements scoped to this territory or to statements with no jurisdiction. Omitting it returns every jurisdiction, which is correct for an inventory and wrong for a compliance question."},
+        "as_of_commit": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Evaluate against the graph state at this semantic commit rather than at the head of a ref. Present so that a query is reproducible: a ref moves, and a query answered against a moving ref cannot be re-run to the same answer, which makes it useless as evidence."}
+      }
+    }
+  }
+}

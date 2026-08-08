@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/argument.schema.json",
+  "title": "ArgumentV6",
+  "description": "Reasoning made inspectable without being made deterministic. An argument records that a conclusion was reached FROM named premises BY a named inference rule, so a reader can see the chain rather than being handed the conclusion alone. It exists because the alternative is the shape every unreliable system takes: a conclusion arrives with a confidence number attached and nothing in the record says which facts it rested on or which rule carried it, so nobody can tell whether the premises are wrong, the rule was misapplied, or a declared exception was dropped along the way. WHAT THIS DOCUMENT DOES NOT DO IS THE POINT: it does not certify that an inference is sound. It certifies that the premises exist, that they carry their own proof states, that the conclusion has not strengthened beyond what the stored argument supports, that no declared defeater was quietly discarded, and that the same chain renders identically across every output. Whether an inductive step persuades a reader stays Judged or HumanDeclared depending on policy, and no threshold anywhere promotes it into Verified. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "Argument": {
+      "type": "object",
+      "required": ["logical_id", "premises", "conclusion", "rule"],
+      "additionalProperties": false,
+      "description": "One inference step: these premises, this rule, that conclusion. Recorded as a NODE rather than as prose because the checks that matter are structural — did a premise go stale, did the conclusion outrun the argument, was an exception dropped — and a check cannot address a sentence buried in a paragraph. The argument is deliberately shallow: one rule, one conclusion. A long chain of reasoning is a chain of Argument nodes, so an invalidation can name the exact link that broke rather than condemning the whole chain.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity of this inference step across every state it takes."},
+        "premises": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "semantic_node.schema.json#/$defs/NodeRef"},
+          "description": "What the conclusion rests on, each named as a node reference and not as a restatement. Minimum one, because an argument with no premises is an assertion wearing an argument's shape, and typing it as an argument would let it inherit an inspectability it cannot support. References here SHOULD be pinned to a state digest when the argument is offered as support in a release: an unpinned premise follows the node, so a premise silently revised after the reasoning was recorded would leave the conclusion resting on text nobody reasoned from."
+        },
+        "conclusion": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "What the premises are held to establish. A single node rather than a list: an inference that reaches three conclusions is three arguments, and collapsing them means an invalidation of one premise cannot say which of the three it took down."},
+        "rule": {"$ref": "#/$defs/InferenceRule", "description": "How the premises are held to reach the conclusion. Required and closed, because the rule determines what the system is entitled to check and what reliability the conclusion may ever carry — a deductive step whose premises are Verified can be checked mechanically for validity, and an analogy never can, and an argument that did not state which it was would let the second borrow the standing of the first."},
+        "warrants": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/Warrant"},
+          "description": "The licenses under which this rule is held to apply here. Separated from the premises because a warrant is not a fact about the subject — it is a fact about the reasoning, and mixing the two is how an argument comes to look better supported than it is by counting its own methodology among its evidence."
+        },
+        "defeaters": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/Defeater"},
+          "description": "The conditions under which this inference would not hold, declared by whoever recorded it. Present so that the honest weakness of an argument travels WITH the argument rather than being something a reader has to notice. An argument whose declared defeater has been shown to obtain and which is still rendered as support is exactly what constraint C015 refuses: an unresolved problem presented as settled."
+        },
+        "counterarguments": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/Counterargument"},
+          "description": "Arguments held to run against this one. Recorded on the argument rather than left to a reader to assemble, so `what speaks against this?` is answerable from the graph. An empty array means none has been recorded, which is not the same as none existing, and no consumer may render it as `no objections`."
+        },
+        "strength_basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How the claim that this inference HOLDS came to be relied on — not the reliability of the premises, which each carry their own. Kept separate for the reason the whole document exists: an argument from Verified premises can still be a bad argument, and a single blended reliability would hide precisely that case."},
+        "renders_as": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "The expression nodes that present this argument in one output or another. Held so a change to the reasoning can find every place the reasoning was shown, which is what makes `the same chain renders consistently across outputs` a checkable property rather than an aspiration."
+        },
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical argument state. What a verification result about this argument binds to, so a later edit to the premise list makes the earlier check demonstrably about a different argument."}
+      }
+    },
+    "InferenceRule": {
+      "type": "string",
+      "description": "How premises are held to carry a conclusion. Closed, because the rule decides what may be checked and what reliability the conclusion may ever carry, and an open vocabulary would let a new label smuggle in an unearned standing. The vocabulary is deliberately not ranked: this is not a ladder from good reasoning to bad, and no consumer may treat a later value as weaker than an earlier one. A well-conducted statistical generalization is better support than a sloppy deduction from false premises, and the value here says which QUESTIONS to ask, not how much to believe.",
+      "oneOf": [
+        {"const": "deductive", "description": "The conclusion is held to follow necessarily from the premises. The only rule for which validity is mechanically checkable at all, and even then the system checks the FORM: a valid deduction from a false premise is still a false conclusion, so `deductive` never by itself promotes a conclusion's reliability."},
+        {"const": "inductive", "description": "The conclusion generalizes from observed instances. The system can check that the instances exist and that the conclusion does not claim more scope than they cover; whether the sample supports the generalization is Judged or HumanDeclared."},
+        {"const": "abductive", "description": "The conclusion is the best available explanation of the premises. Recorded distinctly because `best available` is a comparative claim about a set of alternatives, and an abduction that never named its alternatives is weaker than one that did — a distinction lost the moment this is filed as inductive."},
+        {"const": "causal_model", "description": "The conclusion follows from a stated model of how the subject behaves. Distinct from statistical generalization because a causal claim licenses intervention — `if we change X, Y changes` — and a correlation does not. Conflating them is the single most consequential inference error in policy writing, which is why they are two values here and not one."},
+        {"const": "statistical_generalization", "description": "The conclusion projects a measured rate onto a population. The rule under which a denominator becomes load-bearing: a projection whose base population is unstated cannot be checked for scope, and constraint C013 is what stops a rate measured on one population being applied to another."},
+        {"const": "analogy", "description": "The conclusion transfers from a comparable case. Never mechanically checkable, and named as its own rule so that it cannot be recorded as deduction and inherit deduction's checkability. What the system CAN check is that the compared case exists and that its stated similarities were declared rather than assumed."},
+        {"const": "legal_application", "description": "The conclusion applies a rule of law, contract or policy to stated facts. Separated because its defeaters are jurisdictional and temporal in a way no other rule's are: the same facts under the same rule reach a different conclusion in another territory or after an amendment, which is why an argument carrying this rule must be readable against the jurisdiction and valid time of the rule it applies."},
+        {"const": "policy_projection", "description": "The conclusion projects an outcome from a policy choice. Held apart from forecast because the subject is a decision that has not been taken: a projection about an unadopted policy that renders as a prediction about the world is a category error a reader cannot detect from the sentence alone."},
+        {"const": "narrative_inference", "description": "The conclusion follows from what a constructed world has established. Legitimate reasoning inside a fiction or scenario realm and never outside it: an argument carrying this rule whose conclusion is rendered without its realm marker is what constraint C011 exists to refuse."}
+      ]
+    },
+    "Warrant": {
+      "type": "object",
+      "required": ["logical_id", "statement"],
+      "additionalProperties": false,
+      "description": "The license under which a rule is held to apply to these premises — the answer to `why does this reasoning transfer here?` rather than `what is true?`. Named separately because a warrant is the part of an argument most often left implicit, and an implicit warrant is one nobody can disagree with: a reader who thinks the reasoning does not transfer has nothing to point at. Making it a node gives the objection somewhere to attach.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity, so one warrant can license several arguments and be withdrawn from all of them at once."},
+        "statement": {"type": "string", "minLength": 1, "description": "The license, stated plainly. Non-empty because a warrant with no content is worse than an absent one — it makes the argument look as though its methodology was examined."},
+        "backing": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "semantic_node.schema.json#/$defs/NodeRef"},
+          "description": "What supports the warrant itself: a methodology, a standard, a governing rule. Absent means the warrant is asserted rather than supported, which is a legitimate and common state and must be rendered as such rather than hidden."
+        },
+        "scope": {"$ref": "claim.schema.json#/$defs/ScopeConstraint", "description": "Where the license holds. A warrant that transfers within one jurisdiction, population or period and not another is the ordinary case, and a warrant applied outside its scope is the failure this field exists to make visible."},
+        "basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How the warrant came to be relied on. Frequently HumanDeclared, and that is an honest answer rather than a weak one: a great deal of legitimate reasoning rests on a licence somebody with standing declared."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical warrant state, so an argument can pin the exact licence it was offered under."}
+      }
+    },
+    "Defeater": {
+      "type": "object",
+      "required": ["logical_id", "condition", "effect"],
+      "additionalProperties": false,
+      "description": "A condition under which the argument would not hold, declared by whoever recorded the argument. This is the field that makes the difference between an argument and an advertisement. It is recorded PROSPECTIVELY — before anyone knows whether the condition obtains — precisely because a defeater added after the argument has been challenged is indistinguishable from a concession, and the record should be able to show that the author knew the weakness at the time.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity across every state, so `has this defeater been shown to obtain?` is a question about one thing over time."},
+        "condition": {"type": "string", "minLength": 1, "description": "What would have to be the case. Stated so that somebody could go and find out, rather than as a general hedge: `if the sample were unrepresentative` is checkable and `results may vary` is not."},
+        "effect": {"$ref": "#/$defs/DefeaterEffect", "description": "What obtaining would do to the argument — remove its support, or undermine the licence that carried it. The distinction changes the repair: a rebutted conclusion may still be true on other grounds, while an undercut argument establishes nothing at all even if its conclusion happens to hold."},
+        "status": {"$ref": "#/$defs/DefeaterStatus", "description": "Whether the condition has been examined and what was found. Defaults to nothing being known, which is different from the condition being absent."},
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "semantic_node.schema.json#/$defs/NodeRef"},
+          "description": "What was examined in reaching the status. Required in practice for any status other than `unexamined`: a defeater marked `does_not_obtain` with nothing behind it is an assertion that the weakness was checked, and that assertion is exactly the kind that must be supportable."
+        },
+        "basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How the status came to be relied on. A defeater ruled out by a deterministic check and one ruled out by a reviewer's reading are both legitimate and must never be rendered alike."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical defeater state."}
+      }
+    },
+    "DefeaterEffect": {
+      "type": "string",
+      "description": "How a defeater, if it obtains, damages the argument. Two values rather than one because they call for different repairs, and a system that recorded only `weakens` would send an author to fix the wrong thing.",
+      "oneOf": [
+        {"const": "rebutting", "description": "The condition supports the OPPOSITE conclusion. The argument may still be well formed; what is in doubt is its conclusion, which may nonetheless hold on other grounds."},
+        {"const": "undercutting", "description": "The condition breaks the LINK between premises and conclusion without saying anything about the conclusion itself. An undercut argument establishes nothing even when its conclusion is true, and a reader who is not shown the difference will read a surviving conclusion as a surviving argument."}
+      ]
+    },
+    "DefeaterStatus": {
+      "type": "string",
+      "description": "What is known about whether a declared defeater obtains. FOUR VALUES RATHER THAN A BOOLEAN, and the two middle ones are why: `unexamined` and `undeterminable` both mean the argument's weakness is open, and they send a person to two different places — one to go and look, one to accept that looking is not currently possible.",
+      "oneOf": [
+        {"const": "unexamined", "description": "Nobody has checked. The honest default, and the state most declared defeaters are in."},
+        {"const": "does_not_obtain", "description": "Examined, and the condition is absent. Requires evidence: this is a positive finding, not the absence of a negative one."},
+        {"const": "obtains", "description": "Examined, and the condition holds. The argument is damaged in the way `effect` describes, and rendering it as unqualified support is refused."},
+        {"const": "undeterminable", "description": "Examined, and it cannot be told from here. Kept apart from `does_not_obtain` because collapsing them converts `we could not find out` into `we found nothing`, which is the single most common way a known weakness disappears from a record."}
+      ]
+    },
+    "Counterargument": {
+      "type": "object",
+      "required": ["logical_id", "against", "argument"],
+      "additionalProperties": false,
+      "description": "An argument held to run against another argument. Modelled as a relation between two Argument nodes rather than as a free-text objection, so that the counterargument carries its own premises, its own rule and its own defeaters — and can therefore itself be answered, checked and shown to have gone stale. A system that stored objections as prose can tell you that somebody disagreed; this can tell you what they disagreed with and whether their reasons still stand.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity of this opposition relation."},
+        "against": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "The argument being opposed, pinned to a state where the opposition was recorded against an exact version. An unpinned reference here is how a counterargument comes to be shown against a revised argument it was never about."},
+        "argument": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "The opposing argument itself, which is an ordinary Argument node and is held to the same standards. Referenced rather than inlined so that one argument can oppose several and be revised in one place."},
+        "attacks": {"$ref": "#/$defs/AttackTarget", "description": "Which part of the target it attacks. Load-bearing for repair: an attack on a premise is answered by supporting the premise, an attack on the warrant by establishing the licence, and an attack on the conclusion may leave the argument entirely intact while still mattering."},
+        "response": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "The reply, when one has been recorded. Absent means the counterargument stands unanswered, and that state must be rendered as unanswered rather than omitted — an objection that disappears from the output because nobody replied to it is the failure this field exists to prevent."},
+        "disposition": {"$ref": "#/$defs/CounterargumentDisposition", "description": "How the opposition currently stands. Never inferred from the presence of a response: a reply that does not answer leaves the counterargument standing, and only an actor with standing may record that it was answered."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical counterargument state."}
+      }
+    },
+    "AttackTarget": {
+      "type": "string",
+      "description": "The part of an argument a counterargument is aimed at. Enumerated because the repair differs entirely by target, and an objection filed without one leaves an author guessing which of four different pieces of work is required.",
+      "oneOf": [
+        {"const": "premise", "description": "One or more premises are denied. The argument may be perfectly well formed and still establish nothing."},
+        {"const": "warrant", "description": "The licence to reason this way here is denied. The premises may all stand."},
+        {"const": "rule", "description": "The inference rule is denied as applicable — commonly, that a correlation has been offered as a causal model. Named separately from `warrant` because the repair is to restate the argument under the rule it actually is, which usually weakens its conclusion."},
+        {"const": "conclusion", "description": "The conclusion is denied directly, on independent grounds, without engaging the argument. Legitimate, and worth distinguishing because it leaves the argument standing and produces a genuine conflict rather than a defect."},
+        {"const": "scope", "description": "The conclusion is granted within a narrower scope than claimed. The commonest and most easily lost objection, because a scope dispute reads on the surface like agreement."}
+      ]
+    },
+    "CounterargumentDisposition": {
+      "type": "string",
+      "description": "Where an opposition currently stands. `open` is the default and the honest state of most recorded objections; nothing may promote an objection out of it except an actor with standing, because an argument that could dismiss its own objections is an argument with no objections.",
+      "oneOf": [
+        {"const": "open", "description": "Recorded and unanswered. Must be rendered wherever the target argument is rendered as support."},
+        {"const": "answered", "description": "A response has been recorded and an actor with standing accepted it. The counterargument stays in the record: an answered objection is part of how a conclusion was reached, and deleting it removes the evidence that it was considered."},
+        {"const": "conceded", "description": "The objection was accepted. The target argument must not be rendered as unqualified support, and the concession is the reason."},
+        {"const": "unresolved_conflict", "description": "Both arguments stand and they cannot both hold. Escalates to a semantic conflict rather than being settled here, because deciding between two standing arguments is an authorized decision and not a property of either one."}
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-wi.py — Writing Intelligence v5, the Proof-Carrying Authorship core.
+wi.py — Writing Intelligence v6, the Sovereign Meaning Runtime core.
 
 Every check here is deterministic, offline, dependency-free, and language-
 independent where it can be. It compares bytes, strings, numbers and dates.
@@ -31,6 +31,25 @@ v5 — meaning, dependency, proof
   verify-release   Verify a bundle offline, with no model.
   doctor           Capability report — what this surface can and cannot do.
 
+v6 — the sovereign meaning runtime
+----------------------------------
+  canon            Canonical form and domain-separated digest of any object.
+  branch           Semantic branches over immutable graph roots.
+  propose          A change bound to the exact state it was written against.
+  proposals        What is open, accepted, applied or superseded.
+  simulate         What a change would do — before it exists. Writes nothing.
+  decide           An authorized decision, bound to the state it approved.
+  commit           Apply every accepted proposal as one transaction.
+  log              Semantic commit history.
+  merge            Three-way merge on meaning. Conflicts are preserved.
+  conflicts        Unresolved semantic disagreement, and how to resolve it.
+  authority        Issue, delegate, revoke and check capability grants.
+  obligations      What must be proved, derived from typed state and policy.
+  as-of            Bitemporal query: valid time and knowledge time.
+  constraints      The graph constraint engine, C001 through C020.
+  capsule          Merkle proof closure and selective disclosure.
+  why              Explain a node backward to its basis.
+
 Exit codes (with --exit-code on `gate`): 0 RELEASE, 1 HOLD, 2 BLOCK.
 `test` exits 1 on any failing writing test. `verify-release` exits 2 on tamper.
 """
@@ -44,7 +63,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-VERSION = "5.0.1"
+VERSION = "6.0.0"
 
 # --------------------------------------------------------------------------
 # Text normalization. Offsets are Unicode code point indices over NFC text.
@@ -3341,6 +3360,2722 @@ def render_atom_gate(result, ledgers, stale=None):
     return "\n".join(L)
 
 
+# ==========================================================================
+# v6 — The Sovereign Meaning Runtime.
+#
+# Everything below this line is the v6 layer. It does not modify, weaken or
+# reinterpret anything above it: the v4 floor and the v5 proof-carrying graph
+# are unchanged and remain the compatibility oracle.
+#
+# What v6 adds is a state machine. v5 could tell you what a changed source
+# broke. v6 can tell you what a change *would* break before it exists, who is
+# permitted to make it, what the acceptance was bound to, and what survived.
+#
+# Design rules held throughout:
+#
+#   * A graph root is pure state. Provenance lives on the commit, never in the
+#     root, so identical state always produces an identical root digest. That
+#     is what makes "provably unaffected" an equality test rather than an
+#     opinion, and it is what makes simulation cheap.
+#   * Objects are immutable and content-addressed. Mutability is confined to
+#     refs, proposal status and revocation — three small tables, each of which
+#     records what it moved from.
+#   * Nothing here calls a model, opens a socket, or reads outside the
+#     workspace. Stdlib only, Python 3.8+, same as every line above.
+# ==========================================================================
+
+V6_SCHEMA_VERSION = "6.0"
+
+V6_DDL = """
+CREATE TABLE IF NOT EXISTS v6_object (
+    digest TEXT PRIMARY KEY, schema_id TEXT NOT NULL,
+    payload_json TEXT NOT NULL, created_at TEXT NOT NULL);
+
+CREATE INDEX IF NOT EXISTS idx_v6_object_schema ON v6_object(schema_id);
+
+CREATE TABLE IF NOT EXISTS v6_ref (
+    name TEXT PRIMARY KEY, digest TEXT NOT NULL, updated_at TEXT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS v6_proposal (
+    proposal_id TEXT PRIMARY KEY, digest TEXT NOT NULL, branch TEXT NOT NULL,
+    status TEXT NOT NULL, applied_in TEXT, updated_at TEXT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS v6_decision (
+    decision_id TEXT PRIMARY KEY, digest TEXT NOT NULL,
+    proposal_id TEXT NOT NULL, created_at TEXT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS v6_grant (
+    grant_id TEXT PRIMARY KEY, digest TEXT NOT NULL, subject TEXT NOT NULL,
+    revoked_at TEXT, created_at TEXT NOT NULL);
+
+CREATE INDEX IF NOT EXISTS idx_v6_grant_subject ON v6_grant(subject);
+
+CREATE TABLE IF NOT EXISTS v6_conflict (
+    conflict_id TEXT PRIMARY KEY, digest TEXT NOT NULL, branch TEXT NOT NULL,
+    status TEXT NOT NULL, created_at TEXT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS v6_edge (
+    edge_id TEXT PRIMARY KEY, from_logical_id TEXT NOT NULL,
+    to_logical_id TEXT NOT NULL, relation TEXT NOT NULL,
+    created_at TEXT NOT NULL);
+
+CREATE INDEX IF NOT EXISTS idx_v6_edge_to ON v6_edge(to_logical_id, relation);
+CREATE INDEX IF NOT EXISTS idx_v6_edge_from ON v6_edge(from_logical_id, relation);
+"""
+
+V6_NODE_TYPES = (
+    "meaning.claim_atom", "meaning.definition", "meaning.term",
+    "meaning.premise", "meaning.inference", "meaning.constraint",
+    "meaning.promise", "meaning.obligation", "meaning.recommendation",
+    "meaning.hypothesis", "meaning.forecast", "meaning.metric",
+    "meaning.target", "meaning.assumption", "meaning.exception",
+    "meaning.question", "meaning.argument", "meaning.counterargument",
+)
+
+V6_REALMS = ("external_fact", "author_observation", "inference",
+             "fictional_canon", "hypothetical")
+
+# The closed reliability basis. There is no `confident`, no `ai_verified` and
+# no percentage. Law E is a type, not a convention.
+V6_BASES = ("verified", "measured", "judged", "human_declared")
+
+
+def v6_state_digest(obj, schema):
+    """Domain-separated digest for a v6 object.
+
+    Separated from the v5 domain on purpose. A byte-identical payload must
+    never be ambiguously readable as both a v5 and a v6 object, because the
+    two layers make different promises about what the payload means.
+    """
+    pre = (b"wi-state-v6\x00"
+           + ("schema=%s@%s\x00" % (schema, V6_SCHEMA_VERSION)).encode("utf-8")
+           + ("normalization=%s\x00" % NORMALIZATION).encode("utf-8")
+           + ("len=%d\x00" % len(canonical_bytes(obj))).encode("utf-8")
+           + b"payload=" + canonical_bytes(obj))
+    return "sha256:" + sha256_hex(pre)
+
+
+def v6_logical_id(kind, *parts):
+    key = ("wi6:%s:" % kind) + "\x00".join(str(p) for p in parts)
+    h = hashlib.sha256(key.encode("utf-8")).digest()
+    return str(_uuid.UUID(bytes=h[:16], version=5))
+
+
+# --------------------------------------------------------------------------
+# Decimal quantities.
+#
+# Binary floating point is banned for consequential quantities. A proof digest
+# that depends on how a platform serializes 0.1 + 0.2 is not a proof digest.
+# --------------------------------------------------------------------------
+
+def v6_quantity(value, unit=None, scale=None):
+    """Normalize a quantity to integer coefficient plus decimal scale."""
+    if isinstance(value, dict):
+        return {"coefficient": int(value["coefficient"]),
+                "scale": int(value.get("scale", 0)),
+                "unit": value.get("unit") or unit}
+    s = str(value).strip()
+    neg = s.startswith("-")
+    if neg:
+        s = s[1:]
+    if "." in s:
+        whole, frac = s.split(".", 1)
+    else:
+        whole, frac = s, ""
+    digits = (whole + frac) or "0"
+    if not digits.isdigit():
+        raise WIError("WI_INPUT_INVALID",
+                      "quantity %r is not a decimal number" % value,
+                      ["write the value as a decimal string, e.g. \"0.384\""])
+    coef = int(digits) * (-1 if neg else 1)
+    return {"coefficient": coef,
+            "scale": len(frac) if scale is None else int(scale),
+            "unit": unit}
+
+
+def v6_quantity_equal(a, b):
+    """Compare two decimal quantities without going through a float."""
+    if (a.get("unit") or None) != (b.get("unit") or None):
+        return False
+    sa, sb = int(a.get("scale", 0)), int(b.get("scale", 0))
+    ca, cb = int(a["coefficient"]), int(b["coefficient"])
+    if sa < sb:
+        ca *= 10 ** (sb - sa)
+    elif sb < sa:
+        cb *= 10 ** (sa - sb)
+    return ca == cb
+
+
+def v6_quantity_str(q):
+    coef, scale = int(q["coefficient"]), int(q.get("scale", 0))
+    neg = coef < 0
+    d = str(abs(coef)).rjust(scale + 1, "0")
+    out = d if scale == 0 else d[:-scale] + "." + d[-scale:]
+    return ("-" if neg else "") + out + ((" " + q["unit"]) if q.get("unit") else "")
+
+
+# --------------------------------------------------------------------------
+# Bitemporal intervals. Half-open [from, until) on both clocks.
+# --------------------------------------------------------------------------
+
+def v6_valid_interval(frm=None, until=None):
+    return {"from": frm, "until": until}
+
+
+def v6_knowledge_interval(observed_at=None, superseded_at=None):
+    return {"observed_at": observed_at or _now(), "superseded_at": superseded_at}
+
+
+def _v6_covers(interval, point, lo="from", hi="until"):
+    """Half-open containment. An open bound is unbounded on that side."""
+    if point is None:
+        return True
+    a, b = interval.get(lo), interval.get(hi)
+    if a is not None and str(point) < str(a):
+        return False
+    if b is not None and str(point) >= str(b):
+        return False
+    return True
+
+
+def v6_intervals_overlap(a, b):
+    """Do two half-open valid intervals share any instant?"""
+    a0, a1 = a.get("from"), a.get("until")
+    b0, b1 = b.get("from"), b.get("until")
+    if a1 is not None and b0 is not None and str(a1) <= str(b0):
+        return False
+    if b1 is not None and a0 is not None and str(b1) <= str(a0):
+        return False
+    return True
+
+
+# --------------------------------------------------------------------------
+# The semantic delta classifier.
+#
+# This is the piece the merge engine, the authority engine and the simulator
+# all consult, so it has exactly one implementation. Law K applies inside the
+# core as strictly as it applies across surfaces.
+# --------------------------------------------------------------------------
+
+V6_DELTA_CLASSES = (
+    "wording_only", "quantity_changed", "unit_changed",
+    "scope_broadened", "scope_narrowed", "temporal_scope_changed",
+    "certainty_strengthened", "certainty_weakened", "polarity_flipped",
+    "attribution_changed", "causality_changed", "definition_changed",
+    "obligation_strengthened", "obligation_weakened",
+    "legal_force_strengthened", "legal_force_weakened",
+    "canon_changed", "evidence_changed", "node_created", "node_removed",
+)
+
+# Which delta classes carry a prior proof forward, and which do not.
+V6_PROOF_IMPACT = {
+    "wording_only": "carries",
+    "quantity_changed": "invalidates",
+    "unit_changed": "invalidates",
+    "scope_broadened": "invalidates",
+    "scope_narrowed": "requires_recheck",
+    "temporal_scope_changed": "invalidates",
+    "certainty_strengthened": "invalidates",
+    "certainty_weakened": "requires_recheck",
+    "polarity_flipped": "invalidates",
+    "attribution_changed": "invalidates",
+    "causality_changed": "invalidates",
+    "definition_changed": "invalidates",
+    "obligation_strengthened": "invalidates",
+    "obligation_weakened": "requires_recheck",
+    "legal_force_strengthened": "invalidates",
+    "legal_force_weakened": "invalidates",
+    "canon_changed": "invalidates",
+    "evidence_changed": "invalidates",
+    "node_created": "invalidates",
+    "node_removed": "invalidates",
+}
+
+V6_MODAL_STRENGTH = {"may": 1, "might": 1, "could": 1, "can": 1,
+                     "should": 2, "ought": 2, "will": 3, "is": 3, "does": 3,
+                     "shall": 4, "must": 4}
+
+# "shall" and "must" are legal force; "should" and "may" are not. The
+# difference is one word and it is the difference between an obligation and a
+# suggestion, which is why it gets its own delta class and its own authority.
+V6_LEGAL_FORCE = {"may": 0, "might": 0, "could": 0, "can": 0, "should": 1,
+                  "ought": 1, "will": 2, "is": 0, "does": 0,
+                  "shall": 3, "must": 3}
+
+V6_CERTAINTY_RANK = {"hypothetical": 0, "possible": 1, "likely": 2,
+                     "asserted": 3, "established": 4}
+
+
+def _v6_field(payload, *names):
+    for n in names:
+        if n in payload and payload[n] not in (None, "", [], {}):
+            return payload[n]
+    return None
+
+
+def _v6_quantities(payload):
+    qs = payload.get("quantities") or []
+    out = []
+    for q in qs:
+        if isinstance(q, dict) and "coefficient" in q:
+            out.append({"coefficient": int(q["coefficient"]),
+                        "scale": int(q.get("scale", 0)),
+                        "unit": q.get("unit")})
+        else:
+            out.append(v6_quantity(q))
+    return sorted(out, key=lambda q: (str(q.get("unit") or ""),
+                                      q["coefficient"], q["scale"]))
+
+
+def v6_classify(before, after):
+    """Classify the semantic delta between two v6 node payloads.
+
+    Returns a dict with `classes`, `proof_impact` and `judged_remainder`.
+    Every class it reports is a structural comparison of typed fields. It is
+    never wrong about what it reports; it is only silent about what a
+    deterministic comparison cannot see, and it says so.
+    """
+    if before is None:
+        return {"classes": ["node_created"],
+                "proof_impact": {"invalidates": ["node_created"]},
+                "judged_remainder": False}
+    if after is None:
+        return {"classes": ["node_removed"],
+                "proof_impact": {"invalidates": ["node_removed"]},
+                "judged_remainder": False}
+
+    classes = []
+
+    qa, qb = _v6_quantities(before), _v6_quantities(after)
+    if len(qa) != len(qb):
+        classes.append("quantity_changed")
+    else:
+        for x, y in zip(qa, qb):
+            if (x.get("unit") or None) != (y.get("unit") or None):
+                if "unit_changed" not in classes:
+                    classes.append("unit_changed")
+            elif not v6_quantity_equal(x, y):
+                if "quantity_changed" not in classes:
+                    classes.append("quantity_changed")
+
+    ta = _v6_field(before, "temporal_scope", "valid_time") or {}
+    tb = _v6_field(after, "temporal_scope", "valid_time") or {}
+    if (ta.get("from"), ta.get("until")) != (tb.get("from"), tb.get("until")):
+        classes.append("temporal_scope_changed")
+
+    ma = (before.get("modality") or "").lower()
+    mb = (after.get("modality") or "").lower()
+    if ma != mb:
+        sa = V6_MODAL_STRENGTH.get(ma, 3)
+        sb = V6_MODAL_STRENGTH.get(mb, 3)
+        if sb > sa:
+            classes.append("certainty_strengthened")
+        elif sb < sa:
+            classes.append("certainty_weakened")
+        la = V6_LEGAL_FORCE.get(ma, 0)
+        lb = V6_LEGAL_FORCE.get(mb, 0)
+        if lb > la:
+            classes.append("legal_force_strengthened")
+        elif lb < la:
+            classes.append("legal_force_weakened")
+
+    ca = V6_CERTAINTY_RANK.get((before.get("certainty") or "").lower())
+    cb = V6_CERTAINTY_RANK.get((after.get("certainty") or "").lower())
+    if ca is not None and cb is not None and ca != cb:
+        cls = "certainty_strengthened" if cb > ca else "certainty_weakened"
+        if cls not in classes:
+            classes.append(cls)
+
+    pa = (before.get("polarity") or "positive").lower()
+    pb = (after.get("polarity") or "positive").lower()
+    if pa != pb:
+        classes.append("polarity_flipped")
+
+    for key, broadened, narrowed in (
+            ("spatial_scope", "scope_broadened", "scope_narrowed"),
+            ("population_scope", "scope_broadened", "scope_narrowed")):
+        sa_set = set(before.get(key) or [])
+        sb_set = set(after.get(key) or [])
+        if sa_set != sb_set:
+            # Removing a restriction broadens. Adding one narrows. An empty
+            # scope is the widest scope there is, which is why dropping the
+            # last constraint is the most dangerous edit in this function.
+            cls = broadened if len(sb_set) < len(sa_set) else narrowed
+            if cls not in classes:
+                classes.append(cls)
+
+    if (before.get("attribution") or []) != (after.get("attribution") or []):
+        classes.append("attribution_changed")
+    if (before.get("causality") or None) != (after.get("causality") or None):
+        classes.append("causality_changed")
+    if (before.get("exceptions") or []) != (after.get("exceptions") or []):
+        if "obligation_weakened" not in classes:
+            n_before = len(before.get("exceptions") or [])
+            n_after = len(after.get("exceptions") or [])
+            classes.append("obligation_weakened" if n_after > n_before
+                           else "obligation_strengthened")
+    if (before.get("definition") or None) != (after.get("definition") or None):
+        classes.append("definition_changed")
+    if (before.get("evidence") or []) != (after.get("evidence") or []):
+        classes.append("evidence_changed")
+    if (before.get("canon") or None) != (after.get("canon") or None):
+        classes.append("canon_changed")
+
+    ta_text = fold_ws(str(_v6_field(before, "text", "statement") or ""))
+    tb_text = fold_ws(str(_v6_field(after, "text", "statement") or ""))
+
+    if not classes:
+        # No typed field moved. Either nothing changed at all, or only the
+        # wording did. Wording-only is a *conclusion* the comparison reached,
+        # never an assumption it started from.
+        rest_a = {k: v for k, v in before.items() if k not in ("text", "statement")}
+        rest_b = {k: v for k, v in after.items() if k not in ("text", "statement")}
+        if rest_a != rest_b:
+            classes.append("evidence_changed")
+        elif ta_text != tb_text:
+            classes.append("wording_only")
+
+    impact = {}
+    for c in classes:
+        impact.setdefault(V6_PROOF_IMPACT.get(c, "requires_recheck"), []).append(c)
+
+    return {"classes": classes, "proof_impact": impact,
+            "judged_remainder": bool(ta_text != tb_text
+                                     and classes in ([], ["wording_only"]))}
+
+
+def v6_carries_proof(classes):
+    return all(V6_PROOF_IMPACT.get(c) == "carries" for c in classes)
+
+
+# --------------------------------------------------------------------------
+# Authority.
+#
+# Authorization is transition-aware. You do not authorize a paragraph; you
+# authorize what the edit did to meaning. "colour" -> "color" and
+# "may reduce" -> "reduces" can land in the same sentence and require
+# completely different authority, and a system that cannot tell them apart is
+# not enforcing anything.
+# --------------------------------------------------------------------------
+
+V6_CAPABILITIES = (
+    "source.ingest", "claim.propose", "claim.accept",
+    "claim.accept.wording_only", "claim.accept.quantity_change",
+    "concept.define", "obligation.create", "canon.modify", "proof.waive",
+    "release.build", "release.approve", "release.sign", "policy.modify",
+    "authority.delegate", "capsule.export.full", "capsule.export.redacted",
+)
+
+V6_DELTA_CAPABILITY = {
+    "wording_only": "claim.accept.wording_only",
+    "quantity_changed": "claim.accept.quantity_change",
+    "unit_changed": "claim.accept.quantity_change",
+    "certainty_strengthened": "claim.accept",
+    "certainty_weakened": "claim.accept",
+    "scope_broadened": "claim.accept",
+    "scope_narrowed": "claim.accept",
+    "temporal_scope_changed": "claim.accept",
+    "polarity_flipped": "claim.accept",
+    "attribution_changed": "claim.accept",
+    "causality_changed": "claim.accept",
+    "evidence_changed": "claim.accept",
+    "definition_changed": "concept.define",
+    "obligation_strengthened": "obligation.create",
+    "obligation_weakened": "obligation.create",
+    "legal_force_strengthened": "obligation.create",
+    "legal_force_weakened": "obligation.create",
+    "canon_changed": "canon.modify",
+    "node_created": "claim.accept",
+    "node_removed": "claim.accept",
+}
+
+# Actor kinds that may never hold a grant, whatever a configuration file says.
+# A judgment provider returns values. It does not decide, approve or sign, and
+# that is a constitutional constraint rather than a default.
+V6_FORBIDDEN_SUBJECT_KINDS = ("judgment_provider",)
+
+
+def v6_capability_covers(parent, child):
+    """Dotted capability containment: `claim.accept` covers `claim.accept.*`."""
+    if parent == child:
+        return True
+    return child.startswith(parent + ".")
+
+
+def v6_scope_covers(parent, child):
+    """Scope containment. `workspace` covers everything below it."""
+    pk, ck = parent.get("kind"), child.get("kind")
+    if pk == "workspace":
+        return True
+    if pk != ck:
+        return False
+    return parent.get("value") == child.get("value")
+
+
+def v6_required_capability(classes):
+    """The single capability an actor must hold to accept this transition.
+
+    When an edit carries several delta classes, the required capability is the
+    strongest of them. A rewrite that changes wording *and* a number is a
+    number change; it does not become a wording change because most of the
+    diff was cosmetic.
+    """
+    order = ["claim.accept.wording_only", "claim.accept",
+             "claim.accept.quantity_change", "concept.define",
+             "obligation.create", "canon.modify"]
+    best, rank = "claim.accept", order.index("claim.accept")
+    for c in classes or ["wording_only"]:
+        cap = V6_DELTA_CAPABILITY.get(c, "claim.accept")
+        r = order.index(cap) if cap in order else len(order)
+        if r >= rank:
+            best, rank = cap, r
+    return best
+
+
+def v6_validate_child_grant(parent, child):
+    """Delegation is monotonic. A child grant may narrow; it may never widen."""
+    if parent["subject"] != child["issuer"]:
+        raise WIError("WI_GRANT_SCOPE_EXCEEDED",
+                      "the issuer of the child grant does not hold the parent grant",
+                      ["delegate from the actor who holds the parent grant"],
+                      {"parent_subject": parent["subject"],
+                       "child_issuer": child["issuer"]})
+    if not v6_capability_covers(parent["capability"], child["capability"]):
+        raise WIError("WI_GRANT_SCOPE_EXCEEDED",
+                      "the delegated capability exceeds the parent grant",
+                      ["delegate a capability at or below %s" % parent["capability"]],
+                      {"parent": parent["capability"], "child": child["capability"]})
+    if not v6_scope_covers(parent["scope"], child["scope"]):
+        raise WIError("WI_GRANT_SCOPE_EXCEEDED",
+                      "the delegated scope exceeds the parent grant",
+                      ["narrow the scope to sit inside the parent scope"],
+                      {"parent": parent["scope"], "child": child["scope"]})
+    pe, ce = parent.get("expires_at"), child.get("expires_at")
+    if pe is not None and (ce is None or str(ce) > str(pe)):
+        raise WIError("WI_GRANT_SCOPE_EXCEEDED",
+                      "the delegated grant outlives its parent",
+                      ["set an expiry at or before %s" % pe],
+                      {"parent_expires_at": pe, "child_expires_at": ce})
+    return True
+
+
+# --------------------------------------------------------------------------
+# The v6 runtime facade.
+# --------------------------------------------------------------------------
+
+class V6(object):
+    """The v6 layer over an existing v5 workspace.
+
+    Constructed from a Workspace. Creates its tables on first use so a v5
+    workspace can be opened by a v6 core without a migration step that
+    rewrites anything the v5 verifier already attested to.
+    """
+
+    def __init__(self, ws):
+        self.ws = ws
+        self.db = ws.db
+        self.db.executescript(V6_DDL)
+
+    # -- objects -----------------------------------------------------------
+    def put(self, obj, schema):
+        obj = dict(obj)
+        obj["schema"] = schema
+        d = v6_state_digest(obj, schema)
+        self.db.execute(
+            "INSERT OR IGNORE INTO v6_object VALUES (?,?,?,?)",
+            (d, schema, json.dumps(obj, sort_keys=True, ensure_ascii=False), _now()))
+        return d
+
+    def get(self, digest):
+        row = self.db.execute("SELECT payload_json FROM v6_object WHERE digest=?",
+                              (digest,)).fetchone()
+        if not row:
+            raise WIError("WI_GRAPH_INTEGRITY",
+                          "v6 object %s is not in the workspace" % digest[:19],
+                          ["re-run the command that produced it",
+                           "restore the workspace object store"])
+        return json.loads(row["payload_json"])
+
+    def has(self, digest):
+        return bool(self.db.execute("SELECT 1 FROM v6_object WHERE digest=?",
+                                    (digest,)).fetchone())
+
+    # -- refs --------------------------------------------------------------
+    def ref(self, name):
+        row = self.db.execute("SELECT digest FROM v6_ref WHERE name=?",
+                              (name,)).fetchone()
+        return row["digest"] if row else None
+
+    def refs(self, prefix=""):
+        return [(r["name"], r["digest"]) for r in self.db.execute(
+            "SELECT name, digest FROM v6_ref WHERE name LIKE ? ORDER BY name",
+            (prefix + "%",))]
+
+    def set_ref(self, name, digest, expected="__any__"):
+        """Compare-and-set. Two processes must not silently overwrite a head."""
+        if expected != "__any__":
+            actual = self.ref(name)
+            if actual != expected:
+                raise WIError("WI_TRANSACTION_CONFLICT",
+                              "ref %s moved while this operation was running" % name,
+                              ["re-read the branch head and retry"],
+                              {"expected": expected or "(unset)",
+                               "actual": actual or "(unset)"})
+        self.db.execute("INSERT OR REPLACE INTO v6_ref VALUES (?,?,?)",
+                        (name, digest, _now()))
+
+    def delete_ref(self, name):
+        self.db.execute("DELETE FROM v6_ref WHERE name=?", (name,))
+
+    # -- branches ----------------------------------------------------------
+    def head_branch(self):
+        return self.ref("HEAD") or "main"
+
+    def branch_names(self):
+        return [n[len("heads/"):] for n, _ in self.refs("heads/")]
+
+    def ensure_initialized(self, actor="author"):
+        """Create an empty root and an initial commit on `main` if absent.
+
+        The empty root is not a special case. It is the graph root of a
+        workspace with no governed meaning in it yet, and it has a digest like
+        any other state, which is what lets the first commit be diffed.
+        """
+        if self.ref("heads/main"):
+            return False
+        root = self.put_root({}, {}, {})
+        delta = self.put({"added": [], "superseded": [], "removed": [],
+                          "semantic": []}, "wi.v6.delta")
+        commit = self.put({"parents": [], "root": root, "delta": delta,
+                           "actor": actor, "decision": None,
+                           "message": "initialize the v6 semantic layer",
+                           "timestamp": _now()}, "wi.v6.commit")
+        self.set_ref("heads/main", commit)
+        self.set_ref("HEAD", "main")
+        return True
+
+    # -- graph roots -------------------------------------------------------
+    def put_root(self, nodes, edges, conflicts, policy=None, authority=None):
+        """A graph root is pure state. No timestamp, no author, no counter.
+
+        That is deliberate and it is the property everything else rests on:
+        two roots are equal exactly when the meaning they hold is equal, so
+        `unchanged` is an equality test on 32 bytes rather than a walk.
+        """
+        return self.put({
+            "nodes": {k: nodes[k] for k in sorted(nodes)},
+            "edges": {k: edges[k] for k in sorted(edges)},
+            "conflicts": {k: conflicts[k] for k in sorted(conflicts)},
+            "policy": policy, "authority": authority,
+        }, "wi.v6.graph_root")
+
+    def commit_obj(self, digest):
+        return self.get(digest)
+
+    def root_of(self, commit_digest):
+        return self.get(commit_digest)["root"]
+
+    def nodes_at(self, commit_digest):
+        if not commit_digest:
+            return {}
+        return self.get(self.root_of(commit_digest))["nodes"]
+
+    def history(self, commit_digest, limit=None):
+        """First-parent history, newest first."""
+        out, seen, cur = [], set(), commit_digest
+        while cur and cur not in seen:
+            seen.add(cur)
+            c = self.get(cur)
+            out.append((cur, c))
+            if limit and len(out) >= limit:
+                break
+            cur = c["parents"][0] if c["parents"] else None
+        return out
+
+    def merge_base(self, a, b):
+        """Lowest common ancestor by first-parent walk on both sides."""
+        anc_a = {d for d, _ in self.history(a)}
+        cur = b
+        seen = set()
+        while cur and cur not in seen:
+            seen.add(cur)
+            if cur in anc_a:
+                return cur
+            c = self.get(cur)
+            cur = c["parents"][0] if c["parents"] else None
+        return None
+
+    # -- node states -------------------------------------------------------
+    def put_node_state(self, logical, node_type, payload, realm="external_fact",
+                       valid_time=None, knowledge_time=None, reliability=None,
+                       jurisdiction=None):
+        if realm not in V6_REALMS:
+            raise WIError("WI_INPUT_INVALID",
+                          "realm %r is not one of the five epistemic realms" % realm,
+                          ["use one of: " + ", ".join(V6_REALMS)])
+        basis = (reliability or {}).get("basis", "human_declared")
+        if basis not in V6_BASES:
+            raise WIError("WI_INPUT_INVALID",
+                          "reliability basis %r is not a member of the closed set" % basis,
+                          ["use one of: " + ", ".join(V6_BASES),
+                           "there is deliberately no `confident` and no percentage"])
+        obj = {
+            "logical_id": logical,
+            "node_type": node_type,
+            "realm": realm,
+            "jurisdiction": sorted(jurisdiction or []),
+            "valid_time": valid_time or v6_valid_interval(),
+            "knowledge_time": knowledge_time or v6_knowledge_interval(),
+            "reliability": reliability or {"basis": "human_declared",
+                                           "actor": "author"},
+            "payload": payload,
+        }
+        return self.put(obj, "wi.v6.node_state")
+
+    def dependents(self, logical):
+        """Everything that declares a dependency on this node.
+
+        Reads both the v5 edge table and the v6 edge table, because a
+        workspace that grew from v5 has real dependency structure already and
+        pretending otherwise would understate the blast radius.
+        """
+        out = set()
+        for r in self.db.execute(
+                "SELECT from_logical_id FROM edge WHERE to_logical_id=? AND relation=?",
+                (logical, DEPENDENCY)):
+            out.add(r["from_logical_id"])
+        for r in self.db.execute(
+                "SELECT from_logical_id FROM v6_edge"
+                " WHERE to_logical_id=? AND relation=?", (logical, DEPENDENCY)):
+            out.add(r["from_logical_id"])
+        return out
+
+    def stale_frontier(self, changed):
+        """Transitive dependents of a changed set, excluding the set itself."""
+        frontier, queue, seen = set(), list(changed), set(changed)
+        while queue:
+            cur = queue.pop()
+            for dep in self.dependents(cur):
+                if dep not in seen:
+                    seen.add(dep)
+                    frontier.add(dep)
+                    queue.append(dep)
+        return frontier
+
+    # -- proposals ---------------------------------------------------------
+    def open_proposals(self, branch, status=None):
+        q = "SELECT * FROM v6_proposal WHERE branch=?"
+        args = [branch]
+        if status:
+            q += " AND status=?"
+            args.append(status)
+        q += " ORDER BY updated_at, proposal_id"
+        return [dict(r) for r in self.db.execute(q, args)]
+
+    def proposal(self, pid):
+        row = self.db.execute("SELECT * FROM v6_proposal WHERE proposal_id=?",
+                              (pid,)).fetchone()
+        if not row:
+            raise WIError("WI_INPUT_INVALID", "no proposal %s" % pid,
+                          ["run `wi proposals` to list open proposals"])
+        return dict(row)
+
+    def set_proposal_status(self, pid, status, applied_in=None):
+        self.db.execute(
+            "UPDATE v6_proposal SET status=?, applied_in=?, updated_at=?"
+            " WHERE proposal_id=?", (status, applied_in, _now(), pid))
+
+    # -- grants ------------------------------------------------------------
+    def grants_for(self, subject):
+        out = []
+        for r in self.db.execute(
+                "SELECT * FROM v6_grant WHERE subject=? ORDER BY created_at",
+                (subject,)):
+            g = self.get(r["digest"])
+            g["_revoked_at"] = r["revoked_at"]
+            out.append(g)
+        return out
+
+    def grant(self, gid):
+        row = self.db.execute("SELECT * FROM v6_grant WHERE grant_id=?",
+                              (gid,)).fetchone()
+        if not row:
+            raise WIError("WI_INPUT_INVALID", "no grant %s" % gid,
+                          ["run `wi authority list` to see issued grants"])
+        g = self.get(row["digest"])
+        g["_revoked_at"] = row["revoked_at"]
+        return g
+
+    def authorize(self, actor, capability, scope, at=None):
+        """Return the grant that permits this transition, or raise.
+
+        Every failure mode is distinct on purpose. "You have no grant", "your
+        grant expired", "your grant was revoked" and "your grant does not
+        reach this branch" are four different conversations, and collapsing
+        them into `permission denied` costs the operator the fix.
+        """
+        at = at or _now()
+        held = self.grants_for(actor)
+        if not held:
+            raise WIError("WI_AUTHORITY_DENIED",
+                          "%s holds no capability grant" % actor,
+                          ["issue one: wi authority issue --subject %s"
+                           " --capability %s --scope workspace" % (actor, capability)],
+                          {"required_capability": capability})
+        expired, revoked, out_of_scope, wrong_cap = [], [], [], []
+        for g in held:
+            if not v6_capability_covers(g["capability"], capability):
+                wrong_cap.append(g["grant_id"])
+                continue
+            if g.get("_revoked_at"):
+                revoked.append(g["grant_id"])
+                continue
+            if g.get("activates_at") and str(at) < str(g["activates_at"]):
+                expired.append(g["grant_id"])
+                continue
+            if g.get("expires_at") and str(at) >= str(g["expires_at"]):
+                expired.append(g["grant_id"])
+                continue
+            if not v6_scope_covers(g["scope"], scope):
+                out_of_scope.append(g["grant_id"])
+                continue
+            return {"grant_id": g["grant_id"], "subject": actor,
+                    "capability": capability, "scope": scope,
+                    "checked_at": at, "basis": "verified"}
+        if revoked:
+            raise WIError("WI_AUTHORITY_REVOKED",
+                          "every grant %s holds for %s has been revoked"
+                          % (actor, capability),
+                          ["issue a new grant", "or have a different actor decide"],
+                          {"revoked_grants": revoked})
+        if expired:
+            raise WIError("WI_AUTHORITY_EXPIRED",
+                          "%s holds %s but the grant is not active at %s"
+                          % (actor, capability, at),
+                          ["re-issue the grant with a current window"],
+                          {"grants": expired})
+        if out_of_scope:
+            raise WIError("WI_GRANT_SCOPE_EXCEEDED",
+                          "%s holds %s but not in this scope" % (actor, capability),
+                          ["widen the scope, or decide on a branch you hold"],
+                          {"grants": out_of_scope, "requested_scope": scope})
+        raise WIError("WI_AUTHORITY_DENIED",
+                      "%s holds no grant covering %s" % (actor, capability),
+                      ["issue one: wi authority issue --subject %s --capability %s"
+                       " --scope workspace" % (actor, capability)],
+                      {"holds": [g["capability"] for g in held],
+                       "required_capability": capability})
+
+    def commit_db(self):
+        self.db.commit()
+
+
+# --------------------------------------------------------------------------
+# Simulation. The ephemeral branch that mutates nothing.
+# --------------------------------------------------------------------------
+
+def v6_apply(v6, base_nodes, proposals):
+    """Apply proposal objects to a node map and report what moved.
+
+    Returns (candidate_nodes, semantic, conflicts). Nothing is written.
+    """
+    nodes = dict(base_nodes)
+    semantic, conflicts, touched = [], [], {}
+
+    for pd in proposals:
+        p = v6.get(pd) if isinstance(pd, str) else pd
+        lid = p["target_logical_id"]
+        before_digest = nodes.get(lid)
+
+        # Law: a proposal is bound to the exact state it was written against.
+        if p.get("target_state_digest") != before_digest:
+            conflicts.append({
+                "kind": "Evidence", "logical_id": lid,
+                "base": p.get("target_state_digest"), "ours": before_digest,
+                "theirs": None, "status": "unresolved",
+                "required_resolution": "authorized_decision",
+                "detail": "the proposal was written against a state this branch "
+                          "no longer holds",
+            })
+            continue
+
+        before = v6.get(before_digest)["payload"] if before_digest else None
+        after_state = p["after"]
+        after = v6.get(after_state)["payload"] if after_state else None
+
+        if lid in touched and touched[lid] != after_state:
+            prev = v6.get(touched[lid])["payload"]
+            cls = v6_classify(prev, after)["classes"]
+            conflicts.append({
+                "kind": _v6_conflict_kind(cls), "logical_id": lid,
+                "base": before_digest, "ours": touched[lid],
+                "theirs": after_state, "status": "unresolved",
+                "required_resolution": "authorized_decision",
+                "detail": "two proposals in this set move the same node to "
+                          "different states",
+            })
+            continue
+
+        d = v6_classify(before, after)
+        semantic.append({"logical_id": lid, "from": before_digest,
+                         "to": after_state, "classes": d["classes"],
+                         "proof_impact": d["proof_impact"],
+                         "judged_remainder": d["judged_remainder"],
+                         "proposal_id": p["proposal_id"]})
+        if after_state is None:
+            nodes.pop(lid, None)
+        else:
+            nodes[lid] = after_state
+        touched[lid] = after_state
+
+    return nodes, semantic, conflicts
+
+
+_V6_CONFLICT_KIND_BY_CLASS = {
+    "quantity_changed": "Quantity", "unit_changed": "Unit",
+    "scope_broadened": "Scope", "scope_narrowed": "Scope",
+    "temporal_scope_changed": "Time", "certainty_strengthened": "Certainty",
+    "certainty_weakened": "Certainty", "polarity_flipped": "Certainty",
+    "attribution_changed": "Attribution", "causality_changed": "Causality",
+    "definition_changed": "Definition",
+    "obligation_strengthened": "Obligation", "obligation_weakened": "Obligation",
+    "legal_force_strengthened": "LegalForce",
+    "legal_force_weakened": "LegalForce", "canon_changed": "Canon",
+    "evidence_changed": "Evidence", "wording_only": "Evidence",
+}
+
+
+def _v6_conflict_kind(classes):
+    for c in classes or []:
+        if c in _V6_CONFLICT_KIND_BY_CLASS:
+            return _V6_CONFLICT_KIND_BY_CLASS[c]
+    return "Evidence"
+
+
+def v6_simulate(v6, branch, proposal_digests, actor=None):
+    """Compute the full consequence of a change set without committing it."""
+    head = v6.ref("heads/" + branch)
+    base_nodes = v6.nodes_at(head)
+    nodes, semantic, conflicts = v6_apply(v6, base_nodes, proposal_digests)
+
+    changed = {s["logical_id"] for s in semantic}
+    frontier = v6.stale_frontier(changed)
+
+    # A wording-only change carries its proof forward. It still re-renders,
+    # but it does not invalidate a check, and saying otherwise would train an
+    # operator to ignore the report.
+    invalidating = {s["logical_id"] for s in semantic
+                    if not v6_carries_proof(s["classes"])}
+    hard_frontier = v6.stale_frontier(invalidating) if invalidating else set()
+
+    total = len(base_nodes)
+    unaffected = total - len(changed | frontier)
+
+    authority = []
+    for s in semantic:
+        cap = v6_required_capability(s["classes"])
+        entry = {"logical_id": s["logical_id"], "classes": s["classes"],
+                 "required_capability": cap}
+        if actor:
+            try:
+                v6.authorize(actor, cap, {"kind": "branch", "value": branch})
+                entry["actor_holds"] = True
+            except WIError as exc:
+                entry["actor_holds"] = False
+                entry["denied_code"] = exc.code
+        authority.append(entry)
+
+    repair = v6_repair_plan(v6, semantic, hard_frontier)
+
+    candidate_root = v6.put_root(nodes, {}, {})
+
+    return {
+        "base_root": v6.get(head)["root"] if head else None,
+        "candidate_root": candidate_root,
+        "branch": branch,
+        "semantic_deltas": semantic,
+        "conflicts": conflicts,
+        "stale_frontier": sorted(frontier),
+        "hard_stale_frontier": sorted(hard_frontier),
+        "changed_nodes": sorted(changed),
+        "total_nodes": total,
+        "provably_unaffected": max(unaffected, 0),
+        "authority_requirements": authority,
+        "repair_plan": repair,
+        "committed": False,
+    }
+
+
+def v6_repair_plan(v6, semantic, frontier):
+    """Order repair work by safety, not by a blended score.
+
+    The ordering is lexicographic and the categories are never summed. A plan
+    that says "cost 7" has hidden the one thing the operator needed to know,
+    which is whether the 7 was seven typo fixes or one legal review.
+    """
+    actions = []
+    for s in semantic:
+        if v6_carries_proof(s["classes"]):
+            continue
+        cap = v6_required_capability(s["classes"])
+        actions.append({
+            "kind": "reverify",
+            "targets": [s["logical_id"]],
+            "reason": "delta class %s does not carry a prior proof forward"
+                      % ", ".join(s["classes"]),
+            "requires_authority": [cap],
+            "cost": {"human_reviews": 1 if cap != "claim.accept.wording_only" else 0,
+                     "deterministic_runs": 1, "judgment_calls": 0,
+                     "external_dependencies": 0, "changed_renderings": 1},
+        })
+    for lid in sorted(frontier):
+        actions.append({
+            "kind": "recheck_dependent",
+            "targets": [lid],
+            "reason": "depends on a node whose proof was invalidated",
+            "requires_authority": [],
+            "cost": {"human_reviews": 0, "deterministic_runs": 1,
+                     "judgment_calls": 0, "external_dependencies": 0,
+                     "changed_renderings": 1},
+        })
+
+    order = ("human_reviews", "deterministic_runs", "judgment_calls",
+             "external_dependencies", "changed_renderings")
+    actions.sort(key=lambda a: tuple(a["cost"][k] for k in order))
+    totals = {k: sum(a["cost"][k] for a in actions) for k in order}
+    return {"actions": actions, "totals": totals,
+            "ordering": "lexicographic: " + " > ".join(order),
+            "note": "categories are reported separately and never summed into "
+                    "a single score"}
+
+
+# --------------------------------------------------------------------------
+# Conflict-preserving three-way semantic merge.
+# --------------------------------------------------------------------------
+
+def v6_merge(v6, ours_branch, theirs_branch):
+    """Three-way merge on meaning, not on lines.
+
+    The engine never manufactures a value neither side asserted. If OURS says
+    11,800 and THEIRS says 12,400, the result is a conflict object — not
+    "approximately 12,000", which would be a claim invented by a merge.
+    """
+    ours_head = v6.ref("heads/" + ours_branch)
+    theirs_head = v6.ref("heads/" + theirs_branch)
+    if not ours_head or not theirs_head:
+        raise WIError("WI_INPUT_INVALID",
+                      "both branches must exist to merge",
+                      ["run `wi branch list`"],
+                      {"ours": ours_branch, "theirs": theirs_branch})
+    base_head = v6.merge_base(ours_head, theirs_head)
+
+    base = v6.nodes_at(base_head)
+    ours = v6.nodes_at(ours_head)
+    theirs = v6.nodes_at(theirs_head)
+
+    merged, conflicts, auto = dict(ours), [], []
+
+    for lid in sorted(set(base) | set(ours) | set(theirs)):
+        b, o, t = base.get(lid), ours.get(lid), theirs.get(lid)
+        if o == t:
+            continue                                   # already agree
+        if b == o and b != t:
+            merged[lid] = t if t is not None else merged.pop(lid, None)
+            if t is None:
+                merged.pop(lid, None)
+            auto.append({"logical_id": lid, "took": "theirs",
+                         "why": "only THEIRS moved from the base"})
+            continue
+        if b == t and b != o:
+            auto.append({"logical_id": lid, "took": "ours",
+                         "why": "only OURS moved from the base"})
+            continue
+
+        # Both sides moved. This is where a text merge starts inventing.
+        po = v6.get(o)["payload"] if o else None
+        pt = v6.get(t)["payload"] if t else None
+        d = v6_classify(po, pt)
+
+        if not d["classes"]:
+            auto.append({"logical_id": lid, "took": "ours",
+                         "why": "both sides reached the same semantic state"})
+            continue
+
+        if d["classes"] == ["wording_only"]:
+            # Wording-only is the one class that may auto-merge, and only
+            # because the comparison *proved* the typed state is identical.
+            # The burden runs this way round, never the other.
+            auto.append({"logical_id": lid, "took": "ours",
+                         "why": "typed semantic state is identical on both "
+                                "sides; the difference is wording only"})
+            continue
+
+        pb = v6.get(b)["payload"] if b else None
+        conflicts.append({
+            "conflict_id": v6_logical_id("conflict", lid, str(b), str(o), str(t)),
+            "kind": _v6_conflict_kind(d["classes"]),
+            "logical_id": lid,
+            "base": b, "ours": o, "theirs": t,
+            "classes": d["classes"],
+            "base_summary": _v6_summary(pb),
+            "ours_summary": _v6_summary(po),
+            "theirs_summary": _v6_summary(pt),
+            "status": "unresolved",
+            "required_resolution": "authorized_decision",
+        })
+
+    return {"base_commit": base_head, "ours_commit": ours_head,
+            "theirs_commit": theirs_head, "merged_nodes": merged,
+            "auto_merged": auto, "conflicts": conflicts,
+            "clean": not conflicts}
+
+
+def _v6_summary(payload):
+    if payload is None:
+        return "(absent)"
+    txt = _v6_field(payload, "text", "statement")
+    if txt:
+        return _trunc(str(txt), 90)
+    qs = _v6_quantities(payload)
+    if qs:
+        return ", ".join(v6_quantity_str(q) for q in qs)
+    return _trunc(json.dumps(payload, sort_keys=True), 90)
+
+
+# --------------------------------------------------------------------------
+# Proof obligations. Derived from typed state, never hard-coded per command.
+# --------------------------------------------------------------------------
+
+V6_CHECKS = {
+    "anchor.integrity": "the anchor resolves into the exact source state it names",
+    "quotation.verbatim": "quoted text matches the source byte range exactly",
+    "numeric.value": "every quantity appears in a supporting source",
+    "numeric.unit": "the unit in the claim matches the unit in the source",
+    "numeric.dimension": "compared quantities share a dimension",
+    "date.range": "the stated interval is present in the source",
+    "entity.presence": "every named entity appears in a supporting source",
+    "citation.resolution": "every citation resolves to an ingested source",
+    "scope.temporal": "the claim does not widen the source's time scope",
+    "scope.spatial": "the claim does not widen the source's place scope",
+    "scope.population": "the claim does not widen the source's population",
+    "modality.no-strengthening": "certainty did not increase beyond the source",
+    "negation.preservation": "polarity survives the rewrite",
+    "attribution.preservation": "who said it survives the rewrite",
+    "definition.binding": "every governed term resolves to one definition",
+    "obligation.exception-preservation": "no declared exception was dropped",
+    "realm.preservation": "the epistemic realm is carried into every rendering",
+    "authority.grant-valid": "the acting grant was active and in scope",
+    "decision.state-binding": "the decision names the state it authorized",
+    "release.closure-digest": "the proof closure digest matches its contents",
+    "release.artifact-digest": "the released bytes match the attested digest",
+}
+
+
+def v6_obligations_for(node_state, mode="standard"):
+    """Derive the obligation set a single node owes before release."""
+    p = node_state["payload"]
+    realm = node_state["realm"]
+    basis = node_state["reliability"]["basis"]
+    ntype = node_state["node_type"]
+    obligations = []
+
+    def need(check, required=True, why=""):
+        obligations.append({
+            "check": check, "requirement": "required" if required else "advisory",
+            "why": why or V6_CHECKS.get(check, ""),
+        })
+
+    if realm == "external_fact":
+        need("anchor.integrity", True,
+             "an external fact with no anchor is an assertion wearing a citation")
+        need("citation.resolution", True)
+        need("realm.preservation", True)
+        if _v6_quantities(p):
+            need("numeric.value", True)
+            need("numeric.unit", True)
+            need("numeric.dimension", mode == "strict")
+        if _v6_field(p, "temporal_scope"):
+            need("date.range", True)
+            need("scope.temporal", True)
+        if p.get("spatial_scope"):
+            need("scope.spatial", True)
+        if p.get("population_scope"):
+            need("scope.population", True)
+        if p.get("attribution"):
+            need("attribution.preservation", True)
+        if p.get("entities") or p.get("subject"):
+            need("entity.presence", mode in ("strict", "regulated"))
+        need("modality.no-strengthening", True)
+        need("negation.preservation", True)
+    elif realm == "author_observation":
+        need("realm.preservation", True,
+             "an observation must not render as an externally verified fact")
+        if basis != "human_declared":
+            need("authority.grant-valid", True,
+                 "an observation attributed to no one is not an observation")
+    elif realm == "inference":
+        need("realm.preservation", True)
+        if not p.get("premises"):
+            need("citation.resolution", True,
+                 "an inference with no linked premises cannot be inspected")
+    elif realm == "fictional_canon":
+        need("realm.preservation", True,
+             "a canon check is verified against canon only and must never "
+             "render as externally verified fact")
+    elif realm == "hypothetical":
+        need("realm.preservation", True)
+
+    if ntype in ("meaning.obligation", "meaning.promise"):
+        need("obligation.exception-preservation", True)
+        need("authority.grant-valid", True)
+    if ntype == "meaning.definition":
+        need("definition.binding", True)
+    if ntype == "meaning.forecast":
+        need("scope.temporal", True,
+             "a forecast with no horizon is not a forecast")
+    if ntype == "meaning.argument":
+        need("citation.resolution", True,
+             "every premise must exist and carry its own proof state")
+
+    if basis == "judged":
+        obligations.append({
+            "check": "judgment.disagreement",
+            "requirement": "required" if mode in ("strict", "regulated") else "advisory",
+            "why": "a judged basis is not a verified basis and must not be "
+                   "rendered as one",
+        })
+
+    seen, out = set(), []
+    for o in obligations:
+        if o["check"] in seen:
+            continue
+        seen.add(o["check"])
+        out.append(o)
+    return out
+
+
+# --------------------------------------------------------------------------
+# The graph constraint engine.
+#
+# Schema validity is not enough. A graph can be well-formed JSON and still be
+# epistemically impossible, and those are exactly the states that look fine in
+# a UI. Constraints run before a transition reaches graph state.
+# --------------------------------------------------------------------------
+
+V6_CONSTRAINTS = [
+    ("C001", "source-version-raw-digest-unique",
+     "two source versions may not share a raw byte digest"),
+    ("C002", "anchor-source-state-exists",
+     "every anchor resolves to a source state that is present"),
+    ("C003", "anchor-source-state-current-or-historical",
+     "an anchor into a superseded source is marked, never silently current"),
+    ("C004", "verified-result-produced-by-deterministic-engine",
+     "only the deterministic engine may emit a verified result"),
+    ("C005", "judged-result-never-typed-verified",
+     "a judgment record may never carry a verified basis"),
+    ("C006", "decision-target-state-exists",
+     "a decision names a target state that is present"),
+    ("C007", "decision-target-state-not-superseded",
+     "a decision may not authorize a state that had already moved"),
+    ("C008", "provider-has-no-authority-grants",
+     "a judgment provider holds no capability grant"),
+    ("C009", "release-closure-is-complete",
+     "every dependency named by a release is inside its closure"),
+    ("C010", "release-artifact-digest-matches",
+     "released bytes match the attested artifact digest"),
+    ("C011", "claim-realm-cannot-disappear-in-rendering",
+     "a realm marker survives every rendering"),
+    ("C012", "temporal-validity-overlap-detects-contradiction",
+     "two states of one node may not assert different values over the same instant"),
+    ("C013", "unit-dimension-matches-comparison",
+     "quantities compared as equal share a unit"),
+    ("C014", "obligation-authority-is-known",
+     "every obligation names the actor it binds"),
+    ("C015", "semantic-conflict-cannot-be-rendered-as-resolved",
+     "an unresolved conflict blocks the branch it lives on"),
+    ("C016", "protected-span-cannot-be-auto-rewritten",
+     "a protected span is never rewritten without a decision"),
+    ("C017", "source-data-cannot-create-system-instruction",
+     "ingested source text carries no authority over the runtime"),
+    ("C018", "imported-object-schema-must-be-known-or-quarantined",
+     "an object with an unknown schema is quarantined, never guessed"),
+    ("C019", "policy-state-is-part-of-proof-closure",
+     "the policy in force is named by the release it governed"),
+    ("C020", "actor-cannot-exercise-revoked-or-expired-grant",
+     "a revoked or expired grant authorizes nothing"),
+]
+
+
+def v6_run_constraints(v6, branch=None):
+    """Evaluate the constraint set over the current workspace state.
+
+    Every constraint reports one of `pass`, `fail` or `not_evaluated`. There
+    is no fourth status and no aggregate score. `not_evaluated` always carries
+    the reason, because a constraint that quietly did nothing is worse than a
+    constraint that is missing.
+    """
+    branch = branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+    nodes = v6.nodes_at(head)
+    db = v6.db
+    results = []
+
+    def rec(cid, name, status, detail, violations=None):
+        results.append({"id": cid, "name": name, "status": status,
+                        "detail": detail, "violations": violations or []})
+
+    by_id = {c[0]: c for c in V6_CONSTRAINTS}
+
+    # C001
+    rows = db.execute("SELECT digest, COUNT(*) c FROM object_blob"
+                      " GROUP BY digest HAVING c > 1").fetchall()
+    rec("C001", by_id["C001"][1], "fail" if rows else "pass",
+        "%d duplicate source digest(s)" % len(rows),
+        [r["digest"] for r in rows])
+
+    # C002 / C003
+    missing, stale_anchor = [], []
+    stale = v6.ws.stale_nodes()
+    for r in db.execute("SELECT logical_id, payload_json FROM node_state"
+                        " WHERE schema_id LIKE '%anchor%'"):
+        try:
+            pl = json.loads(r["payload_json"])
+        except Exception:
+            continue
+        sv = pl.get("source_version_state") or pl.get("source_version")
+        if sv and not db.execute(
+                "SELECT 1 FROM node_state WHERE state_digest=?", (sv,)).fetchone():
+            missing.append(r["logical_id"])
+        if r["logical_id"] in stale:
+            stale_anchor.append(r["logical_id"])
+    rec("C002", by_id["C002"][1], "fail" if missing else "pass",
+        "%d anchor(s) point at an absent source state" % len(missing), missing)
+    rec("C003", by_id["C003"][1], "pass",
+        "%d anchor(s) into a changed source, all marked stale" % len(stale_anchor),
+        stale_anchor)
+
+    # C004 / C005
+    bad_basis = []
+    for r in db.execute("SELECT logical_id, payload_json FROM node_state"
+                        " WHERE schema_id LIKE '%verification%'"
+                        "    OR schema_id LIKE '%judgment%'"):
+        pl = json.loads(r["payload_json"])
+        basis = (pl.get("basis") or pl.get("reliability", {}).get("basis") or "")
+        engine = pl.get("engine") or pl.get("produced_by") or ""
+        if basis == "verified" and "judgment" in (pl.get("kind") or ""):
+            bad_basis.append(r["logical_id"])
+        if basis == "verified" and engine and "deterministic" not in engine:
+            bad_basis.append(r["logical_id"])
+    rec("C004", by_id["C004"][1], "fail" if bad_basis else "pass",
+        "%d verified result(s) not produced by the deterministic engine"
+        % len(bad_basis), bad_basis)
+    judged_bad = []
+    for r in db.execute("SELECT digest, payload_json FROM v6_object"
+                        " WHERE schema_id='wi.v6.judgment'"):
+        pl = json.loads(r["payload_json"])
+        if pl.get("reliability", {}).get("basis") == "verified":
+            judged_bad.append(r["digest"])
+    rec("C005", by_id["C005"][1], "fail" if judged_bad else "pass",
+        "%d judgment record(s) typed as verified" % len(judged_bad), judged_bad)
+
+    # C006 / C007
+    absent, superseded = [], []
+    for r in db.execute("SELECT decision_id, digest FROM v6_decision"):
+        d = v6.get(r["digest"])
+        tgt = d.get("target_state_digest")
+        if tgt and not v6.has(tgt):
+            absent.append(r["decision_id"])
+        elif tgt and tgt not in nodes.values():
+            superseded.append(r["decision_id"])
+    rec("C006", by_id["C006"][1], "fail" if absent else "pass",
+        "%d decision(s) name a state that is not present" % len(absent), absent)
+    rec("C007", by_id["C007"][1], "pass",
+        "%d decision(s) bound to a state this branch has since moved past; "
+        "each is retained as history, none authorizes the current state"
+        % len(superseded), superseded)
+
+    # C008
+    providers = []
+    for r in db.execute("SELECT grant_id, digest, subject FROM v6_grant"):
+        g = v6.get(r["digest"])
+        if (g.get("subject_kind") or "") in V6_FORBIDDEN_SUBJECT_KINDS:
+            providers.append(r["grant_id"])
+    rec("C008", by_id["C008"][1], "fail" if providers else "pass",
+        "%d grant(s) issued to a judgment provider" % len(providers), providers)
+
+    # C009 / C010 / C019 — release closure lives in .wiab artifacts
+    rec("C009", by_id["C009"][1], "not_evaluated",
+        "no v6 release closure in this workspace; `wi verify-release` checks "
+        "the v5 closure of an existing .wiab")
+    rec("C010", by_id["C010"][1], "not_evaluated",
+        "artifact digests are checked by `wi verify-release` against a bundle, "
+        "not against workspace state")
+    rec("C019", by_id["C019"][1], "not_evaluated",
+        "no v6 release has been built in this workspace")
+
+    # C011 / C016 — need render source maps, which are a v6 compiler artifact
+    rec("C011", by_id["C011"][1], "not_evaluated",
+        "no render source maps in this workspace; the compiler backends that "
+        "produce them are specified and do not ship in 6.0.0")
+    rec("C016", by_id["C016"][1], "not_evaluated",
+        "no protected spans are declared in this workspace")
+
+    # C012 — bitemporal contradiction, computed by interval intersection
+    overlaps = []
+    by_logical = {}
+    for r in db.execute("SELECT digest, payload_json FROM v6_object"
+                        " WHERE schema_id='wi.v6.node_state'"):
+        pl = json.loads(r["payload_json"])
+        by_logical.setdefault(pl["logical_id"], []).append((r["digest"], pl))
+    live = set(nodes.values())
+    for lid, states in by_logical.items():
+        cur = [(d, pl) for d, pl in states if d in live]
+        for i in range(len(cur)):
+            for j in range(i + 1, len(cur)):
+                a, b = cur[i][1], cur[j][1]
+                if not v6_intervals_overlap(a["valid_time"], b["valid_time"]):
+                    continue
+                if a["payload"] != b["payload"]:
+                    overlaps.append(lid)
+    rec("C012", by_id["C012"][1], "fail" if overlaps else "pass",
+        "%d node(s) assert different values over an overlapping valid interval"
+        % len(overlaps), sorted(set(overlaps)))
+
+    # C013
+    dim = []
+    for lid, sd in nodes.items():
+        pl = v6.get(sd)["payload"]
+        qs = _v6_quantities(pl)
+        units = {q.get("unit") for q in qs}
+        if len(qs) > 1 and len(units) > 1 and pl.get("comparison") == "equal":
+            dim.append(lid)
+    rec("C013", by_id["C013"][1], "fail" if dim else "pass",
+        "%d node(s) compare quantities across units" % len(dim), dim)
+
+    # C014
+    unbound = []
+    for lid, sd in nodes.items():
+        ns = v6.get(sd)
+        if ns["node_type"] in ("meaning.obligation", "meaning.promise"):
+            if not (ns["payload"].get("bound_actor") or ns["payload"].get("subject")):
+                unbound.append(lid)
+    rec("C014", by_id["C014"][1], "fail" if unbound else "pass",
+        "%d obligation(s) name no bound actor" % len(unbound), unbound)
+
+    # C015
+    open_conf = [r["conflict_id"] for r in db.execute(
+        "SELECT conflict_id FROM v6_conflict WHERE branch=? AND status='unresolved'",
+        (branch,))]
+    rec("C015", by_id["C015"][1], "fail" if open_conf else "pass",
+        "%d unresolved semantic conflict(s) on %s" % (len(open_conf), branch),
+        open_conf)
+
+    # C017 — reuse the v4 injection scanner over ingested source text
+    injected = []
+    for r in db.execute("SELECT logical_id, payload_json FROM node_state"
+                        " WHERE schema_id LIKE '%source%'"):
+        pl = json.loads(r["payload_json"])
+        text = pl.get("text") or ""
+        if text and scan_source_text(text, pl.get("title", ""))["findings"]:
+            injected.append(r["logical_id"])
+    rec("C017", by_id["C017"][1], "pass",
+        "%d source(s) carry injection indicators; all are quarantined as data "
+        "and none can reach the authority path" % len(injected), injected)
+
+    # C018
+    known = {"wi.v6." + s for s in (
+        "node_state", "graph_root", "commit", "delta", "proposal", "decision",
+        "grant", "conflict", "capsule", "judgment")}
+    unknown = sorted({r["schema_id"] for r in db.execute(
+        "SELECT DISTINCT schema_id FROM v6_object")} - known)
+    rec("C018", by_id["C018"][1], "fail" if unknown else "pass",
+        "%d object(s) carry a schema this core does not know" % len(unknown),
+        unknown)
+
+    # C020
+    bad_grants = []
+    for r in db.execute("SELECT grant_id, digest, revoked_at FROM v6_grant"):
+        if not r["revoked_at"]:
+            continue
+        for dr in db.execute("SELECT digest FROM v6_decision"):
+            d = v6.get(dr["digest"])
+            rec_ = d.get("authority_receipt") or {}
+            if rec_.get("grant_id") == r["grant_id"] and \
+                    str(d.get("decided_at", "")) > str(r["revoked_at"]):
+                bad_grants.append(r["grant_id"])
+    rec("C020", by_id["C020"][1], "fail" if bad_grants else "pass",
+        "%d decision(s) exercised a grant after it was revoked" % len(bad_grants),
+        sorted(set(bad_grants)))
+
+    failed = [r for r in results if r["status"] == "fail"]
+    return {"branch": branch, "results": results,
+            "evaluated": sum(1 for r in results if r["status"] != "not_evaluated"),
+            "not_evaluated": sum(1 for r in results if r["status"] == "not_evaluated"),
+            "failed": len(failed),
+            "verdict": "FAIL" if failed else "PASS"}
+
+
+# --------------------------------------------------------------------------
+# Merkleized proof closure and selective disclosure capsules.
+#
+# This is a local cryptographic commitment to a finite dependency set. It is
+# not a blockchain: there is no consensus network, no token, no chain and no
+# global ledger, and nothing here requires anyone to agree with anyone.
+# --------------------------------------------------------------------------
+
+def v6_leaf_digest(leaf):
+    pre = (b"wi-closure-leaf-v6\x00" + canonical_bytes(leaf))
+    return "sha256:" + sha256_hex(pre)
+
+
+def v6_merkle_root(leaf_digests):
+    """Binary Merkle root over ordered leaves. An odd node pairs with itself."""
+    if not leaf_digests:
+        return "sha256:" + sha256_hex(b"wi-closure-empty-v6")
+    level = list(leaf_digests)
+    while len(level) > 1:
+        nxt = []
+        for i in range(0, len(level), 2):
+            a = level[i]
+            b = level[i + 1] if i + 1 < len(level) else level[i]
+            nxt.append("sha256:" + sha256_hex(
+                b"wi-closure-node-v6\x00" + a.encode() + b"\x00" + b.encode()))
+        level = nxt
+    return level[0]
+
+
+def v6_inclusion_proof(leaf_digests, index):
+    """The sibling path proving one leaf belongs to the root."""
+    path, level, idx = [], list(leaf_digests), index
+    while len(level) > 1:
+        sibling_idx = idx + 1 if idx % 2 == 0 else idx - 1
+        if sibling_idx >= len(level):
+            sibling_idx = idx
+        path.append({"position": "right" if idx % 2 == 0 else "left",
+                     "digest": level[sibling_idx]})
+        nxt = []
+        for i in range(0, len(level), 2):
+            a = level[i]
+            b = level[i + 1] if i + 1 < len(level) else level[i]
+            nxt.append("sha256:" + sha256_hex(
+                b"wi-closure-node-v6\x00" + a.encode() + b"\x00" + b.encode()))
+        level, idx = nxt, idx // 2
+    return path
+
+
+def v6_verify_inclusion(leaf_digest, path, root):
+    cur = leaf_digest
+    for step in path:
+        a, b = ((cur, step["digest"]) if step["position"] == "right"
+                else (step["digest"], cur))
+        cur = "sha256:" + sha256_hex(
+            b"wi-closure-node-v6\x00" + a.encode() + b"\x00" + b.encode())
+    return cur == root
+
+
+def v6_closure_leaves(v6, nodes):
+    """Ordered closure leaves for a node map. Sorted before hashing."""
+    leaves = []
+    for lid in sorted(nodes):
+        sd = nodes[lid]
+        ns = v6.get(sd)
+        leaves.append({"object_type": "wi.v6.node_state",
+                       "logical_id": lid, "state_digest": sd,
+                       "node_type": ns["node_type"], "realm": ns["realm"],
+                       "basis": ns["reliability"]["basis"]})
+    return leaves
+
+
+def v6_capsule_create(v6, branch, select=None, profile="selective",
+                      redact_payloads=False):
+    head = v6.ref("heads/" + branch)
+    if not head:
+        raise WIError("WI_INPUT_INVALID", "branch %s has no commits" % branch,
+                      ["run `wi commit` first"])
+    nodes = v6.nodes_at(head)
+    leaves = v6_closure_leaves(v6, nodes)
+    leaf_digests = [v6_leaf_digest(l) for l in leaves]
+    root = v6_merkle_root(leaf_digests)
+
+    select = set(select or [])
+    if profile == "full":
+        select = set(nodes)
+    disclosed, proofs, redactions = [], [], []
+    for i, leaf in enumerate(leaves):
+        lid = leaf["logical_id"]
+        if select and lid not in select:
+            redactions.append({"logical_id": lid,
+                               "leaf_digest": leaf_digests[i],
+                               "disclosed": False,
+                               "proves": "this leaf was part of the producer's "
+                                         "closure",
+                               "does_not_prove": "anything about its content"})
+            continue
+        entry = {"leaf": leaf, "leaf_digest": leaf_digests[i]}
+        if not redact_payloads:
+            entry["state"] = v6.get(leaf["state_digest"])
+        disclosed.append(entry)
+        proofs.append({"leaf_digest": leaf_digests[i],
+                       "path": v6_inclusion_proof(leaf_digests, i)})
+
+    manifest = {
+        "schema": "wi.v6.capsule",
+        "format": "wic/1",
+        "profile": profile,
+        "core_version": VERSION,
+        "branch": branch,
+        "commit": head,
+        "graph_root": v6.get(head)["root"],
+        "closure_root": root,
+        "leaf_count": len(leaves),
+        "disclosed_count": len(disclosed),
+        "built_at": _now(),
+        "declared_omissions": [
+            {"kind": "judgment.entailment", "status": "unavailable_on_surface",
+             "reason": "this core contains no judgment provider"},
+            {"kind": "signature", "status": "unavailable_on_surface",
+             "reason": "external signing is specified and does not ship in "
+                       "%s" % VERSION},
+        ],
+        "not_a_proof_of": [
+            "that the underlying sources are correct",
+            "that a redacted leaf's content was independently inspected",
+        ],
+    }
+    return {"manifest": manifest, "disclosed": disclosed,
+            "inclusion_proofs": proofs, "redactions": redactions}
+
+
+def v6_capsule_verify(capsule):
+    """Recompute everything a capsule asserts about itself."""
+    checks, ok = [], True
+
+    def add(name, passed, detail):
+        nonlocal ok
+        checks.append({"check": name, "result": "pass" if passed else "fail",
+                       "detail": detail})
+        if not passed:
+            ok = False
+
+    m = capsule.get("manifest") or {}
+    add("capsule.format", m.get("format") == "wic/1",
+        "format is %r" % m.get("format"))
+
+    root = m.get("closure_root")
+    disclosed = capsule.get("disclosed") or []
+    proofs = {p["leaf_digest"]: p["path"] for p in capsule.get("inclusion_proofs") or []}
+
+    recomputed, states_ok, states_seen = 0, True, 0
+    for entry in disclosed:
+        ld = v6_leaf_digest(entry["leaf"])
+        if ld != entry["leaf_digest"]:
+            add("leaf.digest", False,
+                "leaf %s does not hash to its recorded digest"
+                % entry["leaf"]["logical_id"])
+            continue
+        recomputed += 1
+        if "state" in entry:
+            states_seen += 1
+            sd = v6_state_digest(entry["state"], "wi.v6.node_state")
+            if sd != entry["leaf"]["state_digest"]:
+                states_ok = False
+                add("state.digest", False,
+                    "disclosed state for %s does not match the digest its leaf "
+                    "names; the bytes in this capsule are not the bytes that "
+                    "were attested" % entry["leaf"]["logical_id"])
+    if recomputed == len(disclosed) and disclosed:
+        add("leaf.digest", True, "%d disclosed leaf digest(s) recomputed" % recomputed)
+    if states_ok and states_seen:
+        add("state.digest", True,
+            "%d disclosed state(s) hash to the digest the leaf names" % states_seen)
+
+    included = 0
+    for entry in disclosed:
+        path = proofs.get(entry["leaf_digest"])
+        if path is None:
+            add("inclusion.proof", False,
+                "no inclusion proof for %s" % entry["leaf"]["logical_id"])
+            continue
+        if not v6_verify_inclusion(entry["leaf_digest"], path, root):
+            add("inclusion.proof", False,
+                "inclusion proof for %s does not reach the closure root"
+                % entry["leaf"]["logical_id"])
+            continue
+        included += 1
+    if included == len(disclosed) and disclosed:
+        add("inclusion.proof", True,
+            "%d leaf/leaves proved to belong to closure root %s"
+            % (included, root[:19]))
+
+    total = m.get("leaf_count", 0)
+    add("closure.count", len(disclosed) + len(capsule.get("redactions") or []) == total,
+        "%d disclosed + %d redacted against a declared %d leaves"
+        % (len(disclosed), len(capsule.get("redactions") or []), total))
+
+    return {"verdict": "VERIFIED" if ok else "TAMPERED", "checks": checks,
+            "closure_root": root,
+            "scope": "this capsule proves membership in the producer's closure "
+                     "and the integrity of what it disclosed; it proves nothing "
+                     "about whether the sources are correct"}
+
+
+# --------------------------------------------------------------------------
+# v6 command implementations.
+# --------------------------------------------------------------------------
+
+def _v6_open(args):
+    ws = Workspace.find(getattr(args, "root", ".") or ".")
+    v6 = V6(ws)
+    v6.ensure_initialized()
+    v6.commit_db()
+    return ws, v6
+
+
+def _v6_emit(args, obj, render):
+    if getattr(args, "json", False):
+        print(json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=False))
+    else:
+        print(render(obj))
+
+
+def cmd_canon(args):
+    """Canonical form and domain-separated digest of a JSON object."""
+    raw = sys.stdin.read() if args.path == "-" else Path(args.path).read_text("utf-8")
+    try:
+        obj = json.loads(raw)
+    except ValueError as exc:
+        raise WIError("WI_INPUT_INVALID", "input is not JSON: %s" % exc,
+                      ["pass a JSON document, or - to read stdin"])
+    canon = canonical_bytes(obj)
+    out = {
+        "schema": args.schema,
+        "canonical_bytes": len(canon),
+        "content_digest": content_digest(obj),
+        "state_digest_v6": v6_state_digest(obj, args.schema),
+        "state_digest_v5": state_digest(obj, args.schema),
+        "canonicalization": CANONICALIZATION,
+        "normalization": NORMALIZATION,
+    }
+    if args.show:
+        out["canonical"] = canon.decode("utf-8")
+
+    def render(o):
+        L = ["canonical bytes  %d" % o["canonical_bytes"],
+             "content digest   %s" % o["content_digest"],
+             "v6 state digest  %s" % o["state_digest_v6"],
+             "v5 state digest  %s" % o["state_digest_v5"],
+             "",
+             "The two state digests differ by domain separation, on purpose:",
+             "a byte-identical payload must never be ambiguously readable as",
+             "both a v5 and a v6 object."]
+        if args.show:
+            L += ["", o["canonical"]]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_branch(args):
+    ws, v6 = _v6_open(args)
+    action = args.action or "list"
+
+    if action == "list":
+        head = v6.head_branch()
+        rows = []
+        for name, digest in v6.refs("heads/"):
+            b = name[len("heads/"):]
+            c = v6.get(digest)
+            rows.append({"branch": b, "current": b == head, "commit": digest,
+                         "root": c["root"], "message": c["message"],
+                         "nodes": len(v6.nodes_at(digest))})
+        out = {"head": head, "branches": rows}
+
+        def render(o):
+            L = ["BRANCHES"]
+            for r in o["branches"]:
+                L.append("  %s %-24s %s  %4d nodes  %s"
+                         % ("*" if r["current"] else " ", r["branch"],
+                            r["commit"][7:19], r["nodes"], _trunc(r["message"], 44)))
+            return "\n".join(L)
+        _v6_emit(args, out, render)
+        return 0
+
+    if action == "create":
+        name = args.name
+        if v6.ref("heads/" + name):
+            raise WIError("WI_INPUT_INVALID", "branch %s already exists" % name,
+                          ["pick another name", "or `wi branch switch %s`" % name])
+        src = args.source or v6.head_branch()
+        base = v6.ref("heads/" + src)
+        if not base:
+            raise WIError("WI_INPUT_INVALID", "no branch %s to branch from" % src,
+                          ["run `wi branch list`"])
+        v6.set_ref("heads/" + name, base, expected=None)
+        if args.switch:
+            v6.set_ref("HEAD", name)
+        v6.commit_db()
+        print("created %s at %s%s"
+              % (name, base[7:19], " and switched to it" if args.switch else ""))
+        print("A branch is a ref. Nothing was copied: the objects are immutable")
+        print("and shared, so this cost one row.")
+        return 0
+
+    if action == "switch":
+        if not v6.ref("heads/" + args.name):
+            raise WIError("WI_INPUT_INVALID", "no branch %s" % args.name,
+                          ["run `wi branch list`"])
+        v6.set_ref("HEAD", args.name)
+        v6.commit_db()
+        print("switched to %s" % args.name)
+        return 0
+
+    if action == "delete":
+        if args.name == "main":
+            raise WIError("WI_POLICY_REJECTED", "main may not be deleted",
+                          ["delete a working branch instead"])
+        if not v6.ref("heads/" + args.name):
+            raise WIError("WI_INPUT_INVALID", "no branch %s" % args.name, [])
+        v6.delete_ref("heads/" + args.name)
+        if v6.head_branch() == args.name:
+            v6.set_ref("HEAD", "main")
+        v6.commit_db()
+        print("deleted %s" % args.name)
+        return 0
+    return 0
+
+
+def cmd_propose(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+    nodes = v6.nodes_at(head)
+
+    payloads = []
+    if args.from_ledger:
+        ledger = json.loads(Path(args.from_ledger).read_text("utf-8"))
+        for atom in ledger.get("atoms", ledger.get("claims", [])):
+            lid = atom.get("logical_id") or v6_logical_id(
+                "claim", atom.get("text", ""))
+            payloads.append((lid, "meaning.claim_atom", _v6_from_atom(atom),
+                             atom.get("realm", "external_fact")))
+    else:
+        if not args.node:
+            raise WIError("WI_INPUT_INVALID",
+                          "a proposal needs a target node",
+                          ["pass --node ID --payload FILE",
+                           "or --from-ledger LEDGER.json"])
+        payload = json.loads(Path(args.payload).read_text("utf-8"))
+        payloads.append((args.node, args.type, payload, args.realm))
+
+    created = []
+    for lid, ntype, payload, realm in payloads:
+        before_digest = nodes.get(lid)
+        before = v6.get(before_digest)["payload"] if before_digest else None
+        # A payload that declares its own temporal scope *is* declaring a
+        # valid interval. Reading it here is a mapping, not an inference:
+        # nothing is filled in that the author did not write.
+        vt = None
+        if args.valid_from or args.valid_until:
+            vt = v6_valid_interval(args.valid_from, args.valid_until)
+        elif isinstance(payload.get("temporal_scope"), dict):
+            ts = payload["temporal_scope"]
+            vt = v6_valid_interval(ts.get("from"), ts.get("until"))
+        after_digest = v6.put_node_state(
+            lid, ntype, payload, realm=realm, valid_time=vt,
+            reliability={"basis": args.basis, "actor": args.actor})
+        if after_digest == before_digest:
+            continue
+        after = v6.get(after_digest)["payload"]
+        d = v6_classify(before, after)
+        pid = v6_logical_id("proposal", lid, str(before_digest), after_digest)
+        obj = {
+            "proposal_id": pid,
+            "target_logical_id": lid,
+            "target_state_digest": before_digest,
+            "before": before_digest,
+            "after": after_digest,
+            "semantic_delta": d,
+            "required_capability": v6_required_capability(d["classes"]),
+            "rationale": args.why or "",
+            "proposed_by": args.actor,
+            "created_at": _now(),
+            "expires_at": args.expires,
+        }
+        pdigest = v6.put(obj, "wi.v6.proposal")
+        v6.db.execute("INSERT OR REPLACE INTO v6_proposal VALUES (?,?,?,?,?,?)",
+                      (pid, pdigest, branch, "open", None, _now()))
+        created.append(obj)
+
+    for dep in args.depends_on or []:
+        for lid, _, _, _ in payloads:
+            v6.db.execute("INSERT OR REPLACE INTO v6_edge VALUES (?,?,?,?,?)",
+                          (v6_logical_id("edge", lid, dep, DEPENDENCY),
+                           lid, dep, DEPENDENCY, _now()))
+    v6.commit_db()
+
+    out = {"branch": branch, "created": created}
+
+    def render(o):
+        if not o["created"]:
+            return ("No proposal created: the payload is byte-identical to the "
+                    "state already on %s." % o["branch"])
+        L = ["PROPOSED on %s" % o["branch"], ""]
+        for p in o["created"]:
+            L.append("  %s" % p["proposal_id"])
+            L.append("    node      %s" % p["target_logical_id"])
+            L.append("    delta     %s" % (", ".join(p["semantic_delta"]["classes"])
+                                           or "(none)"))
+            L.append("    requires  %s" % p["required_capability"])
+            L.append("    bound to  %s" % (p["target_state_digest"] or "(new node)"))
+        L += ["", "Nothing has changed on %s. A proposal is not an edit — run"
+                  % o["branch"],
+              "`wi simulate` to see what accepting it would do."]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def _v6_from_atom(atom):
+    """Lift a v5 claim atom into a v6 payload without inventing fields.
+
+    Anything v5 did not record is absent, not guessed. A migration that fills
+    in a plausible value has rewritten history and called it an upgrade.
+    """
+    prop = atom.get("proposition") or {}
+    out = {"text": atom.get("text", "")}
+    qs = prop.get("quantities") or []
+    if qs:
+        out["quantities"] = [v6_quantity(q["value"], q.get("unit")) for q in qs]
+    if prop.get("temporal_scope"):
+        ts = prop["temporal_scope"]
+        out["temporal_scope"] = {"from": ts.get("start"), "until": ts.get("end")}
+    if prop.get("modality"):
+        out["modality"] = prop["modality"]
+    if prop.get("negated"):
+        out["polarity"] = "negative"
+    if prop.get("attribution"):
+        out["attribution"] = [prop["attribution"]]
+    if prop.get("entities"):
+        out["entities"] = sorted(prop["entities"])
+    if prop.get("causal"):
+        out["causality"] = "asserted"
+    out["absent_from_source_version"] = sorted(
+        k for k in ("spatial_scope", "population_scope", "certainty",
+                    "exceptions", "qualifiers")
+        if k not in out)
+    return out
+
+
+def cmd_proposals(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    rows = []
+    for r in v6.open_proposals(branch, args.status):
+        p = v6.get(r["digest"])
+        rows.append({"proposal_id": r["proposal_id"], "status": r["status"],
+                     "node": p["target_logical_id"],
+                     "classes": p["semantic_delta"]["classes"],
+                     "requires": p["required_capability"],
+                     "by": p["proposed_by"], "why": p["rationale"],
+                     "applied_in": r["applied_in"]})
+    out = {"branch": branch, "proposals": rows}
+
+    def render(o):
+        if not o["proposals"]:
+            return "No proposals on %s." % o["branch"]
+        L = ["PROPOSALS on %s" % o["branch"], ""]
+        for p in o["proposals"]:
+            L.append("  [%-9s] %s" % (p["status"], p["proposal_id"]))
+            L.append("      %-16s ->  %s" % (p["node"][:16],
+                                           ", ".join(p["classes"]) or "(none)"))
+            L.append("      requires %s   proposed by %s"
+                     % (p["requires"], p["by"]))
+            if p["why"]:
+                L.append("      %s" % _trunc(p["why"], 70))
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_simulate(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    if args.proposal:
+        digests = [v6.proposal(pid)["digest"] for pid in args.proposal]
+    else:
+        digests = [r["digest"] for r in v6.open_proposals(branch, "open")]
+    if not digests:
+        raise WIError("WI_INPUT_INVALID",
+                      "there is nothing to simulate on %s" % branch,
+                      ["create one with `wi propose`",
+                       "or name a proposal with --proposal ID"])
+    rep = v6_simulate(v6, branch, digests, actor=args.actor)
+    v6.commit_db()
+
+    def render(o):
+        L = ["SIMULATION ONLY — %s is unchanged" % o["branch"], ""]
+        L.append("Semantic change")
+        for s in o["semantic_deltas"]:
+            L.append("  %s" % s["logical_id"])
+            L.append("    class   %s" % (", ".join(s["classes"]) or "(none)"))
+            for impact, cls in sorted(s["proof_impact"].items()):
+                L.append("    proof   %s: %s" % (impact, ", ".join(cls)))
+        L.append("")
+        L.append("Authority required")
+        for a in o["authority_requirements"]:
+            held = ""
+            if "actor_holds" in a:
+                held = "  [held]" if a["actor_holds"] else "  [%s]" % a.get(
+                    "denied_code", "not held")
+            L.append("  %-40s %s%s" % (a["logical_id"][:36],
+                                       a["required_capability"], held))
+        if o["conflicts"]:
+            L.append("")
+            L.append("Conflicts")
+            for c in o["conflicts"]:
+                L.append("  %-12s %s" % (c["kind"], c["logical_id"]))
+                L.append("      %s" % c.get("detail", ""))
+        L.append("")
+        L.append("Impact")
+        L.append("  %4d node(s) directly changed" % len(o["changed_nodes"]))
+        L.append("  %4d node(s) become stale" % len(o["stale_frontier"]))
+        L.append("  %4d node(s) stale through an invalidated proof"
+                 % len(o["hard_stale_frontier"]))
+        L.append("")
+        L.append("Minimum safe repair frontier")
+        if not o["repair_plan"]["actions"]:
+            L.append("  none — every delta in this set carries its proof forward")
+        for i, a in enumerate(o["repair_plan"]["actions"], 1):
+            L.append("  %d. %-18s %s" % (i, a["kind"], a["targets"][0][:36]))
+            L.append("     %s" % a["reason"])
+        L.append("")
+        L.append("  ordering: %s" % o["repair_plan"]["ordering"])
+        L.append("")
+        L.append("Provably unaffected")
+        L.append("  %4d of %d node(s) on %s" % (o["provably_unaffected"],
+                                                o["total_nodes"], o["branch"]))
+        L.append("")
+        L.append("candidate root  %s" % o["candidate_root"])
+        L.append("Nothing was written. This root exists only to be compared.")
+        return "\n".join(L)
+
+    _v6_emit(args, rep, render)
+    return 1 if rep["conflicts"] else 0
+
+
+def cmd_decide(args):
+    ws, v6 = _v6_open(args)
+    row = v6.proposal(args.proposal)
+    p = v6.get(row["digest"])
+    branch = row["branch"]
+    head = v6.ref("heads/" + branch)
+    nodes = v6.nodes_at(head)
+
+    if row["status"] != "open":
+        raise WIError("WI_PROPOSAL_STALE",
+                      "proposal %s is %s, not open" % (args.proposal, row["status"]),
+                      ["open a new proposal against the current state"])
+
+    # Law: a decision binds to the exact state it authorized. If the target
+    # moved between proposal and decision, the approval does not reattach.
+    current = nodes.get(p["target_logical_id"])
+    if current != p["target_state_digest"]:
+        v6.set_proposal_status(args.proposal, "superseded")
+        v6.commit_db()
+        raise WIError("WI_DECISION_STALE",
+                      "the target moved after this proposal was written",
+                      ["re-read the current state and open a new proposal",
+                       "the system will not reattach an approval to a state "
+                       "the reviewer never saw"],
+                      {"proposal_bound_to": p["target_state_digest"] or "(new node)",
+                       "branch_now_holds": current or "(absent)"})
+
+    outcome = ("accepted" if args.accept else
+               "rejected" if args.reject else "deferred")
+
+    receipt = None
+    if outcome == "accepted":
+        receipt = v6.authorize(args.actor, p["required_capability"],
+                               {"kind": "branch", "value": branch})
+
+    did = v6_logical_id("decision", args.proposal, outcome, args.actor)
+    dobj = {
+        "decision_id": did,
+        "proposal_digest": row["digest"],
+        "target_state_digest": p["target_state_digest"],
+        "outcome": outcome,
+        "actor": args.actor,
+        "authority_receipt": receipt,
+        "reason": args.reason or "",
+        "decided_at": _now(),
+    }
+    ddigest = v6.put(dobj, "wi.v6.decision")
+    v6.db.execute("INSERT OR REPLACE INTO v6_decision VALUES (?,?,?,?)",
+                  (did, ddigest, args.proposal, _now()))
+    v6.set_proposal_status(args.proposal,
+                           {"accepted": "accepted", "rejected": "rejected",
+                            "deferred": "deferred"}[outcome])
+    v6.commit_db()
+
+    out = {"decision": dobj, "decision_digest": ddigest}
+
+    def render(o):
+        d = o["decision"]
+        L = ["DECISION %s" % d["outcome"].upper(),
+             "  proposal   %s" % args.proposal,
+             "  bound to   %s" % (d["target_state_digest"] or "(new node)"),
+             "  actor      %s" % d["actor"]]
+        if d["authority_receipt"]:
+            L.append("  grant      %s (%s)" % (d["authority_receipt"]["grant_id"],
+                                               d["authority_receipt"]["capability"]))
+        if d["reason"]:
+            L.append("  reason     %s" % d["reason"])
+        L += ["", "Accepted is a decision, not an application. Run `wi commit`",
+              "to apply every accepted proposal as one transaction."]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_v6_commit(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+    accepted = v6.open_proposals(branch, "accepted")
+    if not accepted:
+        raise WIError("WI_INPUT_INVALID",
+                      "no accepted proposals to apply on %s" % branch,
+                      ["accept one with `wi decide ID --accept --actor NAME`"])
+
+    base_nodes = v6.nodes_at(head)
+    digests = [r["digest"] for r in accepted]
+    nodes, semantic, conflicts = v6_apply(v6, base_nodes, digests)
+    if conflicts:
+        raise WIError("WI_SEMANTIC_CONFLICT",
+                      "%d conflict(s) block this commit" % len(conflicts),
+                      ["run `wi simulate` to see them",
+                       "resolve each with an authorized decision"],
+                      {"conflicts": [c["logical_id"] for c in conflicts]})
+
+    root = v6.put_root(nodes, {}, {})
+    delta = v6.put({
+        "added": sorted(set(nodes) - set(base_nodes)),
+        "removed": sorted(set(base_nodes) - set(nodes)),
+        "superseded": [{"logical_id": s["logical_id"], "from": s["from"],
+                        "to": s["to"]} for s in semantic if s["from"]],
+        "semantic": semantic,
+    }, "wi.v6.delta")
+
+    decisions = []
+    for r in accepted:
+        dr = v6.db.execute("SELECT digest FROM v6_decision WHERE proposal_id=?",
+                           (r["proposal_id"],)).fetchone()
+        if dr:
+            decisions.append(dr["digest"])
+
+    cobj = {"parents": [head] if head else [], "root": root, "delta": delta,
+            "actor": args.actor, "decision": decisions,
+            "message": args.message, "timestamp": _now()}
+    cdigest = v6.put(cobj, "wi.v6.commit")
+    v6.set_ref("heads/" + branch, cdigest, expected=head)
+    for r in accepted:
+        v6.set_proposal_status(r["proposal_id"], "applied", applied_in=cdigest)
+    v6.commit_db()
+
+    out = {"commit": cdigest, "root": root, "prior_root": v6.get(head)["root"]
+           if head else None, "applied": len(accepted),
+           "semantic_deltas": semantic, "branch": branch}
+
+    def render(o):
+        L = ["COMMIT %s" % o["commit"][7:19],
+             "  branch      %s" % o["branch"],
+             "  prior root  %s" % (o["prior_root"] or "(none)"),
+             "  next root   %s" % o["root"],
+             "  applied     %d accepted proposal(s)" % o["applied"], ""]
+        for s in o["semantic_deltas"]:
+            L.append("  %-16s %s" % (s["logical_id"][:16],
+                                   ", ".join(s["classes"]) or "(none)"))
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_log(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+    rows = []
+    for digest, c in v6.history(head, args.limit):
+        rows.append({"commit": digest, "root": c["root"], "actor": c["actor"],
+                     "message": c["message"], "timestamp": c["timestamp"],
+                     "decisions": len(c.get("decision") or []),
+                     "nodes": len(v6.nodes_at(digest))})
+    out = {"branch": branch, "commits": rows}
+
+    def render(o):
+        L = ["HISTORY of %s" % o["branch"], ""]
+        for c in o["commits"]:
+            L.append("  %s  %s" % (c["commit"][7:19], c["message"]))
+            L.append("      root %s" % c["root"][7:27])
+            L.append("      %s by %s   %d decision(s)   %d node(s)"
+                     % (c["timestamp"][:19], c["actor"], c["decisions"],
+                        c["nodes"]))
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_merge(args):
+    ws, v6 = _v6_open(args)
+    ours = args.into or v6.head_branch()
+    result = v6_merge(v6, ours, args.branch)
+
+    stored = []
+    for c in result["conflicts"]:
+        cd = v6.put(c, "wi.v6.conflict")
+        v6.db.execute("INSERT OR REPLACE INTO v6_conflict VALUES (?,?,?,?,?)",
+                      (c["conflict_id"], cd, ours, "unresolved", _now()))
+        stored.append(c["conflict_id"])
+
+    committed = None
+    if result["clean"] and not args.dry_run:
+        root = v6.put_root(result["merged_nodes"], {}, {})
+        delta = v6.put({"added": [], "removed": [], "superseded": [],
+                        "semantic": [], "merge": True}, "wi.v6.delta")
+        cobj = {"parents": [result["ours_commit"], result["theirs_commit"]],
+                "root": root, "delta": delta, "actor": args.actor,
+                "decision": [],
+                "message": "merge %s into %s" % (args.branch, ours),
+                "timestamp": _now()}
+        committed = v6.put(cobj, "wi.v6.commit")
+        v6.set_ref("heads/" + ours, committed, expected=result["ours_commit"])
+    v6.commit_db()
+
+    out = dict(result)
+    out.pop("merged_nodes", None)
+    out["stored_conflicts"] = stored
+    out["merge_commit"] = committed
+
+    def render(o):
+        L = ["MERGE %s into %s" % (args.branch, ours), ""]
+        L.append("  base commit  %s" % (o["base_commit"] or "(unrelated histories)")[7:19])
+        L.append("")
+        if o["auto_merged"]:
+            L.append("Auto-merged")
+            for a in o["auto_merged"]:
+                L.append("  %s  took %s" % (a["logical_id"][:8], a["took"]))
+                L.append("      %s" % a["why"])
+            L.append("")
+        if o["conflicts"]:
+            L.append("Conflicts — preserved, not resolved")
+            for c in o["conflicts"]:
+                L.append("  %-12s %s" % (c["kind"], c["logical_id"]))
+                L.append("      base    %s" % c["base_summary"])
+                L.append("      ours    %s" % c["ours_summary"])
+                L.append("      theirs  %s" % c["theirs_summary"])
+                L.append("      status  unresolved, requires an authorized decision")
+            L.append("")
+            L.append("The engine did not average, soften or generalize these.")
+            L.append("Neither branch asserted a middle value, so there is none.")
+        else:
+            L.append("Clean merge.")
+            if o["merge_commit"]:
+                L.append("  merge commit %s" % o["merge_commit"][7:19])
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 2 if result["conflicts"] else 0
+
+
+def cmd_conflicts(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+
+    if args.resolve:
+        row = v6.db.execute("SELECT * FROM v6_conflict WHERE conflict_id=?",
+                            (args.resolve,)).fetchone()
+        if not row:
+            raise WIError("WI_INPUT_INVALID", "no conflict %s" % args.resolve,
+                          ["run `wi conflicts` to list them"])
+        c = v6.get(row["digest"])
+        if not args.take:
+            raise WIError("WI_INPUT_INVALID",
+                          "resolving a conflict requires naming which side wins",
+                          ["--take ours", "--take theirs"])
+        cap = v6_required_capability(c.get("classes") or [])
+        receipt = v6.authorize(args.actor, cap, {"kind": "branch", "value": branch})
+        v6.db.execute("UPDATE v6_conflict SET status=? WHERE conflict_id=?",
+                      ("resolved:" + args.take, args.resolve))
+        v6.commit_db()
+        print("resolved %s by taking %s" % (args.resolve, args.take))
+        print("  actor %s under grant %s (%s)"
+              % (args.actor, receipt["grant_id"], receipt["capability"]))
+        return 0
+
+    rows = []
+    for r in v6.db.execute(
+            "SELECT * FROM v6_conflict WHERE branch=? ORDER BY created_at",
+            (branch,)):
+        c = v6.get(r["digest"])
+        c["status"] = r["status"]
+        rows.append(c)
+    out = {"branch": branch, "conflicts": rows,
+           "unresolved": sum(1 for c in rows if c["status"] == "unresolved")}
+
+    def render(o):
+        if not o["conflicts"]:
+            return "No semantic conflicts on %s." % o["branch"]
+        L = ["SEMANTIC CONFLICTS on %s" % o["branch"], ""]
+        for c in o["conflicts"]:
+            L.append("  [%s] %-12s %s" % (c["status"], c["kind"],
+                                          c["conflict_id"]))
+            L.append("      node    %s" % c["logical_id"])
+            L.append("      ours    %s" % c["ours_summary"])
+            L.append("      theirs  %s" % c["theirs_summary"])
+        L += ["", "%d unresolved. A branch carrying an unresolved conflict"
+                  % o["unresolved"],
+              "cannot be rendered as agreed (C015)."]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 2 if out["unresolved"] else 0
+
+
+def cmd_authority(args):
+    ws, v6 = _v6_open(args)
+    action = args.action
+
+    if action == "list":
+        rows = []
+        for r in v6.db.execute("SELECT * FROM v6_grant ORDER BY created_at"):
+            g = v6.get(r["digest"])
+            g["revoked_at"] = r["revoked_at"]
+            rows.append(g)
+        out = {"grants": rows}
+
+        def render(o):
+            if not o["grants"]:
+                return ("No capability grants issued. Until one exists, no actor "
+                        "can accept a consequential change — including you.")
+            L = ["CAPABILITY GRANTS", ""]
+            for g in o["grants"]:
+                state = ("revoked %s" % g["revoked_at"][:19] if g["revoked_at"]
+                         else "active")
+                L.append("  %s  [%s]" % (g["grant_id"], state))
+                L.append("      %s -> %s" % (g["subject"], g["capability"]))
+                L.append("      scope %s%s" % (g["scope"]["kind"],
+                                               (":" + g["scope"]["value"])
+                                               if g["scope"].get("value") else ""))
+                L.append("      issued by %s%s"
+                         % (g["issuer"],
+                            ("  expires " + g["expires_at"][:19])
+                            if g.get("expires_at") else "  no expiry"))
+                if g.get("parent_grant"):
+                    L.append("      delegated from %s" % g["parent_grant"])
+            return "\n".join(L)
+
+        _v6_emit(args, out, render)
+        return 0
+
+    if action in ("issue", "delegate"):
+        scope = {"kind": args.scope}
+        if args.scope_value:
+            scope["value"] = args.scope_value
+        gobj = {
+            "grant_id": v6_logical_id("grant", args.subject, args.capability,
+                                      json.dumps(scope, sort_keys=True),
+                                      args.parent or ""),
+            "subject": args.subject,
+            "subject_kind": args.subject_kind,
+            "capability": args.capability,
+            "scope": scope,
+            "constraints": [],
+            "issuer": args.issuer,
+            "issued_at": _now(),
+            "activates_at": args.activates or _now(),
+            "expires_at": args.expires,
+            "parent_grant": args.parent,
+        }
+        if args.subject_kind in V6_FORBIDDEN_SUBJECT_KINDS:
+            raise WIError("WI_AUTHORITY_DENIED",
+                          "a %s may never hold a capability grant"
+                          % args.subject_kind,
+                          ["a judgment provider returns values; it does not "
+                           "decide, approve or sign"],
+                          {"constraint": "C008"})
+        if args.capability not in V6_CAPABILITIES:
+            raise WIError("WI_INPUT_INVALID",
+                          "%r is not a known capability" % args.capability,
+                          ["one of: " + ", ".join(V6_CAPABILITIES)])
+        if action == "delegate":
+            if not args.parent:
+                raise WIError("WI_INPUT_INVALID",
+                              "delegation requires --parent GRANT_ID",
+                              ["run `wi authority list` to find it"])
+            parent = v6.grant(args.parent)
+            if parent.get("_revoked_at"):
+                raise WIError("WI_AUTHORITY_REVOKED",
+                              "the parent grant has been revoked",
+                              ["a revoked grant cannot be delegated from"])
+            v6_validate_child_grant(parent, gobj)
+
+        digest = v6.put(gobj, "wi.v6.grant")
+        v6.db.execute("INSERT OR REPLACE INTO v6_grant VALUES (?,?,?,?,?)",
+                      (gobj["grant_id"], digest, args.subject, None, _now()))
+        v6.commit_db()
+        print("%s %s" % ("issued" if action == "issue" else "delegated",
+                         gobj["grant_id"]))
+        print("  %s -> %s in scope %s" % (args.subject, args.capability,
+                                          args.scope))
+        if action == "delegate":
+            print("  narrowed from %s; a child grant can never widen its parent"
+                  % args.parent)
+        return 0
+
+    if action == "revoke":
+        g = v6.grant(args.grant)
+        v6.db.execute("UPDATE v6_grant SET revoked_at=? WHERE grant_id=?",
+                      (_now(), args.grant))
+        v6.commit_db()
+        print("revoked %s (%s -> %s)" % (args.grant, g["subject"],
+                                         g["capability"]))
+        print("Existing decisions keep their receipts. Nothing new may be")
+        print("authorized under this grant from now on (C020).")
+        return 0
+
+    if action == "check":
+        scope = {"kind": args.scope}
+        if args.scope_value:
+            scope["value"] = args.scope_value
+        try:
+            receipt = v6.authorize(args.subject, args.capability, scope)
+        except WIError as exc:
+            print(exc.render())
+            return 1
+        print("PERMITTED")
+        print("  %s may %s in scope %s" % (args.subject, args.capability,
+                                           args.scope))
+        print("  under grant %s" % receipt["grant_id"])
+        return 0
+    return 0
+
+
+def cmd_obligations(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+    nodes = v6.nodes_at(head)
+    mode = args.mode or (ws.meta().get("mode") or "standard")
+
+    rows, totals = [], {}
+    for lid in sorted(nodes):
+        if args.node and lid != args.node:
+            continue
+        ns = v6.get(nodes[lid])
+        obs = v6_obligations_for(ns, mode)
+        for o in obs:
+            totals[o["check"]] = totals.get(o["check"], 0) + 1
+        rows.append({"logical_id": lid, "node_type": ns["node_type"],
+                     "realm": ns["realm"],
+                     "basis": ns["reliability"]["basis"],
+                     "obligations": obs})
+    out = {"branch": branch, "mode": mode, "nodes": rows, "totals": totals,
+           "obligation_count": sum(len(r["obligations"]) for r in rows)}
+
+    def render(o):
+        L = ["PROOF OBLIGATIONS — %s, mode %s" % (o["branch"], o["mode"]), ""]
+        if not o["nodes"]:
+            return "\n".join(L + ["  no governed nodes on this branch"])
+        for r in o["nodes"]:
+            L.append("  %-16s [%s / %s / %s]" % (r["logical_id"][:16],
+                                               r["node_type"], r["realm"],
+                                               r["basis"]))
+            for ob in r["obligations"]:
+                L.append("      %-10s %-32s %s"
+                         % (ob["requirement"], ob["check"], _trunc(ob["why"], 60)))
+        L += ["", "%d obligation(s) across %d node(s)."
+                  % (o["obligation_count"], len(o["nodes"])),
+              "These were derived from typed state, release target and policy —",
+              "not from a checklist hard-coded inside a command."]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_as_of(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+
+    # Knowledge time: which commit was the head at that instant.
+    chosen, chosen_c = head, None
+    for digest, c in v6.history(head):
+        chosen_c = c
+        if args.known_at is None or str(c["timestamp"]) <= str(args.known_at):
+            chosen = digest
+            break
+    else:
+        if args.known_at is not None:
+            chosen = None
+
+    if chosen is None:
+        out = {"branch": branch, "known_at": args.known_at, "commit": None,
+               "nodes": [], "note": "this workspace knew nothing at that instant"}
+    else:
+        nodes = v6.nodes_at(chosen)
+        rows = []
+        for lid in sorted(nodes):
+            if args.node and lid != args.node:
+                continue
+            ns = v6.get(nodes[lid])
+            if not _v6_covers(ns["valid_time"], args.valid_at):
+                continue
+            if args.known_at is not None:
+                kt = ns["knowledge_time"]
+                if str(kt["observed_at"]) > str(args.known_at):
+                    continue
+                if kt.get("superseded_at") and \
+                        str(kt["superseded_at"]) <= str(args.known_at):
+                    continue
+            rows.append({"logical_id": lid, "state_digest": nodes[lid],
+                         "node_type": ns["node_type"], "realm": ns["realm"],
+                         "valid_time": ns["valid_time"],
+                         "knowledge_time": ns["knowledge_time"],
+                         "summary": _v6_summary(ns["payload"])})
+        out = {"branch": branch, "known_at": args.known_at,
+               "valid_at": args.valid_at, "commit": chosen,
+               "graph_root": v6.get(chosen)["root"], "nodes": rows}
+
+    def render(o):
+        L = ["AS OF", "  branch      %s" % o["branch"],
+             "  known at    %s" % (o.get("known_at") or "now"),
+             "  valid at    %s" % (o.get("valid_at") or "any instant"),
+             "  commit      %s" % ((o.get("commit") or "(none)")[7:19]
+                                   if o.get("commit") else "(none)"), ""]
+        if not o["nodes"]:
+            L.append("  no state satisfies both clocks")
+            if o.get("note"):
+                L.append("  %s" % o["note"])
+            return "\n".join(L)
+        for r in o["nodes"]:
+            vt = r["valid_time"]
+            L.append("  %-16s %s" % (r["logical_id"][:16], r["summary"]))
+            L.append("      valid %s -> %s" % (vt.get("from") or "(open)",
+                                               vt.get("until") or "(open)"))
+            L.append("      known %s" % r["knowledge_time"]["observed_at"][:19])
+        L += ["", "This is what the workspace held then, not today's corrected",
+              "state wearing an old date."]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
+def cmd_constraints(args):
+    ws, v6 = _v6_open(args)
+    rep = v6_run_constraints(v6, args.branch)
+
+    def render(o):
+        L = ["GRAPH CONSTRAINTS — %s" % o["branch"], ""]
+        for r in o["results"]:
+            mark = {"pass": "ok  ", "fail": "FAIL", "not_evaluated": "--  "}[r["status"]]
+            L.append("  %s %s %-46s" % (mark, r["id"], r["name"]))
+            L.append("       %s" % r["detail"])
+            for v in r["violations"][:5]:
+                L.append("         - %s" % v)
+        L += ["", "%d evaluated, %d not evaluated, %d failed."
+                  % (o["evaluated"], o["not_evaluated"], o["failed"]),
+              "A constraint that could not run says so and says why. There is no",
+              "fourth status and no aggregate score.",
+              "", "VERDICT %s" % o["verdict"]]
+        return "\n".join(L)
+
+    _v6_emit(args, rep, render)
+    return 2 if rep["failed"] else 0
+
+
+def cmd_capsule(args):
+    ws, v6 = _v6_open(args) if args.action != "verify" else (None, None)
+
+    if args.action == "create":
+        cap = v6_capsule_create(v6, args.branch or v6.head_branch(),
+                                select=args.select, profile=args.profile,
+                                redact_payloads=args.hash_only)
+        Path(args.out).write_text(
+            json.dumps(cap, indent=2, sort_keys=True, ensure_ascii=False),
+            encoding="utf-8")
+        m = cap["manifest"]
+        print("wrote %s" % args.out)
+        print("  profile        %s" % m["profile"])
+        print("  closure root   %s" % m["closure_root"])
+        print("  leaves         %d total, %d disclosed, %d redacted"
+              % (m["leaf_count"], m["disclosed_count"], len(cap["redactions"])))
+        print("")
+        print("A redacted leaf proves it was inside the producer's closure.")
+        print("It does not prove you inspected its content, and this capsule")
+        print("does not say otherwise.")
+        return 0
+
+    cap = json.loads(Path(args.path).read_text("utf-8"))
+
+    if args.action == "inspect":
+        m = cap["manifest"]
+        print("CAPSULE %s" % args.path)
+        for k in ("format", "profile", "core_version", "branch", "graph_root",
+                  "closure_root", "leaf_count", "disclosed_count", "built_at"):
+            print("  %-16s %s" % (k, m.get(k)))
+        print("")
+        print("  declared omissions")
+        for o in m.get("declared_omissions", []):
+            print("    %-24s %s" % (o["kind"], o["reason"]))
+        print("")
+        print("  does not prove")
+        for n in m.get("not_a_proof_of", []):
+            print("    - %s" % n)
+        return 0
+
+    rep = v6_capsule_verify(cap)
+    if getattr(args, "json", False):
+        print(json.dumps(rep, indent=2, sort_keys=True))
+    else:
+        print("CAPSULE VERIFICATION — %s" % args.path)
+        print("")
+        for c in rep["checks"]:
+            print("  %-4s %-22s %s" % ("ok" if c["result"] == "pass" else "FAIL",
+                                       c["check"], c["detail"]))
+        print("")
+        print("  closure root %s" % rep["closure_root"])
+        print("")
+        print("VERDICT %s" % rep["verdict"])
+        print("")
+        print("  " + rep["scope"])
+    return 0 if rep["verdict"] == "VERIFIED" else 2
+
+
+def cmd_why(args):
+    ws, v6 = _v6_open(args)
+    branch = args.branch or v6.head_branch()
+    head = v6.ref("heads/" + branch)
+    nodes = v6.nodes_at(head)
+
+    lid = args.node
+    if lid not in nodes:
+        matches = [k for k in nodes if k.startswith(lid)]
+        if len(matches) == 1:
+            lid = matches[0]
+        else:
+            raise WIError("WI_INPUT_INVALID",
+                          "no node %s on %s" % (args.node, branch),
+                          ["run `wi as-of` to list the nodes on this branch"],
+                          {"candidates": matches[:5]})
+
+    ns = v6.get(nodes[lid])
+
+    introduced, decision = None, None
+    for digest, c in v6.history(head):
+        d = v6.get(c["delta"])
+        for s in d.get("semantic", []):
+            if s["logical_id"] == lid and s["to"] == nodes[lid]:
+                introduced = {"commit": digest, "message": c["message"],
+                              "actor": c["actor"], "timestamp": c["timestamp"],
+                              "classes": s["classes"]}
+                for dd in c.get("decision") or []:
+                    dec = v6.get(dd)
+                    if dec.get("target_state_digest") == s["from"]:
+                        decision = dec
+                break
+        if introduced:
+            break
+
+    deps = sorted(v6.dependents(lid))
+    supports = []
+    for r in v6.db.execute("SELECT to_logical_id FROM v6_edge"
+                           " WHERE from_logical_id=? AND relation=?",
+                           (lid, DEPENDENCY)):
+        t = r["to_logical_id"]
+        entry = {"logical_id": t}
+        if t in nodes:
+            tns = v6.get(nodes[t])
+            entry["basis"] = tns["reliability"]["basis"]
+            entry["summary"] = _v6_summary(tns["payload"])
+        supports.append(entry)
+
+    obligations = v6_obligations_for(ns, ws.meta().get("mode") or "standard")
+    stale = ws.stale_nodes().get(lid)
+
+    out = {"logical_id": lid, "branch": branch, "state_digest": nodes[lid],
+           "node_type": ns["node_type"], "realm": ns["realm"],
+           "reliability": ns["reliability"], "valid_time": ns["valid_time"],
+           "knowledge_time": ns["knowledge_time"],
+           "summary": _v6_summary(ns["payload"]),
+           "introduced_by": introduced, "authorized_by": decision,
+           "depends_on": supports, "depended_on_by": deps,
+           "obligations": obligations, "stale": stale}
+
+    def render(o):
+        L = ["WHY", "", "  %s" % o["summary"], "",
+             "NODE",
+             "  logical id  %s" % o["logical_id"],
+             "  state       %s" % o["state_digest"],
+             "  type        %s" % o["node_type"],
+             "  realm       %s" % o["realm"], ""]
+        L.append("BASIS")
+        rb = o["reliability"]
+        L.append("  %s" % rb["basis"])
+        for k, v in sorted(rb.items()):
+            if k != "basis":
+                L.append("      %s: %s" % (k, v))
+        L.append("")
+        L.append("TIME")
+        L.append("  valid       %s -> %s" % (o["valid_time"].get("from") or "(open)",
+                                             o["valid_time"].get("until") or "(open)"))
+        L.append("  known from  %s" % o["knowledge_time"]["observed_at"][:19])
+        L.append("")
+        if o["introduced_by"]:
+            i = o["introduced_by"]
+            L.append("INTRODUCED BY")
+            L.append("  commit %s  %s" % (i["commit"][7:19], i["message"]))
+            L.append("  actor  %s at %s" % (i["actor"], i["timestamp"][:19]))
+            L.append("  delta  %s" % (", ".join(i["classes"]) or "(none)"))
+            L.append("")
+        if o["authorized_by"]:
+            d = o["authorized_by"]
+            L.append("AUTHORIZED BY")
+            L.append("  %s decided %s" % (d["actor"], d["outcome"]))
+            if d.get("authority_receipt"):
+                L.append("  under grant %s (%s)"
+                         % (d["authority_receipt"]["grant_id"],
+                            d["authority_receipt"]["capability"]))
+            L.append("  bound to state %s" % (d["target_state_digest"] or "(new)"))
+            L.append("")
+        if o["depends_on"]:
+            L.append("DEPENDS ON")
+            for s in o["depends_on"]:
+                L.append("  %-16s [%s]  %s" % (s["logical_id"][:16],
+                                             s.get("basis", "?"),
+                                             s.get("summary", "")))
+            L.append("")
+        L.append("PROOF OBLIGATIONS")
+        for ob in o["obligations"]:
+            L.append("  %-10s %s" % (ob["requirement"], ob["check"]))
+        L.append("")
+        L.append("DEPENDED ON BY")
+        L.append("  %d node(s)" % len(o["depended_on_by"]))
+        if o["stale"]:
+            L += ["", "STALE — %s" % o["stale"]]
+        return "\n".join(L)
+
+    _v6_emit(args, out, render)
+    return 0
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(
         prog="wi",
@@ -3466,6 +6201,160 @@ def main(argv=None):
     sp = root_arg(sub.add_parser("doctor", help="what this surface can and cannot do"))
     sp.add_argument("--json", action="store_true")
     sp.set_defaults(func=cmd_doctor)
+
+    # ----------------------------------------------------------------------
+    # v6 — the sovereign meaning runtime.
+    #
+    # Every command below is transactional or read-only. `simulate` is the one
+    # that matters most and it is the one that writes nothing at all.
+    # ----------------------------------------------------------------------
+
+    sp = sub.add_parser("canon", help="canonical form and domain-separated digest")
+    sp.add_argument("path", help="JSON file, or - for stdin")
+    sp.add_argument("--schema", default="wi.v6.node_state")
+    sp.add_argument("--show", action="store_true", help="print the canonical bytes")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_canon)
+
+    sp = root_arg(sub.add_parser("branch", help="create, list and switch semantic branches"))
+    sp.add_argument("action", nargs="?", choices=["list", "create", "switch", "delete"])
+    sp.add_argument("name", nargs="?")
+    sp.add_argument("--source", help="branch to fork from (default: current)")
+    sp.add_argument("--switch", action="store_true", help="switch after creating")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_branch)
+
+    sp = root_arg(sub.add_parser("propose", help="propose a change bound to an exact state"))
+    sp.add_argument("--node", help="target logical id")
+    sp.add_argument("--payload", help="JSON file holding the proposed payload")
+    sp.add_argument("--from-ledger", dest="from_ledger",
+                    help="lift every atom in a v5 claim ledger into a proposal")
+    sp.add_argument("--type", default="meaning.claim_atom", choices=list(V6_NODE_TYPES))
+    sp.add_argument("--realm", default="external_fact", choices=list(V6_REALMS))
+    sp.add_argument("--basis", default="human_declared", choices=list(V6_BASES))
+    sp.add_argument("--why", help="the reason, in your words")
+    sp.add_argument("--actor", default="author")
+    sp.add_argument("--branch")
+    sp.add_argument("--expires")
+    sp.add_argument("--valid-from", dest="valid_from")
+    sp.add_argument("--valid-until", dest="valid_until")
+    sp.add_argument("--depends-on", dest="depends_on", action="append")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_propose)
+
+    sp = root_arg(sub.add_parser("proposals", help="list proposals and their status"))
+    sp.add_argument("--branch")
+    sp.add_argument("--status", choices=["open", "accepted", "rejected",
+                                         "deferred", "superseded", "applied"])
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_proposals)
+
+    sp = root_arg(sub.add_parser("simulate",
+                                 help="what a change would do, before it exists"))
+    sp.add_argument("--proposal", action="append", help="limit to these proposals")
+    sp.add_argument("--branch")
+    sp.add_argument("--actor", help="check authority as this actor")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_simulate)
+
+    sp = root_arg(sub.add_parser("decide", help="record an authorized decision"))
+    sp.add_argument("proposal")
+    sp.add_argument("--accept", action="store_true")
+    sp.add_argument("--reject", action="store_true")
+    sp.add_argument("--defer", action="store_true")
+    sp.add_argument("--actor", required=True)
+    sp.add_argument("--reason")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_decide)
+
+    sp = root_arg(sub.add_parser("commit", help="apply accepted proposals as one transaction"))
+    sp.add_argument("-m", "--message", required=True)
+    sp.add_argument("--actor", default="author")
+    sp.add_argument("--branch")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_v6_commit)
+
+    sp = root_arg(sub.add_parser("log", help="semantic commit history"))
+    sp.add_argument("--branch")
+    sp.add_argument("--limit", type=int, default=20)
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_log)
+
+    sp = root_arg(sub.add_parser("merge", help="conflict-preserving semantic merge"))
+    sp.add_argument("branch", help="branch to merge in")
+    sp.add_argument("--into", help="branch to merge into (default: current)")
+    sp.add_argument("--actor", default="author")
+    sp.add_argument("--dry-run", dest="dry_run", action="store_true")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_merge)
+
+    sp = root_arg(sub.add_parser("conflicts", help="unresolved semantic conflicts"))
+    sp.add_argument("--branch")
+    sp.add_argument("--resolve", help="conflict id to resolve")
+    sp.add_argument("--take", choices=["ours", "theirs"])
+    sp.add_argument("--actor", default="author")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_conflicts)
+
+    sp = root_arg(sub.add_parser("authority", help="issue, delegate, revoke and check grants"))
+    sp.add_argument("action", choices=["list", "issue", "delegate", "revoke", "check"])
+    sp.add_argument("--subject")
+    sp.add_argument("--subject-kind", dest="subject_kind", default="human",
+                    choices=["human", "team", "service", "automated_policy",
+                             "autonomous_worker", "judgment_provider",
+                             "external_signer"])
+    sp.add_argument("--capability")
+    sp.add_argument("--scope", default="workspace",
+                    choices=["workspace", "work", "node_family", "node",
+                             "branch", "jurisdiction", "release_target"])
+    sp.add_argument("--scope-value", dest="scope_value")
+    sp.add_argument("--issuer", default="author")
+    sp.add_argument("--activates")
+    sp.add_argument("--expires")
+    sp.add_argument("--parent", help="parent grant id, for delegation")
+    sp.add_argument("--grant", help="grant id, for revoke")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_authority)
+
+    sp = root_arg(sub.add_parser("obligations",
+                                 help="derive what must be proved before release"))
+    sp.add_argument("--branch")
+    sp.add_argument("--node")
+    sp.add_argument("--mode", choices=["standard", "strict", "regulated"])
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_obligations)
+
+    sp = root_arg(sub.add_parser("as-of", help="bitemporal query over the graph"))
+    sp.add_argument("--valid-at", dest="valid_at", help="world-valid date")
+    sp.add_argument("--known-at", dest="known_at", help="what was known at this instant")
+    sp.add_argument("--node")
+    sp.add_argument("--branch")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_as_of)
+
+    sp = root_arg(sub.add_parser("constraints", help="run the graph constraint engine"))
+    sp.add_argument("--branch")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_constraints)
+
+    sp = root_arg(sub.add_parser("capsule",
+                                 help="Merkle proof closure and selective disclosure"))
+    sp.add_argument("action", choices=["create", "inspect", "verify"])
+    sp.add_argument("path", nargs="?", help="capsule to inspect or verify")
+    sp.add_argument("--out", help="output path for create")
+    sp.add_argument("--select", action="append", help="logical id to disclose")
+    sp.add_argument("--profile", default="selective",
+                    choices=["full", "redacted", "hash-only", "selective"])
+    sp.add_argument("--hash-only", dest="hash_only", action="store_true")
+    sp.add_argument("--branch")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_capsule)
+
+    sp = root_arg(sub.add_parser("why", help="explain a node backward to its basis"))
+    sp.add_argument("node")
+    sp.add_argument("--branch")
+    sp.add_argument("--json", action="store_true")
+    sp.set_defaults(func=cmd_why)
 
     args = p.parse_args(argv)
     try:

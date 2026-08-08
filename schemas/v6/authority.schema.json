@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/authority.schema.json",
+  "title": "AuthorityV6",
+  "description": "Who may do what, to which part of the graph, under which limits, and the receipt proving that the question was asked before the action ran. This is the only place in v6 where authority is conferred: `actor.schema.json` describes what an actor IS and grants nothing, so there is exactly one path from an identity to a permission and it leaves a record. The design refuses two conveniences on purpose. There is no capability that suspends a mandatory graph constraint — C001 through C020 in `constraint.schema.json` are not waivable by grant, because an authority system whose top role can turn off the integrity rules has an integrity system that is advisory. And there is no ambient or default authority: an actor with no grant may do nothing, so a missing grant fails closed rather than falling back to a permissive default that nobody wrote down. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "Capability": {
+      "type": "string",
+      "enum": [
+        "graph.read",
+        "graph.propose",
+        "decision.accept",
+        "decision.accept_with_modification",
+        "decision.reject",
+        "decision.defer",
+        "branch.create",
+        "branch.merge",
+        "branch.delete",
+        "source.ingest",
+        "source.retract",
+        "anchor.bind",
+        "anchor.unbind",
+        "definition.author",
+        "canon.author",
+        "policy.author",
+        "policy.activate",
+        "grant.issue",
+        "grant.revoke",
+        "waiver.issue",
+        "judgment.request",
+        "judgment.record",
+        "simulation.run",
+        "repair.plan",
+        "release.plan",
+        "release.build",
+        "release.sign",
+        "release.publish",
+        "capsule.export",
+        "redaction.approve",
+        "migration.apply",
+        "worker.dispatch",
+        "worker.execute",
+        "pack.install",
+        "adapter.register",
+        "extension.derive"
+      ],
+      "description": "The closed vocabulary of things a grant can confer. Verbs are separated where the consequences differ, not where the code happens to differ: `decision.accept` is separate from `decision.reject` because an actor who may decline a change is not thereby an actor who may apply one; `release.sign` is separate from `release.build` because a build is reproducible and a signature is an assertion by a named key; `worker.dispatch` is separate from `worker.execute` because starting an autonomous worker and being one are different acts with different accountability. NOTE WHAT IS ABSENT. There is no `constraint.override`, no `admin`, no `*` and no root capability, and none may be added: the twenty mandatory constraints are the floor the rest of the system stands on, and a vocabulary containing a verb that turns them off would make every other guarantee in v6 conditional on nobody holding that verb. A violation is recorded and refused, never overridden — the sanctioned route is a waiver, which does not erase the violation but records a named actor passing it against one exact state."
+    },
+    "AuthorityScope": {
+      "description": "WHERE a grant applies. Scope is a closed union rather than a free-form pattern because a glob is impossible to reason about at the moment it matters — a reviewer asked whether a grant covers a node cannot answer from a wildcard without evaluating it against a graph that has since changed. Scopes are checked by exact membership, and a grant whose scope does not match the target fails closed.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["scope", "workspace_id"],
+          "additionalProperties": false,
+          "description": "The whole workspace. The broadest scope in the vocabulary and the one an issuer should have to justify, because it grants over nodes that do not exist yet.",
+          "properties": {
+            "scope": {"const": "Workspace", "description": "Discriminator. Fixed for this variant."},
+            "workspace_id": {"type": "string", "minLength": 1, "description": "Which workspace."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["scope", "work"],
+          "additionalProperties": false,
+          "description": "One work — a book, a filing, a proposal — and everything structurally inside it.",
+          "properties": {
+            "scope": {"const": "Work", "description": "Discriminator. Fixed for this variant."},
+            "work": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Logical id of the `structure.work` node."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["scope", "family"],
+          "additionalProperties": false,
+          "description": "Every node of one family, for example every `meaning.definition`. Exists so that a terminology owner can be given authority over definitions across a whole project without being given authority over its claims.",
+          "properties": {
+            "scope": {"const": "NodeFamily", "description": "Discriminator. Fixed for this variant."},
+            "family": {"type": "string", "minLength": 1, "description": "Node family prefix, for example `meaning.definition` or `canon`. Matched on the dotted prefix, so `canon` covers every canon type and `canon.character` covers one."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["scope", "node"],
+          "additionalProperties": false,
+          "description": "One node, by logical id. The narrowest scope, and the right one for a single delegated repair.",
+          "properties": {
+            "scope": {"const": "Node", "description": "Discriminator. Fixed for this variant."},
+            "node": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Logical id of the node."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["scope", "ref"],
+          "additionalProperties": false,
+          "description": "One branch of semantic history. Lets a contributor work freely on their own branch while holding nothing on the trunk, which is what makes proposing safe to grant widely.",
+          "properties": {
+            "scope": {"const": "Branch", "description": "Discriminator. Fixed for this variant."},
+            "ref": {"$ref": "common.schema.json#/$defs/RefName", "description": "The ref this grant applies to."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["scope", "jurisdiction"],
+          "additionalProperties": false,
+          "description": "Every statement scoped to one legal territory. Exists because regulatory authority is genuinely territorial: an actor qualified to approve a claim under one regime is frequently not qualified under another, and a scope model with no jurisdiction forces that distinction into a convention nobody enforces.",
+          "properties": {
+            "scope": {"const": "Jurisdiction", "description": "Discriminator. Fixed for this variant."},
+            "jurisdiction": {"$ref": "common.schema.json#/$defs/Jurisdiction", "description": "The territory."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["scope", "target"],
+          "additionalProperties": false,
+          "description": "One release target. The scope a publisher holds: authority to ship a named channel without authority to change what is in it.",
+          "properties": {
+            "scope": {"const": "ReleaseTarget", "description": "Discriminator. Fixed for this variant."},
+            "target": {"type": "string", "minLength": 1, "description": "Name of the release target."}
+          }
+        }
+      ]
+    },
+    "AuthorityConstraint": {
+      "description": "A limit attached to a grant, evaluated at the moment of use and recorded in the receipt. Constraints are a closed union so that every limit a grant can carry is enumerable by a reviewer reading this file, rather than discovered by reading the code that evaluates them. An unrecognized constraint kind must cause the grant to fail closed: a limit a checker does not understand is not a limit it may ignore.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["constraint", "not_after"],
+          "additionalProperties": false,
+          "description": "The grant stops applying after an instant.",
+          "properties": {
+            "constraint": {"const": "TimeWindow", "description": "Discriminator. Fixed for this variant."},
+            "not_after": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "The grant confers nothing at or after this instant. Constraint C020 refuses an authorization against an expired grant rather than warning about it."},
+            "not_before": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "The grant confers nothing before this instant. Present so authority can be issued ahead of a handover without being live in the interim."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["constraint", "ceiling"],
+          "additionalProperties": false,
+          "description": "A ceiling on a consequential magnitude the action carries — a spend, a headcount, a quantity being asserted. Expressed as an exact decimal Quantity so the comparison is exact and does not depend on float serialization.",
+          "properties": {
+            "constraint": {"const": "ValueCeiling", "description": "Discriminator. Fixed for this variant."},
+            "ceiling": {"$ref": "common.schema.json#/$defs/Quantity", "description": "The maximum. A comparison against a quantity of a different dimension is a refusal and never a coercion, because silently comparing across dimensions is how a ceiling in one currency is passed by a figure in another."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["constraint", "realms"],
+          "additionalProperties": false,
+          "description": "The grant applies only to statements in these realms. The common use is an actor who may edit fictional canon and may not touch external fact.",
+          "properties": {
+            "constraint": {"const": "RealmRestriction", "description": "Discriminator. Fixed for this variant."},
+            "realms": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "common.schema.json#/$defs/Realm"}, "description": "Permitted realms. An empty list is not permitted, because a constraint that forbids everything is a revocation written in the wrong place."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["constraint", "max_effect_class"],
+          "additionalProperties": false,
+          "description": "The grant applies only to actions at or below an effect class — the mechanism that stops an autonomous worker authorized to draft from becoming one authorized to publish.",
+          "properties": {
+            "constraint": {"const": "EffectCeiling", "description": "Discriminator. Fixed for this variant."},
+            "max_effect_class": {"$ref": "release.schema.json#/$defs/EffectClass", "description": "The highest effect class this grant reaches. Classes are ordered, and an unrecognized class is treated as higher than every known one so that a new, more dangerous class is refused by old grants rather than admitted by them."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["constraint", "rule"],
+          "additionalProperties": false,
+          "description": "Using the grant requires an approval satisfying a rule — the four-eyes constraint. Kept as a constraint on the grant rather than as a property of the action so that the same action can require two approvers for one actor and one for another.",
+          "properties": {
+            "constraint": {"const": "RequiresApproval", "description": "Discriminator. Fixed for this variant."},
+            "rule": {"$ref": "#/$defs/ApprovalRule", "description": "The approval rule that must be satisfied."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["constraint", "max_uses"],
+          "additionalProperties": false,
+          "description": "The grant may be exercised a bounded number of times. Exists for one-shot delegations, where the honest expression of `you may do this once` is a counter rather than a note in a message.",
+          "properties": {
+            "constraint": {"const": "UseLimit", "description": "Discriminator. Fixed for this variant."},
+            "max_uses": {"type": "integer", "minimum": 1, "description": "How many authorizations this grant may produce in total. Counted from the receipts, which is what makes the limit auditable rather than a number a caller is trusted to decrement."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["constraint", "policy_state"],
+          "additionalProperties": false,
+          "description": "The grant applies only while a named policy state is in force. It is what makes tightening a policy immediately effective on outstanding grants instead of requiring every grant to be reissued.",
+          "properties": {
+            "constraint": {"const": "PolicyBinding", "description": "Discriminator. Fixed for this variant."},
+            "policy_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "State digest of the policy that must be active. If the active policy digest differs, the grant confers nothing and the receipt says which digest was expected."}
+          }
+        }
+      ]
+    },
+    "CapabilityGrant": {
+      "type": "object",
+      "required": ["grant_id", "granted_to", "granted_by", "capabilities", "scope", "issued_at", "state_digest"],
+      "additionalProperties": false,
+      "description": "One conferral of authority, from a named actor to a named actor, over an explicit scope, under explicit constraints. It is the ONLY object in v6 that confers a capability. Two properties do most of the work. First, a grant is state-addressed: a receipt binds `grant_state_digest`, so widening a grant tomorrow cannot retroactively authorize what ran today, and narrowing it cannot retroactively unauthorize. Second, revocation is a STAMP and never a delete — a deleted grant would orphan every action taken under it, turning an authorized history into an unattributable one, which is the opposite of what revoking is for.",
+      "properties": {
+        "grant_id": {"$ref": "common.schema.json#/$defs/GrantId", "description": "Content-derived identity over grantor, grantee, sorted capabilities and scope, so re-issuing identical authority is idempotent rather than accumulating duplicates that a reviewer then has to reconcile."},
+        "granted_to": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who receives the authority. Constraint C008 refuses this field naming an actor of kind `JudgmentProvider`: a provider that could hold a grant could hold `decision.accept`, and an assessment would become an approval by one configuration change."},
+        "granted_by": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who conferred it, and who must themselves have held `grant.issue` within a scope covering this one. Authority does not widen through delegation; a grantor may pass on what they hold and never more."},
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/Capability"},
+          "description": "What is conferred. At least one, because a grant of nothing is a record with no effect that nonetheless reads on a review screen as authority somebody holds."
+        },
+        "scope": {"$ref": "#/$defs/AuthorityScope", "description": "Where the capabilities apply. Required, because an unscoped grant is a workspace grant written by somebody who did not intend to write one."},
+        "constraints": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/AuthorityConstraint"},
+          "description": "Limits evaluated at every use and recorded in the receipt. An empty array means unconstrained within the scope, which is a real and sometimes correct choice — it is spelled as an empty array rather than as an absent field so that `nobody set limits` and `somebody decided there were none` are the same visible statement."
+        },
+        "delegable": {"type": "boolean", "description": "Whether the grantee may confer any of this authority onward. Defaults to false where absent: delegation that happens by default is delegation nobody chose, and the chain it produces is discovered during an incident rather than before one."},
+        "delegation_depth": {"type": "integer", "minimum": 0, "description": "How many further hops of delegation are permitted, when `delegable` is true. Zero means the grantee may use but not pass on. Bounded rather than unlimited because an unbounded chain is one nobody can enumerate, and an authority nobody can enumerate is an authority nobody can revoke."},
+        "delegated_from": {"$ref": "common.schema.json#/$defs/GrantId", "description": "The grant this one was delegated out of, when it was. What makes the chain walkable: revoking a grant upstream must invalidate everything delegated from it, and that walk needs an edge to follow."},
+        "issued_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the grant was conferred."},
+        "expires_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "Convenience expiry equivalent to a `TimeWindow` constraint, present because time-bounding is the most common limit and burying it in a constraint array makes it easy to miss on review. Where both are present the EARLIER bound wins, so a reader who checks only one field is never told the grant lasts longer than it does."},
+        "revoked_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the grant was revoked. Stamped, never deleted. Constraint C020 refuses an authorization against a revoked grant; actions taken before this instant remain authorized and remain attributed, which is what revocation means and is not the same as pretending they never happened."},
+        "revocation_reason": {"type": "string", "description": "Why the grant was revoked, in words. It matters downstream: a grant revoked because a project ended leaves prior actions untouched, and a grant revoked because a key was compromised puts every action under it in question."},
+        "reason": {"type": "string", "description": "Why the authority was conferred, in the grantor's words. A grant with no stated purpose cannot be reviewed for whether it is still needed, so it is never reviewed and never removed."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "State digest over the canonical grant payload under its schema id. The value a receipt binds, which is what makes `was this authorized at the time?` a mechanical question rather than a reconstruction."}
+      }
+    },
+    "AuthorityReceipt": {
+      "type": "object",
+      "required": ["receipt_id", "actor", "capability", "grant_id", "grant_state_digest", "target", "decision", "checked_at"],
+      "additionalProperties": false,
+      "description": "The record that authority was CHECKED before an action ran, and what the check found. It exists because an authority system with no receipts can only answer whether an actor could have been authorized, never whether anybody asked — and those diverge exactly when it matters, which is when a grant has been widened since. Refusals are recorded as well as approvals: a receipt file containing only successes is a log of what the system permitted rather than a log of what it was asked.",
+      "properties": {
+        "receipt_id": {"type": "string", "minLength": 1, "description": "Addressable identity of the receipt, so a decision, a release attestation or an incident review can cite the exact authorization."},
+        "actor": {"$ref": "common.schema.json#/$defs/ActorId", "description": "Who was acting."},
+        "on_behalf_of": {"$ref": "common.schema.json#/$defs/ActorId", "description": "The principal a worker or service was acting for, when one exists. Present so that `the worker did it` never terminates an accountability question."},
+        "capability": {"$ref": "#/$defs/Capability", "description": "Which capability was exercised."},
+        "grant_id": {"$ref": "common.schema.json#/$defs/GrantId", "description": "Which grant was relied on."},
+        "grant_state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The exact grant state relied on. THE LOAD-BEARING FIELD: binding the state rather than the id is what stops a grant widened after the fact from appearing to have authorized an action it did not, and what stops a grant narrowed after the fact from appearing to have forbidden one it did."},
+        "target": {"$ref": "#/$defs/AuthorityScope", "description": "What the action was actually against, expressed in the same scope vocabulary so that the containment check is a comparison rather than an interpretation."},
+        "decision": {"type": "string", "enum": ["authorized", "refused"], "description": "What the check concluded. Two values, because a check that could not run is a `refused` with a stated reason — an authority question that fails open is the failure this whole document exists to prevent."},
+        "refusal_reason": {"type": "string", "enum": ["no_grant", "capability_not_granted", "scope_mismatch", "grant_expired", "grant_revoked", "constraint_violated", "approval_missing", "delegation_depth_exceeded", "provider_may_not_hold_authority", "grant_unreadable"], "description": "Why authority was refused, as a stable code. `grant_unreadable` is deliberately a refusal rather than an error: a system that cannot read its own grants must stop, not proceed."},
+        "constraints_evaluated": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["constraint", "satisfied"],
+            "additionalProperties": false,
+            "description": "One constraint and how it evaluated.",
+            "properties": {
+              "constraint": {"type": "string", "minLength": 1, "description": "The constraint kind that was evaluated."},
+              "satisfied": {"type": "boolean", "description": "Whether it was satisfied."},
+              "detail": {"type": "string", "description": "What the evaluation compared, in words — the ceiling and the actual, the window and the instant."}
+            }
+          },
+          "description": "Every constraint on the grant and its outcome, including the ones that passed. Recording only failures would make a receipt unable to answer whether a constraint was checked at all, which is the same absence-versus-pass confusion that `checks_not_run` exists to prevent elsewhere in this family."
+        },
+        "approvals": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/ActorId"},
+          "description": "Actors whose approval was collected when a `RequiresApproval` constraint applied, in collection order. Distinctness is evaluated against the actor identity, so one person approving twice is one approval."
+        },
+        "checked_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the authority check ran. This is the instant every time-bounded constraint is evaluated against, so it must be the check's own clock reading and not the time the action later completed."}
+      }
+    },
+    "ApprovalRule": {
+      "description": "How many approvals, from whom, in what arrangement. A closed union rather than an expression language, because an approval rule is read under pressure by somebody deciding whether a release may go out, and a rule that requires evaluation to understand will be misread exactly then.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["rule", "eligible"],
+          "additionalProperties": false,
+          "description": "Any one of the named actors suffices.",
+          "properties": {
+            "rule": {"const": "AnyOne", "description": "Discriminator. Fixed for this variant."},
+            "eligible": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "common.schema.json#/$defs/ActorId"}, "description": "Actors who may approve. Non-empty, because a rule with no eligible approver can never be satisfied and is a block written as a rule."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["rule", "required"],
+          "additionalProperties": false,
+          "description": "Every named actor must approve.",
+          "properties": {
+            "rule": {"const": "All", "description": "Discriminator. Fixed for this variant."},
+            "required": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "common.schema.json#/$defs/ActorId"}, "description": "Actors whose approval is each required."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["rule", "threshold", "eligible"],
+          "additionalProperties": false,
+          "description": "At least N distinct actors from a pool.",
+          "properties": {
+            "rule": {"const": "Threshold", "description": "Discriminator. Fixed for this variant."},
+            "threshold": {"type": "integer", "minimum": 1, "description": "How many distinct approvals are needed. Distinct by actor identity: a person approving twice under two roles is one approval, and counting it as two is how a four-eyes rule quietly becomes a two-eyes rule."},
+            "eligible": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "common.schema.json#/$defs/ActorId"}, "description": "The pool. A threshold larger than the pool is unsatisfiable and must be refused when the rule is written rather than discovered when the release is blocked."}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["rule", "sequence"],
+          "additionalProperties": false,
+          "description": "Approvals in a required order — the shape of a real review chain, where a legal sign-off after an editorial one means something different from the two arriving in either order.",
+          "properties": {
+            "rule": {"const": "Sequence", "description": "Discriminator. Fixed for this variant."},
+            "sequence": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["step", "rule"],
+                "additionalProperties": false,
+                "description": "One ordered step of the chain.",
+                "properties": {
+                  "step": {"type": "integer", "minimum": 1, "description": "Position in the sequence, from one."},
+                  "rule": {"type": "object", "description": "The rule that must be satisfied at this step, itself an ApprovalRule. Nesting is permitted one level so a step can require any-of a group; deeper nesting is refused, because a rule nobody can read aloud is a rule nobody checks."},
+                  "label": {"type": "string", "description": "What this step is for, in words — `editorial`, `legal`, `subject-matter`. Present so a stalled chain names which review is outstanding rather than a step number."}
+                }
+              },
+              "description": "The steps, in order. An approval collected out of order does not count toward a later step, because the point of ordering is that the later reviewer saw the earlier reviewer's outcome."
+            }
+          }
+        }
+      ]
+    }
+  }
+}

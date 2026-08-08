@@ -67,6 +67,12 @@ jobs:
       - name: v5 regression must pass
         run: bash tests/v5/test_wi5.sh
 
+      - name: v6 regression must pass
+        run: bash tests/v6/test_wi6.sh
+
+      - name: The build manifest cannot claim what does not run
+        run: python3 scripts/check-manifest.py
+
       - name: Every link resolves
         run: python3 scripts/check-links.py
 
@@ -111,8 +117,8 @@ jobs:
           fi
 
           echo "creating $TAG at $SHA"
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "Antonio T. Smith Jr."
+          git config user.email "antonio@antoniotsmithjr.com"
           git tag -a "$TAG" -m "Writing Intelligence $TAG" "$SHA"
           git push origin "refs/tags/$TAG"
 
@@ -135,6 +141,8 @@ jobs:
             "${{ steps.v.outputs.tag }}"
             dist/writing-intelligence.skill
             dist/writing-intelligence.skill.sha256
+            dist/writing-intelligence-craft.skill
+            dist/writing-intelligence-craft.skill.sha256
             --title "Writing Intelligence ${{ steps.v.outputs.tag }}"
             --verify-tag
           )
@@ -148,7 +156,9 @@ jobs:
             echo "release exists; replacing assets"
             gh release upload "${{ steps.v.outputs.tag }}" \
               dist/writing-intelligence.skill \
-              dist/writing-intelligence.skill.sha256 --clobber
+              dist/writing-intelligence.skill.sha256 \
+              dist/writing-intelligence-craft.skill \
+              dist/writing-intelligence-craft.skill.sha256 --clobber
           else
             gh release create "${ARGS[@]}"
           fi

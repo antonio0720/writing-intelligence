@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/proof.schema.json",
+  "title": "ProofV6",
+  "description": "Proof as a planner rather than only a checker. v5 verifies claims after they are atomized; v6 derives, before release, what WOULD have to be proved — so that a gate evaluates a declared obligation set instead of running a hard-coded list of checks hidden inside a command. Three rules hold throughout and none of them bends. UNAVAILABLE IS NOT PASSING: a check that could not run is recorded as not run, with its reason, and never absorbed into a pass rate. AN ABSENT CHECK IS NOT A PASSING CHECK: an obligation nothing evaluated is open, not satisfied. AND NOTHING PROMOTES A RELIABILITY TYPE: a judged result never becomes verified because a provider was confident, because two providers agreed, or because a threshold was met — constraint C005 refuses it and there is no configuration that changes this. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "ProofObligation": {
+      "type": "object",
+      "required": ["obligation_id", "subject", "kind", "required_basis", "policy_source", "status"],
+      "additionalProperties": false,
+      "description": "Something that must be established before a subject may be released. Derived from typed state, a release target and a policy — not written by hand — so that `what must be proved?` is answerable before any work begins and identical for two people asking the same question of the same graph.",
+      "properties": {
+        "obligation_id": {"type": "string", "minLength": 1, "description": "Identity of the obligation, derived from its subject, kind and policy source so that regenerating obligations for an unchanged graph produces the same set rather than a fresh one. Without that, no obligation could carry a status across a re-plan."},
+        "subject": {"$ref": "semantic_node.schema.json#/$defs/NodeRef", "description": "What must be established about. Pinned to a state when the obligation has been discharged, because a result proves something about the state it examined and about nothing else."},
+        "kind": {"$ref": "#/$defs/ProofObligationKind", "description": "What must be established. The field that makes an obligation set readable: a claim requiring anchor integrity, numeric value and citation resolution has three obligations rather than one vague requirement to be checked."},
+        "required_basis": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/BasisKind"},
+          "description": "The reliability types that would satisfy this obligation. Minimum one, and stated as a SET because policy differs by target: an internal memo may accept a judged entailment where a regulatory filing accepts only a verified one, and the same claim then carries different obligations for different outputs. This is where a policy's strictness actually lives."
+        },
+        "required_checks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Specific check identifiers that must run. Empty means any check producing an acceptable basis will do; naming them is how a policy pins a particular method rather than an outcome."
+        },
+        "policy_source": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The exact policy state this obligation was derived from. Required, and it is why constraint C019 puts the policy inside the proof closure: a rule that changed six months later must not retroactively alter what `passed` meant for an older release."},
+        "status": {"$ref": "#/$defs/ObligationStatus", "description": "Where the obligation stands. Derived from the results bound to it rather than set, so it cannot be marked satisfied by anything but evidence."},
+        "satisfied_by": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "The verification results or judgment records that discharge it. Plural, because some obligations need several; and carried by digest so that a result later found to have examined the wrong state can be traced to everything it was counted toward."
+        },
+        "waiver": {"$ref": "#/$defs/ObligationWaiver", "description": "The record of a deliberate release with this obligation open, where policy permits one. Present so a waived obligation stays visible as waived — an obligation that could be deleted would let a release look complete when what happened is that somebody accepted a risk."},
+        "release_targets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Which targets require this. An obligation binding for one output and not another is the ordinary case, and a set that flattened them would either over-constrain the memo or under-constrain the filing."
+        },
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical obligation state, so a release closure binds the obligations as they stood at build."}
+      }
+    },
+    "ProofObligationKind": {
+      "type": "string",
+      "description": "What kind of thing must be established. Closed, because a gate evaluates a declared set and an open vocabulary would let an obligation be declared that no check knows how to discharge — which reads on a report as permanently open rather than as a mistake. Not every kind applies to every subject; the planner decides applicability from typed state, which is why a claim with no quantity generates no numeric obligation instead of generating one that trivially passes.",
+      "oneOf": [
+        {"const": "anchor.integrity", "description": "The evidence anchor resolves and the anchored bytes are what they were. The obligation everything else rests on: a claim whose anchor has drifted is unsupported however well it verifies against the drifted text."},
+        {"const": "quotation.verbatim", "description": "Quoted text matches the source exactly. Distinct from anchor integrity because a correct anchor can still be quoted inaccurately."},
+        {"const": "numeric.value", "description": "The stated quantity is what the source states."},
+        {"const": "numeric.unit", "description": "The unit is the source's unit, or a correct conversion of it."},
+        {"const": "numeric.dimension", "description": "Compared quantities share a dimension. What constraint C013 enforces, and what stops a rate being compared with a count."},
+        {"const": "numeric.range", "description": "A stated range or interval is the source's."},
+        {"const": "numeric.denominator", "description": "A rate's base population is stated and is the source's. The obligation that stops `43%` travelling without the thing it is 43% of."},
+        {"const": "date.point", "description": "A stated instant is the source's."},
+        {"const": "date.range", "description": "A stated period is the source's."},
+        {"const": "entity.presence", "description": "A named entity appears in the source as the claim says it does."},
+        {"const": "citation.resolution", "description": "A citation resolves to a retrievable source. Distinguished from anchor integrity because a citation can be well formed, resolvable and about something else entirely."},
+        {"const": "scope.spatial", "description": "The claim's territory is the source's."},
+        {"const": "scope.population", "description": "The claim's population is the source's. The scope failure that most often survives review, because both statements read as true."},
+        {"const": "scope.temporal", "description": "The claim's period is the source's."},
+        {"const": "modality.no-strengthening", "description": "A claim did not become more certain than its source. The obligation that catches `may` becoming `will` in a rewrite that changed nothing else."},
+        {"const": "negation.preservation", "description": "A negation survived rewriting. Rarely violated and catastrophic when it is."},
+        {"const": "attribution.preservation", "description": "Who said it survived rewriting. What stops a source's reported claim being rendered as the author's own."},
+        {"const": "definition.binding", "description": "A term is used under the definition that governs it. What makes a definition change propagate rather than sit inert."},
+        {"const": "obligation.exception-preservation", "description": "A declared exception survived rendering. The obligation with the largest legal consequence per instance: an obligation rendered without its exception clause states a duty nobody agreed to."},
+        {"const": "realm.preservation", "description": "A claim's epistemic realm survived rendering. Constraint C011, and what stops a scenario figure reading as a measurement."},
+        {"const": "entailment", "description": "A paraphrase is entailed by its source where no exact support exists. THE OBLIGATION MOST OFTEN DISCHARGED BY JUDGMENT rather than verification, which is why `required_basis` is per-obligation: a policy may accept a judged entailment for one target and require exact support for another."},
+        {"const": "forecast.assumptions-linked", "description": "A forecast names its assumptions and baseline. What stops a projection circulating as a finding."},
+        {"const": "argument.premises-exist", "description": "An argument's cited premises exist and carry their own proof states. All the system can check about reasoning, and it checks it."},
+        {"const": "authority.grant-valid", "description": "An actor held the capability they exercised, at the time they exercised it. Constraint C020."},
+        {"const": "decision.state-binding", "description": "A decision's target had not moved when it was taken. Constraints C006 and C007."},
+        {"const": "release.artifact-digest", "description": "The approved bytes are the shipped bytes. Constraint C010."},
+        {"const": "release.closure-digest", "description": "Every dependency the release claims is present in its closure. Constraint C009."}
+      ]
+    },
+    "ObligationStatus": {
+      "type": "string",
+      "description": "Where an obligation stands. FIVE VALUES, AND THE MIDDLE THREE ARE THE POINT: `open`, `unavailable` and `undeterminable` all mean the obligation is not discharged, and they send a person to three different places — do the work, fix the installation, accept that it cannot be settled from here. A schema with `satisfied` and `failed` alone would force all three into `failed`, and a gate report full of failures nobody can act on is one whose failures stop being read.",
+      "oneOf": [
+        {"const": "open", "description": "Not yet evaluated. The honest default, and where every obligation starts."},
+        {"const": "satisfied", "description": "Discharged by results whose basis is in `required_basis`. Requires the results to exist and to name this subject state; nothing else produces this value."},
+        {"const": "failed", "description": "Evaluated and not met. A finding, and the only one of the five that says something is wrong with the work."},
+        {"const": "unavailable", "description": "A required check could not run — no provider on this surface, an offline verifier profile, a dependency out of reach. NEVER counted as passing and never counted as failing: the subject may be perfectly sound and nobody has been able to tell. A release declaring this is stating an omission, which is stronger than a missing field."},
+        {"const": "undeterminable", "description": "Evaluated, and the answer cannot be reached from the available evidence — a source that neither supports nor contradicts the claim. Kept apart from `failed` because the repairs differ entirely: one is to correct the claim and the other is to find better support."}
+      ]
+    },
+    "BasisKind": {
+      "type": "string",
+      "description": "The reliability types, named as bare kinds so a policy can require one without supplying its payload. THE SET IS CLOSED AND ORDERED BY NOTHING. There is no `Confident`. There is no `AI Verified`. There is no `94.7% True`. A policy requiring `Verified` is not requiring a higher score, it is requiring a different KIND of thing, and no accumulation of judgment ever becomes one.",
+      "oneOf": [
+        {"const": "Verified", "description": "Established by a deterministic check that anyone can re-run to the same answer. Constraint C004 requires a deterministic engine to have produced it."},
+        {"const": "Measured", "description": "Established by a measurement carrying its numerator, denominator and population. Not a weaker verification: a different claim, about a sample."},
+        {"const": "Judged", "description": "Assessed by a named provider. Carries the provider's identity because the assessment is theirs and inherits none of the system's standing. Constraint C005 forbids typing it Verified under any circumstance."},
+        {"const": "HumanDeclared", "description": "Asserted by a named person with standing. The honest basis for a great deal of legitimate content, and it must never be rendered as though a machine had checked it."}
+      ]
+    },
+    "VerificationResult": {
+      "type": "object",
+      "required": ["result_id", "check", "check_version", "subject_state", "outcome", "basis", "executed_at"],
+      "additionalProperties": false,
+      "description": "What one check found about one exact state. `check_version` is required alongside `check`, because a check is software: an improved implementation that finds something its predecessor missed has not proved the old result wrong, it has produced a different result, and a record that could not tell them apart could never explain why something that passed in March fails in July.",
+      "properties": {
+        "result_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity of this result."},
+        "check": {"type": "string", "minLength": 1, "description": "Which check ran."},
+        "check_version": {"type": "string", "minLength": 1, "description": "Which version of it. Load-bearing for reproducibility: a release closure binds check versions, so re-verifying an old release runs the checks that actually judged it rather than today's."},
+        "subject_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "THE EXACT STATE EXAMINED. The field that makes staleness computable: when the subject's digest moves, this result demonstrably describes something else, and no wall-clock heuristic is needed to notice."},
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "Every other state the result relied on — the anchor, the source version, the governing definition, the policy. What makes invalidation precise rather than approximate: a definition changing invalidates exactly the results that read it."
+        },
+        "outcome": {"$ref": "#/$defs/CheckOutcome", "description": "What was found."},
+        "basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "The reliability type this result carries. A deterministic engine emits Verified and cannot emit anything else; a judgment provider emits Judged and cannot emit Verified. The constraint engine enforces both, because the alternative is a configuration flag that would eventually be set."},
+        "detail": {"type": "string", "description": "What was found, in words a person can act on. Most valuable on a failure, where `expected 11,800 from the source and the claim states 12,400` is a repair and `numeric.value failed` is a search."},
+        "executed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it ran."},
+        "engine": {"$ref": "#/$defs/EngineIdentity", "description": "Which implementation produced it. Required in a dual-core window, where Python and Rust must agree byte for byte and any divergence has to be attributable to one of them."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical result, so a closure binds the result as it was recorded."}
+      }
+    },
+    "CheckOutcome": {
+      "type": "string",
+      "description": "What a check found. `not_run` is a legitimate outcome recorded as a result rather than as an absence, because absence is invisible: a subject with no result and a subject whose check could not run look identical to a gate, and only one of them is a finding a release must declare.",
+      "oneOf": [
+        {"const": "pass", "description": "The property holds for the examined state."},
+        {"const": "fail", "description": "The property does not hold. A finding about the work."},
+        {"const": "not_applicable", "description": "The check does not apply — a numeric check on a claim with no quantity. Recorded so a report can distinguish a check that had nothing to do from one that was skipped."},
+        {"const": "not_run", "description": "The check could not run, with the reason in `detail`. NEVER absorbed into a pass rate: a run of 40 checks with 38 passes and 2 not-run is not 95%, it is 38 answers and 2 unknowns, and the second number is the one worth reading."},
+        {"const": "error", "description": "The check ran and failed to complete. Distinct from `fail`, which is a finding about the subject; this is a finding about the check, and confusing them sends somebody to correct a claim that was never examined."}
+      ]
+    },
+    "EngineIdentity": {
+      "type": "object",
+      "required": ["implementation", "version"],
+      "additionalProperties": false,
+      "description": "Which implementation produced a result. Present because the migration plan runs two cores side by side for at least one release cycle, and the requirement is byte-identical output on shared fixtures. A result that could not say which core produced it makes that requirement unverifiable, and the operator asking `which core answered?` is entitled to a straight answer rather than an inference.",
+      "properties": {
+        "implementation": {"type": "string", "minLength": 1, "description": "The engine. There is no silent fallback between implementations: a run that fell back has produced a result from a different engine and says so here."},
+        "version": {"type": "string", "minLength": 1, "description": "Its version."},
+        "binary_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of the binary, where the deployment can produce one. What turns `version 6.0.1` from a label into a fact."}
+      }
+    },
+    "JudgmentRecord": {
+      "type": "object",
+      "required": ["record_id", "provider", "subject_state", "assessment", "requested_at"],
+      "additionalProperties": false,
+      "description": "What a named provider assessed about an exact state. A record of an opinion and never of a fact, which is why the provider's identity is required and why constraint C008 gives providers NO authority grants at all: a provider may assess and may never decide, approve, commit or sign, and an assessment arriving as though it were a check is the confusion the whole reliability model exists to prevent.",
+      "properties": {
+        "record_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity."},
+        "provider": {"$ref": "#/$defs/ProviderRef", "description": "Who assessed. Required and never anonymized: an assessment whose provider is unknown cannot be weighed, re-requested or held to a policy, and it is the provider's opinion rather than the system's finding."},
+        "subject_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The exact state assessed."},
+        "obligation": {"type": "string", "description": "The obligation this was requested against, where it was requested for one. Present so an unsolicited assessment is distinguishable from one a policy asked for."},
+        "assessment": {"$ref": "#/$defs/JudgmentAssessment", "description": "What was found."},
+        "rationale": {"type": "string", "description": "The provider's reasoning, retained verbatim. A judgment a person cannot inspect is a judgment they have to take on trust, which is exactly what a Judged basis is meant to avoid asking of anybody."},
+        "requested_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it was asked for."},
+        "responded_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it came back. Absent means outstanding, and an outstanding request is not a negative answer."},
+        "disagreement": {"$ref": "#/$defs/JudgmentDisagreement", "description": "How this assessment stands against others of the same subject. Recorded because two providers disagreeing is information, and a policy for a regulated target may require the disagreement be resolved before release rather than averaged away."},
+        "prompt_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest of exactly what the provider was asked. What makes an assessment re-requestable on the same terms, and what stops a differently-worded request being compared with an earlier answer as though the question had not changed."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical record."}
+      }
+    },
+    "ProviderRef": {
+      "type": "object",
+      "required": ["provider_id"],
+      "additionalProperties": false,
+      "description": "A judgment provider. Named as a first-class reference so that an assessment carries who made it into every rendering — the provider is replaceable and the policy is durable, and an assessment that lost its provider would have inherited the system's voice.",
+      "properties": {
+        "provider_id": {"type": "string", "minLength": 1, "description": "Which provider."},
+        "model": {"type": "string", "description": "The specific model or panel, where the provider exposes one. Recorded because a provider's answer is a function of it, and comparing answers across a silent model change compares two different things."},
+        "version": {"type": "string", "description": "The provider's version, where declared."}
+      }
+    },
+    "JudgmentAssessment": {
+      "type": "string",
+      "description": "What a provider found. `abstained` and `undeterminable` are both here and are not the same: one is the provider declining, and one is the provider answering that the question cannot be settled on the evidence given. Collapsing them loses the difference between a provider that is unavailable and a subject that is genuinely unresolvable.",
+      "oneOf": [
+        {"const": "supported", "description": "The provider assesses the subject as supported. Judged, and it stays Judged."},
+        {"const": "unsupported", "description": "The provider assesses it as unsupported."},
+        {"const": "contradicted", "description": "The provider finds the source contradicts the subject. Stronger than unsupported and worth its own value, since the repairs differ."},
+        {"const": "undeterminable", "description": "The provider cannot settle it on the evidence provided. An answer, and often the correct one."},
+        {"const": "abstained", "description": "The provider declined — policy, safety, or a subject outside its scope. Recorded so that a declined request is not read as a negative finding."}
+      ]
+    },
+    "JudgmentDisagreement": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "description": "How assessments of one subject stand against each other. NEVER AVERAGED INTO A SCORE. Two providers disagreeing about whether a paraphrase is entailed is a finding that belongs in front of a person, and a mean would erase precisely the signal that made it worth asking twice.",
+      "properties": {
+        "status": {"$ref": "#/$defs/DisagreementStatus", "description": "Where the disagreement stands."},
+        "conflicting_records": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/DigestRef"},
+          "description": "The other assessments that disagree."
+        },
+        "resolution": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision that settled it, where policy required settlement. Absent means unresolved, and a policy for a regulated target may refuse release on exactly that."},
+        "policy_treatment": {"$ref": "#/$defs/DisagreementTreatment", "description": "What the governing policy does about it. Recorded on the record so a reader can see that a disagreement was permitted rather than missed."}
+      }
+    },
+    "DisagreementStatus": {
+      "type": "string",
+      "description": "Whether providers agree. `unknown` is present because a single assessment establishes nothing about agreement, and reporting it as `none` would claim a consensus of one.",
+      "oneOf": [
+        {"const": "none", "description": "Several assessments and they agree."},
+        {"const": "present", "description": "Assessments disagree, and the disagreement is unsettled."},
+        {"const": "resolved", "description": "Disagreed and settled by an authorized decision."},
+        {"const": "unknown", "description": "Only one assessment exists, so agreement has not been tested. Never rendered as agreement."}
+      ]
+    },
+    "DisagreementTreatment": {
+      "type": "string",
+      "description": "How policy handles a judgment disagreement for a given target. Per-policy rather than global, because the right answer for an internal draft and for a regulatory filing are genuinely different — and the difference should live in the policy where it can be read, not in a reviewer's habits.",
+      "oneOf": [
+        {"const": "advisory", "description": "Recorded and does not block. Appropriate where the judgment was optional to begin with."},
+        {"const": "blocking", "description": "Must be resolved before release. The correct treatment for a regulated target, where an unresolved disagreement about an entailment is an unresolved question about whether the document says something true."},
+        {"const": "escalate", "description": "Requires a decision by a named role rather than by whoever is releasing. For subjects where the disagreement itself indicates the matter needs somebody with standing."}
+      ]
+    },
+    "ObligationWaiver": {
+      "type": "object",
+      "required": ["decision", "reason", "waived_at"],
+      "additionalProperties": false,
+      "description": "A deliberate release with an obligation open. Requires a decision digest rather than a flag, because waiving a proof obligation is an exercise of authority and recording it any other way creates a second approval path around the one the authority model governs. The obligation stays OPEN and waived; it is never marked satisfied, because it was not.",
+      "properties": {
+        "decision": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision that waived it, carrying its own authority receipt."},
+        "reason": {"type": "string", "minLength": 1, "description": "Why. Non-empty and rendered wherever the waiver is: a waiver whose reason is not shown to a reader of the released artifact is an undisclosed risk, and disclosure is the whole reason a waiver is a first-class object."},
+        "expires_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the waiver lapses. Absent means it holds for this release only rather than indefinitely — a waiver that silently carried into every future release would turn one accepted risk into a permanent exemption."},
+        "waived_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When."}
+      }
+    },
+    "Invalidation": {
+      "type": "object",
+      "required": ["invalidation_id", "subject", "cause", "kind", "detected_at"],
+      "additionalProperties": false,
+      "description": "The record that something a proof depended on moved. Invalidation is DERIVED from digests rather than declared: when a state a result depended on changes, that result demonstrably describes a state that no longer exists, and the system knows it without anybody remembering. This is what makes verification stop expiring silently — the failure v5 was built to end and v6 inherits without weakening.",
+      "properties": {
+        "invalidation_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity, so an invalidation raised and later repaired is one object with a history."},
+        "subject": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "What became invalid — a verification result, a judgment record, a decision, an argument."},
+        "cause": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state change that caused it. Named, because `this result is stale` sends nobody anywhere and `this result is stale because the definition it read was revised` sends them to the definition."},
+        "kind": {"$ref": "#/$defs/InvalidationKind", "description": "What kind of dependency moved. Decides the repair, and the repairs are not comparable in cost."},
+        "severity": {"$ref": "#/$defs/InvalidationSeverity", "description": "Whether the subject is definitely wrong or merely unverified. The distinction that stops every dependency change reading as an error, which is what makes an invalidation report worth opening."},
+        "detected_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it was detected — which is when the dependency moved, not when somebody noticed."},
+        "resolved_by": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The new result or decision that repaired it. Absent means outstanding, and an outstanding invalidation is what makes a node stale — a flag nobody can clear by hand."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical invalidation."}
+      }
+    },
+    "InvalidationKind": {
+      "type": "string",
+      "description": "What moved underneath a proof. Enumerated because each leads to a different repair and a different cost, and a single `stale` marker would send a re-run and a re-approval to the same queue at the same apparent price.",
+      "oneOf": [
+        {"const": "subject_state_changed", "description": "The examined subject itself changed. The commonest kind, usually repaired by re-running the check."},
+        {"const": "dependency_state_changed", "description": "Something the result relied on changed — an anchor, a governing definition, a linked assumption. The subject may be untouched and the result is still about a world that has moved."},
+        {"const": "source_version_advanced", "description": "The underlying source has a new version. May require re-anchoring rather than re-checking, and constraint C003 requires an anchor into a superseded version to be explicit."},
+        {"const": "check_version_changed", "description": "The check was updated. Does not make the old result wrong; it makes it a result from a previous implementation, and whether that still counts is a policy question."},
+        {"const": "policy_changed", "description": "The governing policy moved, so the obligation set itself may differ. Invalidates the QUESTION rather than the answer, which is why it is its own kind."},
+        {"const": "authority_revoked", "description": "A grant relied on was revoked or expired. Constraint C020, and it reaches decisions rather than checks — the most expensive kind to repair, because the repair is somebody's attention."},
+        {"const": "provider_deprecated", "description": "A judgment provider is no longer accepted under policy. Its assessments do not become false; they stop being admissible, which is a distinction a report must preserve."}
+      ]
+    },
+    "InvalidationSeverity": {
+      "type": "string",
+      "description": "How badly a subject is damaged. Three values because collapsing them makes every dependency change look like an error, and a system that cries wolf on a whitespace change in an upstream source teaches its users to clear invalidations without reading them.",
+      "oneOf": [
+        {"const": "contradicted", "description": "The new state actively contradicts what the subject asserted. Definitely wrong, and it is a finding rather than a chore."},
+        {"const": "unverified", "description": "The subject may still hold and is no longer proved. The commonest severity, and the honest description of most staleness: nobody knows, and finding out is a re-run."},
+        {"const": "advisory", "description": "A dependency changed in a way that does not bear on the subject — a source revision that did not touch the anchored region. Recorded for the audit trail and does not make the subject stale, because marking it stale would spend a person's attention on nothing."}
+      ]
+    }
+  }
+}

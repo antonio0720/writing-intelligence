@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/graph_delta.schema.json",
+  "title": "GraphDeltaV6",
+  "description": "Everything that changed between two graph states, at two levels at once: the mechanical level, which says which node states moved, and the semantic level, which says what the movement MEANT. Both are required and neither substitutes for the other. A mechanical delta alone cannot distinguish a reworded sentence from a reversed one, so a reviewer reading it has to re-read the prose, which is the work the system was supposed to do. A semantic delta alone cannot be applied, replayed or verified, so it is commentary. Held together, they are what makes a merge decidable and a review proportionate: eleven changes of which one is `polarity_flipped` is a review of one paragraph rather than of eleven. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "GraphDelta": {
+      "type": "object",
+      "required": ["delta_id", "from_root", "to_root", "transitions", "semantic_deltas"],
+      "additionalProperties": false,
+      "description": "The complete difference between two graph roots. It is addressed by content and bound to both endpoints, so a delta cannot be re-pointed at a different pair of states: applying it to a state other than `from_root` is refused rather than attempted, because a delta applied to an unexpected base produces a graph nobody computed and nobody reviewed.",
+      "properties": {
+        "delta_id": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Content-derived identity over the canonical delta payload. The value a semantic commit references."},
+        "from_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root this delta starts from. Checked before application; a mismatch is a refusal."},
+        "to_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root that results. Recomputed after application and compared, so a delta that does not produce the state it claims to produce is caught at the moment it is applied rather than at the moment somebody notices the graph is wrong."},
+        "transitions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/StateTransition"},
+          "description": "Every node whose state moved, in canonical order by logical id. Includes creations and removals, because a delta that recorded only updates would make a node's disappearance indistinguishable from its never having been there."
+        },
+        "edges_added": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/EdgeRef"},
+          "description": "Edges introduced. Kept separate from node transitions because rewiring and restating are different acts with different review costs: a claim that gained a supporting anchor and a claim whose figure changed both move the graph, and conflating them makes every rewiring look like an assertion change."
+        },
+        "edges_removed": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/EdgeRef"},
+          "description": "Edges withdrawn. The most under-noticed change in the family: removing a `supports` edge leaves every word of a document identical and leaves the claim unsupported, and it is invisible to every diff that reads text."
+        },
+        "semantic_deltas": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/SemanticDelta"},
+          "description": "What the transitions MEAN, one entry per detected semantic move. May be empty when a delta is purely structural — a paragraph reordering that changes no assertion — and an empty array is a positive statement that nothing semantic moved rather than an absence of analysis. That distinction is carried by `classification_complete`."
+        },
+        "classification_complete": {"type": "boolean", "description": "Whether every transition was classified. False when a classifier could not decide a move and escalated it, which is a fact a reviewer must see: an unclassified change presented among classified ones reads as `wording_only` by adjacency, and that is the one class an over-eager classifier is most likely to reach for."},
+        "unclassified": {
+          "type": "array",
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes whose semantic move could not be determined. Named rather than counted, so the reviewer can open them. Under the weakest-defensible-label rule an unclassified change is treated as requiring human review, never as benign — a misclassification then costs a click rather than a correction after publication."
+        },
+        "computed_by": {"type": "string", "minLength": 1, "description": "Identity and version of the differ that produced this delta. A different version is a different producer, and a classification disagreement between two builds has to be attributable to one of them."}
+      }
+    },
+    "StateTransition": {
+      "type": "object",
+      "required": ["logical_id", "kind", "schema"],
+      "additionalProperties": false,
+      "description": "One node moving from one state to another, or coming into or out of existence. Both endpoints are state digests rather than payloads, so a delta stays proportionate to the change rather than to the size of the graph, and so a transition can be verified against a node index without the payloads being present at all.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which node moved. Unchanged across the transition by definition: a change that mints a new logical id is a creation plus a supersession, not an update, and recording it as an update would hide that the claim being asserted is a different claim."},
+        "kind": {"type": "string", "enum": ["created", "updated", "superseded", "removed", "restored"], "description": "What sort of movement. `superseded` differs from `removed` in that the node remains readable and points forward to its replacement, which is what bitemporal knowledge time requires; `removed` means the node is no longer part of the graph at all and is reserved for retraction of something that should never have been recorded. `restored` exists because a node brought back is not a new node — treating it as one would break every proof that ever pointed at it."},
+        "from_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state before. Absent exactly when `kind` is `created`."},
+        "to_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state after. Absent exactly when `kind` is `removed`."},
+        "schema": {"$ref": "common.schema.json#/$defs/SchemaId", "description": "The schema id the node's payload is written under. Carried on the transition because a payload reinterpreted under a new schema version is a state change even when no byte of it moved, and a transition that did not record the schema could not express that."},
+        "realm": {"$ref": "common.schema.json#/$defs/Realm", "description": "The node's realm after the transition. Present so a realm change — a hypothetical promoted to an external fact, which is among the most consequential edits available — is visible in the transition itself and not only in the payload."}
+      }
+    },
+    "EdgeRef": {
+      "type": "object",
+      "required": ["from", "to", "relation"],
+      "additionalProperties": false,
+      "description": "One edge named by its endpoints and relation, which together are unique. Used for additions and removals, where naming the triple is enough and carrying the payload would not be.",
+      "properties": {
+        "from": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Origin node. Direction is meaningful for every relation; a reversed edge asserts a different thing."},
+        "to": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Target node."},
+        "relation": {"type": "string", "minLength": 1, "description": "The relation name, from the edge vocabulary. Retyping a relation is recorded as a removal and an addition rather than as an update, because `supports` becoming `illustrates` is not an adjustment to an existing claim of support — it is a withdrawal of it."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The edge's own state digest, when the edge carries payload. Present so that changing the scope recorded on a qualifying edge is a detectable change rather than an invisible one."}
+      }
+    },
+    "SemanticDeltaClass": {
+      "type": "string",
+      "enum": [
+        "wording_only",
+        "quantity_changed",
+        "unit_changed",
+        "scope_broadened",
+        "scope_narrowed",
+        "temporal_scope_changed",
+        "certainty_strengthened",
+        "certainty_weakened",
+        "polarity_flipped",
+        "attribution_changed",
+        "causality_changed",
+        "definition_changed",
+        "obligation_strengthened",
+        "obligation_weakened",
+        "legal_force_strengthened",
+        "legal_force_weakened",
+        "canon_changed",
+        "evidence_changed"
+      ],
+      "description": "What kind of change a semantic move is. The vocabulary is closed and each member names a change whose proof consequence differs from the others.\n\n`wording_only` — the assertion is identical and the words are not. THE ONLY CLASS AN AUTOMATIC ACCEPT POLICY MAY CONTAIN, and for exactly that reason the class a careless classifier reaches for; an uncertain classification must resolve AWAY from it.\n\n`quantity_changed` and `unit_changed` — the figure moved, or what it counts did. Separated because `11,800 households` becoming `11,800 individuals` keeps every digit and changes the claim, and a differ that compared only magnitudes would report no change at all.\n\n`scope_broadened` and `scope_narrowed` — the population or condition the claim ranges over changed. Broadening is the more dangerous direction: existing evidence for a narrow claim does not carry to a wide one, and a universal is refuted by a single counterexample.\n\n`temporal_scope_changed` — the period changed. A source about 2019 does not support a claim about 2019 through 2023.\n\n`certainty_strengthened` and `certainty_weakened` — the modal force moved. Strengthening invalidates existing support, because a source saying a thing MAY happen does not support a claim that it DOES.\n\n`polarity_flipped` — an assertion became its negation, or the reverse. Named on its own rather than folded into certainty because it inverts the sign of every other dimension at once and is the single change most likely to survive a hurried review.\n\n`attribution_changed` — who the claim is credited to moved, including the removal of attribution, which silently converts a reported claim into an asserted one.\n\n`causality_changed` — a causal relation was added, removed or redirected. Adding causation where a source stated correlation is the most common serious misreporting failure in sourced writing and the least visible in a line diff.\n\n`definition_changed` — a registered term's meaning moved, which changes every claim that uses it without any of those claims being edited.\n\n`obligation_strengthened` and `obligation_weakened` — what somebody must do changed. Separated from certainty because an obligation is about conduct rather than about truth, and the two are governed by different reviewers.\n\n`legal_force_strengthened` and `legal_force_weakened` — the binding force of a provision changed: a guideline became a requirement, or the reverse. Kept apart from obligation because the same conduct can be recommended in one jurisdiction and mandated in another, and collapsing them loses which one a document is asserting.\n\n`canon_changed` — a fact of a constructed world moved, invalidating every scene that depended on it.\n\n`evidence_changed` — the binding between a claim and what supports it moved: an anchor rebound, a source replaced, a supporting edge withdrawn. The claim's own words may be untouched, which is precisely why this class exists."
+    },
+    "SemanticDelta": {
+      "type": "object",
+      "required": ["class", "node", "basis"],
+      "additionalProperties": false,
+      "description": "One classified semantic move, with what moved, how the classification was reached and what it costs downstream. `basis` is required rather than assumed, because a field comparison and a model's assessment are different kinds of finding and a reviewer deciding how hard to look needs to know which one they are reading.",
+      "properties": {
+        "class": {"$ref": "#/$defs/SemanticDeltaClass", "description": "Which kind of change this is."},
+        "node": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The node the change is about."},
+        "dimension": {"type": "string", "description": "Which dimension of the semantic representation moved — `quantity`, `modality`, `polarity`, `temporal_scope`, `attribution`. Present so a report can say what to look at rather than only what class it fell into."},
+        "before": {"description": "The value on that dimension before the change, in whatever shape the dimension uses. Untyped on purpose: a quantity, a modality string and a boolean polarity all appear here, and forcing them into one type would mean serializing a quantity as a number, which is exactly the float hazard `common.schema.json#/$defs/Quantity` exists to avoid."},
+        "after": {"description": "The value on that dimension after the change."},
+        "basis": {"$ref": "common.schema.json#/$defs/ReliabilityBasis", "description": "How the classification was produced. A field comparison is `Verified`; a paraphrase or materiality assessment is `Judged` and names its provider. There is no threshold at which a judged classification becomes a verified one."},
+        "detected_by": {"type": "string", "enum": ["deterministic", "escalated", "declared"], "description": "`deterministic` — a comparison decided it. `escalated` — it was referred to the judgment tier, and with no provider configured it returns needing review rather than resolved. `declared` — a human stated the classification, which is legitimate and is recorded as such rather than dressed up as a computation."},
+        "proof_consequence": {"type": "string", "enum": ["invalidates", "requires_recheck", "unaffected", "undetermined"], "description": "What this change does to existing proof. `invalidates` — support does not carry forward and re-verification is required. `requires_recheck` — the support may still hold and a human decision clears it; nothing clears itself. `unaffected` — provably no proof path is touched, which is as important to report as damage is: a dependency engine that reports only damage produces a wall of red on every edit, the rational response is to stop reading it, and the first thing lost is the finding that mattered. `undetermined` — the consequence could not be computed, which HOLDS rather than passes."},
+        "note": {"type": "string", "description": "Why the classification is what it is, addressed to the person who has to decide what to do about it rather than to a parser."}
+      }
+    }
+  }
+}

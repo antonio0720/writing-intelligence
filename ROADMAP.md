@@ -1,6 +1,6 @@
 # Roadmap
 
-Writing Intelligence is a living project. **v5.0 shipped August 2026.** Here's where it goes next.
+Writing Intelligence is a living project. **v6.0 shipped August 2026.** Here's where it goes next.
 
 Built by **Antonio T. Smith Jr. / Density6 LLC**
 
@@ -17,194 +17,213 @@ Each version proved one thing and then made the next thing necessary.
 | **v3.0** | Governed authorship. Writing can be governed without being flattened: passes, engines, schemas, benchmarks. |
 | **v4.0** | Accountable authorship. What may be *claimed* about the writing is itself governed — support means a verbatim span or it is `needs_source`. |
 | **v5.0** | Proof-carrying authorship. The account travels with the document and survives the absence of everything that made it. |
+| **v6.0** | Executable meaning. A body of meaning can be changed by several people across time, under scoped authority, without anyone losing track of what is still true — and without the system inventing an answer when they disagree. |
 
-v4 verifies a document at a moment. v5 keeps the verification bound to what it depended on, so an edit made three weeks after a check cannot inherit the check's result — and packages the account into an artifact a stranger can verify offline, with no model and no network.
-
----
-
-## v5.0 — Released (August 2026)
-
-**The Proof-Carrying Authorship OS.** Six new system laws (G–L) above the six preserved v4 laws. All of it in one stdlib-only Python file, offline, Python 3.8+.
-
-**Executable today:**
-
-- [x] Content-addressed source ingestion with immutable source versions — `wi ingest`, raw bytes hashed before any normalization
-- [x] Canonical serialization and domain-separated state digests — `wi-state-v5`, NFC, sorted keys, RFC 8785-shaped
-- [x] A persistent `.wi/` workspace — SQLite index plus content-addressed object store, plus `wi.lock`
-- [x] Claim atomization — a compound sentence becomes independently checkable atoms — `wi atomize`
-- [x] Evidence anchors with byte spans and quote digests — `wi anchor`, `text_span` only
-- [x] Deterministic checks — anchor integrity, verbatim quotation, numeric value, date range, entity presence, citation resolution
-- [x] `span_supported` — every checkable component of a claim found co-located inside one span of one source; distinct from `supported` and from `candidate_support`
-- [x] The authorship graph — `wi graph`, nodes and edges with a content-derived logical id and an immutable state digest
-- [x] Staleness and the minimum repair frontier — `wi impact`, which reports what a changed source broke **and how many nodes it provably did not**, with a costed repair plan
-- [x] Deterministic semantic diff — `wi diff --semantic`, classifying `may reduce → reduces` as `certainty_strengthened` and `11,800 → 12,400` as `quantity_changed`
-- [x] Writing tests — `wi test`: evidence coverage with a denominator, forbidden terminology, concept drift, required sections, orphan citations
-- [x] Proof-carrying release bundles in three profiles — `wi bundle` at `full` / `hash-only` / `redacted`
-- [x] Offline verification — `wi verify-release`, recomputing every digest with no model and no network, rejecting a tampered artifact with `WI_RELEASE_TAMPERED`
-- [x] `wi explain path:line`, `wi doctor` capability negotiation, `wi preserve` into the workspace
-- [x] The whole v4 floor unchanged — `preserve` · `scan-sources` · `extract-claims` · `verify` · `gate`
-- [x] Regression: `tests/v4/test_wi.sh` (3 checks) and `tests/v5/test_wi5.sh` (32 checks, each with a negative twin)
-- [x] 20 doctrine documents in `references/v5/`, 15 JSON Schemas in `schemas/v5/`
-
-**Specified in v5.0 and not executable anywhere:** a compiled Rust/WASM core; PDF, DOCX, XLSX, image, audio and video anchors; any judgment provider; proposal and decision objects as persisted records; external signing; the Workbench; the MCP server; REST v5; multi-actor authority policy; at-rest encryption; `wi migrate`. Every one is labelled at the point of description, and `wi doctor` reports the live list on any machine.
-
-> **Note on numbering.** Earlier roadmaps reserved v5.0 for *Multimodal Writing Intelligence*. The graph had to come first: multimodal anchors without dependency-aware proof would have produced more kinds of evidence that nothing could invalidate. Multimodal work is **v5.2** and is unchanged in scope.
+v5 answers *is this supported?* v6 answers *what changed, what did that break, who was allowed to do it, and what would it cost to accept?* The second set of questions is not a bigger version of the first. It requires the system to hold state across time and to have an opinion about who may move it, and neither is a feature that can be bolted onto a verifier.
 
 ---
 
-## v5.1 — The Judgment Tier (Target: Q1 2027)
+## Shipped in 6.0.0 — the first tier of the runtime
 
-The deterministic tier says outright that it cannot judge paraphrase. That is the largest remaining gap and closing it is the next priority. The whole design constraint is that adding judgment must not weaken `verified`.
+Sixteen new commands beside the seventeen from v4 and v5, for thirty-three in total. All of it in one stdlib-only Python file, offline, Python 3.8+, no model, no network.
 
-### The provider ABI
+**Canonicalization**
 
-- [ ] A stable provider interface — request, response, error taxonomy, timeout and refusal semantics
-- [ ] Providers are named, versioned and swappable. No provider is bundled, privileged or default
-- [ ] The gateway has **no write path into the graph**. A provider returns a record; the core decides what, if anything, becomes a node
+- [x] `wi canon` — canonical JSON under `wi-json-v1` and a domain-separated state digest, emitted **beside** the v5 digest rather than in place of it, so nothing computed under v5 is silently reassigned an identity
 
-### Paraphrase entailment as a typed, replaceable record
+**Semantic version control**
 
+- [x] `wi branch` — create, list, switch and delete named movable pointers into the immutable object store
+- [x] `wi propose` — a change bound to an exact target state digest. Nothing moves, and the command says so on every run
+- [x] `wi proposals` — open, accepted, rejected, deferred, superseded, applied
+- [x] `wi decide` — an authorized decision bound to the state the actor actually reviewed; a target that has moved is refused with `WI_DECISION_STALE` rather than re-attached
+- [x] `wi commit` — every accepted proposal applies as one transaction, recording prior root, next root, actor and decisions
+- [x] `wi log` — semantic commit history
+
+**Counterfactual simulation**
+
+- [x] `wi simulate` — deltas, required authority and whether the actor holds it, the stale frontier, the conflicts a change would cause, a costed repair plan, and the **provably unaffected count reported with the same prominence as the breakage**. It writes nothing and says so
+
+**Conflict-preserving merge**
+
+- [x] `wi merge` — a semantic three-way merge that preserves a typed conflict instead of averaging it. Exits 2, does not move the root, shows both values verbatim
+- [x] `wi conflicts` — unresolved conflicts, and resolution under a named grant with a stated reason
+
+**Authority**
+
+- [x] `wi authority` — issue, delegate, revoke and check capability grants over subject, capability, scope and window. Delegation is monotone: a child may narrow and may never widen, and an attempt exits with `WI_GRANT_SCOPE_EXCEEDED`. Absence of a grant is a refusal, never a default-allow
+
+**Proof planning**
+
+- [x] `wi obligations` — what must be proved before this ships, **derived from typed state, release target and policy** rather than read off a hard-coded checklist
+
+**Bitemporal query**
+
+- [x] `wi as-of` — `--valid-at` and `--known-at` queried independently, so *what did we believe in March about what was true in 2019* is a query rather than an act of memory
+
+**The graph constraint engine**
+
+- [x] `wi constraints` — C001 through C020, where a constraint that could not run says so and says why. Three outcomes, no fourth status, and no aggregate score
+
+**Merkle closure and selective disclosure**
+
+- [x] `wi capsule` — create, inspect and verify a `.wic` closure with per-leaf disclosure across four profiles. A redacted leaf proves membership and nothing about its content, and the artifact declares that itself
+
+**Backward explanation**
+
+- [x] `wi why` — a node backward to its basis, its two time intervals, the commit that introduced it, the actor and the grant that permitted it
+
+**And the substrate under all of it**
+
+- [x] Six new system laws — M through R — in `references/v6/CONSTITUTION.md`
+- [x] 24 doctrine documents in `references/v6/`, every mechanism section marked *executable* or *specified*
+- [x] 20 JSON Schemas in `schemas/v6/`
+- [x] `tests/v6/test_wi6.sh` — 70 assertions, every one with a negative twin
+- [x] The v4 floor and the whole v5 graph, unchanged: every earlier fixture still verifies
+
+The v5.0 tier — content-addressed ingestion, claim atoms, evidence anchors, the authorship graph, staleness and the minimum repair frontier, semantic diff, writing tests, `.wiab` bundles and offline verification — is unchanged and in force. Its detail lives in [`references/v5/README.md`](references/v5/README.md).
+
+---
+
+## v6.1 → v6.3 — judgment, evidence, and compilation (Target: 2027)
+
+The deterministic tier says outright that it cannot judge paraphrase, that six of its seven anchor kinds do not execute, and that meaning does not compile to anything but Markdown and HTML. Those are the three largest remaining gaps and they close in this order, because the order is the order of evidentiary value per unit of risk.
+
+### v6.1 — The judgment tier
+
+The whole design constraint is that adding judgment must not weaken `verified`.
+
+- [ ] A stable provider ABI — request, response, error taxonomy, timeout and refusal semantics. Providers are named, versioned and swappable; **no provider is bundled, privileged or default**
+- [ ] **The gateway has no write path into the graph.** A provider returns a record; the core decides what, if anything, becomes a node
 - [ ] Entailment classification for a claim supported by a source that does not share its wording
 - [ ] Every judgment record carries `provider`, `model_identifier`, `prompt_policy_hash`, `input_hashes`, `output` verbatim, `calibration_basis` and `currency` — per Law L
 - [ ] A judgment emits `judged`. It may never emit `verified`. There is no threshold and no provider quality that promotes one into the other
 - [ ] A judgment record is dependency-bound like any other proof and goes stale under Law I
+- [ ] **Two providers that disagree produce a conflict, not an average** — the same rule `wi merge` already enforces on branches, applied to opinions. Averaging two opinions manufactures a third opinion nobody holds
+- [ ] Calibration published with its benchmark set and its N on the same line. No naked confidence percentage anywhere; a percentage without a denominator is authority theater
+- [ ] A judgment provider may never sign a decision record, act on an acceptance, or write a record typed `human`, `team_member` or `authorized_editor`
 
-### Disagreement as a first-class outcome
+Governing documents: [`references/v5/JUDGMENT_TIER.md`](references/v5/JUDGMENT_TIER.md), [`references/v6/AUTHORITY_MODEL.md`](references/v6/AUTHORITY_MODEL.md).
 
-- [ ] Two providers that disagree produce a **conflict**, not an average. Averaging two opinions manufactures a third opinion nobody holds
-- [ ] Conflicts surface at the gate with both records and both provenance chains attached
-- [ ] Conflict between two *supplied sources* surfaced at intake rather than at gate
+### v6.2 — Multimodal evidence adapters
 
-### Calibration published honestly
-
-- [ ] Calibration results are `measured`, and publish their **benchmark set and their N** on the same line
-- [ ] No naked confidence percentage anywhere. A percentage without a denominator is authority theater
-- [ ] An uncalibrated provider reports `calibration_basis: none` rather than omitting the field
-
-Governing document: `references/v5/JUDGMENT_TIER.md`, written to bind an implementation that does not exist yet.
-
----
-
-## v5.2 — Multimodal anchors (Target: Q2–Q3 2027)
-
-Six of the seven anchor kinds are specified and none execute. They ship in this order, because the order is the order of evidentiary value per unit of decoder risk.
+Six of the seven anchor kinds are specified and none execute. They ship in this order.
 
 - [ ] **PDF page/region** — page number plus bounding box, with a **page-image digest** so the anchor survives a re-extraction and a human can see the region they are being pointed at
-- [ ] **XLSX cell/range** — sheet name plus cell range, with **formula dependencies** recorded, so a figure that is computed from three other cells has three dependencies and goes stale when any of them moves
+- [ ] **XLSX cell/range** — sheet plus cell range, with **formula dependencies recorded**, so a figure computed from three other cells has three dependencies and goes stale when any of them moves
 - [ ] **DOCX paragraphs** — paragraph identity that survives a reflow
 - [ ] **Image regions** — bounding box or mask reference
 - [ ] **Audio timecode** — start and end, with sample rate
 - [ ] **Video frame intervals** — frame index or time range, optional bounding box
 
-### The rules every adapter inherits
+Every adapter inherits five rules:
 
-- [ ] **The raw-bytes rule.** The source is the bytes. A decoder's output is a *derived object* with its own digest and its own named extractor identity, and never the source itself. An extractor upgrade is a visible change
-- [ ] **Sandbox.** Decoders run with no network, no filesystem write outside a scratch directory, and no ability to reach the graph. A malicious PDF is a normal Tuesday
-- [ ] **Limits.** Declared ceilings on size, page count, decode time, memory and recursion depth, with the limit that tripped named in the failure
-- [ ] **Quarantine before context.** Ingestion produces a quarantined object; the object is scanned; only then may any surface build a model-facing representation. Law F holds at the adapter boundary, not at a delimiter
+- [ ] **The raw-bytes rule.** The source is the bytes. A decoder's output is a *derived object* with its own digest and named extractor identity, never the source itself. An extractor upgrade is a visible change
+- [ ] **Sandbox.** No network, no filesystem write outside a scratch directory, no reach into the graph. A malicious PDF is a normal Tuesday
+- [ ] **Declared limits** on size, page count, decode time, memory and recursion depth, with the limit that tripped named in the failure
+- [ ] **Quarantine before context.** Ingestion produces a quarantined object; it is scanned; only then may any surface build a model-facing representation. Law F holds at the adapter boundary, not at a delimiter
 - [ ] **An unavailable anchor never degrades into a text-span anchor built from recollection.** Law E, stated as a code path
 
-Governing documents: `references/v5/EVIDENCE_ANCHORS.md`, `references/v5/MULTIMODAL.md`, `references/v5/SECURITY_MODEL.md`.
+Governing documents: [`references/v5/EVIDENCE_ANCHORS.md`](references/v5/EVIDENCE_ANCHORS.md), [`references/v5/MULTIMODAL.md`](references/v5/MULTIMODAL.md), [`references/v6/CAPABILITY_SECURITY.md`](references/v6/CAPABILITY_SECURITY.md).
+
+### v6.3 — Compiler backends and render source maps
+
+Law M says the semantic state is canonical and every document is a build. Today that is true of Markdown and HTML and specified for everything else.
+
+- [ ] **DOCX, PDF, EPUB, slides and subtitle backends**, each a pure function of `(graph_root, renderer_id, renderer_version, policy_digest)` — two builds from the same tuple produce byte-identical artifacts, or the renderer is defective
+- [ ] **Render source maps.** Every emitted artifact carries a map from its bytes back to the meaning that produced them, so a reader can point at a line in a PDF and get the claim atom behind it
+- [ ] **`built_from` on every artifact** — graph root digest, renderer identity and version, policy digest. An artifact with none of these is `WI_RENDERING_UNGOVERNED` and no gate may treat it as an output of this system
+- [ ] **The reverse-proposal round trip.** An edit made inside a built DOCX is parsed back to a candidate semantic delta and emitted as a proposal against the graph. It is never applied, and where the parser cannot map the edit to a node the proposal is emitted as `unmapped` with the raw before and after — the system does not guess a target
+- [ ] **A renderer may change expression and may not change a quantity, a scope, a modality, a hedge, a negation, a causal force, an enumerated exception or a legal force.** Where a target constraint makes the semantically complete rendering impossible, the renderer raises a proposal and renders nothing
+
+Governing documents: [`references/v6/COMPILER_MODEL.md`](references/v6/COMPILER_MODEL.md), [`references/v6/SEMANTIC_SOURCE_MAPS.md`](references/v6/SEMANTIC_SOURCE_MAPS.md).
 
 ---
 
-## v5.3 — Proposals and decisions as records (Target: Q4 2027)
+## v6.4 → v6.6 — the compiled core, signing, and federation (Target: 2028)
 
-Laws A and J are conduct today. This makes them persisted objects in the store.
-
-- [ ] **The proposal object** — `target` node and state digest, `before` / `after` verbatim, `why` in the operator's words, `semantic_delta` from Law H, `proof_impact` naming which proofs the change invalidates and which it leaves intact
-- [ ] **The decision record** — actor and actor type, `accepted` / `rejected` / `deferred` / `accepted_with_modification`, the digest of the proposal, the digest of the target state, timestamp, optional reason — hashed and stored beside the content
-- [ ] A decision binds to the **target state**, not to the document. A decision that says "approved" without saying what state it approved is a signature on a blank page
-- [ ] A proposal with no decision is an **open proposal**, never a silent acceptance
-- [ ] **Auto-accept policy** — a project may declare which delta classes accept without a person present, and the acting party is recorded as `automated_policy`, which is a real actor with real authority that is honestly not a human
-- [ ] **Delegated authority** — `authorized_editor` with explicit, recorded, scoped and expiring authority
-- [ ] A `judgment_provider` may never sign a decision record, may never be the actor on an acceptance, and may never write a record typed `human`, `team_member` or `authorized_editor`
-- [ ] **The decision ledger in the bundle** — a `.wiab` carries who approved what, against which state, and when, so "the author approved this" becomes a checkable statement rather than an assumption
-
----
-
-## v5.4 — The Workbench (Target: 2028)
-
-A desktop authoring surface over the same core. Six panes:
-
-- [ ] **Source Vault** — ingested sources, versions, digests, rights basis, consent basis, quarantine findings
-- [ ] **Author Canvas with a proof margin** — you write; the margin shows, per sentence, the status, the anchor and what depends on it. The margin is the product
-- [ ] **Proof Inspector** — `wi explain` as a pane: every anchor, every check, every reliability type, every dependency
-- [ ] **Meaning Diff** — `wi diff --semantic` between any two states, with the proof-carry-forward verdict per change
-- [ ] **Impact View** — the minimum repair frontier as a picture, showing the provably-unaffected set at the same weight as the stale set
-- [ ] **Release Room** — gate verdict, outstanding items with their repair routes, bundle profile choice, and the offline verification command to hand a reader
-
-### The no-dashboard-theater rule
-
-**Every number on every pane has a visible denominator and a stated reliability type, or it does not appear.** No blended score, no health gauge, no percentage that averages a string comparison with a model opinion, no green badge over text that changed after it was checked. A dashboard is where a system with four honest reliability types quietly grows a fifth one called "overall," and that is the failure this project exists to prevent, pointed at its own UI.
-
-The Workbench is a surface. Law K binds it: it calls the core, it does not implement a check.
-
----
-
-## v5.5 — Surfaces (Target: 2028)
-
-- [ ] **MCP server on the same core** — the deterministic commands exposed as tools, with capability negotiation so a reduced surface states what it cannot do rather than degrading quietly
-- [ ] **REST v5 as a thin adapter** — HTTP in front of the core. `services/api/` remains the v3 craft kernel; the v5 tier arrives as an adapter beside it, not as a port of it
-- [ ] **OpenAPI 3.1 generated in CI** — generated from the core's own schemas, never hand-written, and CI fails if the committed document does not match the generated one
-- [ ] **Webhook event format** for CI/CD writing checks
-- [ ] **Browser and edge surface** via the compiled core, once v6.0 lands
-
-### Law K, stated plainly
-
-**No surface reimplements proof rules.** A surface may add ergonomics, caching, presentation, batching and access control. A surface may **not** implement a check, re-implement a digest, define an anchor resolution rule, or emit a proof record it did not receive from the core.
-
-The moment two implementations of `verified` exist, one of them is wrong and nobody knows which. They will not disagree loudly. They will disagree on the fifth edge case, in the surface with fewer tests, on the document that mattered — because one normalized whitespace differently or pinned an older parser. Adapters translate. They do not decide.
-
----
-
-## v5.6 — The Storyworld graph (Target: 2029)
-
-The graph already knows how to hold a fact, bind it to a location, and invalidate it when something moves. Canon is that machinery pointed at a constructed world.
-
-- [ ] **Persistent canon** — characters, places, timelines, objects and rules as registered concepts inside the `fictional_canon` realm
-- [ ] **Character state machines** — what is true of a character at a point in the timeline, so "she does not know yet" is a queryable state rather than an act of memory
-- [ ] **The canon compiler** — plants and payoffs as edges; an orphaned plant is a graph query, and a contradiction three hundred pages later is a failing test
-- [ ] **Transmedia invalidation** — a canon change in the novel raises the affected scenes in the audio drama, the game cutscene and the lore bible, using the same minimum repair frontier
-- [ ] **Realm discipline enforced at the renderer.** A canon check is verified against canon only, inside the fictional realm, and **must never render as externally verified fact**. The realm is not metadata a renderer may drop for space
-
-Governing document: `references/v5/STORYWORLD_OS.md`.
-
----
-
-## v6.0 — The compiled core (Target: 2029+)
+### v6.4 — The compiled Rust core, behind a parity gate
 
 `scripts/wi.py` is the canonical core and it is a single stdlib-only Python file. That is why surface parity is achievable at all today: there is exactly one thing to call. A compiled core replaces it only under conditions strict enough that nobody has to take the swap on faith.
 
 - [ ] **Rust core with a WASM build** for browser, edge and embedded surfaces
-- [ ] **Parity gate.** The compiled core and the Python core run the **same shared fixtures** and must produce byte-identical canonical output, byte-identical digests and identical verdicts. **Nothing switches until parity is proven on every fixture**, and the parity runner ships as part of the release
-- [ ] Both cores run in CI for at least one full release cycle after parity, so a divergence has somewhere to be caught
+- [ ] **The parity harness is built first**, before there is a second core, so the second core is developed against it rather than validated by it afterwards
+- [ ] **Parity gate.** The compiled core and the Python core run the **same shared fixtures** and must produce **byte-identical canonical output, byte-identical digests and identical verdicts**. Nothing switches until parity is proven on **every** fixture, and the parity runner ships as part of the release
+- [ ] **Both cores run in CI for at least one full release cycle after parity**, so a divergence has somewhere to be caught
+- [ ] **No silent fallback.** A surface that cannot reach the compiled core reports which core answered, or it refuses. A runtime that quietly drops back to the other implementation is two implementations of `verified` with the disagreement hidden — which is the exact failure Law K exists to prevent, arriving as a convenience
 - [ ] **Single-binary distribution** — one file, no runtime, no dependencies, checksum published
-- [ ] **Air-gapped verifier** — a minimal build that does nothing but `verify-release`, small enough to carry into a room with no network and audit by reading
+- [ ] **Air-gapped verifier** — a minimal build that does nothing but `wi verify-release` and `wi capsule`, small enough to carry into a room with no network and audit by reading
 - [ ] Language bindings generated from one schema source, never hand-maintained
 
 Until every one of those boxes is checked, any document, deck or README implying a compiled core exists is wrong and should be corrected on sight.
+
+### v6.5 — External signing
+
+- [ ] **Sigstore, C2PA and PROV export** over the closure root a capsule already commits to
+- [ ] **Key isolation.** Signing material never enters the process that computes proof. A core that can sign is a core that can be persuaded to sign
+- [ ] **A signature attests to a digest and nothing else.** It says who published this closure, not that the closure is true — and the artifact says which of those it means
+- [ ] An unsigned bundle keeps reporting `SKIP — unsigned bundle`, because absence of a signature is a fact and not a defect
+
+### v6.6 — Semantic remotes and federation
+
+Meaning across organizational boundaries, where trust is computed locally and never inherited.
+
+- [ ] **Remotes** — push and pull a closure between workspaces
+- [ ] **Signed graph deltas**, so what arrives can be checked against what was sent
+- [ ] **Import records** naming the remote, the closure root, the moment and the local re-derivation
+- [ ] **A remote's `verified` becomes a local `verified` only when this workspace re-derives it from the evidence.** Federation moves artifacts. It does not move authority, and it does not create trust
+- [ ] **Continuous rebuild** — watch mode and incremental re-verification, which requires both the closure walk and the compiler backends and therefore cannot come earlier
+
+Governing documents: [`references/v6/FEDERATION.md`](references/v6/FEDERATION.md), [`references/v6/SECURITY_MODEL.md`](references/v6/SECURITY_MODEL.md).
+
+---
+
+## v7.0 horizon — the full sovereign runtime (Target: 2029)
+
+Everything above is one core and a command line. v7.0 is what that core is *for*: surfaces that translate without deciding, a canon graph pointed at constructed worlds, and a migration that can carry five years of state forward without rewriting any of it.
+
+- [ ] **Surfaces** — REST, MCP, SDK and WASM as thin adapters over the same facade, with capability negotiation so a reduced surface states what it cannot do rather than degrading quietly. OpenAPI generated in CI from the core's own schemas, never hand-written
+- [ ] **The Workbench** — twelve views over one core: source vault, author canvas with a proof margin, proof inspector, meaning diff, impact view, simulation, branch and merge, authority, obligations, capsule builder, release room, and the argument graph. **Every number on every pane has a visible denominator and a stated reliability type, or it does not appear.** No blended score, no health gauge, no green badge over text that changed after it was checked. A dashboard is where a system with four honest reliability types quietly grows a fifth one called *overall*, and the Workbench is where that failure would be easiest to commit
+- [ ] **The storyworld graph** — persistent canon, character state machines, plants and payoffs as edges, and transmedia invalidation using the same minimum repair frontier. A canon check is verified against canon only, inside the fictional realm, and **must never render as externally verified fact**
+- [ ] **Autonomous workers under Law P** — anything automated may plan, retrieve, draft, judge, simulate and propose, through the same proposal, impact and authority machinery a person uses. No accrual, no reputation score, no promotion path from proposing to deciding
+- [ ] **Migration** — v5 state to v6 state with auditable evidence, re-runnable idempotently, with the previous run's evidence still auditable. It comes last because it must migrate the finished shape; a migration written against a moving target migrates to a state that no longer exists
+- [ ] **`.wipack` packages** — genre packs, voiceprints and rule sets as pinned, effect-declaring content with no ambient power
+
+Ordering argument, dependency graph and the exit condition for every wave: [`references/v6/BUILD_MANIFEST.md`](references/v6/BUILD_MANIFEST.md). The one edge in that graph that is not negotiable is **authority before writing** — a write path built first acquires a default caller, the default caller is ambient authority, and the broad grant issued later to keep existing calls working is permanent.
 
 ---
 
 ## Permanent non-goals
 
-These are not unbuilt features. They are refusals, and they do not move. Full reasoning in [`references/v5/NON_GOALS.md`](references/v5/NON_GOALS.md).
+These are not unbuilt features. They are refusals, and they do not move. Full reasoning in [`references/v6/NON_GOALS.md`](references/v6/NON_GOALS.md).
 
 **Carried from v4**
 
 - **Detector evasion.** Never. A system built to produce a machine-checkable account of how a document came to exist cannot also be a system for concealing how a document came to exist.
 - **Source generation.** The system will not construct a citation, ever. There is no code path in which a well-formed anchor can be produced for a source that was never ingested.
-- **Truth verification.** It verifies support within supplied sources. A `.wiab` that verifies offline on a stranger's machine proves the anchors resolve and nothing drifted. It proves nothing about whether the sources are correct.
+- **Truth verification.** It verifies support within supplied sources. A capsule that verifies offline on a stranger's machine proves the anchors resolve and nothing drifted. It proves nothing about whether the sources are correct.
 - **Absolute quality scores.** There is no universal writing number. Counts with visible denominators are legitimate; a number that stands in for the counts is not.
 
-**New in v5**
+**Carried from v5**
 
-- **No hosted-account dependency.** Everything constitutional runs local-first and offline from one file. The documents that most need this system are the ones that cannot leave the building, and a proof that expires when a vendor does is not a proof.
+- **No hosted-account dependency.** The documents that most need this system are the ones that cannot leave the building, and a proof that expires when a vendor does is not a proof.
 - **No proprietary-model dependency.** The deterministic tier is model-independent by construction. Judgment providers, when they arrive, are named and replaceable in every record.
-- **No vector database as the truth layer.** Embeddings are candidate retrieval; they are never evidence. Negation, attribution swaps and date shifts barely move a vector — every failure this system exists to catch is a small distance in exactly the space a similarity search is scoring.
-- **No blockchain.** Every hard problem here is semantic. A ledger timestamps a digest, which this system already produces, and any timestamping authority an organization already trusts can attest to a `.wiab` hash without the core knowing or caring.
-- **No autonomous source approval.** A discovered source is `candidate`, never `approved`, until a human approves it. `automated_policy` may filter, rank, deduplicate and reject. It may not approve — an automated approver is an unbounded prompt-injection surface.
+- **No vector database as the truth layer.** Negation, attribution swaps and date shifts barely move a vector — every failure this system exists to catch is a small distance in exactly the space a similarity search is scoring.
+- **No autonomous source approval.** A discovered source is `candidate`, never `approved`, until a human approves it. An automated approver is an unbounded prompt-injection surface.
+
+**New in v6**
+
+- **No universal truth score.** Not per claim, not per document, not per author. A single number is the artifact people quote, and it is the one output that cannot carry a denominator, a realm or a reliability type with it.
+- **No RAG as proof.** Retrieval finds candidates. Only comparison produces proof. A retrieved passage that reads like support is the most convincing wrong answer this system could give, and no amount of embedding turns similarity into evidence.
+- **No model as sovereign author.** A model may propose, draft, judge and simulate. It may never sign a decision, hold a grant that decides, appear as an author, or be recorded as a contributor. Authorship is a claim about a person.
+- **No cloud dependency in the constitutional path.** Everything that decides — canonicalization, digests, obligations, constraints, merge, capsule verification — runs local-first and offline from one file. A network call in the path that decides is a dependency on somebody else's uptime for your ability to prove what you wrote.
+- **No global ontology monopoly.** Concepts are registered per workspace and per federation, and terms are reconciled at boundaries by explicit mapping. A single canonical vocabulary imposed on every user is a governance claim wearing a schema.
+- **No overall health gauge.** No blended score across reliability types, no percentage that averages a string comparison with a model opinion, no green badge over text that changed after it was checked. This is the failure the project exists to prevent, pointed at its own UI.
+- **No hidden auto-merge of consequential state.** If meaning conflicts, the conflict is preserved. There is no averaging flag, no last-writer-wins rule for quantities, and no setting that turns either on.
+- **No ambient plugin power.** An extension does not inherit the authority of the process that loaded it. Effects are declared, granted and revocable; a package that wants a capability asks for it, and a package that has not asked cannot have it.
+- **No renderer-side facts.** A renderer may change expression. It may not change a quantity, a scope, a modality, a hedge, a negation, a causal force, an enumerated exception or a legal force. A renderer that needs new meaning emits a proposal and renders nothing.
+- **No history rewriting.** A correction supersedes an old state; it does not falsify the record of what was known and when. There is no compaction pass that drops superseded knowledge, because the value of a bitemporal record is precisely the part somebody would want removed.
+- **No blockchain** — restated from v5 rather than carried quietly, because v6's Merkle closures and capsules are exactly what make people ask again. Every hard problem here is semantic. A ledger timestamps a digest, which this system already produces, and any timestamping authority an organization already trusts can attest to a closure root without the core knowing or caring.
 
 ---
 
@@ -218,7 +237,7 @@ These are not unbuilt features. They are refusals, and they do not move. Full re
 
 The roadmap is driven by community need, not a corporate product schedule. What gets built next depends on what people actually use and ask for.
 
-Changes to the meaning of `verified`, `stale`, `BLOCK`, `permitted` or `source quarantine` are not roadmap items. They are constitutional amendments and go through the RFC process with a benchmark case that fails before the change and passes after it.
+Changes to the meaning of `verified`, `stale`, `BLOCK`, `permitted`, `authoritative` or `source quarantine` are not roadmap items. They are constitutional amendments and go through the RFC process with a benchmark case that fails before the change and passes after it.
 
 ---
 

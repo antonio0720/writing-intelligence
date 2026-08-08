@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v6/conflict.schema.json",
+  "title": "ConflictV6",
+  "description": "Semantic three-way merge and the conflicts it preserves. A textual merge adjudicates characters, which is why prose merges are a chore and why a merge can produce a sentence neither author wrote; a semantic merge adjudicates what each branch ASSERTS, so two rewordings of one claim are not a conflict and two different figures for one quantity are — even three paragraphs apart, where no line diff would look. THE MERGE ENGINE MAY NEVER SPLIT THE DIFFERENCE. Given 11,800 households on one branch and 12,400 on the other, `approximately 12,000` is the one answer that is categorically forbidden, because neither branch asserted it and the merge would have invented a third claim under the authority of two people who never made it. The conflict is recorded unresolved and an authorized decision settles it. This document is a DEFINITION LIBRARY: validate against a named member of `$defs`, never against the document root.",
+  "$defs": {
+    "MergeResult": {
+      "type": "object",
+      "required": ["base_root", "ours_root", "theirs_root", "auto_merged", "conflicts", "candidate_root"],
+      "additionalProperties": false,
+      "description": "Everything a merge found. Returned whole rather than as a success-or-failure, because a merge with conflicts is not a failure: it is a correct result that requires a decision, and an interface that treated it as an error would push people toward whichever strategy produced no conflicts. The three roots are carried so the result stays checkable after the branches have moved — a merge re-derived against a different base is a different merge, and constraint C007 is what stops a stale one being applied.",
+      "properties": {
+        "base_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The common ancestor this merge was computed against. RECORDED, never recomputed at read time: recomputing against a history that has moved can yield a different base, and every conflict determination in this result was relative to the base that was used."},
+        "ours_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root of the branch being merged into."},
+        "theirs_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root of the branch being merged in. Kept distinct from `ours` because the asymmetry survives into the result: `what did this merge bring in?` is answerable only if the sides are named."},
+        "auto_merged": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/MergedState"},
+          "description": "The states that merged without a decision, each carrying WHY it was safe to take. An array of results with no reasons would be a list a reviewer has to trust; with reasons it is a list a reviewer can spot-check, and the wording-only entries are exactly the ones worth spot-checking."
+        },
+        "conflicts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/SemanticConflict"},
+          "description": "What could not be settled mechanically. An empty array is a genuine and common outcome and means the merge is clean; it does not mean the merge was easy, and nothing here permits a surface to render a conflicted merge as resolved — that is precisely what constraint C015 refuses."
+        },
+        "proof_invalidations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "proof.schema.json#/$defs/Invalidation"},
+          "description": "The verification results and decisions the merge would take down. Reported at merge time rather than discovered later, because a merge that quietly invalidates eleven checks and two approvals is a much larger act than its diff suggests, and the person doing it is entitled to know before rather than after."
+        },
+        "authority_requirements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/RequiredAuthority"},
+          "description": "The capabilities the merge would need. Computed from what the merge would DO rather than from who is asking, so that a merge is refused for want of authority before anything is written and not halfway through."
+        },
+        "candidate_root": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The graph root the merge would produce if every conflict were resolved as recorded. A CANDIDATE and not a commit: nothing has been written, and a candidate root with unresolved conflicts must never be committable, because committing it would resolve them by silence."},
+        "strategy": {"$ref": "#/$defs/MergeStrategy", "description": "How the merge was run. Recorded because a merge run under a permissive surface strategy and one run conflict-preserving can reach different states from the same inputs, and a history that did not say which cannot be replayed."},
+        "unexamined": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "Nodes the merge could not compare — an unknown schema, an unreadable state, a node type this build does not understand. NAMED RATHER THAN COUNTED, and never folded into either `auto_merged` or `conflicts`: a node nobody could examine is not a node that merged cleanly, and constraint C018 requires it be quarantined rather than assumed harmless."
+        },
+        "computed_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When the merge was computed, so a result offered for application can be checked for age against branches that may have moved since."}
+      }
+    },
+    "MergedState": {
+      "type": "object",
+      "required": ["logical_id", "outcome", "resulting_state"],
+      "additionalProperties": false,
+      "description": "One node that merged without a decision. `outcome` is required because `it merged` is not a reason: a state taken because only one side touched it and a state taken because both sides reworded it identically are trusted to different degrees, and a reviewer sampling a large merge needs to know which of the two they are looking at.",
+      "properties": {
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Which node."},
+        "outcome": {"$ref": "#/$defs/ThreeWayOutcome", "description": "Which of the three-way cases applied, which IS the justification for taking the state without asking anybody."},
+        "resulting_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state the merge would carry forward."},
+        "ours_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "This side's state, retained so the merge can be reviewed without resolving both branches."},
+        "theirs_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The other side's state."},
+        "wording_only_proof": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The comparison result establishing that both sides' semantic IR is equal and only the expression differs. REQUIRED whenever `outcome` is `wording_only`. Wording-only is never an assumption: the burden runs the other way, the machinery must demonstrate the semantic equality, and a merge that assumed it would be exactly the merge that silently accepts a rewording which changed a modality."}
+      }
+    },
+    "ThreeWayOutcome": {
+      "type": "string",
+      "description": "Which case of the three-way comparison settled a node. Enumerated so that a clean merge is inspectable rather than merely reported: the first three are structural and need no judgement at all, and only the last two involved the semantic machinery.",
+      "oneOf": [
+        {"const": "unchanged", "description": "Base, ours and theirs agree. Nothing happened here."},
+        {"const": "took_theirs", "description": "Only the incoming branch changed it. Safe because this side has no competing intent to overrule."},
+        {"const": "took_ours", "description": "Only this branch changed it. Safe for the same reason, from the other direction."},
+        {"const": "converged", "description": "Both sides changed it and reached the SAME state. The state digests are equal, so there is nothing to adjudicate — two people independently made the same correction, which is evidence rather than a problem."},
+        {"const": "wording_only", "description": "Both sides changed it, the semantic IR compares equal, and a configured surface strategy chose an expression. The only auto-merge that involves a choice, and the only one requiring a proof, because it is the one where a mistake produces a sentence that reads fine and asserts something nobody approved."}
+      ]
+    },
+    "SemanticConflict": {
+      "type": "object",
+      "required": ["conflict_id", "kind", "logical_id", "status"],
+      "additionalProperties": false,
+      "description": "One disagreement the merge could not settle. A first-class persisted object rather than a transient message, because a conflict outlives the merge that found it: it must be visible in the graph, renderable as unresolved wherever the node is rendered, and resolvable by an authorized decision days later — none of which is possible if the conflict lived only in the output of a command.",
+      "properties": {
+        "conflict_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "Durable identity, so a conflict raised, deferred and settled a week later is one object with a history rather than three sightings."},
+        "kind": {"$ref": "#/$defs/SemanticConflictKind", "description": "What is in disagreement. The most consequential field for a reader: a quantity conflict and an authority conflict are settled by different people using different evidence, and a merge tool reporting only `conflict` sends every one of them to the same queue."},
+        "logical_id": {"$ref": "common.schema.json#/$defs/LogicalId", "description": "The node in dispute."},
+        "base": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The common ancestor state. Present so a reviewer can see what both sides were changing FROM, which is frequently what decides which change was deliberate."},
+        "ours": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "This side's state."},
+        "theirs": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The other side's state."},
+        "detail": {"type": "string", "minLength": 1, "description": "The disagreement in plain language, naming both values. `11,800 households on this branch, 12,400 on the incoming branch` is what a decision-maker can act on; `values differ` is what sends them to open two documents."},
+        "status": {"$ref": "#/$defs/ConflictStatus", "description": "Where the conflict stands. Defaults to unresolved, and nothing but a decision moves it — the whole point of preserving conflicts is that they cannot be cleared by continuing."},
+        "required_resolution": {"$ref": "#/$defs/ResolutionRequirement", "description": "What it would take to settle this. Recorded at detection because the merge engine knows and the person reading the queue does not, and the difference between `pick one` and `an authorized decision by a named role` decides whether this is a five-minute task or a meeting."},
+        "resolution": {"$ref": "#/$defs/ConflictResolution", "description": "How it was settled, once it has been. Absent while unresolved, and its absence is the machine-readable form of the fact that this merge is not finished."},
+        "affects": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "What else depends on the disputed node. Carried on the conflict so that its cost is visible at the point of decision: a quantity conflict touching one paragraph and one touching four release targets are the same disagreement and very different decisions."
+        },
+        "detected_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When it was first found."},
+        "state_digest": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "Digest over the canonical conflict state, so a decision resolving it binds an exact statement of the disagreement rather than one that has since been edited."}
+      }
+    },
+    "SemanticConflictKind": {
+      "type": "string",
+      "description": "What class of thing is in disagreement. Sixteen values because the classes are settled by different people with different evidence, and a single `conflict` type would route a units mistake and a legal-force dispute to the same reviewer. THE LIST IS CLOSED: an unclassifiable disagreement is reported as unexamined rather than filed under a nearest neighbour, because a misfiled conflict is worse than an unfiled one — it looks handled.",
+      "oneOf": [
+        {"const": "Quantity", "description": "Two different numbers for one measured thing. The archetypal conflict and the one where splitting the difference is most tempting and most forbidden."},
+        {"const": "Unit", "description": "The same number in incompatible units, or a unit change that was not a conversion. Distinct from Quantity because the repair is a conversion or a correction rather than a choice, and constraint C013 catches the comparison that should never have been made."},
+        {"const": "Scope", "description": "The same assertion over different populations, territories or subsets. The conflict most often mistaken for agreement, because both sides read as true and only one of them is about the thing under discussion."},
+        {"const": "Time", "description": "Incompatible valid intervals for one assertion. Separate from TemporalOverlap: this is a disagreement about WHEN something held, not two claims that cannot both hold at once."},
+        {"const": "Entity", "description": "Two branches resolved the same reference to different entities. Rarely visible in text, since both sides may use the same name."},
+        {"const": "Attribution", "description": "Disagreement about who said or did the thing. Load-bearing for quotation and for any claim whose weight rests on its source."},
+        {"const": "Certainty", "description": "One branch strengthened or weakened a claim's certainty. Frequently arrives as a wording change and is exactly what a wording-only merge must not wave through."},
+        {"const": "Causality", "description": "One branch asserts a causal relation the other has as correlation or coincidence. The upgrade almost never survives review and almost always survives a text merge."},
+        {"const": "Definition", "description": "The governing definition of a term differs. Damages every claim that uses the term, which is why it is its own kind rather than a variety of Scope."},
+        {"const": "Obligation", "description": "Disagreement about who must do what. Settled by whoever holds authority over the obligation, not by whoever is merging."},
+        {"const": "LegalForce", "description": "The same text carries different binding effect — a recommendation on one branch and a requirement on the other. Never auto-mergeable under any strategy at any confidence."},
+        {"const": "Canon", "description": "Two branches assert incompatible facts inside one constructed world. A real conflict within its realm, and no less real for being fictional."},
+        {"const": "Authority", "description": "Both sides claim standing to settle the same matter. Cannot be resolved by the merge, since resolving it is the thing in dispute; escalates to whoever governs the grants."},
+        {"const": "Policy", "description": "The governing policy state differs between the branches. Must be settled first, because every other conflict in the merge is being adjudicated under a policy the two sides do not agree on."},
+        {"const": "Evidence", "description": "The same claim rests on incompatible support, or one side removed the support the other relies on. A conflict even where the claim's wording is identical on both branches."},
+        {"const": "TemporalOverlap", "description": "Two assertions whose valid intervals overlap and which cannot both hold there. Detected by constraint C012, and the only kind commonly found without either branch having changed anything — it can appear because a third assertion arrived."}
+      ]
+    },
+    "ConflictStatus": {
+      "type": "string",
+      "description": "Where a conflict stands. `unresolved` is the default and the only state a merge itself can produce; every other value requires an act by somebody with standing, which is what makes conflict preservation more than a label.",
+      "oneOf": [
+        {"const": "unresolved", "description": "Standing. Must be rendered as unresolved wherever the disputed node is rendered."},
+        {"const": "resolved", "description": "Settled by an authorized decision, which the resolution names."},
+        {"const": "deferred", "description": "Acknowledged and postponed by somebody with standing. Distinct from unresolved because it has been LOOKED AT, which is what a queue needs to know."},
+        {"const": "obsolete", "description": "No longer applicable, because the disputed node was superseded on both sides by later work. Reached without a decision and retained rather than deleted: a conflict that stopped mattering is part of the history of what mattered."}
+      ]
+    },
+    "ResolutionRequirement": {
+      "type": "string",
+      "description": "What settling a conflict would take. Recorded at detection so the queue can be triaged without opening every item, and so that nothing routes a decision requiring legal authority to whoever happens to be merging.",
+      "oneOf": [
+        {"const": "authorized_decision", "description": "A decision by an actor holding the relevant capability. The default for every conflict that turns on which assertion is true."},
+        {"const": "evidence_required", "description": "Neither side can be chosen without support that does not currently exist. The honest answer for a quantity conflict where both branches are asserting rather than citing."},
+        {"const": "policy_resolution", "description": "The governing policy must be settled first. Blocks the rest of the merge rather than being decided alongside it."},
+        {"const": "authority_resolution", "description": "Who may decide is itself in dispute and must be established before anything else can be."},
+        {"const": "external_determination", "description": "The answer lies outside this workspace — a regulator, a counterparty, a measurement not yet taken. Named so a conflict waiting on the world is distinguishable from one waiting on a person, since only the second belongs on somebody's list."}
+      ]
+    },
+    "ConflictResolution": {
+      "type": "object",
+      "required": ["decision", "chosen", "resolved_at"],
+      "additionalProperties": false,
+      "description": "How a conflict was settled. Requires a decision digest rather than an actor and a note, because settling a conflict IS a decision and recording it any other way creates a second, weaker approval path around the one the authority model governs.",
+      "properties": {
+        "decision": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The decision state that settled it, carrying its own authority receipt. This is what makes `who resolved this and under what standing?` answerable years later."},
+        "chosen": {"$ref": "#/$defs/ResolutionChoice", "description": "What was chosen. `synthesized` exists so that a genuinely new third answer is DECLARED as new rather than passing as one of the two originals — which is the honest way to reach a third value, as against the merge engine inventing one."},
+        "resulting_state": {"$ref": "common.schema.json#/$defs/DigestRef", "description": "The state carried forward. Required for every choice except `deferred`, and for `synthesized` it names a state that neither branch held — legitimate, because a person with authority asserted it, and recorded as theirs."},
+        "reason": {"type": "string", "description": "Why. Worth more here than almost anywhere else in the system: the next person to meet this disagreement will meet it in a year, and the reason is the only thing that will stop them re-litigating it."},
+        "resolved_at": {"$ref": "common.schema.json#/$defs/Timestamp", "description": "When."}
+      }
+    },
+    "ResolutionChoice": {
+      "type": "string",
+      "description": "Which way a conflict went. `synthesized` is present deliberately: a person with authority may legitimately assert a third answer, and the alternative to naming it is that they enter it as one branch's value and the record shows an agreement that never happened.",
+      "oneOf": [
+        {"const": "ours", "description": "This branch's state was chosen."},
+        {"const": "theirs", "description": "The incoming branch's state was chosen."},
+        {"const": "base", "description": "Both changes were rejected and the ancestor state kept. A real outcome, and one a two-way choice could not express."},
+        {"const": "synthesized", "description": "A new state neither branch held, asserted by the decision-maker. The ONLY lawful route to a third value, and it is lawful precisely because it carries a name, a receipt and a reason — everything the merge engine's `approximately 12,000` would have lacked."}
+      ]
+    },
+    "RequiredAuthority": {
+      "type": "object",
+      "required": ["capability", "reason"],
+      "additionalProperties": false,
+      "description": "A capability the merge would need. Computed from the merge's effects rather than from the actor, so that authority is checked before anything is written — a merge that discovers halfway through that it may not touch a protected node leaves a graph in a state nobody designed.",
+      "properties": {
+        "capability": {"$ref": "authority.schema.json#/$defs/Capability", "description": "What would be required."},
+        "reason": {"type": "string", "minLength": 1, "description": "Which part of the merge requires it. Non-empty so that a refusal names the node rather than only the capability, and the person refused can either get the authority or drop that node from the merge."},
+        "subjects": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "common.schema.json#/$defs/LogicalId"},
+          "description": "The nodes whose merging requires it."
+        },
+        "held": {"type": "boolean", "description": "Whether the actor attempting the merge holds it, when the check has been run. Absent means unchecked, which is different from not held, and a surface that rendered the two alike would tell somebody they lack authority they may have."}
+      }
+    },
+    "MergeStrategy": {
+      "type": "string",
+      "description": "How a merge was run. Recorded on the result because two strategies over the same inputs reach different states, and a history that did not say which was used cannot be replayed. `conflict_preserving` is the default and the only one that never chooses on a reader's behalf.",
+      "oneOf": [
+        {"const": "conflict_preserving", "description": "Auto-merges only the structurally safe cases and records everything else as a conflict. The default, and the only strategy under which an unattended merge is safe."},
+        {"const": "wording_permissive", "description": "Additionally takes a configured side for expressions PROVEN semantically equal. Requires a wording-only proof per state; without one the node conflicts as normal, so the strategy widens what may be taken and never what may be assumed."},
+        {"const": "ours_preferred", "description": "Takes this side where both changed and no semantic difference is found. A convenience for a branch known to be authoritative on a subject, and it still cannot touch a genuine semantic conflict — no strategy can."},
+        {"const": "dry_run", "description": "Computes the whole result and writes nothing. What `wi merge --dry-run` produces, and the honest way to see a merge's cost before committing to its cleanup."}
+      ]
+    }
+  }
+}
