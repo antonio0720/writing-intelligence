@@ -1,13 +1,32 @@
 ---
-manifest_version: "3.0.0"
-total_cases: 60
-categories: 12
-release_target: "3.0.0"
+manifest_version: "6.0.0"
+release_target: "6.0.0"
+
+# Two classes, counted separately and never averaged together.
+#   class_a — prose quality, scored 0-100
+#   class_b — runtime correctness, pass/fail
+
+total_cases: 68
+authored_cases: 18
+reserved_cases: 50
+
+# class_a
+# `category_count`, not `categories` — the v3 manifest declared `categories: 12`
+# as a scalar and `categories:` as a list, and YAML silently kept the list. The
+# scalar had never been read by anything.
+category_count: 12
+category_cases: 60
+authored_category_cases: 10
+
+# class_b
+runtime_case_files: 2
+authored_runtime_cases: 8
 
 gates:
   score_improvement:
     pct_cases_must_improve: 70
     min_points: 5
+    denominator: authored_category_cases
   regression:
     max_drop_without_reason: 3
   evidence_safety:
@@ -23,52 +42,157 @@ gates:
   output_packaging:
     delivery_bundle_validates: true
 
+# Runtime gates are pass/fail. There is no threshold, no percentage and no
+# weighting. `max_failures: 0` is the whole gate. A gate with no authored
+# case reports not_evaluated and blocks the release; it never reports passed.
+runtime_gates:
+  b1_conflict_preservation:
+    max_failures: 0
+    command: "wi merge <branch> --json"
+    asserts:
+      - "no value in the output is absent from base, ours and theirs"
+      - "clean is false"
+      - "merge_commit is null"
+      - "both input summaries appear in the conflict record"
+    law: Q
+    cases: runtime/conflict_preservation
+  b2_simulation_fidelity:
+    max_failures: 0
+    command: "wi simulate --json then wi commit --json"
+    asserts:
+      - "simulate.candidate_root equals commit.root"
+      - "simulate.committed is false"
+      - "simulate.base_root is identical across two consecutive runs"
+      - "commit.prior_root equals simulate.base_root"
+    law: P
+    cases: runtime/simulation_fidelity
+  b3_impact_precision:
+    max_failures: 0
+    command: "wi simulate --json"
+    asserts:
+      - "changed_nodes equals the known changed set exactly"
+      - "stale_frontier equals the known stale set exactly"
+      - "hard_stale_frontier equals the known invalidated set exactly"
+      - "provably_unaffected equals the known unaffected count exactly"
+    comparison: set_equality
+    law: R
+    cases: null
+    not_evaluated_because: "no authored case; gate declared, case owed"
+  b4_authority:
+    max_failures: 0
+    command: "wi decide <proposal> --accept --actor <actor>"
+    asserts:
+      - "live grant is accepted"
+      - "expired grant is refused with WI_AUTHORITY_EXPIRED and exit 2"
+      - "absent grant is refused with WI_AUTHORITY_DENIED and exit 2"
+      - "the two refusals carry different repair guidance"
+      - "neither refused transition is applied to state"
+    law: O
+    cases: null
+    not_evaluated_because: "no authored case; gate declared, case owed"
+  b5_digest_stability:
+    max_failures: 0
+    command: "wi canon <file> --json"
+    asserts:
+      - "key reordering does not move content_digest or state_digest_v6"
+      - "reindenting does not move content_digest or state_digest_v6"
+      - "NFD input does not move content_digest or state_digest_v6"
+      - "a changed value does move both digests"
+      - "the same canonical bytes digest differently under different domains"
+    directions: both
+    law: M
+    cases: null
+    not_evaluated_because: "no authored case; gate declared, case owed"
+  b6_capsule_verification:
+    max_failures: 0
+    command: "wi capsule verify <path>"
+    asserts:
+      - "a clean capsule reports VERDICT VERIFIED and exits 0"
+      - "a tampered disclosed state fails the named check state.digest"
+      - "a tampered leaf_digest fails the named check leaf.digest"
+      - "a broken format marker fails the named check capsule.format"
+      - "no tampered capsule prints VERDICT VERIFIED"
+      - "every tampered capsule exits 2"
+    law: L
+    cases: null
+    not_evaluated_because: "no authored case; gate declared, case owed"
+
 categories:
   - id: ai_slop_rewrite
     cases: 5
+    authored: 5
     file: cases/ai_slop_rewrite.md
     focus: "Generic AI prose → authored prose"
   - id: business_strategy_memo
     cases: 5
+    authored: 0
     file: cases/business_strategy_memo.md
     focus: "Strategic memo with BLUF + evidence"
   - id: founder_manifesto
     cases: 5
+    authored: 0
     file: cases/founder_manifesto.md
     focus: "Vision-dense, voice-anchored manifesto"
   - id: investor_update
     cases: 5
+    authored: 0
     file: cases/investor_update.md
     focus: "Investor precision voice, no inflated verbs"
   - id: sales_email
     cases: 5
+    authored: 0
     file: cases/sales_email.md
     focus: "Conversion + trust preservation"
   - id: sermon_excerpt
     cases: 5
+    authored: 0
     file: cases/sermon_excerpt.md
     focus: "Cadence, dignity, theological care"
   - id: academic_paragraph
     cases: 5
+    authored: 0
     file: cases/academic_paragraph.md
     focus: "Claim-evidence binding, citation discipline"
   - id: grant_narrative
     cases: 5
+    authored: 5
     file: cases/grant_narrative.md
     focus: "Funder fit, logic model, compliance"
   - id: government_brief
     cases: 5
+    authored: 0
     file: cases/government_brief.md
     focus: "BLUF, plain language, agency calibration"
   - id: fiction_scene
     cases: 5
+    authored: 0
     file: cases/fiction_scene.md
     focus: "Setting as force, props as weapons, fatal detail"
   - id: dialogue_scene
     cases: 5
+    authored: 0
     file: cases/dialogue_scene.md
     focus: "Voice distinction, subtext, tension elements"
   - id: longform_continuity_audit
     cases: 5
+    authored: 0
     file: cases/longform_continuity_audit.md
     focus: "Series arc, foreshadowing ledger, voice fingerprint stability"
+
+runtime_cases:
+  - id: conflict_preservation
+    cases: 4
+    authored: 4
+    file: cases/conflict_preservation.md
+    gate: b1_conflict_preservation
+    focus: "A merge preserves both values and invents none"
+  - id: simulation_fidelity
+    cases: 4
+    authored: 4
+    file: cases/simulation_fidelity.md
+    gate: b2_simulation_fidelity
+    focus: "The predicted root is the root that lands, and the preview writes nothing"
+
+# A case whose negative twin has not been run has not been shown to fail.
+# Every runtime case names its twin; the runbook runs them.
+negative_twin_required: true

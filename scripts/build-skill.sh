@@ -57,6 +57,12 @@ PAYLOAD=(
   ROADMAP.md
   CONTRIBUTING.md
   LICENSE
+  # NOTICE and PATENTS.md ship with LICENSE, not instead of it. LICENSE is a
+  # copyright grant and is silent on trademarks and patents; a bundle carrying
+  # it alone tells a recipient the terms are MIT and nothing else, which is
+  # true and incomplete in the two places a recipient would want it complete.
+  NOTICE
+  PATENTS.md
   agents
   docs
   governance

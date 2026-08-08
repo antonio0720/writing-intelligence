@@ -1,0 +1,111 @@
+NOTICE
+Writing Intelligence — The Sovereign Meaning Runtime
+Copyright (c) 2026 Antonio T. Smith Jr. / Density6 LLC
+
+This file is informational. It does not modify, limit or add conditions to the
+MIT License in `LICENSE`. Where anything here appears to conflict with the MIT
+License as it applies to the software, the MIT License governs the software.
+
+---
+
+## 1. What the MIT License covers
+
+`LICENSE` grants you copyright permission in the software and its documentation:
+use, copy, modify, merge, publish, distribute, sublicense and sell, with
+attribution and without warranty. That grant is real, it is irrevocable for the
+code as published, and it is not going to be narrowed later. The project's
+promise — free, open, no account, no server, no API key, no telemetry — is a
+promise about this software and it stands.
+
+The MIT License is a copyright license. By its own terms it says nothing
+explicit about patent rights. Section 3 of this file records what is and is not
+being asserted on that separate question, because saying nothing at all is how
+a project ends up having answered by accident.
+
+## 2. Trademarks and attribution
+
+The following are asserted as marks of Antonio T. Smith Jr. and Density6 LLC and
+are **not** licensed by `LICENSE`, which grants rights in software and not in
+names:
+
+  Density6 · Writing Intelligence · The Sovereign Meaning Runtime ·
+  Sovereign Simulation Games · RA-OMEGA
+
+What this means in practice, stated plainly so nobody has to guess:
+
+- **You may** use, fork, modify, redistribute and sell this software, including
+  commercially, under the MIT terms. You do not need permission and you do not
+  need to ask.
+- **You may** say truthfully that your product is built on, derived from, or
+  compatible with Writing Intelligence. Accurate reference to a project by its
+  name is normal and welcome.
+- **You may not** name your fork or derivative work in a way that implies it is
+  the official distribution, is endorsed by Density6 LLC, or is certified under
+  this project's certification tiers when it is not. `certification/README.md`
+  states the same rule from the other direction: no tier grants authority
+  inside anyone's workspace, and a certificate points at artifacts or it points
+  at nothing.
+- **You may not** represent a modified build as producing this project's
+  verification verdicts unless it actually does. A tool that prints
+  `VERDICT VERIFIED` without running the checks is the exact artifact this
+  project exists to make impossible, and shipping one under this name is the
+  one misuse that is not merely a trademark problem.
+
+Attribution requested but not required beyond the MIT notice: *Writing
+Intelligence, created by Antonio T. Smith Jr., Density6 LLC.*
+
+## 3. Patent rights — reserved, and honestly described
+
+**As of the date of this file, no patent has been granted and no patent
+application has been filed covering any mechanism in this repository.** Nothing
+here is marked "patent pending", because nothing here is. See `PATENTS.md` for
+the dated invention-disclosure record and the reasoning.
+
+Antonio T. Smith Jr. and Density6 LLC **reserve all patent rights** in the
+inventions described in `PATENTS.md`, to the extent such rights exist and remain
+available. No patent license is granted expressly by `LICENSE` or by this file.
+
+Two things follow, and both are said out loud rather than left ambiguous:
+
+1. **This reservation is not a trap.** The intended posture is defensive. The
+   inventions in `PATENTS.md` are published here on purpose, which is the
+   opposite of concealment, and publication itself creates prior art that
+   prevents a third party from patenting them against you.
+
+2. **A reservation notice is weaker than it reads.** A copyright license granted
+   with knowledge of one's own patents can, under some authorities, support an
+   argument for an implied patent license or for equitable estoppel against
+   asserting those patents on the licensed use. This file cannot resolve that
+   question and does not pretend to. It is recorded here so that a reader
+   relying on this project is relying on a stated position rather than a
+   silence.
+
+Nothing in this section is legal advice, and it was not written by a lawyer.
+Anyone whose plans depend on the answer should get their own counsel.
+
+## 4. Third-party material
+
+`scripts/wi.py` — the deterministic core — has **no dependencies**. It is
+standard-library-only Python and is tested to run air-gapped on Python 3.8. That
+is not a convenience claim; it is the reason the deterministic tier is worth
+anything, because a tier whose value is *you have to trust nothing* cannot have
+a supply chain.
+
+`services/api/` is the optional TypeScript reference runtime and does carry
+Node dependencies. Its dependency licenses are those declared by the packages in
+`services/api/package-lock.json`. It is not required to run the tool, verify a
+release, or open a proof capsule.
+
+## 5. Verification
+
+The offline verification path — a stranger checking a proof capsule with no
+model, no network and no account — is deliberately unencumbered. If any patent
+right described in `PATENTS.md` is ever granted and asserted, it will not be
+asserted against verification of an artifact this project produced. A proof a
+stranger cannot verify is not a proof, and a licensing term that makes
+verification risky would destroy the thing being protected.
+
+---
+
+Questions about trademark use, certification, or licensing beyond the MIT terms:
+Antonio T. Smith Jr. — https://densitysix.com

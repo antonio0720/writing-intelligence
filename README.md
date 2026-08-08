@@ -567,6 +567,9 @@ services/api/             REST reference runtime for the v3 craft kernel
 | [`docs/BUILDER_GUIDE.md`](docs/BUILDER_GUIDE.md) | Building on the schemas |
 | [`ROADMAP.md`](ROADMAP.md) | Where it goes next |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contributing |
+| [`examples/v6/README.md`](examples/v6/README.md) | Four worked v6 sessions — simulate, refuse, expire, verify |
+| [`governance/RELEASE_CHECKLIST.md`](governance/RELEASE_CHECKLIST.md) | What is gated, what is manual, and what nothing checks |
+| [`NOTICE`](NOTICE) · [`PATENTS.md`](PATENTS.md) | Trademarks, and the invention-disclosure record |
 
 ---
 
@@ -579,6 +582,8 @@ An author who can prove what they wrote is only safe if the people reading them 
 Take it. Fork it. Put it in your newsroom, your grants office, your law firm, your classroom, your publishing house, your government agency. Ship it inside your own product if you want to — the licence permits it.
 
 [MIT](LICENSE). Credit appreciated: **Antonio T. Smith Jr. / Density6 LLC**.
+
+Two companion files sit beside the licence and neither of them narrows it. [`NOTICE`](NOTICE) covers trademarks — you may fork, sell and build on this freely, and you may not name the result in a way that implies it is the official distribution or that it produces this project's verdicts when it does not. [`PATENTS.md`](PATENTS.md) is a dated invention-disclosure record for the sixteen mechanisms in this repository. It opens by stating that no patent has been granted and no application has been filed, because a notice implying protection that does not exist is the exact failure this software was built to prevent, committed in its own repository.
 
 ---
 

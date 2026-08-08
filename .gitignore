@@ -1,17 +1,78 @@
+# Writing Intelligence — ignore rules
+#
+# The governing distinction: the semantic state is canonical and renderings are
+# builds (Law M). Everything a build produces is derivable and does not belong
+# in git. The small set of files that declare intent — project, tests, policy,
+# and the lockfile that pins what a release was built from — are the parts you
+# commit, and they are unignored explicitly below.
 
-services/api/node_modules/
-services/api/*.log
+# ---------------------------------------------------------------------------
+# Workspace state — local build state, not source
+# ---------------------------------------------------------------------------
+# .wi/ holds the object store, graph, refs, decisions, judgments, snapshots,
+# attestations, builds, reports, cache and workspace.db. All of it is
+# reconstructible and all of it is machine-local. wi.project.yaml,
+# wi.tests.yaml, wi.policy.yaml and wi.lock live outside it and are committed.
+.wi/
+!wi.lock
 
-# build artifacts
+# ---------------------------------------------------------------------------
+# Build outputs and renderings
+# ---------------------------------------------------------------------------
+# A rendering is compiled from state. Committing one creates a second writable
+# source of truth, which is the exact failure Law M exists to prevent.
+outputs/
 dist/
+build/
 
+# Proof capsules are release artifacts. They are published on a release page,
+# not carried in the tree, and a stale capsule in a repo is a proof of a state
+# that no longer exists.
+*.wic
+
+# ---------------------------------------------------------------------------
+# Simulation and candidate state
+# ---------------------------------------------------------------------------
+# A candidate root exists only to be compared and then discarded. If one of
+# these files reaches a commit, something wrote what it promised not to write.
+*.candidate.json
+*.simulation.json
+.wi-scratch/
+
+# ---------------------------------------------------------------------------
 # wi.py working files
+# ---------------------------------------------------------------------------
 *.original-*
 *.claims.json
 __pycache__/
 *.pyc
+*.pyo
+.pytest_cache/
 
-# v5 workspace. The index and object store are local build state; wi.project.yaml,
-# wi.tests.yaml, wi.policy.yaml and wi.lock are the parts you commit.
-.wi/
-!wi.lock
+# ---------------------------------------------------------------------------
+# Reference runtime (services/api) — optional, not required to run the tool
+# ---------------------------------------------------------------------------
+services/api/node_modules/
+services/api/*.log
+services/api/dist/
+node_modules/
+*.tsbuildinfo
+
+# ---------------------------------------------------------------------------
+# Secrets and local configuration — never committed
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---------------------------------------------------------------------------
+# Editor and OS noise
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

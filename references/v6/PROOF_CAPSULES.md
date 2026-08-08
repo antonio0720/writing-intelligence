@@ -275,7 +275,7 @@ The reason to be exact is [Law E](../v5/CONSTITUTION.md). Describing a Merkle co
 
 ## 6. The redaction contract
 
-**Status: executable in `scripts/wi.py` — the reliability rendering rules below are enforced by `wi capsule inspect` and `wi capsule verify`.**
+**Status: partially executable in `scripts/wi.py`.** What ships: every redacted leaf carries `disclosed: false`, a `proves` string and a `does_not_prove` string; the manifest carries `declared_omissions` and `not_a_proof_of`; `wi capsule create` prints the redacted-leaf limit; `wi capsule inspect` prints both lists; `wi capsule verify` prints the verdict and the scope as separate lines. What does **not** ship in 6.0.0: the `*_by_producer` reliability values in the table below, and the worked coverage output that quotes them. Those strings appear nowhere in `scripts/wi.py`. Marked here rather than left ambiguous, because a document about not implying more than you checked cannot imply more than it implemented.
 
 > A capsule may prove: **a source object with this digest was part of the producer's closure.**
 >
@@ -292,9 +292,9 @@ The four reliability types in [`../v5/CONSTITUTION.md`](../v5/CONSTITUTION.md) d
 | `judged` | `judged` | `judged` — unchanged; a judgment was never independently checkable |
 | `human-declared` | `human-declared` | `human-declared` |
 
-`verified_by_producer` is a distinct wire value and not a presentation variant. A recipient's tooling must be able to filter on it, count it, and refuse a document where it exceeds a threshold. Rendering it as `verified` with a footnote is the failure this table exists to prevent — footnotes are not read, and the word in the column is what gets quoted.
+`verified_by_producer` is specified as a distinct wire value and not a presentation variant. A recipient's tooling must be able to filter on it, count it, and refuse a document where it exceeds a threshold. Rendering it as `verified` with a footnote is the failure this table exists to prevent — footnotes are not read, and the word in the column is what gets quoted. **This table is a specification and not a description of 6.0.0.** The transformation is not implemented; a capsule built today carries `human_declared` and `verified` across the boundary unchanged, and states the limit in `does_not_prove` instead of in the type. Anyone writing a recipient today should filter on the redaction record, because that is the thing that exists.
 
-**`wi capsule verify` states the limitation in its own output**, following the pattern the v5 `hash-only` verifier already uses:
+**`wi capsule verify` states the limitation in its own output.** The shipped verifier prints its verdict and then a separate scope line; the fuller per-reliability accounting below is specified and depends on the transformation above, which does not ship. The example is what the output is meant to become, not what it prints:
 
 ```
 Profile: selective
@@ -392,9 +392,9 @@ wi capsule verify  <path> [--attestation <path>]
 
 `create` builds the closure, sorts leaves, constructs the tree, generates an inclusion proof per disclosed leaf, copies disclosed content, and writes the manifest. It refuses when a requested disclosure has no approval record under a profile that requires one, and it refuses when the disclosure set is empty — an empty capsule commits to a root and discloses nothing, and there is no reader for whom that is the intended artifact rather than a mistake.
 
-`inspect` prints the manifest, the profile, the disclosure counts with their denominators, and the reliability breakdown including the `*_by_producer` counts. It performs no cryptographic verification and says so, because an inspection that looked like a verification is the same category error as a `VALID` line with no coverage statement.
+`inspect` prints the manifest, the profile, the disclosure counts with their denominators, the `declared_omissions` list and the `not_a_proof_of` list. It performs no cryptographic verification and says so, because an inspection that looked like a verification is the same category error as a `VALID` line with no coverage statement. The reliability breakdown with `*_by_producer` counts is **specified and not printed in 6.0.0**, for the reason given in §6.
 
-`verify` recomputes every leaf hash from disclosed content, folds every inclusion proof, compares the root against `closure/root.json` and against the release attestation, and prints the section 6 output. It exits non-zero on any mismatch. It requires no network, no key material and no workspace.
+`verify` recomputes every leaf hash from disclosed content, folds every inclusion proof, compares the root against `closure/root.json` and against the release attestation, and prints a verdict line followed by a separate scope line. It exits non-zero on any mismatch. It requires no network, no key material and no workspace. The fuller §6 output — the per-reliability accounting — is specified and awaits the transformation that does not ship.
 
 **`verify` runs against a capsule alone.** A verifier that needed the producer's workspace to check a capsule would defeat the purpose of the format at the first step.
 
@@ -441,7 +441,8 @@ The consequence is that a valid capsule and a current release are different asse
 | Inclusion proof generation and verification | Executable in `scripts/wi.py` |
 | `wi capsule create \| inspect \| verify` | Executable in `scripts/wi.py` |
 | Profiles `full`, `hash-only`, `redacted`, `selective` | Executable in `scripts/wi.py` |
-| Redaction contract, `*_by_producer` reliability values, coverage output | Executable in `scripts/wi.py` |
+| Redaction contract — `does_not_prove` per leaf, `declared_omissions`, `not_a_proof_of`, verdict and scope printed separately | Executable in `scripts/wi.py` |
+| `*_by_producer` reliability values and the per-reliability coverage output that quotes them | Specified. Not implemented — the strings are not in `scripts/wi.py` |
 | Salted commitments and revelation checking | Executable in `scripts/wi.py` |
 | Profile `challenge-response` | Specified. Requires an interactive session between two endpoints |
 | External signing, key isolation, `SigningRequest` | Specified. No key handling of any kind ships |
