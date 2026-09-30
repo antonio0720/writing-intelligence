@@ -36,6 +36,7 @@ than to process.
 
 | File | What it is |
 |---|---|
+| [`driftless-vip-public-page-source-bundle.md`](driftless-vip-public-page-source-bundle.md) | Evidence-bounded proposal copy for the five Driftless VIP public pages; release held and explicitly not yet published. |
 | [`shigosen-intent-commons-covenant.md`](shigosen-intent-commons-covenant.md) | The SHIGOSEN Intent Commons Standard — 26 constitutional commitments for a consent-driven outcome network, with an explicit public-claim boundary separating direction from shipped capability. |
 
 ## Adding one
