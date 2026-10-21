@@ -3,9 +3,11 @@
 ## Purpose
 
 Build a unique voiceprint from a writer's existing samples. This is the
-highest-leverage anti-detection tool in the system. A custom voiceprint
-produces output that sounds like a specific person — which no detector
-can flag because the statistical signature matches human authorship.
+highest-leverage voice-fidelity tool in the system. A custom voiceprint
+produces output that sounds like a specific person, built only from samples
+that person supplied and consented to. It is a craft instrument, not a way
+to make a document evade a detector or misrepresent who wrote it
+(`references/v4/NON_GOALS.md`).
 
 ---
 

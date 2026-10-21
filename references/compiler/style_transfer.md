@@ -170,13 +170,16 @@ After every transfer, verify:
 
 ## Chaining Transfers
 
-For maximum undetectability in academic contexts:
+For academic work, chain transfers so the student's own thinking stays visible:
 
-1. Write the content in the student's natural voice (casual, thinking-through-it)
-2. Transfer to academic register while preserving the original's imperfections
+1. Start from the student's own draft or notes, in their natural voice
+2. Transfer to academic register while keeping their ideas, uncertainties and
+   phrasing choices; never add imperfections they did not write
 3. Run the academic genre pack
 4. Apply the academic voiceprint
-5. Run the anti-detection adversarial checks
+5. Record the provenance log (`references/academic/academic_mode.md`,
+   Authorship Proof Layer) and any disclosure the institution requires
 
-The content started human. Each transfer preserved the human origin. The
-academic polish doesn't erase the authorship — it refines it.
+The content started with the author and every step is on the record. The
+academic polish refines the authorship; it never hides how the work was made.
+This is not a detector-evasion procedure (`references/v4/NON_GOALS.md`).

@@ -1,14 +1,22 @@
 ---
 name: writing-intelligence
-description: Writing Intelligence v6 — the Sovereign Meaning Runtime. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop) plus a semantic state machine — claims anchored to an exact span of an exact source version, semantic branches, proposals bound to the state they were written against, capability grants that expire, merge that preserves a conflict instead of averaging it, counterfactual simulation before an edit exists, bitemporal as-of queries, and proof capsules a stranger verifies offline with no model. Use whenever the user wants to write, rewrite, edit, draft, ghostwrite, redline, audit, fact-check, verify or release any prose — grants and NOFOs, policy, journalism, medical, legal, investor material, technical docs, books, sermons, speeches, newsletters, fiction, screenplays. Trigger when unnamed — 'clean this up', 'is this accurate', 'make this sound like me', 'check my sources', 'what breaks if this number changes', 'will this hold up'.
+description: Writing Intelligence v7 — Institutional Intelligence on the Sovereign Meaning Runtime. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop) plus a semantic state machine — claims anchored to an exact span of an exact source version, branches, proposals bound to reviewed state, expiring grants, merge that preserves conflicts instead of averaging them, counterfactual simulation, as-of queries, and proof capsules verified offline with no model. v7 opens the program for consequential work (research, legal, capital, grants, contracts) under authentic authorship, with a receipt behind every claimed status. Use whenever the user wants to write, rewrite, edit, draft, ghostwrite, redline, audit, fact-check or verify prose — grants, dissertations, policy, legal, investor material, books, speeches, fiction. Trigger when unnamed — 'clean this up', 'is this accurate', 'make this sound like me', 'check my sources', 'what breaks if this number changes'.
 ---
 
-# Writing Intelligence v6 — The Sovereign Meaning Runtime
+# Writing Intelligence v7 — Institutional Intelligence on the Sovereign Meaning Runtime
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 6.0.0
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → **v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge)**
+**Version:** 7.0.0
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → **v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work)**
+
+---
+
+## v7 in one paragraph
+
+v7 is the **Institutional Intelligence Expansion** (program WI7-IIP): the work whose consequences are academic, legal, financial, contractual, regulatory or institutional — dissertations, filings, investor rooms, grants and bids. **7.0.0 ships the governance, not the domain workflows.** It froze the baseline, proved v4/v5/v6 reproduce exactly (3/32/70 assertions, byte-identical bundles), repaired the academic doctrine so no pack instructs detector evasion or fabricated authorship, and made the program checkable: a wave in `plans/v7.manifest.yaml` is shipped only with a PASS receipt carrying its command, result, negative control and independent readback. The doctoral, legal, capital, grants, procurement and deal workflows are waves WI7-03 to WI7-19, all planned — say so when asked, and never present one as working. Program: `references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md`. Why this is "v7": `references/v7/RFC-0001-VERSIONING.md`.
+
+**The v7 rule for consequential work:** proof is not outcome. A document can be verified; an admission, award, filing, financing or verdict is claimed only from the institution's own evidence. And in academic work the author's own thinking stays visible — observations come from the author, uncertainty is real, and required AI-use disclosure is drafted, never suppressed.
 
 ---
 

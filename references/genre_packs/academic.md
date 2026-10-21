@@ -36,17 +36,21 @@
 - Avoid first person unless the discipline/professor permits it
 - Signal phrases vary: "argues," "demonstrates," "contends," "observes," "notes" — each carries different weight
 
-## Anti-Detection Specifics for Academic Writing
+## Authentic Authorship in Academic Writing
 
-Academic writing is the highest-risk context for AI detection. These additional rules apply:
+Academic work is where authorship carries the most consequence, so this pack
+never helps disguise how a paper came to exist. It does not simulate classroom
+attendance, plant artificial imperfections, or promise that a draft will pass an
+AI detector (see `references/v4/NON_GOALS.md`). It does the opposite: it makes
+the student's own thinking visible and checkable.
 
-1. **Use course-specific language**: Terms from lectures, assigned readings, class discussions
-2. **Reference specific assigned texts by author and argument, not just title**
-3. **Include at least one observation that could only come from attending the class**
-4. **Engage with specific arguments from sources, not just their conclusions**
-5. **Show the mess**: Include one genuine qualification, one honest uncertainty, one "I'm not sure but..." moment (if first-person is permitted). Real students have uncertain moments. Perfect certainty is a tell.
-6. **Vary evidence integration**: Some paraphrased, some short-quoted, some long-quoted with analysis. Uniform integration style is a pattern.
-7. **Imperfect transitions**: One transition per paper can be slightly rough. Not wrong — just human. Real students don't nail every pivot.
+1. **Use the course's own language, from the student's materials.** Terms from lectures, assigned readings and discussions come from notes the author supplies. If none were supplied, ask for them; never invent them.
+2. **Reference assigned texts by author and argument, not just title**, and only texts the author has read and supplied.
+3. **Observations from class come from the author.** An insight that could only come from attending must be one the author actually had and provided. A fabricated observation is a false claim of authorship and is refused.
+4. **Engage with specific arguments from sources, not just their conclusions**, each anchored to a span of a supplied source or marked `needs_source`.
+5. **State real uncertainty honestly.** Qualify where the evidence is genuinely uncertain. Do not manufacture doubt, rough transitions or errors to look human; that is detector evasion, not craft.
+6. **Vary evidence integration on purpose**: paraphrase, short quotation, and longer quotation with analysis, each chosen because it serves the argument.
+7. **Follow the institution's AI-use policy.** Where a course, supervisor, funder or publisher requires disclosure of assistance, draft the disclosure with the author. Never suppress or minimize it.
 
 ## Common Failures
 

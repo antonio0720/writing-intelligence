@@ -7,6 +7,41 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [7.0.0] — 2026-10-21 — **The Institutional Intelligence Expansion**
+
+### The Leap
+
+v6 proved meaning can be changed by more than one person without anybody losing track of what is still true. **v7 points that runtime at work whose consequences are academic, legal, financial, contractual, regulatory or institutional** — dissertations, filings, investor rooms, grants and bids — and starts by making sure the program itself cannot claim progress it has not measured.
+
+**7.0.0 ships governance, not domain workflows.** The doctoral, legal, capital, grants, procurement and deal workflows are waves WI7-03 to WI7-19 and are all `planned`. Nothing in this release says otherwise.
+
+### Added
+
+- **The program** — `references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md`: twenty-seven arenas, the governing architecture and its five rules, the four anchor experiences (Research, Legal, Capital, Awards & Contracts), security controls, twenty wave exit tests, the falsification matrix, economics and stop conditions
+- **RFC-0001** — `references/v7/RFC-0001-VERSIONING.md`: why this is v7, and how the earlier "v7.0 sovereign runtime" horizon is preserved as the substrate (W13–W28 in `plans/v6.manifest.yaml`, unchanged) rather than renamed away
+- **`plans/v7.manifest.yaml`** — WI7-00 … WI7-19 as an inspectable object, the one status source for the program
+- **Receipts** — `plans/receipts/WI7-00.json`, `WI7-01.json`, `WI7-02.json`: the command, the environment, the observed result with stdout digests, the negative controls and an independent readback for each shipped wave
+- **`tests/v7/test_wi7.sh`** — 12 assertions, each positive check with a negative twin that must go red
+
+### Changed
+
+- **`scripts/check-manifest.py` validates every `plans/*.manifest.yaml`.** A manifest that declares `receipts_required: true` may mark a wave `shipped` only if its receipt exists, reads PASS for that wave, carries the command, result, a negative control and an independent readback, and every dependency is itself shipped. A status typed by hand with nothing behind it is refused
+- **The skill bundle ships `references/v7`, `tests/v7` and `scripts/check-manifest.py`**, and the build runs the v7 suite inside the extracted bundle
+
+### Fixed — WI7-01, the doctrine contradiction
+
+`references/genre_packs/academic.md` carried a section on making academic writing avoid AI detection — simulate class attendance, plant a rough transition, perform uncertainty — while `references/v4/NON_GOALS.md` and `ROADMAP.md` refuse detector evasion. Three more files carried the same framing: `references/compiler/style_transfer.md`, `references/compiler/auto_mode.md` and `references/voiceprints/custom_voiceprint_builder.md`. The retired phrases are listed in `tests/v7/test_wi7.sh`. All four now require author-supplied observations, real uncertainty, consented voice samples and institution-compliant AI-use disclosure. The v7 suite fails if the old language returns.
+
+### Unchanged
+
+Every v4, v5 and v6 command, exit code, digest and bundle format. The v4 suite passes 3/3, v5 32/32, v6 70/70, before and after the version change. Existing `.wiab` bundles and v6 workspaces need no migration. The MIT license is unchanged.
+
+### Measured, not asserted
+
+Baseline `b59ef9544e9da78bab3dfa8db2178d4e6b569d16`: doctor exit 0; both CI mutation checks turn the suites red; two builds of one tree produce identical bundles (`52bea47e…` runtime, `b73089d5…` craft), identical to the committed release; 154/200 and 79/200 files; description 973/1024 characters. Details in `plans/receipts/WI7-02.json`.
+
+---
+
 ## [6.0.0] — 2026-08-08 — **The Sovereign Meaning Runtime**
 
 ### The Leap

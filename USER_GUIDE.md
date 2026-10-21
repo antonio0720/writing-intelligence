@@ -1,4 +1,4 @@
-# Writing Intelligence v6 — User Guide
+# Writing Intelligence v7 — User Guide
 
 The day-to-day manual for the Sovereign Meaning Runtime.
 
@@ -9,6 +9,12 @@ Free. Open source. MIT. Forever.
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com).
 
 ---
+
+## What changed for you in v7
+
+- **Nothing you run changed.** Every v4, v5 and v6 command, exit code, digest and bundle format is identical; `wi --version` now says 7.0.0.
+- **Academic work is authentic-authorship only.** The academic pack, the style-transfer chain, auto mode and the voiceprint builder no longer suggest simulating class attendance, planting imperfections or evading a detector. Supply your own notes and observations; where your institution requires AI-use disclosure, the system drafts it with you.
+- **The v7 program is planned, and says so.** Doctoral, legal, capital, grants, procurement and deal workflows are waves WI7-03 to WI7-19 in [`plans/v7.manifest.yaml`](plans/v7.manifest.yaml). A wave is marked shipped only with a receipt; `python3 scripts/check-manifest.py` refuses anything else. Details: [`references/v7/`](references/v7/README.md).
 
 ## What changed for you in v6
 
@@ -1241,7 +1247,7 @@ Sixteen capabilities ship. They are dotted, and containment is real: holding `cl
 | `proof.waive` | Accept something without the proof its type demands |
 | `release.build` | Build a release |
 | `release.approve` | Approve a release for distribution |
-| `release.sign` | Sign a release (external signing is specified and does not ship in 6.0.0) |
+| `release.sign` | Sign a release (external signing is specified and does not ship in 7.0.0) |
 | `policy.modify` | Change the policy the workspace enforces |
 | `authority.delegate` | Issue grants derived from one's own |
 | `capsule.export.full` | Export a capsule disclosing every leaf |
@@ -1515,7 +1521,7 @@ GRAPH CONSTRAINTS — main
   --   C009 release-closure-is-complete                   
        no v6 release closure in this workspace; `wi verify-release` checks the v5 closure of an existing .wiab
   --   C011 claim-realm-cannot-disappear-in-rendering     
-       no render source maps in this workspace; the compiler backends that produce them are specified and do not ship in 6.0.0
+       no render source maps in this workspace; the compiler backends that produce them are specified and do not ship in 7.0.0
 ```
 
 A `--` is Law C in the shape of a status: the constraint could not be evaluated here, and the report says why rather than counting it as a pass. Aggregating twenty constraints into "95%" would let a failure and an unevaluated check average each other out, which is the one thing a compliance number must never do.
@@ -1693,7 +1699,7 @@ This is the part worth being exact about, because selective disclosure is routin
 CAPSULE households.wic
   format           wic/1
   profile          selective
-  core_version     6.0.0
+  core_version     7.0.0
   branch           main
   graph_root       sha256:8a8f093912d53c20d406fa2f163b4416f43a391b865771be3d7f45e2edb74c91
   closure_root     sha256:4d922a40ea08efebd4c473cf0134092a2b8c414ec22ec774e8fce56d9aaa26e4
@@ -1702,7 +1708,7 @@ CAPSULE households.wic
 
   declared omissions
     judgment.entailment      this core contains no judgment provider
-    signature                external signing is specified and does not ship in 6.0.0
+    signature                external signing is specified and does not ship in 7.0.0
 
   does not prove
     - that the underlying sources are correct
@@ -1753,7 +1759,7 @@ WI_INPUT_INVALID: no Writing Intelligence workspace found
 - **My proposal requires a capability I did not expect.** The delta class was computed from the two states. Run `wi why <node>` to see the current claim, and compare — a modality or scope change hidden inside a reword is exactly what this is for.
 - **`wi commit` says there is nothing to apply.** Accepted proposals are what commits; proposing is not accepting. `wi proposals` shows the status of each.
 - **`wi merge` exited 2 and I expected it to work.** That is a conflict, and it is the designed outcome when two branches disagree. `wi conflicts` lists them; nothing was silently chosen for you.
-- **`wi constraints` says `--` for five checks.** Those are the constraints that depend on subsystems specified and not shipping in 6.0.0 — release closure, render source maps, protected spans. `--` is not a failure and is not a pass; the report says which and why.
+- **`wi constraints` says `--` for five checks.** Those are the constraints that depend on subsystems specified and not shipping in 7.0.0 — release closure, render source maps, protected spans. `--` is not a failure and is not a pass; the report says which and why.
 - **`wi capsule verify` fails on a capsule I just built.** Check whether the file was transferred as text; `.wic` is bytes, and a newline conversion is enough to change a digest. That is the check working.
 - **`wi as-of` returns nothing.** Both clocks must be satisfied. Widen one; the output tells you which values it used.
 - **I want to know what this build can and cannot do.** `wi doctor` prints the deterministic checks it runs, the anchor types available, and — under *"Not available here — and therefore never reported as done"* — every capability that is specified and not executable, with the reason.
@@ -1779,7 +1785,7 @@ Step by step: [`references/v6/MIGRATION_V5_TO_V6.md`](references/v6/MIGRATION_V5
 
 ### What is specified and does not run
 
-Named here so you do not build a plan around it. Not shipping in 6.0.0: the Rust/WASM core, the compiler backends and render source maps, the media adapters (`pdf_region`, `sheet_range`, `audio_time`, `video_time`, `image_region`), the plugin host, judgment providers, federation, watch mode, external signing, the Workbench, and REST/MCP v6. Each is designed and normatively described in [`references/v6/`](references/v6/README.md), and none of it is executable anywhere. `wi doctor` lists the same set with reasons, which is the copy to trust if this paragraph ever drifts.
+Named here so you do not build a plan around it. Not shipping in 7.0.0: the Rust/WASM core, the compiler backends and render source maps, the media adapters (`pdf_region`, `sheet_range`, `audio_time`, `video_time`, `image_region`), the plugin host, judgment providers, federation, watch mode, external signing, the Workbench, and REST/MCP v6. Each is designed and normatively described in [`references/v6/`](references/v6/README.md), and none of it is executable anywhere. `wi doctor` lists the same set with reasons, which is the copy to trust if this paragraph ever drifts.
 
 ---
 
@@ -1789,8 +1795,8 @@ It will not invent a citation · tell you your sources are correct · judge para
 
 ---
 
-**Antonio T. Smith Jr. / Density6 LLC** · MIT · v6.0.0
+**Antonio T. Smith Jr. / Density6 LLC** · MIT · v7.0.0
 
 *v4 proved authorship can be held accountable. v5 proved the account can be carried, checked and re-checked by someone who was never in the room. v6 makes meaning itself the state — so a change can be examined before it exists, authorized by a named person, and merged without inventing a number nobody asserted.*
 
-Release notes: [`release/RELEASE_NOTES_v6.0.0.md`](release/RELEASE_NOTES_v6.0.0.md)
+Release notes: [`release/RELEASE_NOTES_v7.0.0.md`](release/RELEASE_NOTES_v7.0.0.md) · [`v6.0.0`](release/RELEASE_NOTES_v6.0.0.md)

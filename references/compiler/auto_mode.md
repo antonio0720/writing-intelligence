@@ -161,10 +161,10 @@ Pass 6: Default to clean + transfer verification notes
 Pass 0: FULL — rubric compiler, discipline identification
 Pass 1: FULL — with academic-specific checks
 Pass 2: FULL — with rubric mapping
-Pass 3: FULL — with academic anti-detection rules
+Pass 3: FULL — with academic authentic-authorship rules
 Pass 4: FULL — with academic voiceprint
 Pass 5: FULL — with professor calibration
-Pass 6: Default to clean + citation check + detection risk
+Pass 6: Default to clean + citation check + authorship provenance
 ```
 
 ### Longform Mode

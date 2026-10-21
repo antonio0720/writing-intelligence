@@ -1,0 +1,43 @@
+{
+  "checkpoint": "WI7-00",
+  "program": "WI7-IIP",
+  "status": "PASS",
+  "baseline_sha": "b59ef9544e9da78bab3dfa8db2178d4e6b569d16",
+  "objective": "Freeze the repository baseline before any v7 change",
+  "measured_at": "2026-10-21",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin 25.5.0",
+    "checkout": "fresh git clone of github.com/antonio0720/writing-intelligence, detached at the baseline"
+  },
+  "commands": [
+    "git ls-remote origin refs/heads/main",
+    "git checkout --detach b59ef9544e9da78bab3dfa8db2178d4e6b569d16",
+    "git rev-parse HEAD",
+    "python3 scripts/wi.py doctor"
+  ],
+  "observed_result": {
+    "remote_main": "b59ef9544e9da78bab3dfa8db2178d4e6b569d16",
+    "local_head": "b59ef9544e9da78bab3dfa8db2178d4e6b569d16",
+    "doctor_exit": 0,
+    "doctor_stdout_sha256": "870dc5675953e62462fa6f6eb3c63481b69961c3cf5e52cc2320f3c4741b18e3"
+  },
+  "negative_controls": [
+    {
+      "id": "retarget-on-moved-head",
+      "expectation": "if refs/heads/main differs from baseline_sha at write time, the program write target is invalidated instead of silently moved",
+      "observed": "remote main equalled the baseline at measurement; the push of 7.0.0 is a fast-forward from this exact commit"
+    }
+  ],
+  "independent_readback": {
+    "method": "git ls-remote against the public remote, separate from the local checkout",
+    "value": "b59ef9544e9da78bab3dfa8db2178d4e6b569d16"
+  },
+  "unknown": [
+    "no customer or institution has used any v7 domain workflow",
+    "judgment gateway, PDF/DOCX/XLSX anchors, Workbench, signing and federation are specified in v6 and not executable",
+    "no legal, securities, procurement or academic-policy review of the v7 program has occurred"
+  ],
+  "remaining_issue": null,
+  "next_authorized_action": "WI7-01 and WI7-02"
+}

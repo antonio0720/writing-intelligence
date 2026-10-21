@@ -1,0 +1,225 @@
+# v7.manifest.yaml — WI7-IIP, the Institutional Intelligence Expansion.
+#
+# The program plan as an inspectable object. The governing document is
+# references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md; the versioning decision
+# that makes this v7 is references/v7/RFC-0001-VERSIONING.md.
+#
+# This manifest is the ONE status source for the program. It does not replace
+# plans/v6.manifest.yaml: the v6 runtime waves W13-W28 stay authoritative and
+# several WI7 waves wait on them.
+#
+# Rules enforced by scripts/check-manifest.py, in addition to the v6 rules:
+#   * receipts_required — a wave may be `shipped` only with a receipt file that
+#     reads PASS for that wave and carries the command, the observed result,
+#     at least one negative control and an independent readback
+#   * a shipped wave's dependencies must themselves be shipped
+#
+# Shipped here means the wave's declared exit held on measurement. It never
+# means a domain outcome: no admission, award, filing, financing or verdict is
+# claimed anywhere in this file.
+
+schema: wi.build-manifest/v1
+program: writing-intelligence-v7-institutional-intelligence
+program_id: WI7-IIP
+horizon: 2029-12
+core_version: 7.0.0
+baseline_sha: b59ef9544e9da78bab3dfa8db2178d4e6b569d16
+receipts_required: true
+
+waves:
+  # ------------------------------------------------------------------------
+  # Shipped in 7.0.0 — recovery, doctrine repair, reproducibility floor
+  # ------------------------------------------------------------------------
+  - id: WI7-00
+    name: Constitutional recovery — freeze the baseline
+    status: shipped
+    depends_on: []
+    receipt: plans/receipts/WI7-00.json
+    proves:
+      commands: [doctor]
+      artifacts: [plans/receipts/WI7-00.json]
+    exit:
+      - the baseline commit is pinned and read back from the public remote
+      - the explicit unknown list is recorded in the receipt
+      - a changed remote HEAD invalidates the write target instead of retargeting
+
+  - id: WI7-01
+    name: Repair the academic detector-evasion contradiction
+    status: shipped
+    depends_on: [WI7-00]
+    receipt: plans/receipts/WI7-01.json
+    proves:
+      artifacts: [plans/receipts/WI7-01.json, references/v7/RFC-0001-VERSIONING.md, tests/v7/test_wi7.sh]
+    exit:
+      - no shipped doctrine instructs fabricated class observations, planted imperfection or detector evasion
+      - the v7 suite fails when an evasion instruction is planted back
+      - the versioning RFC reconciling the old v7.0 runtime target is accepted by the owner
+
+  - id: WI7-02
+    name: Reproducibility floor — prove v4, v5 and v6 before extending
+    status: shipped
+    depends_on: [WI7-00]
+    receipt: plans/receipts/WI7-02.json
+    proves:
+      commands: [doctor, verify-release]
+      artifacts: [plans/receipts/WI7-02.json]
+    exit:
+      - doctor exits 0 on a clean pinned checkout
+      - the v4, v5 and v6 suites pass with 3, 32 and 70 assertions
+      - both CI mutation checks turn the suites red
+      - two bundle builds of one tree produce identical bytes, under the 200-file and 1024-character limits
+
+  # ------------------------------------------------------------------------
+  # Planned — contracts and the security floor
+  # ------------------------------------------------------------------------
+  - id: WI7-03
+    name: Product contracts — domain and opportunity invariants
+    status: planned
+    depends_on: [WI7-01, WI7-02]
+    exit:
+      - schemas for opportunity, submission attempt, decision and evidence parse and map to the v6 semantic IR
+      - a rejected status transition stays rejected under property tests
+      - no second authoritative truth store is introduced
+
+  - id: WI7-04
+    name: Security and privacy foundation — tenant, matter, academic, deal and bid isolation
+    status: planned
+    depends_on: [WI7-03]
+    exit:
+      - independent cross-boundary read and write drills are refused
+      - redaction capsules and key revocation are tested
+      - denied access produces a negative-proof receipt
+
+  - id: WI7-05
+    name: Evidence adapters — PDF, DOCX, XLSX, court and solicitation anchors
+    status: planned
+    depends_on: [WI7-02, WI7-04]
+    exit:
+      - anchors are deterministic and digest-bound on real files
+      - malformed and adversarial files fail safely
+      - changing a spreadsheet input invalidates every derived number
+
+  # ------------------------------------------------------------------------
+  # Planned — the four anchor experiences
+  # ------------------------------------------------------------------------
+  - id: WI7-06
+    name: Doctoral Research OS
+    status: planned
+    depends_on: [WI7-03, WI7-04, WI7-05]
+    exit:
+      - fabricated source, wrong DOI, reversed result and invented interview each block or open an obligation
+      - an author-permitted thesis pilot passes an independent committee-style review within declared scope
+      - required AI-use disclosure is drafted, never suppressed
+
+  - id: WI7-07
+    name: Legal Practice OS — civil, prosecution and defense kept separate
+    status: planned
+    depends_on: [WI7-03, WI7-04, WI7-05]
+    exit:
+      - fabricated, overruled or out-of-jurisdiction authority is refused on attorney-reviewed golden sets
+      - prosecution and defense matters cannot read each other
+      - an unsupported jurisdiction refuses rather than generalizes
+
+  - id: WI7-08
+    name: Capital Readiness OS
+    status: planned
+    depends_on: [WI7-03, WI7-04, WI7-05]
+    exit:
+      - sample financials reconcile independently
+      - observed, asserted, predicted and simulated figures never share a label
+      - modeled money is never displayed as funded
+
+  - id: WI7-09
+    name: Opportunity Intelligence — provenance-rich intake and amendments
+    status: planned
+    depends_on: [WI7-03, WI7-04, WI7-05]
+    exit:
+      - every opportunity carries an authoritative locator, digest and timezone-correct deadline
+      - an amendment or withdrawal propagates to every dependent artifact
+      - an unknown official deadline blocks rather than defaults
+
+  - id: WI7-10
+    name: Grants OS — federal, state, local and foundation
+    status: planned
+    depends_on: [WI7-06, WI7-09]
+    exit:
+      - every mandatory NOFO field maps to a response section and evidence
+      - SUBMITTED is set only from an authoritative receipt readback
+      - an unsupported submission path ends READY_FOR_MANUAL_SUBMISSION, not SUBMITTED
+
+  - id: WI7-11
+    name: Contract Capture OS — federal, state, local and private bids
+    status: planned
+    depends_on: [WI7-09]
+    exit:
+      - a missing bond, expired acknowledgment or forbidden exception blocks regardless of prose quality
+      - bid and no-bid economics are explicit and labeled predicted
+      - an ambiguous timeout never produces a second submission
+
+  - id: WI7-12
+    name: Institutional Deals OS
+    status: planned
+    depends_on: [WI7-08, WI7-09]
+    exit:
+      - executed and proposed terms are separate claim types
+      - an unsigned deal is never counted as contracted revenue
+
+  - id: WI7-13
+    name: Investor participation — consent-based, inside the securities boundary
+    status: planned
+    depends_on: [WI7-04, WI7-08]
+    exit:
+      - written scope opinion from qualified securities counsel is on file before any pilot
+      - no solicitation, fee or matching runs outside the cleared role
+
+  - id: WI7-14
+    name: Extension packs — IP, science, accreditation, claims and more
+    status: planned
+    depends_on: [WI7-03, WI7-04, WI7-05]
+    exit:
+      - each pack declares its schema, evidence mode, professional reviewer and unsupported scope
+      - each pack passes its adverse benchmark cases
+
+  # ------------------------------------------------------------------------
+  # Planned — surface, autonomy, learning, pilots, release
+  # ------------------------------------------------------------------------
+  - id: WI7-15
+    name: Institutional Workbench — one interface, one proof engine
+    status: planned
+    depends_on: [WI7-06, WI7-07, WI7-08, WI7-09, WI7-10, WI7-11, WI7-12, WI7-13, WI7-14]
+    exit:
+      - CLI, API and UI return the same proof verdict for the same input
+      - no blended truth score appears on any pane
+      - no acceptance surface scrolls horizontally
+
+  - id: WI7-16
+    name: Governed autonomy — bounded workers and submission grants
+    status: planned
+    depends_on: [WI7-04, WI7-09, WI7-15]
+    exit:
+      - workers execute only explicitly granted effects, replayably
+      - an ambiguous external result is marked UNKNOWN and reconciled before any retry
+
+  - id: WI7-17
+    name: Reality-linked learning without changing proof semantics
+    status: planned
+    depends_on: [WI7-15, WI7-16]
+    exit:
+      - a held-out replay shows behavior changed after authorized evidence
+      - no historical proof or decision is overwritten
+
+  - id: WI7-18
+    name: Pilots and business validation with real users
+    status: planned
+    depends_on: [WI7-06, WI7-07, WI7-08, WI7-10, WI7-11]
+    exit:
+      - each consented pilot reports baseline and measured time, cost and error counts with denominators
+      - external acknowledgments are independently evidenced
+
+  - id: WI7-19
+    name: Certification and release of the institutional products
+    status: planned
+    depends_on: [WI7-02, WI7-04, WI7-18]
+    exit:
+      - a clean install from the distributed bundle passes an independent verifier
+      - release bytes match validated bytes

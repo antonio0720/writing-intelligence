@@ -1,6 +1,6 @@
 # Roadmap
 
-Writing Intelligence is a living project. **v6.0 shipped August 2026.** Here's where it goes next.
+Writing Intelligence is a living project. **v6.0 shipped August 2026. v7.0 shipped October 2026** — as governance, with the institutional workflows planned and stated as planned. Here's where it goes next.
 
 Built by **Antonio T. Smith Jr. / Density6 LLC**
 
@@ -18,8 +18,32 @@ Each version proved one thing and then made the next thing necessary.
 | **v4.0** | Accountable authorship. What may be *claimed* about the writing is itself governed — support means a verbatim span or it is `needs_source`. |
 | **v5.0** | Proof-carrying authorship. The account travels with the document and survives the absence of everything that made it. |
 | **v6.0** | Executable meaning. A body of meaning can be changed by several people across time, under scoped authority, without anyone losing track of what is still true — and without the system inventing an answer when they disagree. |
+| **v7.0** | Institutional intelligence, governed before it is built. A program for consequential work can refuse to call itself done: every shipped wave carries a receipt, and the doctrine no longer contradicts its own refusal of detector evasion. |
 
 v5 answers *is this supported?* v6 answers *what changed, what did that break, who was allowed to do it, and what would it cost to accept?* The second set of questions is not a bigger version of the first. It requires the system to hold state across time and to have an opinion about who may move it, and neither is a feature that can be bolted onto a verifier.
+
+---
+
+## v7 — the Institutional Intelligence Expansion (WI7-IIP)
+
+v7 makes Writing Intelligence the environment for work whose consequences are academic, legal, financial, contractual, regulatory or institutional. The program, its architecture and every wave's exit test: [`references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md`](references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md). Why this is "v7": [`references/v7/RFC-0001-VERSIONING.md`](references/v7/RFC-0001-VERSIONING.md). Status lives in one place: [`plans/v7.manifest.yaml`](plans/v7.manifest.yaml).
+
+### Shipped in 7.0.0 — with receipts
+
+- [x] **WI7-00** — baseline `b59ef95` frozen and read back from the public remote ([receipt](plans/receipts/WI7-00.json))
+- [x] **WI7-01** — the academic detector-evasion contradiction repaired in four doctrine files; RFC-0001 accepted; `tests/v7/test_wi7.sh` goes red if the language returns ([receipt](plans/receipts/WI7-01.json))
+- [x] **WI7-02** — v4 3/3, v5 32/32, v6 70/70, both mutations red, byte-identical bundles under the 200-file and 1024-character limits ([receipt](plans/receipts/WI7-02.json))
+- [x] `scripts/check-manifest.py` refuses a wave marked shipped without a PASS receipt, a negative control, an independent readback and shipped dependencies
+
+### Planned — not built
+
+- [ ] **WI7-03 → WI7-05** — product contracts, tenant/matter/deal/bid isolation, evidence adapters (PDF, DOCX, XLSX, court and solicitation anchors)
+- [ ] **WI7-06** — Doctoral Research OS
+- [ ] **WI7-07** — Legal Practice OS, with civil, prosecution and defense kept separate
+- [ ] **WI7-08** — Capital Readiness OS
+- [ ] **WI7-09 → WI7-12** — Opportunity Intelligence, Grants OS, Contract Capture OS, Institutional Deals OS
+- [ ] **WI7-13** — investor participation, only after a written securities-counsel scope opinion
+- [ ] **WI7-14 → WI7-19** — extension packs, the Institutional Workbench, governed autonomy, reality-linked learning, real pilots, certification
 
 ---
 
@@ -178,9 +202,9 @@ Governing documents: [`references/v6/FEDERATION.md`](references/v6/FEDERATION.md
 
 ---
 
-## v7.0 horizon — the full sovereign runtime (Target: 2029)
+## The sovereign runtime substrate — formerly the "v7.0 horizon" (Target: 2029)
 
-Everything above is one core and a command line. v7.0 is what that core is *for*: surfaces that translate without deciding, a canon graph pointed at constructed worlds, and a migration that can carry five years of state forward without rewriting any of it.
+RFC-0001 moved the name "v7" to the institutional line; this work keeps every item, every wave and every exit condition, and becomes the substrate the WI7 domains are built on. Everything above is one core and a command line. The substrate is what that core is *for*: surfaces that translate without deciding, a canon graph pointed at constructed worlds, and a migration that can carry five years of state forward without rewriting any of it.
 
 - [ ] **Surfaces** — REST, MCP, SDK and WASM as thin adapters over the same facade, with capability negotiation so a reduced surface states what it cannot do rather than degrading quietly. OpenAPI generated in CI from the core's own schemas, never hand-written
 - [ ] **The Workbench** — twelve views over one core: source vault, author canvas with a proof margin, proof inspector, meaning diff, impact view, simulation, branch and merge, authority, obligations, capsule builder, release room, and the argument graph. **Every number on every pane has a visible denominator and a stated reliability type, or it does not appear.** No blended score, no health gauge, no green badge over text that changed after it was checked. A dashboard is where a system with four honest reliability types quietly grows a fifth one called *overall*, and the Workbench is where that failure would be easiest to commit

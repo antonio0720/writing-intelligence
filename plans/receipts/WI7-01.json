@@ -1,0 +1,63 @@
+{
+  "checkpoint": "WI7-01",
+  "program": "WI7-IIP",
+  "status": "PASS",
+  "baseline_sha": "b59ef9544e9da78bab3dfa8db2178d4e6b569d16",
+  "objective": "Resolve the academic detector-evasion contradiction and reconcile the meaning of v7",
+  "measured_at": "2026-10-21",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin 25.5.0"
+  },
+  "approving_authority": {
+    "name": "Antonio T. Smith Jr.",
+    "role": "repository owner, Density6 LLC",
+    "decision": "update Writing Intelligence to v7, in the repository and on GitHub",
+    "date": "2026-10-21"
+  },
+  "changed_paths": [
+    "references/genre_packs/academic.md",
+    "references/compiler/style_transfer.md",
+    "references/compiler/auto_mode.md",
+    "references/voiceprints/custom_voiceprint_builder.md",
+    "references/v7/RFC-0001-VERSIONING.md",
+    "tests/v7/test_wi7.sh"
+  ],
+  "commands": [
+    "python3 scan.py SKILL.md references packs  (the scanner embedded in tests/v7/test_wi7.sh), on the baseline tree and on the repaired tree",
+    "bash tests/v7/test_wi7.sh"
+  ],
+  "observed_result": {
+    "repaired_tree": {
+      "files_scanned": 135,
+      "forbidden_instructions": 0,
+      "stdout_sha256": "47502b9986f9f0a6a394ec93707f428e1886896824f165fc0d8375cbef21584d"
+    },
+    "rfc": "references/v7/RFC-0001-VERSIONING.md, status ACCEPTED"
+  },
+  "negative_controls": [
+    {
+      "id": "baseline-still-carries-the-defect",
+      "expectation": "the scanner exits 1 on the unrepaired baseline",
+      "observed_exit": 1,
+      "files_scanned": 132,
+      "forbidden_instructions": 8,
+      "stdout_sha256": "cea9a92ce2644dd66973031ad13281262b8e4d0ea7cad4456ff9e8d385e4d338"
+    },
+    {
+      "id": "planted-instruction",
+      "expectation": "a planted evasion section is caught",
+      "observed": "caught by tests/v7/test_wi7.sh on every run"
+    }
+  ],
+  "independent_readback": {
+    "method": "the same scanner run against a separate fresh clone detached at the baseline, not the working tree",
+    "value": "8 forbidden instructions in 4 files: auto_mode.md, style_transfer.md (2), academic.md (4), custom_voiceprint_builder.md"
+  },
+  "unknown": [
+    "no academic-integrity office or doctoral committee has reviewed the repaired pack",
+    "the craft diagnostic 'AI detection risk' report remains as a craft measurement of machine-pattern prose; it does not instruct evasion"
+  ],
+  "remaining_issue": null,
+  "next_authorized_action": "WI7-03"
+}

@@ -83,6 +83,18 @@ jobs:
           test "$n" -eq 70 \
             || { echo "::error::expected 70 PASS lines, got $n"; cat /tmp/v6.txt; exit 1; }
 
+      # v7.0.0 ships governance: the doctrine must not instruct detector
+      # evasion, and the program manifest must refuse a wave marked shipped
+      # without a PASS receipt. Each positive check has a negative twin.
+      - name: v7 regression (doctrine, receipts, version, description limit)
+        run: bash tests/v7/test_wi7.sh | tee /tmp/v7.txt
+
+      - name: The v7 suite did not stop early
+        run: |
+          n=$(grep -c '^PASS' /tmp/v7.txt || true)
+          test "$n" -eq 12 \
+            || { echo "::error::expected 12 PASS lines, got $n"; cat /tmp/v7.txt; exit 1; }
+
       # A suite must be able to fail. Break the artifact digest check and the
       # tamper assertions have to go red; if they do not, they were never
       # testing anything and the green build above meant nothing.

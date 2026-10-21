@@ -70,11 +70,14 @@ PAYLOAD=(
   references/v4
   references/v5
   references/v6
+  references/v7
   schemas
   scripts/wi.py
+  scripts/check-manifest.py
   tests/v4
   tests/v5
   tests/v6
+  tests/v7
 )
 
 # The second bundle: the craft library.
@@ -214,7 +217,7 @@ grep -q "## \[$CLI_V\]" CHANGELOG.md \
 echo "    version consistent: $CLI_V"
 
 if command -v python3 >/dev/null 2>&1; then
-  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh tests/v6/test_wi6.sh; do
+  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh tests/v6/test_wi6.sh tests/v7/test_wi7.sh; do
     if RESULT=$(bash "$SUITE" 2>&1); then
       echo "$RESULT" | sed 's/^/    /'
     else
@@ -307,6 +310,8 @@ unzip -qq "$BUNDLE" -d "$VERIFY"
 [ -d "$VERIFY/$NAME/references/v4" ]        || { echo "FAIL bundle has no references/v4" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/references/v5" ]        || { echo "FAIL bundle has no references/v5" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/references/v6" ]        || { echo "FAIL bundle has no references/v6" >&2; exit 1; }
+[ -d "$VERIFY/$NAME/references/v7" ]        || { echo "FAIL bundle has no references/v7" >&2; exit 1; }
+[ -f "$VERIFY/$NAME/plans/v7.manifest.yaml" ] || { echo "FAIL bundle has no plans/v7.manifest.yaml" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/schemas/v5" ]           || { echo "FAIL bundle has no schemas/v5" >&2; exit 1; }
 [ -d "$VERIFY/$NAME/schemas/v6" ]           || { echo "FAIL bundle has no schemas/v6" >&2; exit 1; }
 [ ! -d "$VERIFY/$NAME/services" ]           || { echo "FAIL bundle contains services/" >&2; exit 1; }
@@ -316,7 +321,7 @@ unzip -qq "$BUNDLE" -d "$VERIFY"
 if command -v python3 >/dev/null 2>&1; then
   ( cd "$VERIFY/$NAME" && python3 scripts/wi.py --version >/dev/null ) \
     || { echo "FAIL wi.py does not run from the extracted bundle" >&2; exit 1; }
-  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh tests/v6/test_wi6.sh; do
+  for SUITE in tests/v4/test_wi.sh tests/v5/test_wi5.sh tests/v6/test_wi6.sh tests/v7/test_wi7.sh; do
     if RESULT=$( cd "$VERIFY/$NAME" && bash "$SUITE" 2>&1 ); then
       echo "$RESULT" | sed 's/^/    /'
     else

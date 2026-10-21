@@ -1,10 +1,14 @@
-# Writing Intelligence v6 — Cheatsheet
+# Writing Intelligence v7 — Cheatsheet
 
 One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
 
-**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v6.0.0
+**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v7.0.0
 
 ---
+
+## v7 in one line
+
+7.0.0 ships the Institutional Intelligence **program**, not its domain workflows: baseline frozen, v4/v5/v6 proven, the academic doctrine repaired (no detector evasion, no fabricated authorship), and `python3 scripts/check-manifest.py` refuses any wave in [`plans/v7.manifest.yaml`](plans/v7.manifest.yaml) marked shipped without a PASS receipt. Run `bash tests/v7/test_wi7.sh`. Program: [`references/v7/`](references/v7/README.md).
 
 ## The v6 law
 
@@ -418,4 +422,4 @@ Full list, with the reasoning for each: [`references/v6/NON_GOALS.md`](reference
 
 ---
 
-**Antonio T. Smith Jr. / Density6 LLC** · MIT · v6.0.0
+**Antonio T. Smith Jr. / Density6 LLC** · MIT · v7.0.0

@@ -1,10 +1,10 @@
-# Writing Intelligence v6
+# Writing Intelligence v7
 
 [![Release](https://img.shields.io/github/v/release/antonio0720/writing-intelligence?label=release&color=0b7285)](https://github.com/antonio0720/writing-intelligence/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0b7285)](LICENSE)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-0b7285)](scripts/wi.py)
 
-**The Sovereign Meaning Runtime.**
+**Institutional Intelligence on the Sovereign Meaning Runtime.**
 
 Every writing tool on the market makes prose *sound* better. Some can now tell you whether a sentence is supported. None of them can tell you what a change would do before you make it, who was allowed to make it, or what is still true afterward — and none of them will refuse to invent a number when two people disagree.
 
@@ -18,6 +18,16 @@ Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO,
 
 ---
 
+## What v7 is, in one paragraph
+
+v7 is the **Institutional Intelligence Expansion** — Writing Intelligence pointed at work whose consequences are academic, legal, financial, contractual, regulatory or institutional: dissertations, legal filings, investor rooms, grants and bids. **7.0.0 ships the governance, not the domain workflows**, and says so: the baseline is frozen, v4/v5/v6 are proven to reproduce byte for byte, the academic doctrine no longer contradicts the refusal of detector evasion, and the program is a manifest that cannot mark a wave shipped without a receipt — the command, the result, a negative control and an independent readback. The doctoral, legal, capital, grants, procurement and deal workflows are waves WI7-03 to WI7-19, all planned.
+
+> **The v7 rule:** *proof is not outcome.* A document can be verified here. An admission, award, filing, financing or verdict is claimed only from the institution's own evidence — and a domain may stop anywhere in `SOURCE → QUALIFY → MODEL → AUTHOR → VERIFY → AUTHORIZE → EXECUTE → RECEIPT → RECONCILE → LEARN` and say why, but may never skip from generated prose to a claimed outcome.
+
+The program: [`references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md`](references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md) · why it is "v7": [`references/v7/RFC-0001-VERSIONING.md`](references/v7/RFC-0001-VERSIONING.md) · status: [`plans/v7.manifest.yaml`](plans/v7.manifest.yaml)
+
+---
+
 ## What v6 is, in one paragraph
 
 v3 governs *how well* the writing is built. v4 governs *what may be claimed about it.* v5 governs *what depends on what.* **v6 governs what may become true, who may make it true, and what it costs.** A document stops being the thing that is edited and becomes a build of governed meaning. A change is proposed against an exact state before it exists, simulated before it is accepted, accepted only by an actor holding a grant that could have been absent, and applied as one transaction. Authority is scoped and expires. Time is two clocks, not one — when a claim held in the world, and when this workspace believed it. And when two branches assert incompatible states, the disagreement is preserved as a typed conflict rather than smoothed into a third claim neither side made.
@@ -26,7 +36,7 @@ v3 governs *how well* the writing is built. v4 governs *what may be claimed abou
 
 Seven identifications. Each has a mechanism behind it and a failure code when it is absent.
 
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → **v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge)**
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → **v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program)**
 
 ---
 
