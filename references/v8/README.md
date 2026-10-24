@@ -36,6 +36,8 @@ The one status source is [`plans/v8.manifest.yaml`](../../plans/v8.manifest.yaml
 
 Each package's checksum file is kept at the path its own verifier expects: `SHA256SUMS.txt` (part 1, at the repository root), `ARC_SHA256SUMS.txt` (part 2 — two of its entries, `README.md` and `SOURCE_SPECIFICATION.md`, live at `docs/v8/ARC_ENDING_README.md` and `docs/v8/ARC_SOURCE_SPECIFICATION.md` because the root names were already taken), `extensions/wi8/craft03/CRAFT03_SHA256SUMS.txt` (part 3) and `JAPAN04_SHA256SUMS.txt` (part 4). `scripts/check_arc_package.py` verifies the arc package as it was extracted, not this merged tree.
 
+**Eight schemas were annotated after the merge.** This repository requires every schema to carry `$schema`, `$id`, `title` and `description`, and eight delivered v8 schemas lacked one or more: `arc_reader_review`, `arc_report`, `arc_rule_catalog`, `fiction_findings`, `fiction_gate`, `fiction_ir`, `fiction_reader_study`, `fiction_rule_catalog`. The missing annotations were added — annotations only, no validation keyword changed — so their bytes no longer match the lines for them in `SHA256SUMS.txt` and `ARC_SHA256SUMS.txt`. Those files are kept as the record of what was delivered; the delivered bytes are in git history at commit `551fdfe`.
+
 ## Verify
 
 ```bash

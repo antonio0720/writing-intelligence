@@ -1,6 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/fiction_findings.schema.json",
   "title": "WI Fiction Audit Report",
+  "description": "The JSON report wi-fiction.py emits for one manuscript projection: per-rule status (mechanical defect, signal, editorial review, not applicable), bound to the input digest.",
   "type": "object",
   "required": [
     "schema",

@@ -1,6 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/fiction_rule_catalog.schema.json",
   "title": "WI fiction rule catalog",
+  "description": "The catalog of the 60 fiction and thriller requirements (FI-01-FI-60): source requirement, owner, acceptance condition, positive and negative example, execution owner and evidence limit.",
   "type": "object",
   "required": [
     "schema",

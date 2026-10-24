@@ -1,6 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/fiction_reader_study.schema.json",
   "title": "WI Fiction Independent Reader Study",
+  "description": "An independent reader-study record: method, consented readers, findings and reconciliation, bound to the exact manuscript digest. The only evidence a fiction publication gate accepts for reader reception.",
   "type": "object",
   "required": [
     "schema",

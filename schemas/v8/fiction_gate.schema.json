@@ -1,6 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/fiction_gate.schema.json",
   "title": "WI fiction release gate",
+  "description": "The verdict of the three-stage fiction release gate (draft, editorial, publication). Eligibility is not publication; publication holds without independent reader evidence.",
   "type": "object",
   "required": [
     "schema",

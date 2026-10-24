@@ -32,6 +32,7 @@ v8 was delivered as four independent packages, each built and tested on its own,
 - **`packs/craft/SKILL.md`** — version 8.0.0; now carries and points to the v8 fiction compiler references and genre addenda
 - **`scripts/build-skill.sh`** — builds and verifies three bundles; runs `scripts/test-v8.sh` before building and again inside the extracted story bundle; same 200-file ceiling and frontmatter checks for all three
 - **`scripts/wi.py`** — version string 8.0.0. Nothing else in the core changed
+- **Eight delivered v8 schemas annotated** with the `$id`, `title` and `description` the repository's schema rule requires (CI caught it on the first push). Annotations only; validation unchanged; the delivered bytes stay in history at `551fdfe`
 - **CI** — `scripts/test-v8.sh` runs on every push; the bundle and release workflows build and publish the story bundle
 
 ### Unchanged

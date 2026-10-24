@@ -38,7 +38,9 @@
       "files": 184,
       "description_chars": 965,
       "reproducible": true,
-      "sha256": "27150a6e619d60190790bcff41f86133f2ab1660964aac9ce3ba825e55e7360c"
+      "sha256_as_first_measured": "27150a6e619d60190790bcff41f86133f2ab1660964aac9ce3ba825e55e7360c",
+      "sha256": "211212e05fb6cdb3c2ca9b5de30a46ddabf90c23d0aaf54a5b0833e31ea233b1",
+      "note": "re-measured after eight schemas gained their required annotations (see WI8-R0 post_measurement_changes); two macOS builds byte-identical. A Linux build zips the same 184 files in a different byte layout, so CI on ubuntu rebuilds and commits its own reproducible copy"
     },
     "note": "the runtime bundle carries plans/receipts, including this file, so its digest is not recorded here; it is reproducible by the same two-build comparison and CI enforces it"
   },

@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/arc_report.schema.json",
   "title": "Arc v8 Audit Report",
+  "description": "The JSON report wi-arc.py emits: validation, ending classifications, signals and gate state for one arc projection, bound to the input digest.",
   "type": "object",
   "required": [
     "schema",

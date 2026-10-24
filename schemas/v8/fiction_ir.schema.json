@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/fiction_ir.schema.json",
   "title": "Fiction Manuscript Audit IR v1 (derived sidecar, not canon replacement)",
+  "description": "The typed, read-only projection of a manuscript that the fiction engine audits: characters, events, powers and costs, promises, scenes, with provenance. A derived sidecar, never canon.",
   "type": "object",
   "required": [
     "schema",

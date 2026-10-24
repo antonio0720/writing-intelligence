@@ -66,5 +66,8 @@
     "the arc package's own scripts/check_arc_package.py verifies the package as extracted, not this merged tree, and reports the remapped README and SOURCE_SPECIFICATION as missing there"
   ],
   "remaining_issue": null,
-  "next_authorized_action": "WI8-R1"
+  "next_authorized_action": "WI8-R1",
+  "post_measurement_changes": [
+    "eight delivered schemas in schemas/v8/ gained the $id, title and description annotations the repository's CI schema rule requires; no validation keyword changed; the as-measured bytes are at commit 551fdfe; scripts/test-v8.sh re-run after the change: 19 passed, 0 failed"
+  ]
 }
