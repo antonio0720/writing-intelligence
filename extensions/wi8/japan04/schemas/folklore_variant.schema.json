@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/folklore_variant.schema.json",
+  "title": "folklore_variant",
+  "description": "Attributable version of a local story; variants can conflict",
+  "type": "object",
+  "required": [
+    "id",
+    "subject",
+    "account",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "account": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "recorded",
+        "disputed",
+        "unverified",
+        "invented"
+      ]
+    },
+    "scope": {
+      "type": "object"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "derived_from_variant_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

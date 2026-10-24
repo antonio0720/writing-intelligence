@@ -1,0 +1,11 @@
+{
+  "repo": "antonio0720/writing-intelligence",
+  "branch": "main",
+  "head_commit_sha": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "review_date_utc": "2026-10-24",
+  "status": "read_from_connected_github_connector",
+  "basis": "GitHub main ref and canonical v5/v6 docs. No checkout or upstream tests in this standalone package.",
+  "core_node_type_constraint": "schemas/v6/semantic_node.schema.json#/$defs/NodeType is closed, contains extension.derivation, and does not allow narrative.want directly.",
+  "license": "Repository MIT; original user notes have separate author-provided provenance and are not licensed here as third-party scripts.",
+  "prior_zip_relationship": "Earlier local package covers B001-B060. This ZIP is separate, non-importing, and collision-aware."
+}

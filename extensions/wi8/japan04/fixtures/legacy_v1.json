@@ -1,0 +1,5 @@
+[
+  {"cid":"CID::WORLD::POWERS::ki-threads","rank_system":["D","C","B","A","S"],"canon_state":"unadopted_seed"},
+  {"cid":"CHAR::REN","legalName":"Sample legacy identifier","age":17,"source_field":"sample_only"},
+  {"cid":"LOC::TOKYO:ASAKUSA","city":"Tokyo","district":"Asakusa"}
+]

@@ -1,0 +1,85 @@
+{
+  "format": "wi8-japan04/seed-catalog-1",
+  "status": "PROPOSED_NOT_ADOPTED",
+  "source": "User supplied 97-page draft, PDF pp.8–10; paraphrased original high-level loglines",
+  "entries": [
+    {
+      "id": "jp04-seed-01",
+      "title": "Neon Shrine Couriers",
+      "region": "Kyoto / Osaka",
+      "paraphrased_premise": "Student couriers carry supernatural promises through a proposed city-world; a rival crew changes the cost of vows.",
+      "seed_origin": "user_provided_planning_draft",
+      "canon_state": "proposed",
+      "adopted_by_child": false,
+      "actual_child_authorship": "unknown",
+      "kid_required_to_write": false,
+      "requires_local_research_before_publication": true,
+      "power_system_assumed": false
+    },
+    {
+      "id": "jp04-seed-02",
+      "title": "Tsukumogami Detectives",
+      "region": "Tokyo / Asakusa",
+      "paraphrased_premise": "Apprentices and imaginary animated objects investigate missing memories; moral stakes include the rights of nonhuman companions.",
+      "seed_origin": "user_provided_planning_draft",
+      "canon_state": "proposed",
+      "adopted_by_child": false,
+      "actual_child_authorship": "unknown",
+      "kid_required_to_write": false,
+      "requires_local_research_before_publication": true,
+      "power_system_assumed": false
+    },
+    {
+      "id": "jp04-seed-03",
+      "title": "Sapporo Ice Circuit",
+      "region": "Sapporo",
+      "paraphrased_premise": "An ice-skating group explores an invented winter art and its consequences for competition and friendship.",
+      "seed_origin": "user_provided_planning_draft",
+      "canon_state": "proposed",
+      "adopted_by_child": false,
+      "actual_child_authorship": "unknown",
+      "kid_required_to_write": false,
+      "requires_local_research_before_publication": true,
+      "power_system_assumed": false
+    },
+    {
+      "id": "jp04-seed-04",
+      "title": "Kansai Heist Institute",
+      "region": "Osaka",
+      "paraphrased_premise": "Trade-school repair students face questions about the people affected by risky acts of restitution.",
+      "seed_origin": "user_provided_planning_draft",
+      "canon_state": "proposed",
+      "adopted_by_child": false,
+      "actual_child_authorship": "unknown",
+      "kid_required_to_write": false,
+      "requires_local_research_before_publication": true,
+      "power_system_assumed": false
+    },
+    {
+      "id": "jp04-seed-05",
+      "title": "Okinawa Tidebound",
+      "region": "Okinawa",
+      "paraphrased_premise": "Divers navigate fictional sea-spirit promises and contemporary ecological and community conflicts; require careful Ryukyuan contextual research.",
+      "seed_origin": "user_provided_planning_draft",
+      "canon_state": "proposed",
+      "adopted_by_child": false,
+      "actual_child_authorship": "unknown",
+      "kid_required_to_write": false,
+      "requires_local_research_before_publication": true,
+      "power_system_assumed": false
+    },
+    {
+      "id": "jp04-seed-06",
+      "title": "Mecha Tea Club",
+      "region": "Nagoya",
+      "paraphrased_premise": "Students restore a shuttered factory through a hobby club and invented mecha competitions, choosing between craft and sponsorship.",
+      "seed_origin": "user_provided_planning_draft",
+      "canon_state": "proposed",
+      "adopted_by_child": false,
+      "actual_child_authorship": "unknown",
+      "kid_required_to_write": false,
+      "requires_local_research_before_publication": true,
+      "power_system_assumed": false
+    }
+  ]
+}

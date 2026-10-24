@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/japan_event.schema.json",
+  "title": "japan_event",
+  "description": "Event with explicit temporal basis, no invented festival dates",
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "place_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "organizer_source_ref": {
+      "type": "string"
+    },
+    "historical": {
+      "type": "boolean"
+    },
+    "alternate_history": {
+      "type": "boolean"
+    },
+    "divergence_ref": {
+      "type": "string"
+    },
+    "valid_time": {
+      "type": "object"
+    },
+    "knowledge_time": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

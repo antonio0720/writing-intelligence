@@ -1,0 +1,589 @@
+{
+  "source_pdf_sha256": "3e601bd83e691329a2260af08b06ddcf8f642dea0c880bfb8b63c7e17bae891b",
+  "pages": 97,
+  "status": "source_locators_only_not_authoritative_factual_evidence",
+  "records": [
+    {
+      "page": 1,
+      "extracted_text_sha256": "06ae02a1487245f82c02313f69c90f9176d9cde090c66b52cc06b30d21b8e7fd",
+      "first_detectable_line": "Jɑpɑn Story OS — Cɑnon Bible & Production",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 2,
+      "extracted_text_sha256": "5108d37e597c516658cb3d2cc5c618f72750eb34fae0264428a1704a4ded0589",
+      "first_detectable_line": "A3. Plɑce Integrity: Reɑl Jɑpɑn references must respect etiquette,",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 3,
+      "extracted_text_sha256": "8323d72164e1731c1566681957cfda0567a0be1981f82926128dbb74f8e60f1c",
+      "first_detectable_line": "(technique tɑint).",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 4,
+      "extracted_text_sha256": "7652f07a86de23aba35ffffc53f10191aaff7b148ca08a962648c6f4659d6ab7",
+      "first_detectable_line": "A. Seɑson Spine (12-Episode Templɑte)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 5,
+      "extracted_text_sha256": "ffc59fc20792fe4d108ddaf73d85b53e5c5cefdcb0d9d8e9820a52e49455ff33",
+      "first_detectable_line": "E. Food & Spɑce",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 6,
+      "extracted_text_sha256": "304a99c451fcd875cd5a17e5ad72cb1bc0e81bd5c8f280d5c426f74d2efb4e74",
+      "first_detectable_line": "\",\"hometown\",\"desire\",\"feɑr\",\"wound\",\"misbelief\",\"skills\",\"ɑbilities\",\"limits\",\"rel",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 7,
+      "extracted_text_sha256": "9b0108fc774d9ab8778493683678b5bb9ec5af6754de9c97e6de5ba8dc4bc40e",
+      "first_detectable_line": "[\"tɑlismɑns\",\"shikigɑmi\",\"blɑde_ɑrt\",\"binding\",\"seɑlwork\",\"elementɑl\",\"mech",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 8,
+      "extracted_text_sha256": "f4738b32f1eaa67e3e76674b6197308a48e18a05848142aeb8efda828c8491a6",
+      "first_detectable_line": "\"items\":{",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 9,
+      "extracted_text_sha256": "a5a4298d6999f9344f4607be1f499e5ca7a4a1b08075bdd1b9cedb44b9370db2",
+      "first_detectable_line": "Core Cɑst:",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 10,
+      "extracted_text_sha256": "e6d53923e1d774e3c18126143a20f69513b7e90daef2478c7f6d4f319fda415f",
+      "first_detectable_line": "Cɑst: Amɑno Tɑku, Kobori Mei, Fɑctory Ghost Foremɑn.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 11,
+      "extracted_text_sha256": "cf7f2a5c176350f06e5fc0db3236d56560d00d5d4e9c3bb6d95dad9fce9a2d7e",
+      "first_detectable_line": "Cɑnon Dɑtɑ Snippets (reɑdy for SonGPT",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 12,
+      "extracted_text_sha256": "5371b0b90a953ee82c0975e0f9549338c0ee733ac6e1bae55122f09dfc8791de",
+      "first_detectable_line": "Primɑries: Shōnen ɑdventure • Seinen mystery • Urbɑn fɑntɑsy (yōkɑi) •",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 13,
+      "extracted_text_sha256": "629adde874760ba52b93bed3a2b3d03ac424b26f09c4cbc9649b4a035f9a2591",
+      "first_detectable_line": "\"reɑlism\":{\"type\":\"integer\",\"minimum\":0,\"mɑximum\":10}",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 14,
+      "extracted_text_sha256": "e856b8be34246b8a33440c9435f348904af744e38396e170beec12b869cf1d55",
+      "first_detectable_line": "Crossovers: supernɑturɑl_detective, urbɑn_yokɑi, heist_crime.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 15,
+      "extracted_text_sha256": "054f637d2b21984986ceabc8eedb6702297f8db9b1228d8c00b63ba37b6f9106",
+      "first_detectable_line": "growth micro-beɑt.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 16,
+      "extracted_text_sha256": "f526fc9b5b58a747fa7a3cace50689ec654650efe425f87c667d9f8fb51830c4",
+      "first_detectable_line": "CID::TONE::GENRE::supernɑturɑl_detective",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 17,
+      "extracted_text_sha256": "0c83fa90992ad9e708916b3424aa9db9d7e10556de18896b211b6032c71185c2",
+      "first_detectable_line": "Affects: ɑvɑilɑble solutions, counterplɑy types, exposition mode (lore vs.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 18,
+      "extracted_text_sha256": "0e190632b04deec62639fb5884e636e7ee2e207bf4e730845de0dcf7fb08d36c",
+      "first_detectable_line": "References (3):",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 19,
+      "extracted_text_sha256": "fa9f0ef772c2eaba476bc190030fcace63c08eb7654377b51c9d26c3d246ef64",
+      "first_detectable_line": "1.5 Compliɑnce & QA (binding for SonGPT)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 20,
+      "extracted_text_sha256": "590497c3eb6bfaff06ef75f8f4d3e9fc7574fcc3e4db96086274ff2069dc84de",
+      "first_detectable_line": "Exɑmple A — “Neon Shrine Couriers” (Kyoto/",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 21,
+      "extracted_text_sha256": "60d604c7ab31d809f7865649a23eb272125909412a67fbfc65e6ac8a1431e040",
+      "first_detectable_line": "(islɑnd), rurɑl Tōhoku (ghost folklore), Nɑgoyɑ (industry), Kobe/",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 22,
+      "extracted_text_sha256": "332847da056cb1d7aae42b524d4f28a273623908a87a0ef4630135e03482bc8f",
+      "first_detectable_line": "Arɑshiyɑmɑ.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 23,
+      "extracted_text_sha256": "fdc959f88ecc37cedba0f6cefab7e575a5ae691bf9ab53fb79f00512b6cce4cc",
+      "first_detectable_line": "CID::JP::PLACE::TOHOKU_RURAL",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 24,
+      "extracted_text_sha256": "604b4656a5a622c8e9adf6eb70a573ff34e09df174b6ba2039ab98869d4e1b92",
+      "first_detectable_line": "Events Anchors: Entrɑnce ceremonies (Apr), culture festivɑl (bunkɑsɑi,",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 25,
+      "extracted_text_sha256": "625c78dac6a387b3d3d46b9a64b46a92b11646d3984b13d1ca877c8475830325",
+      "first_detectable_line": "“Anɑtɑ” cɑution: ɑvoid ɑs “you”; use nɑmes or titles insteɑd.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 26,
+      "extracted_text_sha256": "be897658004727d7394bd5918832257207f3eea9b6bdfdc50204050fd358a294",
+      "first_detectable_line": "CID::JP::FOOD::spine",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 27,
+      "extracted_text_sha256": "72814dcf0ca6cb6cd0180d5396d573bd909f2db5e494dc0b6e7f85094cbe7a0d",
+      "first_detectable_line": "CID::JP::PHRASE::bɑnk",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 28,
+      "extracted_text_sha256": "90e265101e26097a97bbf1b764d520e48d6948e9d0a606945d7c654d5f1592da",
+      "first_detectable_line": "2.H Quick “Do/Don’t” Mɑster List (for SonGPT lint)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 29,
+      "extracted_text_sha256": "40d5c22de080009fe3d36c87a372b3c92f52842e0d70560eec99636ea9a95248",
+      "first_detectable_line": "\"nɑme\":\"Bunkɑsɑi\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 30,
+      "extracted_text_sha256": "65319779649fb2cc069fc7ba6329bf35ddd38f4613c84a5227795743e4e8a0f8",
+      "first_detectable_line": "Pɑge 3 — Etiquette & Voice",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 31,
+      "extracted_text_sha256": "2de3889757f0aad56559c4b90fa8d47a1375591a70303b2940a935b2eb1adee6",
+      "first_detectable_line": "vow, domɑin, timeline erɑ) hɑs ɑ stɑble cid, ɑn origin_note, ɑnd",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 32,
+      "extracted_text_sha256": "ed69fedb047703c55ebaf8410f270820d74c25d36b18d9dcff21be2b2c4eb337",
+      "first_detectable_line": "petition → heɑring → seɑl workflow; violɑtions cɑrry sociɑl ɑnd spirituɑl",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 33,
+      "extracted_text_sha256": "1f59a09632c76a7d5e29772d6a2a9baab45e83ca724f31092de6531e094bf967",
+      "first_detectable_line": "\"type\":\"clɑn|shrine|school|corporɑte|yokɑi_court|civic|vigilɑnte\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 34,
+      "extracted_text_sha256": "bb9b590d6096d3ce9d30bdcbe21138f9bd2a034a55df5307cf287366d4f727b3",
+      "first_detectable_line": "Artifɑcts: Heirloom blɑdes, seɑls, prɑyer beɑds, shrine keys; lineɑge",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 35,
+      "extracted_text_sha256": "e3f5c615a5e723e333ceb091ea4a8c82d0940d0485f076127f30e93403121126",
+      "first_detectable_line": "CID::WORLD::POWERS::counterplɑy",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 36,
+      "extracted_text_sha256": "7ef8d7ddd357099ce4adec7087b23e5528368b3ab2674ea1934d5317422d0505",
+      "first_detectable_line": "Vow / Contrɑct",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 37,
+      "extracted_text_sha256": "16b2477d0fc43f10ce9b815b8be5aa0bc47096bfe265acdf33b0be0b875024e9",
+      "first_detectable_line": "drɑin: \"moderɑte; breɑth shɑllow\" | \"two-bow, one-clɑp sync\" | \"nɑme cɑlled",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 38,
+      "extracted_text_sha256": "adb485a16f018049be4f1b2a19009c9e0e937a969707c301257305596454e3b5",
+      "first_detectable_line": "schedule.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 39,
+      "extracted_text_sha256": "a199518ee8631dcda49d438454d88030b816894f6d2caeb74afb87deffafd1ce",
+      "first_detectable_line": "Timeline Mode & Cɑlendɑr (2–3p)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 40,
+      "extracted_text_sha256": "7faf02ba5a06bd60e387d55afbb4c4508ce7460de93cb8cdd1fd556bcb795946",
+      "first_detectable_line": "\"cid\":\"COSMO::BASE\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 41,
+      "extracted_text_sha256": "46d31d29870dd14c545fd05bd619eca8cb40abd68f4b8dd10135edd6d6ff9b58",
+      "first_detectable_line": "Skills (mundɑne) • Abilities (supernɑturɑl/tech) • Limits & costs",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 42,
+      "extracted_text_sha256": "9d5d1ebde7ce0ce794fd03e2b6caeb585e5ee1e1d35c6b9dec58b189cfa8c87c",
+      "first_detectable_line": "\"type\":\"object\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 43,
+      "extracted_text_sha256": "b2cbfee1ca1f73031ac56575e1d98792e24e6738d6804cd5c6040091cfb607e6",
+      "first_detectable_line": "\"voice\":{",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 44,
+      "extracted_text_sha256": "5035380af68f98a9f9cfd7af2504aa4e8503ded75e963ed012e7bb45d35e485d",
+      "first_detectable_line": "Diɑlect only when hometown supports it; keep it light ɑnd consistent.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 45,
+      "extracted_text_sha256": "bd52db414c68f3b1f530b598c054c3a12085360975901c9d65faccd85a70e5b0",
+      "first_detectable_line": "Couriers” series)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 46,
+      "extracted_text_sha256": "26740a77a28539ecc1563c044dc69fa54c59d49da09e7a562cf415f0ecea4e60",
+      "first_detectable_line": "Silhouette: reflective sɑsh; mɑp cɑse; brush pen tucked in hɑir.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 47,
+      "extracted_text_sha256": "e6453f9294edb4d88ad1672b4b18d8cd40a2bb65533d368b0b6d656dc1c14ece",
+      "first_detectable_line": "cid,kɑnji,romɑji_hepburn,romɑji_ɑscii,meɑning,origin_region",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 48,
+      "extracted_text_sha256": "1b2188ab7d061dd1870b8f307b21235cadc1d10286b95122a4d6b8e34b5f3277",
+      "first_detectable_line": "5.3 Villɑin Philosophy Lɑdder",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 49,
+      "extracted_text_sha256": "b208c73f77a766602d196bb3f1232d60be2dad7ec26a44d801309a1dca111c34",
+      "first_detectable_line": "bɑlɑnce restored (not reset).",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 50,
+      "extracted_text_sha256": "5b62046182f908e6190705933d7c924390abfc06950ff5769e70b84825026e4a",
+      "first_detectable_line": "Counterplɑy beɑts.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 51,
+      "extracted_text_sha256": "b200291f2b68a6b2cf389c1e04759a95621a941da5577a7dbf3bf44afb2a50c2",
+      "first_detectable_line": "City — infrɑstructure/sociɑl systems; corporɑte/shrine leverɑge.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 52,
+      "extracted_text_sha256": "6cdbdc6c0b8ec221ae2e07ccdec9f6f5fb64c341f1d38df4c011db6295f3bbe5",
+      "first_detectable_line": "\"cid\":\"SEASON::<series>::S1\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 53,
+      "extracted_text_sha256": "8be064a50a60f1a48e0cd7481455163ea83a584b40daa12813742cf1e63531d0",
+      "first_detectable_line": "\"setPiece\":{",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 54,
+      "extracted_text_sha256": "d1281e17df92f59880cd3f47c9d1355f59aac0f52da34aad730d54863afcbfbf",
+      "first_detectable_line": "\"nɑme\":{\"type\":\"string\"},",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 55,
+      "extracted_text_sha256": "b1cb80e92ceaf98a7307e68e03136377ee7f785d5c38ef200fcf7914357bc179",
+      "first_detectable_line": "require doctrine line ɑt Ep10.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 56,
+      "extracted_text_sha256": "19eb6c22305911861c826684f6b0ca106a9328c59aa7d7baaceb8e2443d80f64",
+      "first_detectable_line": "“Who Owns ɑ Vow?” — Betrɑyɑl/Reveɑl: ɑ friendly clerk sells ledger",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 57,
+      "extracted_text_sha256": "7153b7f3021878c6cf8f8c7b127ef474ce5980e09db0b9b2a1281bbe481182e4",
+      "first_detectable_line": "Aftermɑth: public vow reɑd; license restored; community uplift.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 58,
+      "extracted_text_sha256": "6a37436a7b7614fbb7514fc95a1f6795ae894944e5ad37f9dea66f731b69b20c",
+      "first_detectable_line": "Counter nɑmed",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 59,
+      "extracted_text_sha256": "1d197ecc8c3db539a07d0815e91c15d7eacdea43ac3948096f2aacb00c6ce738",
+      "first_detectable_line": "Classmates",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 60,
+      "extracted_text_sha256": "4a8525d3fdbd200b8d0eaf57252ac23f2194cd1a1e435f246bd697cb5cbea999",
+      "first_detectable_line": "Post-Credit Stinger (≤5 lines): One of: new clue, doctrine twist,",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 61,
+      "extracted_text_sha256": "ee8f02cac312aec4849408277a77f2b8cba7a396d6ec389fd6b4ffb21c718023",
+      "first_detectable_line": "thought; drop to 2–4 for impɑct.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 62,
+      "extracted_text_sha256": "bd130469739e7cfd08ec66f6a961e1e97ee33711c7ccbf8bd12a6652901edaf6",
+      "first_detectable_line": "6.11 Etiquette Hooks Inside Food",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 63,
+      "extracted_text_sha256": "c53ce8d56393f29290396e1128b89729769d53ca784d4495ae13c9585306b352",
+      "first_detectable_line": "pɑcing: brisk",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 64,
+      "extracted_text_sha256": "6fb3d74c33fe3ccef312898bd6b59f0c46e3e5ab1f6277a0230e63e138a81246",
+      "first_detectable_line": "requirement.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 65,
+      "extracted_text_sha256": "23a519aa0a79ee8a792064e145a705f319f1c77dd33df0c28772e0ebcf927b00",
+      "first_detectable_line": "7.1 System Role (finɑl system prompt)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 66,
+      "extracted_text_sha256": "228bb562a2dcf332995c3144200f7b08ad22e60ae16707046c862430973a68a9",
+      "first_detectable_line": "/style_guide STYLE_v1.0.md (do/don’t + exɑmples)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 67,
+      "extracted_text_sha256": "33fbd3a30172c586ee42eb98ae1d5abdcae2104628750b727ab3a48f776055a1",
+      "first_detectable_line": "\"themes\":[\"vows\",\"teɑmwork\"],",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 68,
+      "extracted_text_sha256": "6020cdbe49ec6095807e31baad52ca7d28b14b351ac37c13a71176447e927b5c",
+      "first_detectable_line": "7.3.4 continuity_scɑn(scene_text)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 69,
+      "extracted_text_sha256": "7cc7e3f741fcb9da74b9dac51ca2aac32b85452c0b39c7edfe0ebd3944af7603",
+      "first_detectable_line": "\"sɑfeFictionɑlizɑtion\":[\"ledger-bɑsed vows\",\"urbɑn power grid",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 70,
+      "extracted_text_sha256": "8865ee0ba12df0214ca4700b0aa12a9946fa6185f3b8eec6ed023ecd7e929579",
+      "first_detectable_line": "\"limits\":{\"type\":\"ɑrrɑy\",\"items\":{\"type\":\"string\"}},",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 71,
+      "extracted_text_sha256": "f768dad5aa64a82a543c4412ae2ff1f4c374d0705982fad78cd7d308e455cef3",
+      "first_detectable_line": "\"trigger\":{\"type\":\"string\"},",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 72,
+      "extracted_text_sha256": "bfe0926f58505010a7d89b6518a4ac6e685ed121c615a7c701e12d13ece1df0f",
+      "first_detectable_line": "Authenticity: shrine etiquette, school rhythm, seɑsons/uniforms, ɑnd",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 73,
+      "extracted_text_sha256": "542baef2347d8453414f9b8aaaa08e6c77a6a5d26ce625ab3c724a209439b841",
+      "first_detectable_line": "Exɑmple: Technique record",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 74,
+      "extracted_text_sha256": "089f94be40d317f8df65a19148f016cb320f788e066f7fcf1bc7aadcf8f4d36a",
+      "first_detectable_line": "\"id\":\"TONE::NSC_v1\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 75,
+      "extracted_text_sha256": "19a895ed790992195762603d4f76b2e084a8ed8de3837d4403d4ff7d210cab93",
+      "first_detectable_line": "set-piece).",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 76,
+      "extracted_text_sha256": "988628d26acb36f005bb8edb77ee56192fa12489de03a19b93781466911d52d7",
+      "first_detectable_line": "8) Stɑrter Series Seeds (pick 1–3 to pilot)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 77,
+      "extracted_text_sha256": "40cd691b96a2eb9f3dffa3ef2737164fd786564954f821a35538922143d3d19f",
+      "first_detectable_line": "Timeline / Tech: Now; T0 everydɑy + T3 spirituɑl tech (ofudɑ printers,",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 78,
+      "extracted_text_sha256": "5457ea8573ee6e79f6b9f497c860f9ba8772380c96c8a03f723f45273af1d8ce",
+      "first_detectable_line": "Ledger issues ɑ probɑtionɑry license.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 79,
+      "extracted_text_sha256": "a5efb0a083ce5bcdb497b5e48fa7b9351de77ddc2d98a6e33fd72b03db1f6138",
+      "first_detectable_line": "[SFX: bell hush]—ɑ rivɑl chime splits his focus.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 80,
+      "extracted_text_sha256": "a4fc668601becb7c2d42eeb77209d84446c719756e626bc8194201b006f341c7",
+      "first_detectable_line": "新堂 ⾹織 / Kɑori Shindō — Villain — Aletheiɑ CPO; believes curɑted",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 81,
+      "extracted_text_sha256": "c784a7c81a694f7cb5044dff78f913a1d863d3c3e2ec058c553424377a0e02b2",
+      "first_detectable_line": "The lɑntern on the counter won’t cɑtch. Aki snɑps the lighter shut.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 82,
+      "extracted_text_sha256": "ae93832a77c52ada4d607749d403df15f454104c13ef7875b770996637777f73",
+      "first_detectable_line": "岡本 仁 / Jin Okɑmoto — Specialist — blɑde tech; counter expert",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 83,
+      "extracted_text_sha256": "a007152eb88ef0a5a28e494240997595d68667a2cf4ef977cea53786da12808b",
+      "first_detectable_line": "9) Production Pipeline (12-week bootstrɑp)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 84,
+      "extracted_text_sha256": "1f103e87490d859a8a2629cb96eda986b008e6570f59f83d2c1f54ae2feb9bf8",
+      "first_detectable_line": "Kɑnbɑn: 12 columns (W1–W12) with Gɑte bɑdges.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 85,
+      "extracted_text_sha256": "c407f92bb2028d462dc362d54e5ea2a714d6cee0fe688d2fcd529f41b52d16a1",
+      "first_detectable_line": "honorific_guɑrd dry run on sɑmple diɑlogue.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 86,
+      "extracted_text_sha256": "d6ccccbaaf60e157ad192173a2509b00e7eb77662fcf18f065aa42e40aafd260",
+      "first_detectable_line": "All 20 tests green locɑlly.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 87,
+      "extracted_text_sha256": "2fdaa9c9e257320c8fec5ac9c036a3e01d2ba25b2654e3794c0232e3982417f4",
+      "first_detectable_line": "ɑftermɑth crisp).",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 88,
+      "extracted_text_sha256": "14b61618c501a503784a6d7961b0017f6869ab4d8271ac92f72b072308e2421e",
+      "first_detectable_line": "Roɑdmɑp nɑmes Metɑphysicɑl rung resolution.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 89,
+      "extracted_text_sha256": "89fda14cdf96397f540a8b6421eb02235f30332107521ecb4219bb087736c13c",
+      "first_detectable_line": "16. Lɑst-trɑin timing impossible for declɑred lines.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 90,
+      "extracted_text_sha256": "63e14d2d302405b477a85b60c1872175def87ff1711bdf9df572edb0cbab8d10",
+      "first_detectable_line": "9.7 Risk Register (top 6 & mitigɑtions)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 91,
+      "extracted_text_sha256": "d72435ad687142e2e3feb137288a58d59236c8bfb045a1c25974b3869f3934fe",
+      "first_detectable_line": "Everydɑy life (school, clubs, pɑrt-time jobs)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 92,
+      "extracted_text_sha256": "858edea1e869f0c5911c3ad1970f828ce35e4082d3cf891b4d19794915e6de57",
+      "first_detectable_line": "operɑtingCode, tɑboos, hooks. Rivɑl CIDs resolve.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 93,
+      "extracted_text_sha256": "d96f6a7b3e29590fbf71960bd03978414122434cee5c0c50ed39e25478f572a7",
+      "first_detectable_line": "STEREOTYPE_FLAG.",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 94,
+      "extracted_text_sha256": "31bef0247e6b0f02fc742ff296024d3f26ffc0fc0c497ce00de186e388b8a1af",
+      "first_detectable_line": "10.3 SonGPT “Reɑdy” — CID::CHK::SON::reɑdy",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 95,
+      "extracted_text_sha256": "9d3534506d9b864fdecf25af44e328f45526149c817dba6ea3a6af91e134ad5b",
+      "first_detectable_line": "10.4 Mɑchine Checklists (drop-in JSON)",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 96,
+      "extracted_text_sha256": "2104e7064ea4ab18fc40c6010ce607e707ae8af493390b938ded53184367dbb6",
+      "first_detectable_line": "\"cid\":\"CHK::SON::reɑdy\",",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    },
+    {
+      "page": 97,
+      "extracted_text_sha256": "f1bd118a7b4b5b2f8e3bbbf2ae97c427149e81a4c4b6c1890bec91161738e4f9",
+      "first_detectable_line": "Signɑture (Showrunner): ___________________",
+      "notes": "Locator only; extracted ɑ and line wraps may differ from rendered PDF"
+    }
+  ]
+}

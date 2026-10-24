@@ -1,0 +1,18 @@
+{
+  "creative_modes": [
+    "ask",
+    "research",
+    "challenge",
+    "outline",
+    "edit",
+    "co-create",
+    "surprise",
+    "questions-only",
+    "experiment"
+  ],
+  "auto_canon_adoption": false,
+  "auto_publishing": false,
+  "rewrite_without_proposal": false,
+  "network_by_default": false,
+  "mandatory_word_quotas": false
+}

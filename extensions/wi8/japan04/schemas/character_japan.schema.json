@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/character_japan.schema.json",
+  "title": "character_japan",
+  "description": "No forced fixed teen-age cast or cultural stereotype",
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "school": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "personal_desire": {
+      "type": "string"
+    },
+    "pronouns": {
+      "type": "string"
+    },
+    "voice_policy": {
+      "type": "object"
+    },
+    "name_display": {
+      "type": "object"
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "canonical_character_ref": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

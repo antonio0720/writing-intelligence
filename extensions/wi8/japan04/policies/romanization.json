@@ -1,0 +1,8 @@
+{
+  "display_policy": "author_selected",
+  "hepburn_macrons_supported": true,
+  "ascii_fallback": "lossy_visual_only",
+  "kanji_to_reading_automatic": false,
+  "automatic_name_meaning": false,
+  "language_reviews": "qualified_human_before_publication"
+}

@@ -1,0 +1,161 @@
+id,category,title,local_implementation_state,local_mechanism,upstream_integrated,acceptance_fully_verified
+JP-181,I. Young Author Sovereignty & Creative Freedom,Creator-First Constitutional Law,partial_local_mechanism,vault.decide; studio.plan_request,false,false
+JP-182,I. Young Author Sovereignty & Creative Freedom,Private Draft Vault,partial_local_mechanism,vault.DraftVault local-only,false,false
+JP-183,I. Young Author Sovereignty & Creative Freedom,Authorship Attribution Ledger,partial_local_mechanism,"vault history (declared origin, not identity proof)",false,false
+JP-184,I. Young Author Sovereignty & Creative Freedom,My-Voice Preservation Mode,partial_local_mechanism,vault proposals preserve original; voice-fingerprint not executed,false,false
+JP-185,I. Young Author Sovereignty & Creative Freedom,Exploration Without Gatekeeping,partial_local_mechanism,studio.experiment (no quotas),false,false
+JP-186,I. Young Author Sovereignty & Creative Freedom,Idea Ownership and Canon Adoption,partial_local_mechanism,analysis.JP_SEED_ADOPTION_FORBIDDEN,false,false
+JP-187,I. Young Author Sovereignty & Creative Freedom,Creative Modes by Request,partial_local_mechanism,studio.plan_request modes,false,false
+JP-188,I. Young Author Sovereignty & Creative Freedom,Consent-Based Revision Diffs,partial_local_mechanism,vault.propose/decide,false,false
+JP-189,I. Young Author Sovereignty & Creative Freedom,Healthy Writing Cadence,partial_local_mechanism,studio optional cadence; not a scheduler,false,false
+JP-190,I. Young Author Sovereignty & Creative Freedom,Guardian-Controlled External Effects,partial_local_mechanism,release.preflight preview-only,false,false
+JP-191,"II. Truth, Folklore, Fiction & Provenance Boundaries",Source-Realm Separation,partial_local_mechanism,contracts.validate_claim,false,false
+JP-192,"II. Truth, Folklore, Fiction & Provenance Boundaries",Documented Folklore Variant Status,partial_local_mechanism,contracts.validate_variant,false,false
+JP-193,"II. Truth, Folklore, Fiction & Provenance Boundaries",Living-Practice Versus Historic-Description Split,partial_local_mechanism,contracts source status,false,false
+JP-194,"II. Truth, Folklore, Fiction & Provenance Boundaries",Cultural Claim Scope,partial_local_mechanism,context.cultural_applicability,false,false
+JP-195,"II. Truth, Folklore, Fiction & Provenance Boundaries",Fictional Divergence Declaration,partial_local_mechanism,context.scene_travel author exception; project world mode,false,false
+JP-196,"II. Truth, Folklore, Fiction & Provenance Boundaries",Cultural Accuracy Severity Taxonomy,partial_local_mechanism,analysis research severities,false,false
+JP-197,"II. Truth, Folklore, Fiction & Provenance Boundaries",Claim-to-Source Reverse Navigation,partial_local_mechanism,research.source_card,false,false
+JP-198,"II. Truth, Folklore, Fiction & Provenance Boundaries",Primary-Source Preference Ladder,partial_local_mechanism,research.source_card kind; source quality human assessed,false,false
+JP-199,"II. Truth, Folklore, Fiction & Provenance Boundaries",Translation Mediation Audit,partial_local_mechanism,source_card provenance fields,false,false
+JP-200,"II. Truth, Folklore, Fiction & Provenance Boundaries",Research Refresh and Version Lock,partial_local_mechanism,analysis JP_SOURCE_UNRESOLVED,false,false
+JP-201,III. Japan Regional Geography & Place Intelligence,Prefecture-to-Block Location Graph,partial_local_mechanism,context.scene_travel; no actual geodata,false,false
+JP-202,III. Japan Regional Geography & Place Intelligence,Urban Versus Rural Rhythm,specified_only,,false,false
+JP-203,III. Japan Regional Geography & Place Intelligence,Place-Dependent Story Physics,specified_only,,false,false
+JP-204,III. Japan Regional Geography & Place Intelligence,Local Atmosphere Beyond Neon,specified_only,,false,false
+JP-205,III. Japan Regional Geography & Place Intelligence,Transit Constraint Ledger,partial_local_mechanism,analysis.JP_TIMETABLE_NEEDS_CURRENT_SOURCE,false,false
+JP-206,III. Japan Regional Geography & Place Intelligence,Neighborhood Economy Layer,specified_only,,false,false
+JP-207,III. Japan Regional Geography & Place Intelligence,Regional Cuisine Provenance,specified_only,,false,false
+JP-208,III. Japan Regional Geography & Place Intelligence,Landscape–Folklore Coupling,specified_only,,false,false
+JP-209,III. Japan Regional Geography & Place Intelligence,Japan Map Forks for Fantasy,partial_local_mechanism,analysis invented places,false,false
+JP-210,III. Japan Regional Geography & Place Intelligence,Location Research Card,partial_local_mechanism,research.source_card,false,false
+JP-211,"IV. Japanese History, Institutions & Temporal Reality",Era-Aware Chronology,partial_local_mechanism,context.era_from_gregorian (post-1873 only),false,false
+JP-212,"IV. Japanese History, Institutions & Temporal Reality",Historical Institution State,specified_only,,false,false
+JP-213,"IV. Japanese History, Institutions & Temporal Reality",Period-Specific Speech Caution,specified_only,,false,false
+JP-214,"IV. Japanese History, Institutions & Temporal Reality",Samurai–Shinobi Research Hygiene,specified_only,,false,false
+JP-215,"IV. Japanese History, Institutions & Temporal Reality",History of Religious Syncretism,specified_only,,false,false
+JP-216,"IV. Japanese History, Institutions & Temporal Reality","War, Disaster & Memory Context",specified_only,,false,false
+JP-217,"IV. Japanese History, Institutions & Temporal Reality",Civic and Legal Reality,specified_only,,false,false
+JP-218,"IV. Japanese History, Institutions & Temporal Reality",Festival Event-Time Resolver,partial_local_mechanism,analysis.JP_FESTIVAL_SCOPE_MISSING,false,false
+JP-219,"IV. Japanese History, Institutions & Temporal Reality",School and University Calendar Variance,specified_only,,false,false
+JP-220,"IV. Japanese History, Institutions & Temporal Reality",Future-Japan Projection Provenance,specified_only,,false,false
+JP-221,"V. Japanese Language, Naming & Social Register",Japanese Script-Aware Entity Record,partial_local_mechanism,language.script_tags; project names,false,false
+JP-222,"V. Japanese Language, Naming & Social Register",Romanization Policy as Configuration,partial_local_mechanism,language.macron_ascii (lossy),false,false
+JP-223,"V. Japanese Language, Naming & Social Register",Name Plausibility Assistant,partial_local_mechanism,analysis.JP_READING_UNKNOWN,false,false
+JP-224,"V. Japanese Language, Naming & Social Register",Name Order by Narration Audience,partial_local_mechanism,language.display_record,false,false
+JP-225,"V. Japanese Language, Naming & Social Register",Honorifics as Social Actions,partial_local_mechanism,context.honorific_transition,false,false
+JP-226,"V. Japanese Language, Naming & Social Register",Politeness Shift State Machine,partial_local_mechanism,context.honorific_transition,false,false
+JP-227,"V. Japanese Language, Naming & Social Register",Dialect and Regional Speech Evidence,specified_only,,false,false
+JP-228,"V. Japanese Language, Naming & Social Register",Multilingual Character Reality,specified_only,,false,false
+JP-229,"V. Japanese Language, Naming & Social Register",Translation and Subtext Rendering,specified_only,,false,false
+JP-230,"V. Japanese Language, Naming & Social Register",Japanese Dialogue Native Review Gate,partial_local_mechanism,release preflight (review marker only),false,false
+JP-231,"VI. Everyday Life, School & Generational Reality",School Setting Profile,partial_local_mechanism,context.grade_transition no national rule,false,false
+JP-232,"VI. Everyday Life, School & Generational Reality",School Calendar and Age Transition,partial_local_mechanism,context.grade_transition (no specific school schedule),false,false
+JP-233,"VI. Everyday Life, School & Generational Reality",Club Culture Without Universalization,specified_only,,false,false
+JP-234,"VI. Everyday Life, School & Generational Reality",Examination and Future Pressure,specified_only,,false,false
+JP-235,"VI. Everyday Life, School & Generational Reality",Home and Caregiving Diversity,specified_only,,false,false
+JP-236,"VI. Everyday Life, School & Generational Reality",Digital Youth Culture Freshness,specified_only,,false,false
+JP-237,"VI. Everyday Life, School & Generational Reality",Part-Time Employment and Rules,specified_only,,false,false
+JP-238,"VI. Everyday Life, School & Generational Reality",Public-Space Interaction Realism,specified_only,,false,false
+JP-239,"VI. Everyday Life, School & Generational Reality",Food and Daily Practice as Character Choice,specified_only,,false,false
+JP-240,"VI. Everyday Life, School & Generational Reality",Generational Differences and Change,specified_only,,false,false
+JP-241,"VII. Shrines, Temples & Living Religious Traditions",Shrine–Temple Ontology,partial_local_mechanism,context.tradition_hint,false,false
+JP-242,"VII. Shrines, Temples & Living Religious Traditions",Custodian-Specific Etiquette,partial_local_mechanism,context.cultural_applicability,false,false
+JP-243,"VII. Shrines, Temples & Living Religious Traditions","Kami, Buddhas and Yōkai Distinction",specified_only,,false,false
+JP-244,"VII. Shrines, Temples & Living Religious Traditions",Living Sacred versus Invented Magic,specified_only,,false,false
+JP-245,"VII. Shrines, Temples & Living Religious Traditions",Ritual Action Evidence Card,specified_only,,false,false
+JP-246,"VII. Shrines, Temples & Living Religious Traditions",Religious Character Diversity,specified_only,,false,false
+JP-247,"VII. Shrines, Temples & Living Religious Traditions",Sacred-Site Narrative Dignity,specified_only,,false,false
+JP-248,"VII. Shrines, Temples & Living Religious Traditions",Festival Participation & Consent,specified_only,,false,false
+JP-249,"VII. Shrines, Temples & Living Religious Traditions",Textual Tradition and Interpretation,specified_only,,false,false
+JP-250,"VII. Shrines, Temples & Living Religious Traditions",Belief Without Forced Literalism,specified_only,,false,false
+JP-251,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Regional Folklore Creature Registry,partial_local_mechanism,analysis.JP_VARIANTS_PRESERVED,false,false
+JP-252,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Yōkai Variant Genealogy,partial_local_mechanism,contracts.validate_variant,false,false
+JP-253,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Tsukumogami Rule Provenance,partial_local_mechanism,"contracts variant ancestry possible, manual evidence",false,false
+JP-254,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Onryō and Yūrei Context,specified_only,,false,false
+JP-255,"VIII. Yōkai, Ghosts, Folklore & Mythic Research","Tengu, Oni and Kitsune Nuance",specified_only,,false,false
+JP-256,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Urban Legend Chronology,specified_only,,false,false
+JP-257,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Monster Encounter Ethics,specified_only,,false,false
+JP-258,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Folklore Uncertainty Preservation,partial_local_mechanism,contracts variant.status unverified,false,false
+JP-259,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Folklore-to-Original-Invention Transmutation,partial_local_mechanism,"source_inspires edges, no copying",false,false
+JP-260,"VIII. Yōkai, Ghosts, Folklore & Mythic Research",Mythic Theme Composer,specified_only,,false,false
+JP-261,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Ainu Cultural Distinction,partial_local_mechanism,context.cultural_applicability,false,false
+JP-262,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Ainu Community Source Priority,specified_only,,false,false
+JP-263,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Ryukyu Kingdom and Okinawa Heritage Layer,partial_local_mechanism,context.cultural_applicability,false,false
+JP-264,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Okinawan Spiritual Practice Distinction,specified_only,,false,false
+JP-265,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Minority and Diaspora Character Integrity,specified_only,,false,false
+JP-266,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Regional Sacred Knowledge Boundaries,partial_local_mechanism,research rights metadata,false,false
+JP-267,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Contested Historical Memory,specified_only,,false,false
+JP-268,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Living Culture Not Museum Fossil,partial_local_mechanism,studio.no archetype enforcement,false,false
+JP-269,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Community Review Option,specified_only,,false,false
+JP-270,"IX. Ainu, Ryukyuan & Other Distinct Local Traditions",Cultural Borrowing and Reciprocity Log,partial_local_mechanism,research.source_card attribution,false,false
+JP-271,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Ki-Threads as Optional World Module,partial_local_mechanism,contracts validate_world powers optional,false,false
+JP-272,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Per-Series Power Constitution,partial_local_mechanism,analysis powers per world,false,false
+JP-273,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Narrative Cost Economics,partial_local_mechanism,context.simulate_power_ledger,false,false
+JP-274,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Counterplay and Counter-Counterplay Graph,partial_local_mechanism,world power fields (counterplay review manual),false,false
+JP-275,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Vow and Contract Consent,partial_local_mechanism,contracts edges consent optional,false,false
+JP-276,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Spirit Agency and Rights,specified_only,,false,false
+JP-277,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Place-Memory Mechanics,partial_local_mechanism,analysis technique world isolation,false,false
+JP-278,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Progression Without Mandatory Ranks,partial_local_mechanism,no rank requirement in schema,false,false
+JP-279,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",Power Resource Simulation,partial_local_mechanism,context.simulate_power_ledger,false,false
+JP-280,"X. Fictional Worlds, Ki-Threads & Supernatural Rule Systems",No-Deus-Ex With Authorized Exceptions,partial_local_mechanism,analysis causal setup or exception,false,false
+JP-281,XI. Japanese Character Worlds & Relationship Intelligence,Japanese Social Role Without Stereotype,partial_local_mechanism,studio no stereotype forcing,false,false
+JP-282,XI. Japanese Character Worlds & Relationship Intelligence,Age-Specific Agency,partial_local_mechanism,contracts character age unconstrained,false,false
+JP-283,XI. Japanese Character Worlds & Relationship Intelligence,Senpai–Kōhai Context Model,specified_only,,false,false
+JP-284,XI. Japanese Character Worlds & Relationship Intelligence,Family Name and Intimacy Arc,partial_local_mechanism,context.honorific_transition,false,false
+JP-285,XI. Japanese Character Worlds & Relationship Intelligence,Club and Household Resource Pressures,specified_only,,false,false
+JP-286,XI. Japanese Character Worlds & Relationship Intelligence,Moral Codes and Temptation,specified_only,,false,false
+JP-287,XI. Japanese Character Worlds & Relationship Intelligence,Generational Knowledge Conflict,specified_only,,false,false
+JP-288,XI. Japanese Character Worlds & Relationship Intelligence,Ordinary Friendship and Joy,partial_local_mechanism,no scene intensity quota,false,false
+JP-289,XI. Japanese Character Worlds & Relationship Intelligence,Identity Beyond Japanese-ness,partial_local_mechanism,character attributes not inferred,false,false
+JP-290,XI. Japanese Character Worlds & Relationship Intelligence,Careful Violence and Recovery,partial_local_mechanism,analysis resource carryover structure,false,false
+JP-291,"XII. Japan-Specific Fiction, Genre & Story Structures",Genre Demographic Correctness,partial_local_mechanism,world genre modes differ from demographic labels,false,false
+JP-292,"XII. Japan-Specific Fiction, Genre & Story Structures",Japanese Genre-Hybrid Composer,specified_only,,false,false
+JP-293,"XII. Japan-Specific Fiction, Genre & Story Structures",Mono no Aware as Optional Lens,specified_only,,false,false
+JP-294,"XII. Japan-Specific Fiction, Genre & Story Structures",Ma and Quiet-Beat Composition,specified_only,,false,false
+JP-295,"XII. Japan-Specific Fiction, Genre & Story Structures",Ikigai and Wabi-Sabi Misuse Guard,specified_only,,false,false
+JP-296,"XII. Japan-Specific Fiction, Genre & Story Structures",Tournament and Training Arc Variation,partial_local_mechanism,studio no tournament enforcement,false,false
+JP-297,"XII. Japan-Specific Fiction, Genre & Story Structures",Folklore Mystery Fairness,specified_only,,false,false
+JP-298,"XII. Japan-Specific Fiction, Genre & Story Structures",Historical Fantasy Difference Marking,partial_local_mechanism,analysis alternate-history declarations,false,false
+JP-299,"XII. Japan-Specific Fiction, Genre & Story Structures",Slice-of-Life Narrative Legitimacy,partial_local_mechanism,studio no formula enforcement,false,false
+JP-300,"XII. Japan-Specific Fiction, Genre & Story Structures",Japan-Set Thriller Logistics,partial_local_mechanism,analysis timetable source check,false,false
+JP-301,"XIII. Novels, Manga, Anime & Transmedia Production",Novel-First Default,partial_local_mechanism,release derivative_preview opt-in,false,false
+JP-302,"XIII. Novels, Manga, Anime & Transmedia Production",Manga Panel Grammar,partial_local_mechanism,release derivative_preview only,false,false
+JP-303,"XIII. Novels, Manga, Anime & Transmedia Production",Light-Novel Conventions as Options,partial_local_mechanism,studio no packaging mandates,false,false
+JP-304,"XIII. Novels, Manga, Anime & Transmedia Production",Anime Episode Adaptation,partial_local_mechanism,analysis adaption author decision,false,false
+JP-305,"XIII. Novels, Manga, Anime & Transmedia Production",Character Design Provenance,partial_local_mechanism,research rights labels,false,false
+JP-306,"XIII. Novels, Manga, Anime & Transmedia Production",Bilingual Export Views,partial_local_mechanism,release derivative_preview canon unchanged,false,false
+JP-307,"XIII. Novels, Manga, Anime & Transmedia Production",Regional Audio Design,partial_local_mechanism,research source card for sounds,false,false
+JP-308,"XIII. Novels, Manga, Anime & Transmedia Production",Print and Digital Layout Profiles,partial_local_mechanism,vault UTF-8 NFC-preserving bytes,false,false
+JP-309,"XIII. Novels, Manga, Anime & Transmedia Production",World Bible Cross-Medium Dependency,partial_local_mechanism,analysis.JP_ADAPTATION_NOT_CANON,false,false
+JP-310,"XIII. Novels, Manga, Anime & Transmedia Production",Transmedia Ownership and Release Decisions,partial_local_mechanism,release.preview-only,false,false
+JP-311,"XIV. The Writer's Desk, SonGPT & Learning Studio",Ask-the-Author-First Protocol,partial_local_mechanism,studio.plan_request,false,false
+JP-312,"XIV. The Writer's Desk, SonGPT & Learning Studio",Discovery Interview in the Author's Vocabulary,partial_local_mechanism,studio.plan_request optional,false,false
+JP-313,"XIV. The Writer's Desk, SonGPT & Learning Studio",Scene Microscope,partial_local_mechanism,analysis output categories (no art grade),false,false
+JP-314,"XIV. The Writer's Desk, SonGPT & Learning Studio",Lore Research Desk,partial_local_mechanism,research.research_suggestion,false,false
+JP-315,"XIV. The Writer's Desk, SonGPT & Learning Studio",Socratic Workshop,partial_local_mechanism,studio.questions-only,false,false
+JP-316,"XIV. The Writer's Desk, SonGPT & Learning Studio",Multiple Creative Paths,partial_local_mechanism,studio.compare_paths,false,false
+JP-317,"XIV. The Writer's Desk, SonGPT & Learning Studio",Backlog of Unfinished Worlds,partial_local_mechanism,vault history preservation,false,false
+JP-318,"XIV. The Writer's Desk, SonGPT & Learning Studio",Chapter-to-Chapter Development Memory,partial_local_mechanism,vault version history only; narrative memory not implemented,false,false
+JP-319,"XIV. The Writer's Desk, SonGPT & Learning Studio",Craft Apprenticeship Exercises,partial_local_mechanism,studio no mandatory assignments,false,false
+JP-320,"XIV. The Writer's Desk, SonGPT & Learning Studio",Read-Aloud and Audience Modes,partial_local_mechanism,release reader-response explicitly unverified,false,false
+JP-321,"XV. Research Rights, Safety, Privacy & Publishing",Copyright and Inspiration Ledger,partial_local_mechanism,research.source_card rights,false,false
+JP-322,"XV. Research Rights, Safety, Privacy & Publishing",Clean-Room Character and Mechanic Design,partial_local_mechanism,migration provenance; originality review not automated,false,false
+JP-323,"XV. Research Rights, Safety, Privacy & Publishing",Living-Contributor Permission Record,partial_local_mechanism,source_card permissions metadata,false,false
+JP-324,"XV. Research Rights, Safety, Privacy & Publishing",Source Licensing and Excerpts,partial_local_mechanism,research.source_card excerpt omission,false,false
+JP-325,"XV. Research Rights, Safety, Privacy & Publishing",Private Identity Minimization,partial_local_mechanism,vault.preview_publication metadata scrub,false,false
+JP-326,"XV. Research Rights, Safety, Privacy & Publishing",Account and Network Scope Control,partial_local_mechanism,"network_policy offline, no accounts",false,false
+JP-327,"XV. Research Rights, Safety, Privacy & Publishing",Prompt-Injection and Source Isolation,partial_local_mechanism,research.quarantine_report and inert source display,false,false
+JP-328,"XV. Research Rights, Safety, Privacy & Publishing",Age-Appropriate Creative Support,partial_local_mechanism,studio private exploration; policy beyond scope,false,false
+JP-329,"XV. Research Rights, Safety, Privacy & Publishing",Publication/Commercialization Gate,partial_local_mechanism,release.preflight no actual publish,false,false
+JP-330,"XV. Research Rights, Safety, Privacy & Publishing",Independent Rights and Factual Review,partial_local_mechanism,release.preflight independent review unverified,false,false
+JP-331,"XVI. Canonical Integration, Validation & Delivery",Single Runtime Owner,partial_local_mechanism,contracts projection noncanonical,false,false
+JP-332,"XVI. Canonical Integration, Validation & Delivery",Source-to-Canon Edge Types,partial_local_mechanism,contracts ALLOWED_EDGES,false,false
+JP-333,"XVI. Canonical Integration, Validation & Delivery",Schema Reconciliation Migration,partial_local_mechanism,migration.normalize_legacy_id,false,false
+JP-334,"XVI. Canonical Integration, Validation & Delivery",Structured Cultural Confidence,partial_local_mechanism,analysis research statuses (no scalar),false,false
+JP-335,"XVI. Canonical Integration, Validation & Delivery",Negative Controls for Cultural Variation,partial_local_mechanism,context cultural variation controls,false,false
+JP-336,"XVI. Canonical Integration, Validation & Delivery",Creative-Freedom Regression Pack,partial_local_mechanism,studio no templates mandated,false,false
+JP-337,"XVI. Canonical Integration, Validation & Delivery",Human-in-the-Loop Author Acceptance,partial_local_mechanism,vault propose/decide,false,false
+JP-338,"XVI. Canonical Integration, Validation & Delivery",Offline Reconstitution and Open Formats,partial_local_mechanism,vault local open JSON UTF-8,false,false
+JP-339,"XVI. Canonical Integration, Validation & Delivery",Operational Receipt Discipline,partial_local_mechanism,tests + receipt templates (not upstream wave shipped),false,false
+JP-340,"XVI. Canonical Integration, Validation & Delivery",Young-Author Success Measurements,partial_local_mechanism,no artificial writing performance score,false,false

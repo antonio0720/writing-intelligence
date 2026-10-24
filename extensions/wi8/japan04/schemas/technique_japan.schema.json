@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/technique_japan.schema.json",
+  "title": "technique_japan",
+  "description": "Optional per-world power mechanics",
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "world_id": {
+      "type": "string"
+    },
+    "uses": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "resource_before": {
+      "type": "number",
+      "minimum": 0
+    },
+    "resource_spent": {
+      "type": "number",
+      "minimum": 0
+    },
+    "replenishment_ref": {
+      "type": "string"
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "costs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

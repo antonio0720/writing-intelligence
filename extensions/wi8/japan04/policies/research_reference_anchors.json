@@ -1,0 +1,25 @@
+{
+  "status": "URLS_FROM_USER_SPEC_NOT_FETCHED_OR_VERIFIED_IN_THIS_CODE_PACKAGE",
+  "anchors": [
+    {
+      "label": "Japan National Tourism Organization \u2014 shrines and temples",
+      "url": "https://www.japan.travel/en/guide/shrine-and-temple-traditions/"
+    },
+    {
+      "label": "Embassy of Japan in US \u2014 education overview",
+      "url": "https://www.us.emb-japan.go.jp/itpr_en/education-system-in-japan.html"
+    },
+    {
+      "label": "Agency for Cultural Affairs \u2014 Folk Cultural Properties",
+      "url": "https://www.bunka.go.jp/english/policy/cultural_properties/introduction/folk/"
+    },
+    {
+      "label": "National Ainu Museum / Upopoy",
+      "url": "https://ainu-upopoy.go.jp/en/facility/upopoy/"
+    },
+    {
+      "label": "Okinawa official travel guide \u2014 Ryukyu heritage",
+      "url": "https://visitokinawajapan.com/travel-inspiration/local-culture-in-world-heritage-okinawa/"
+    }
+  ]
+}

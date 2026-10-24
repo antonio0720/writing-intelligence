@@ -1,0 +1,138 @@
+{
+  "characters": [
+    {
+      "arc_family": "positive_change",
+      "character_ref": "ch-ada",
+      "endings": [
+        {
+          "arc_family": "positive_change",
+          "assertion_id": "ending-ada",
+          "closure": "closed",
+          "need_ref": "need-ada",
+          "projection": {
+            "epistemic_status": "derived_from_author_asserted_interpretation",
+            "need_binary": true,
+            "quadrant": "sweet",
+            "reasons": [],
+            "want_binary": true
+          },
+          "reader_valence": null,
+          "want_ref": "want-ada-v2"
+        }
+      ],
+      "needs": [
+        "need-ada"
+      ],
+      "turns": [],
+      "wants": [
+        "want-ada-v1",
+        "want-ada-v2"
+      ]
+    },
+    {
+      "arc_family": "flat",
+      "character_ref": "ch-beck",
+      "endings": [
+        {
+          "arc_family": "flat",
+          "assertion_id": "ending-beck",
+          "closure": "closed",
+          "need_ref": "need-beck",
+          "projection": {
+            "epistemic_status": "derived_from_author_asserted_interpretation",
+            "need_binary": true,
+            "quadrant": "semi_sweet",
+            "reasons": [],
+            "want_binary": false
+          },
+          "reader_valence": null,
+          "want_ref": "want-beck"
+        }
+      ],
+      "needs": [
+        "need-beck"
+      ],
+      "turns": [],
+      "wants": [
+        "want-beck"
+      ]
+    },
+    {
+      "arc_family": "fall",
+      "character_ref": "ch-cero",
+      "endings": [
+        {
+          "arc_family": "fall",
+          "assertion_id": "ending-cero",
+          "closure": "closed",
+          "need_ref": "need-cero",
+          "projection": {
+            "epistemic_status": "derived_from_author_asserted_interpretation",
+            "need_binary": false,
+            "quadrant": "bittersweet",
+            "reasons": [],
+            "want_binary": true
+          },
+          "reader_valence": null,
+          "want_ref": "want-cero"
+        }
+      ],
+      "needs": [
+        "need-cero"
+      ],
+      "turns": [],
+      "wants": [
+        "want-cero"
+      ]
+    },
+    {
+      "arc_family": "open",
+      "character_ref": "ch-dela",
+      "endings": [
+        {
+          "arc_family": "open",
+          "assertion_id": "ending-dela",
+          "closure": "closed",
+          "need_ref": "need-dela",
+          "projection": {
+            "epistemic_status": "derived_from_author_asserted_interpretation",
+            "need_binary": false,
+            "quadrant": "bitter",
+            "reasons": [],
+            "want_binary": false
+          },
+          "reader_valence": null,
+          "want_ref": "want-dela"
+        }
+      ],
+      "needs": [
+        "need-dela"
+      ],
+      "turns": [],
+      "wants": [
+        "want-dela"
+      ]
+    }
+  ],
+  "coverage": {
+    "assertions": 17,
+    "automated_validity": "structure_and_declared_dependency_only",
+    "characters": 4,
+    "ending_projections": 4,
+    "events": 5,
+    "human_review": "not_performed_by_this_tool",
+    "reader_study": "not_performed_by_this_tool"
+  },
+  "findings": [],
+  "limits": [
+    "A source_root supplied in JSON is an assertion until independently matched to canonical core readback.",
+    "All wants, needs, beliefs, arcs and endings are authored interpretations, not machine-proven psychology.",
+    "Mechanical conformance is not evidence of emotional impact or reader satisfaction.",
+    "This tool neither modifies canon nor implements canonical authority and commitment."
+  ],
+  "origin": "fixture",
+  "schema": "wi.arc.report/v1",
+  "source_digest": "sha256:951411905262ea237da31cee0da4a3d7027b18899ff934b5f17881bc5531ff2d",
+  "source_graph_root": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "status": "evaluated"
+}

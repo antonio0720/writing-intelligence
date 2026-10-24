@@ -1,0 +1,83 @@
+{
+  "caution": "These differences are author-declared states; psychological transformation and causal adequacy require review.",
+  "changes": [
+    {
+      "after": {
+        "character_ref": "ch-ada",
+        "kind": "choice",
+        "payload": {
+          "action": "Asks a rival for help"
+        },
+        "provenance": {
+          "actor_id": "writer-1",
+          "basis": "author_asserted"
+        },
+        "revision": 1,
+        "state_id": "choice-ada"
+      },
+      "before": null,
+      "change": "introduced",
+      "logical_id": "choice-ada"
+    },
+    {
+      "after": {
+        "character_ref": "ch-ada",
+        "kind": "ending",
+        "payload": {
+          "choice_ref": "choice-ada",
+          "closure": "closed",
+          "need_outcome": "fulfilled",
+          "need_ref": "need-ada",
+          "want_outcome": "attained",
+          "want_ref": "want-ada-v2"
+        },
+        "provenance": {
+          "actor_id": "writer-1",
+          "basis": "author_asserted"
+        },
+        "revision": 1,
+        "state_id": "ending-ada"
+      },
+      "before": null,
+      "change": "introduced",
+      "logical_id": "ending-ada"
+    },
+    {
+      "after": {
+        "character_ref": "ch-ada",
+        "kind": "want",
+        "payload": {
+          "proposition": "Bring a witness home safely",
+          "scope": "central"
+        },
+        "provenance": {
+          "actor_id": "writer-1",
+          "basis": "author_asserted"
+        },
+        "revision": 2,
+        "state_id": "want-ada-v2"
+      },
+      "before": {
+        "character_ref": "ch-ada",
+        "kind": "want",
+        "payload": {
+          "proposition": "Win the city medal",
+          "scope": "central"
+        },
+        "provenance": {
+          "actor_id": "writer-1",
+          "basis": "author_asserted"
+        },
+        "revision": 1,
+        "state_id": "want-ada-v1"
+      },
+      "change": "state_changed",
+      "logical_id": "want-ada-v1"
+    }
+  ],
+  "character_ref": "ch-ada",
+  "end_event": "ev-4",
+  "known_at": "2026-10-24T13:00:00-05:00",
+  "start_event": "ev-0",
+  "status": "projection_only"
+}

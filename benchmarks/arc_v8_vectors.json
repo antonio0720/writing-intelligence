@@ -1,0 +1,13 @@
+{
+  "schema": "wi.arc.benchmark/v1",
+  "notes": "Deterministic exact vector subset of twenty cases; all psychological interpretations are predeclared, not machine-discovered.",
+  "vectors": [
+    {"id":"ARC-01","want":"attained","need":"fulfilled","closure":"closed","expected":"sweet"},
+    {"id":"ARC-02","want":"sacrificed","need":"fulfilled","closure":"closed","expected":"semi_sweet"},
+    {"id":"ARC-03","want":"attained","need":"unfulfilled","closure":"closed","expected":"bittersweet"},
+    {"id":"ARC-04","want":"thwarted","need":"rejected","closure":"closed","expected":"bitter"},
+    {"id":"ARC-05","want":"partial","need":"fulfilled","closure":"closed","expected":"not_classifiable"},
+    {"id":"ARC-06","want":"attained","need":"fulfilled","closure":"closed","need_basis":"reviewer_inferred","expected":"not_classifiable"},
+    {"id":"ARC-07","want":"attained","need":"fulfilled","closure":"deliberately_ambiguous","expected":"not_classifiable"}
+  ]
+}

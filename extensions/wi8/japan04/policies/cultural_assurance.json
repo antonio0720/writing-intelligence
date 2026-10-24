@@ -1,0 +1,25 @@
+{
+  "statuses": [
+    "NEEDS_SOURCE",
+    "SOURCED_UNREVIEWED",
+    "SOURCE_CONFLICT",
+    "EXPERT_REVIEWED",
+    "STALE",
+    "INVENTED"
+  ],
+  "severity": [
+    "verified_error",
+    "likely_mismatch",
+    "local_variation",
+    "disputed_interpretation",
+    "unknown",
+    "creative_departure"
+  ],
+  "never_certify_from_model_output": [
+    "culture_authenticity",
+    "native_fluency",
+    "folklore_universality",
+    "reader_emotion"
+  ],
+  "source_priority": "contextual; local custodian and era-specific source for local practice, community voices for identity-specific claims"
+}

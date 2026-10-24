@@ -1,0 +1,120 @@
+{
+  "consent_inputs_unverified": {
+    "author": false,
+    "guardian": false
+  },
+  "distribution_performed": false,
+  "findings": [
+    {
+      "assurance": "mechanically_checked",
+      "category": "time",
+      "code": "JP_FESTIVAL_SCOPE_MISSING",
+      "explanation": "Festival date requires year, place and organizer source",
+      "requirements": [
+        218,
+        193,
+        200
+      ],
+      "severity": "review",
+      "subject": "ev1"
+    },
+    {
+      "assurance": "mechanically_checked",
+      "category": "language",
+      "code": "JP_READING_UNKNOWN",
+      "explanation": "Kanji has no author-selected/attested pronunciation; do not fabricate a reading",
+      "requirements": [
+        221,
+        223,
+        334
+      ],
+      "severity": "review",
+      "subject": "nm1"
+    },
+    {
+      "assurance": "mechanically_checked",
+      "category": "authorship",
+      "code": "JP_SEED_UNADOPTED",
+      "explanation": "This fictional invention is proposed, not canon",
+      "requirements": [
+        186,
+        191,
+        195
+      ],
+      "severity": "info",
+      "subject": "cl-lantern-fiction"
+    },
+    {
+      "assurance": "mechanically_checked",
+      "category": "research",
+      "code": "JP_SOURCE_REQUIRED",
+      "explanation": "Factual assertion has no source; no authenticity conclusion possible",
+      "requirements": [
+        191,
+        194,
+        197,
+        198,
+        334
+      ],
+      "severity": "review",
+      "subject": "cl-festival-example"
+    },
+    {
+      "assurance": "mechanically_checked",
+      "category": "research",
+      "code": "JP_SOURCE_UNRESOLVED",
+      "explanation": "Current source status is unresolved; do not use as verified publication fact",
+      "requirements": [
+        193,
+        196,
+        200,
+        205,
+        218
+      ],
+      "severity": "review",
+      "subject": "cl-festival-example"
+    },
+    {
+      "assurance": "mechanically_checked",
+      "category": "geography",
+      "code": "JP_TIMETABLE_NEEDS_CURRENT_SOURCE",
+      "explanation": "Transit or time claim needs date-specific source",
+      "requirements": [
+        201,
+        205,
+        210,
+        300
+      ],
+      "severity": "review",
+      "subject": "place1"
+    },
+    {
+      "assurance": "mechanically_checked",
+      "category": "folklore",
+      "code": "JP_VARIANTS_PRESERVED",
+      "explanation": "Multiple attributed versions preserved; no automatic winning interpretation",
+      "requirements": [
+        192,
+        249,
+        251,
+        252,
+        258
+      ],
+      "severity": "info",
+      "subject": "hypothetical local creature"
+    }
+  ],
+  "reasons": [
+    "No public release/publishing operation exists in this module",
+    "Author has not accepted publication",
+    "Guardian authorization not present",
+    "Independent rights review not recorded",
+    "Japanese-language review not recorded"
+  ],
+  "release_authorized": false,
+  "review_inputs_unverified": {
+    "native_language": false,
+    "rights": false
+  },
+  "state": "PREVIEW_ONLY"
+}

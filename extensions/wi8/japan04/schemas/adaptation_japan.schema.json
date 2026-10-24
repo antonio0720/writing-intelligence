@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/adaptation_japan.schema.json",
+  "title": "adaptation_japan",
+  "description": "Secondary derivative without automatic source-canon promotion",
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "source_work_id": {
+      "type": "string"
+    },
+    "medium": {
+      "type": "string"
+    },
+    "proposes_canon_change": {
+      "type": "boolean"
+    },
+    "author_decision_id": {
+      "type": "string"
+    },
+    "rights": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

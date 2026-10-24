@@ -1,0 +1,12 @@
+{
+  "source_kind": "uploaded-author-planning-sources",
+  "pdf_sha256": "3e601bd83e691329a2260af08b06ddcf8f642dea0c880bfb8b63c7e17bae891b",
+  "pdf_pages": 97,
+  "original_pdf_included": false,
+  "reason": "Contains third-party excerpts and screenshots; retain hash and local link, do not redistribute in source code ZIP",
+  "source_input_md_sha256": "db5385c42b9d60655b992f1892604283d8bbe294d5b7e7cb40c0de4a6d30c909",
+  "source_input_planning_zip_sha256": "711e43ffc0593ae34be6d519154d7bd3e2881dc7298004c0b55023df910e0025",
+  "repository": "antonio0720/writing-intelligence",
+  "observed_commit": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "observation_date": "2026-10-24"
+}

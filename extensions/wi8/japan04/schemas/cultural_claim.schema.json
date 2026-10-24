@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/cultural_claim.schema.json",
+  "title": "cultural_claim",
+  "description": "Realm-safe Japan cultural or fictional claim projection",
+  "type": "object",
+  "required": [
+    "id",
+    "statement",
+    "realm"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "statement": {
+      "type": "string"
+    },
+    "realm": {
+      "type": "string",
+      "enum": [
+        "external_fact",
+        "fictional_canon",
+        "interpretation",
+        "research_note",
+        "simulation"
+      ]
+    },
+    "scope": {
+      "type": "object"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_status": {
+      "type": "string"
+    },
+    "canon_state": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "author_adopted",
+        "archived",
+        "retconned"
+      ]
+    },
+    "author_decision_id": {
+      "type": "string"
+    },
+    "world_id": {
+      "type": "string"
+    },
+    "assurance": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,15 @@
+{
+  "optional_world_seed": "Ki-Threads",
+  "globally_required": false,
+  "cost_per_use_required_for_all_fiction": false,
+  "tier_ladder_required": false,
+  "storyworlds_can_have_incompatible_rules": true,
+  "continuity_if_chosen": [
+    "capacity",
+    "limits",
+    "costs",
+    "replenishment",
+    "consequences",
+    "author_exceptions"
+  ]
+}

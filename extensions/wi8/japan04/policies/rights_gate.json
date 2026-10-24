@@ -1,0 +1,13 @@
+{
+  "archive_pdf_redistributable": false,
+  "guardian_permission_claim_trust": "unverified_local_input",
+  "can_publish": false,
+  "review_required": [
+    "source_rights",
+    "contributors",
+    "minor_privacy",
+    "native_dialogue_if_critical",
+    "author_decision"
+  ],
+  "creative_experiments_are_not_release_candidates_by_default": true
+}

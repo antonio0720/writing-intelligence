@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/source_card.schema.json",
+  "title": "source_card",
+  "description": "Untrusted sourced research metadata; not certified cultural fact",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "kind",
+    "status",
+    "rights"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "primary",
+        "community_custodian",
+        "museum",
+        "scholarship",
+        "government",
+        "local_organizer",
+        "secondary",
+        "media",
+        "field_observation",
+        "unknown"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NEEDS_SOURCE",
+        "SOURCED_UNREVIEWED",
+        "SOURCE_CONFLICT",
+        "EXPERT_REVIEWED",
+        "STALE"
+      ]
+    },
+    "rights": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "public_domain",
+        "licensed",
+        "permission_required",
+        "restricted"
+      ]
+    },
+    "retrieved_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publisher": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "protected": {
+      "type": "boolean"
+    },
+    "reviewer_ref": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

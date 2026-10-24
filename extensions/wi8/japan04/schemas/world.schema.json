@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/world.schema.json",
+  "title": "world",
+  "description": "Independent per-series fictional branch; not a global rule over Japan",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "genre_mode"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "genre_mode": {
+      "type": "string",
+      "enum": [
+        "contemporary",
+        "historic",
+        "alternate_history",
+        "fantasy",
+        "near_future",
+        "invented",
+        "slice_of_life"
+      ]
+    },
+    "powers": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "divergence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

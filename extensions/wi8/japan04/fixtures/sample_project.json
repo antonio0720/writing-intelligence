@@ -1,0 +1,23 @@
+{
+  "format":"wi8-japan04/projection-1",
+  "authority":"noncanonical_projection","network_policy":"offline","release_policy":"preview_only",
+  "sources":[
+    {"id":"src-local-variant-a","title":"Illustrative local testimony A (invented fixture, not Japanese history)","kind":"field_observation","status":"SOURCED_UNREVIEWED","rights":"unknown"},
+    {"id":"src-local-variant-b","title":"Illustrative local testimony B (invented fixture, not Japanese history)","kind":"field_observation","status":"SOURCED_UNREVIEWED","rights":"unknown"}
+  ],
+  "claims":[
+    {"id":"cl-festival-example","realm":"external_fact","statement":"Unverified illustrative claim about a festival date; requires local confirmation","scope":{"place":"fictional placeholder"},"source_status":"NEEDS_SOURCE","source_refs":[]},
+    {"id":"cl-lantern-fiction","realm":"fictional_canon","statement":"In this imaginary district a lantern retains remembered conversations","world_id":"world-lantern","canon_state":"proposed","source_status":"INVENTED"}
+  ],
+  "variants":[
+    {"id":"v-a","subject":"hypothetical local creature","account":"Fictional variant A created for tests","scope":{"place":"fictional valley A"},"source_refs":["src-local-variant-a"],"status":"recorded"},
+    {"id":"v-b","subject":"hypothetical local creature","account":"Fictional variant B created for tests","scope":{"place":"fictional valley B"},"source_refs":["src-local-variant-b"],"status":"recorded"}
+  ],
+  "worlds":[{"id":"world-lantern","title":"Lantern District (invented)","genre_mode":"fantasy","powers":null}],
+  "edges":[{"from":"src-local-variant-a","to":"cl-lantern-fiction","relation":"source_inspires"}],
+  "names":[{"id":"nm1","kanji":"結衣","reading":null,"reading_status":"unknown"}],
+  "places":[{"id":"place1","kind":"real","travel_claim":"unspecified last train"}],
+  "events":[{"id":"ev1","kind":"festival","year":null,"place_id":null}],
+  "characters":[{"id":"ch1","name":"Character A","age":14,"personal_desire":"Keep her promise"},{"id":"ch2","name":"Character B","age":83,"personal_desire":"Repair an old friendship"}],
+  "techniques":[],"reviews":[],"adaptations":[],"seeds":[]
+}

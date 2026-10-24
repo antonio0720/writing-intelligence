@@ -1,0 +1,1 @@
+{"status": "BLOCK", "error": "ContractError", "reason": "must not claim canonical authority"}

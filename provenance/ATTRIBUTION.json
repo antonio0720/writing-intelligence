@@ -1,0 +1,16 @@
+{
+  "status": "interpretive_attributions_from_user_provided_specification",
+  "primary_specification": "SOURCE_SPECIFICATION.md",
+  "notes": "The Only 4 Ways To End A Story (9-page notes described in the supplied source specification; PDF itself was not attached to this turn).",
+  "acknowledged_theorist": "K. M. Weiland (identified in user notes)",
+  "works_discussed_as_interpretations": [
+    "Back to the Future",
+    "The Godfather",
+    "Joker",
+    "Onward",
+    "Rain Man",
+    "The Social Network"
+  ],
+  "rights_boundary": "No screenplay scenes, scripts, third-party text or verbatim film dialogues reproduced. Original invented fixture scenarios only.",
+  "ownership_claim": "These schemas and source code are newly authored for this package. Classification ideas are not represented as exclusive original concepts."
+}

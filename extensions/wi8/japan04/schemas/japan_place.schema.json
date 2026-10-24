@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/japan_place.schema.json",
+  "title": "japan_place",
+  "description": "Local or authored place without assumed travel logistics",
+  "type": "object",
+  "required": [
+    "id",
+    "kind"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "real",
+        "invented",
+        "alternate_history"
+      ]
+    },
+    "world_id": {
+      "type": "string"
+    },
+    "municipality": {
+      "type": "string"
+    },
+    "prefecture": {
+      "type": "string"
+    },
+    "travel_claim": {
+      "type": "string"
+    },
+    "travel_source_ref": {
+      "type": "string"
+    },
+    "coordinate_source": {
+      "type": "string"
+    },
+    "last_verified_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

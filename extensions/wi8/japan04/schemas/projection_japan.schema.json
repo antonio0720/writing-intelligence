@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/projection_japan.schema.json",
+  "title": "projection_japan",
+  "description": "Read-only noncanonical projection; canonical graph remains authoritative",
+  "type": "object",
+  "required": [
+    "format",
+    "authority",
+    "network_policy",
+    "release_policy"
+  ],
+  "properties": {
+    "format": {
+      "const": "wi8-japan04/projection-1"
+    },
+    "authority": {
+      "const": "noncanonical_projection"
+    },
+    "network_policy": {
+      "const": "offline"
+    },
+    "release_policy": {
+      "const": "preview_only"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "worlds": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "names": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "places": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "techniques": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "adaptations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "seeds": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": false
+}

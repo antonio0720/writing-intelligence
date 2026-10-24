@@ -1,0 +1,248 @@
+{
+  "schema": "wi8.japan04.wave-plan/1",
+  "baseline_sha": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "status": "ALL_PLANNED_NO_UPSTREAM_SHIPMENT",
+  "depends_on_previous_four_zip_program": true,
+  "waves": [
+    {
+      "id": "WI8-24",
+      "name": "Baseline / source reconciliation",
+      "status": "planned",
+      "depends_on": [
+        "WI8-23 (external prerequisite, not included)"
+      ],
+      "exit": "Pinned GitHub revision, complete source-page coverage and exact requirement inventory",
+      "negative_control": "Changing Git HEAD or removing a source locator blocks acceptance",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-25",
+      "name": "Young-author private creation",
+      "status": "planned",
+      "depends_on": [
+        "WI8-24"
+      ],
+      "exit": "Local draft snapshots and consent-based review contract",
+      "negative_control": "Rejected revision cannot overwrite any original bytes",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-26",
+      "name": "Cultural epistemic type system",
+      "status": "planned",
+      "depends_on": [
+        "WI8-25"
+      ],
+      "exit": "External fact and fictional canon never collapse",
+      "negative_control": "Invented rite cannot become externally verified",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-27",
+      "name": "Place/time-source precision",
+      "status": "planned",
+      "depends_on": [
+        "WI8-26"
+      ],
+      "exit": "Location, festival, school and transit uncertainty retained",
+      "negative_control": "Unverified last-train clock is not invented",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-28",
+      "name": "Script/romanization/name policy",
+      "status": "planned",
+      "depends_on": [
+        "WI8-27"
+      ],
+      "exit": "Kanji ambiguity and lossy ASCII fallback preserved",
+      "negative_control": "Unknown kanji reading is not silently guessed",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-29",
+      "name": "School/family/daily-life variants",
+      "status": "planned",
+      "depends_on": [
+        "WI8-28"
+      ],
+      "exit": "Institution- and family-specific contextual profiles",
+      "negative_control": "Non-April school is not automatically rejected",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-30",
+      "name": "Sacred/religious sites",
+      "status": "planned",
+      "depends_on": [
+        "WI8-29"
+      ],
+      "exit": "Temple/shrine/context-specific source checks",
+      "negative_control": "Temple cannot inherit mandatory torii choreography",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-31",
+      "name": "Y\u014dkai and folklore variants",
+      "status": "planned",
+      "depends_on": [
+        "WI8-30"
+      ],
+      "exit": "Variant genealogy, source links and right types",
+      "negative_control": "Conflicting local versions coexist without forced canonicalization",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-32",
+      "name": "Ainu/Ryukyuan/source dignity",
+      "status": "planned",
+      "depends_on": [
+        "WI8-31"
+      ],
+      "exit": "Community-primary evidence and bounded cultural claims",
+      "negative_control": "Okinawa customs not overwritten by Kyoto defaults",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-33",
+      "name": "World-scoped Ki-Threads",
+      "status": "planned",
+      "depends_on": [
+        "WI8-32"
+      ],
+      "exit": "Legacy technique aliases and optional per-world power rules",
+      "negative_control": "No-magic novel is not forced to use ranks or power costs",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-34",
+      "name": "Characters and social-register choices",
+      "status": "planned",
+      "depends_on": [
+        "WI8-33"
+      ],
+      "exit": "Honorific/relationship shifts and age independence",
+      "negative_control": "Sarcastic name change not treated as automatic cultural failure",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-35",
+      "name": "Genre lenses, not recipes",
+      "status": "planned",
+      "depends_on": [
+        "WI8-34"
+      ],
+      "exit": "Optional slice-of-life/quiet experiment modes",
+      "negative_control": "No mandatory tournament, 12 episodes, or culture beat quota",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-36",
+      "name": "Novel/manga/audio/game boundaries",
+      "status": "planned",
+      "depends_on": [
+        "WI8-35"
+      ],
+      "exit": "Derivative previews preserve source canon references",
+      "negative_control": "Audio/manga export alone cannot write to canon",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-37",
+      "name": "Writer Desk modes and questions",
+      "status": "planned",
+      "depends_on": [
+        "WI8-36"
+      ],
+      "exit": "Critique, question-only and proposal contracts",
+      "negative_control": "Questions-only cannot silently ghostwrite a scene",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-38",
+      "name": "Source-aware local research index",
+      "status": "planned",
+      "depends_on": [
+        "WI8-37"
+      ],
+      "exit": "Attributable source cards, denied tool instructions",
+      "negative_control": "Malicious retrieved wiki cannot trigger manuscript upload",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-39",
+      "name": "Provenance/licensing permissions",
+      "status": "planned",
+      "depends_on": [
+        "WI8-38"
+      ],
+      "exit": "Rights-aware source snippets and unadopted seed cards",
+      "negative_control": "Copyright excerpt excluded from publish-ready package",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-40",
+      "name": "Legacy Japan v1 migration",
+      "status": "planned",
+      "depends_on": [
+        "WI8-39"
+      ],
+      "exit": "Old CID/CHAR/TECH/NAME/LOC IDs preserve original bytes",
+      "negative_control": "Ambiguous/duplicate ID cannot silently overwrite",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-41",
+      "name": "Adversarial cultural QA",
+      "status": "planned",
+      "depends_on": [
+        "WI8-40"
+      ],
+      "exit": "Named positive & negative variation fixtures pass locally",
+      "negative_control": "False nationwide generalizations are not accepted",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-42",
+      "name": "Human calibration and real writer feedback",
+      "status": "planned",
+      "depends_on": [
+        "WI8-41"
+      ],
+      "exit": "Attributed author/reader reports with explicit unverified states",
+      "negative_control": "Automated aesthetic grade never labeled reader-verified",
+      "proven_in_upstream": false,
+      "receipt": null
+    },
+    {
+      "id": "WI8-43",
+      "name": "Canonical merge and release proof",
+      "status": "planned",
+      "depends_on": [
+        "WI8-42"
+      ],
+      "exit": "Upstream v4-v7 regression, exact authority, independent receipts",
+      "negative_control": "Local test pass never upgrades upstream wave to shipped",
+      "proven_in_upstream": false,
+      "receipt": null
+    }
+  ]
+}

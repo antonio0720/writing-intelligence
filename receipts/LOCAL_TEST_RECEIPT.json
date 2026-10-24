@@ -1,0 +1,42 @@
+{
+  "schema": "wi8.arc.local-test-receipt/v1",
+  "status": "LOCAL_PASS_ONLY",
+  "date": "2026-10-24",
+  "repository_head_observed": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "scope": "Standalone ZIP #2 local executor; neither merged nor upstream-tested nor reader-validated",
+  "command": "PYTHONDONTWRITEBYTECODE=1 bash tests/v8_arc/run.sh",
+  "observed_result": "Ran 60 tests, OK, plus positive/negative/publication controls PASS",
+  "test_log_sha256": "sha256:b3d9c98085d0ba0c611a222c1b87cc3d7b7919e872fd5ad075a89988e9a34568",
+  "independent_readback": [
+    {
+      "surface": "separate direct CLI evaluation",
+      "result": "example report emitted",
+      "report_digest": "sha256:951411905262ea237da31cee0da4a3d7027b18899ff934b5f17881bc5531ff2d"
+    },
+    {
+      "surface": "independent Draft 2020-12 jsonschema checker",
+      "result": "5 schemas and 4 instance checks passed"
+    }
+  ],
+  "negative_controls": [
+    "dangling reference exits 2",
+    "cross-character focus rejected",
+    "future-known desire not visible in historical query",
+    "partial/ambiguous endings remain unclassified",
+    "publication stage returns HOLD/exit 3"
+  ],
+  "not_performed": [
+    "official v4-v7 regression in real checkout",
+    "canonical graph adapter readback",
+    "human reader studies",
+    "real typesetting validation",
+    "GitHub branch/commit/pull request/merge",
+    "official v8 release"
+  ],
+  "requirements": {
+    "carried_forward_separate_zip": 60,
+    "new_notes_driven": 60,
+    "partially_executable": 21,
+    "release_waves_shipped": 0
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/japanese_name.schema.json",
+  "title": "japanese_name",
+  "description": "Script-aware names with no fabricated readings",
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "kanji": {
+      "type": "string"
+    },
+    "kana": {
+      "type": "string"
+    },
+    "reading": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reading_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "author_chosen",
+        "sourced",
+        "verified"
+      ]
+    },
+    "family_name": {
+      "type": "string"
+    },
+    "given_name": {
+      "type": "string"
+    },
+    "script_profile": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "romanization": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

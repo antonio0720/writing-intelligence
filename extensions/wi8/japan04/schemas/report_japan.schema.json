@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/extensions/wi8/japan04/schemas/report_japan.schema.json",
+  "title": "report_japan",
+  "description": "Typed diagnostic signals; not literary excellence certification",
+  "type": "object",
+  "required": [
+    "format",
+    "source_projection_digest",
+    "status",
+    "findings"
+  ],
+  "properties": {
+    "format": {
+      "const": "wi8-japan04/report-1"
+    },
+    "source_projection_digest": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "subject",
+          "category",
+          "severity",
+          "explanation",
+          "requirements",
+          "assurance"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "review",
+              "hold",
+              "defect"
+            ]
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 181,
+              "maximum": 340
+            }
+          },
+          "assurance": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "explicitly_not_verified": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reported_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

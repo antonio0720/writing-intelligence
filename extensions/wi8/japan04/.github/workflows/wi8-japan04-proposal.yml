@@ -1,0 +1,15 @@
+# This file is nested inside an extension and DOES NOT activate GitHub CI.
+# It is a future integration proposal; only owner may move to root .github/workflows.
+name: japan04-local-proposal-not-installed
+on:
+  workflow_dispatch:
+jobs:
+  local-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Japan offline contract tests
+        run: |
+          cd extensions/wi8/japan04
+          python3 -m unittest discover -s tests
+          python3 tools/verify_manifest.py

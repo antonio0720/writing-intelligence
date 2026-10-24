@@ -1,0 +1,64 @@
+{
+  "format": "wi8-japan04/local-evidence-receipt-1",
+  "recorded_date": "2026-10-24",
+  "baseline_commit_observed_via_github": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "status": "PASS_LOCAL_PROTOTYPE_ONLY",
+  "domain": "offline independent ZIP #4",
+  "not_canonical": true,
+  "canonical_release_shipped": false,
+  "commands": [
+    {
+      "command": "python3 -m unittest discover -s extensions/wi8/japan04/tests -v",
+      "exit_code": 0,
+      "observed": "Ran 141 tests, OK",
+      "log": "receipts/UNIT_TESTS_VERBOSE.log"
+    },
+    {
+      "command": "python3 extensions/wi8/japan04/tools/verify_manifest.py",
+      "exit_code": 0,
+      "observed": "160 requirements, 20 waves, all upstream unshipped",
+      "log": "receipts/WAVE_AND_REQUIREMENT_AUDIT.json"
+    },
+    {
+      "command": "python3 extensions/wi8/japan04/tools/verify_schema_examples.py",
+      "exit_code": 0,
+      "observed": "12 Draft 2020-12 schemas valid; fixture and diagnostic report validate",
+      "log": "receipts/SCHEMA_VALIDATION.json"
+    }
+  ],
+  "negative_controls": [
+    {
+      "command": "python3 cli/wi8_japan.py preflight fixtures/sample_project.json",
+      "expected_exit_code": 2,
+      "observed_exit_code": 2,
+      "result": "PREVIEW_ONLY"
+    },
+    {
+      "command": "python3 cli/wi8_japan.py check /tmp/counterfeit-projection.json",
+      "expected_exit_code": 2,
+      "observed_exit_code": 2,
+      "result": "BLOCK counterfeit canonical authority"
+    }
+  ],
+  "independent_readback": [
+    "Python unittest runner processes the package as executed",
+    "Draft 2020-12 jsonschema validator independently parses schemas, sample and report",
+    "The manifest checker reads all 160 requirement rows and 20 planned integration waves",
+    "Negative-control CLI exit 2 was observed"
+  ],
+  "coverage": {
+    "requirements": 160,
+    "partial_local_contract_or_mechanism": 107,
+    "specified_only": 53,
+    "upstream_verified": 0,
+    "full_end_to_end_acceptance_proven": 0
+  },
+  "known_limitations": [
+    "No independent cultural fact verification or real Japanese language expert review",
+    "No authenticated authorship/guardian identity",
+    "No public publishing or third-party account integration",
+    "No upstream v4-v7 combined regression run",
+    "No core .wi graph migration or release claim",
+    "No external reader reception data"
+  ]
+}
