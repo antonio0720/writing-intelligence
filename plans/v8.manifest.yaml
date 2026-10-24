@@ -1,0 +1,464 @@
+# v8.manifest.yaml — Writing Intelligence v8, Story Intelligence.
+#
+# The one status source for v8. It does not replace plans/v6.manifest.yaml or
+# plans/v7.manifest.yaml; both stay authoritative for their own waves.
+#
+# v8 was delivered as four independent packages. Each package's own proposal
+# remains beside this file, unchanged:
+#   plans/v8-fiction.proposal.json                       (FI8-00 .. FI8-06)
+#   plans/v8-arc.proposal.json                           (WI8-00 .. WI8-11)
+#   extensions/wi8/craft03/plans/v8-craft03.proposal.json (WI8-12 .. WI8-23)
+#   extensions/wi8/japan04/plans/japan04_waves.json      (WI8-24 .. WI8-43)
+# Their planned waves are carried here verbatim in name and status. FI8-00 to
+# FI8-02 read "completed_locally" in the fiction proposal; that is a package
+# measurement, and the release-level claim it supports is WI8-R0..R2 below.
+#
+# Rules enforced by scripts/check-manifest.py:
+#   * receipts_required — a wave may be `shipped` only with a PASS receipt
+#     carrying the command, the observed result, a negative control and an
+#     independent readback
+#   * a shipped wave's dependencies must themselves be shipped
+#
+# Shipped here means the wave's declared exit held on measurement. It never
+# means a novel is good, a reader was satisfied, a cultural claim is accurate
+# or a book was published. No such claim appears anywhere in this file.
+
+schema: wi.build-manifest/v1
+program: writing-intelligence-v8-story-intelligence
+program_id: WI8-SI
+horizon: 2028-12
+core_version: 8.0.0
+baseline_sha: d4524f3caa5f75e005b23f94dcd1c71bb5002127
+receipts_required: true
+# proves.artifacts lists only files the runtime bundle carries, so this manifest
+# validates inside the extracted bundle as well as in the repository. The
+# receipts name the engines, scripts/test-v8.sh and packs/story/SKILL.md.
+
+waves:
+  # ------------------------------------------------------------------------
+  # Shipped in 8.0.0 — the four engines, merged, tested and bundled
+  # ------------------------------------------------------------------------
+  - id: WI8-R0
+    name: Additive merge of the four v8 packages
+    status: shipped
+    depends_on: []
+    receipt: plans/receipts/WI8-R0.json
+    proves:
+      artifacts: [plans/receipts/WI8-R0.json, references/v8/README.md]
+    exit:
+      - each package installed by its own fail-closed installer with zero collisions
+      - no v4 to v7 file is deleted, and none changes behaviour
+      - every file in the four packages is present in the tree
+      - a second install against the merged tree is refused
+
+  - id: WI8-R1
+    name: The four engines run from one tree, with cross-engine twins
+    status: shipped
+    depends_on: [WI8-R0]
+    receipt: plans/receipts/WI8-R1.json
+    proves:
+      artifacts: [plans/receipts/WI8-R1.json]
+    exit:
+      - all four package suites pass unchanged inside the repository
+      - every publication gate holds with exit 3 and every refusal exits 2
+      - the registers carry exactly 340 numbered requirements
+      - the v4, v5, v6 and v7 suites pass unchanged
+      - breaking a publication gate turns scripts/test-v8.sh red
+
+  - id: WI8-R2
+    name: Three bundles, under the ceiling, reproducible
+    status: shipped
+    depends_on: [WI8-R1]
+    receipt: plans/receipts/WI8-R2.json
+    proves:
+      artifacts: [plans/receipts/WI8-R2.json]
+    exit:
+      - runtime, craft and story bundles each hold at most 200 files
+      - every SKILL.md description is at most 1024 characters with no colon-space
+      - scripts/test-v8.sh passes inside the extracted story bundle
+      - two builds of one tree produce identical bytes
+      - a description over the limit is refused by the build
+
+  # ------------------------------------------------------------------------
+  # Planned — Part 1 · Fiction & Thriller Intelligence   (source: plans/v8-fiction.proposal.json)
+  # ------------------------------------------------------------------------
+  - id: FI8-03
+    name: Canonical Storyworld OS extraction and graph adapter
+    status: planned
+    depends_on: [WI8-R2]
+    exit:
+      - sidecar source IDs and root digests resolve to canonical WI nodes; bitemporal and authority boundaries preserved
+
+  - id: FI8-04
+    name: Full manuscript developmental evidence evaluation
+    status: planned
+    depends_on: [FI8-03]
+    exit:
+      - independent human-edited scene annotations, open/ending promise matrix, reviewed all critical flags and blinded regression corpus
+
+  - id: FI8-05
+    name: EPUB/print proof and independent reader trial
+    status: planned
+    depends_on: [FI8-04]
+    exit:
+      - source-bound export checks, consented readers on exact digest, limitations reported and human release authorization
+
+  - id: FI8-06
+    name: Upstream v8 decision and governed release
+    status: planned
+    depends_on: [FI8-05]
+    exit:
+      - PR merged after v4-v7 regressions, installed bundles verified, status receipt accepted, version and docs updated truthfully
+
+
+  # ------------------------------------------------------------------------
+  # Planned — Part 2 · Arc, Want/Need & Ending Intelligence   (source: plans/v8-arc.proposal.json)
+  # ------------------------------------------------------------------------
+  - id: WI8-00
+    name: Pin baseline and repo law
+    status: planned
+    depends_on: [WI8-R2]
+    exit:
+      - GitHub HEAD readback
+      - Source rights and conflict map
+
+  - id: WI8-01
+    name: Type contracts and closed-type-compatible projection
+    status: planned
+    depends_on: [WI8-00]
+    exit:
+      - JSON schema validation
+      - No second graph state
+
+  - id: WI8-02
+    name: Bitemporal desires, beliefs and decisions
+    status: planned
+    depends_on: [WI8-01]
+    exit:
+      - as-of positive/negative controls
+      - No history overwrite
+
+  - id: WI8-03
+    name: Conservative ending derivation
+    status: planned
+    depends_on: [WI8-02]
+    exit:
+      - all four quadrants
+      - ambiguous and partial refuse
+
+  - id: WI8-04
+    name: Arc family independent of ending result
+    status: planned
+    depends_on: [WI8-03]
+    exit:
+      - flat, positive, fall, corruption fixtures
+      - no mandatory transformation
+
+  - id: WI8-05
+    name: Character relation and impact witnesses
+    status: planned
+    depends_on: [WI8-04]
+    exit:
+      - scene and event refs
+      - causal edge cross-check
+
+  - id: WI8-06
+    name: Ending/catharsis evaluator and human boundary
+    status: planned
+    depends_on: [WI8-05]
+    exit:
+      - last-scene choice witness
+      - no machine claims reader happiness
+
+  - id: WI8-07
+    name: Carried-forward 60 rule integration
+    status: planned
+    depends_on: [WI8-06]
+    exit:
+      - merge with earlier zip without duplicate owners
+      - upstream regression
+
+  - id: WI8-08
+    name: Reader calibration
+    status: planned
+    depends_on: [WI8-07]
+    exit:
+      - blinded study instrument
+      - measured disagreements
+
+  - id: WI8-09
+    name: Canon-authorized acceptance
+    status: planned
+    depends_on: [WI8-08]
+    exit:
+      - core simulate/authority/commit in real workspace
+      - negative revocation test
+
+  - id: WI8-10
+    name: Publication preflight
+    status: planned
+    depends_on: [WI8-09]
+    exit:
+      - rights, metadata, reader feedback independently verified
+      - independent rendering checks
+
+  - id: WI8-11
+    name: Independent release proof
+    status: planned
+    depends_on: [WI8-10]
+    exit:
+      - v4-v7 tests
+      - negative controls and signed receipts
+
+
+  # ------------------------------------------------------------------------
+  # Planned — Part 3 · The Craft (C121-C180)   (source: extensions/wi8/craft03/plans/v8-craft03.proposal.json)
+  # ------------------------------------------------------------------------
+  - id: WI8-12
+    name: freeze ownership and deduplicate 121–180
+    status: planned
+    depends_on: [WI8-R2]
+    exit:
+      - Baseline and overlap receipts across all ZIPs
+
+  - id: WI8-13
+    name: opening strategies and fair reveal contracts
+    status: planned
+    depends_on: [WI8-12]
+    exit:
+      - Six-genre fixture comparison and future source anchor
+
+  - id: WI8-14
+    name: action geometry, resources, bodily state
+    status: planned
+    depends_on: [WI8-13]
+    exit:
+      - Impossible routes and recovery regression
+
+  - id: WI8-15
+    name: fight agency and consequence
+    status: planned
+    depends_on: [WI8-14]
+    exit:
+      - Causal state changes and human review
+
+  - id: WI8-16
+    name: antagonist composition and indirect evidence
+    status: planned
+    depends_on: [WI8-15]
+    exit:
+      - Antagonist diversity and harm independent of sympathy
+
+  - id: WI8-17
+    name: bounded strategic opposition
+    status: planned
+    depends_on: [WI8-16]
+    exit:
+      - Alternative responses and logistical assumptions
+
+  - id: WI8-18
+    name: suspense and subtext contracts
+    status: planned
+    depends_on: [WI8-17]
+    exit:
+      - Promises, clocks and asymmetric knowledge
+
+  - id: WI8-19
+    name: hierarchical sequence outcomes
+    status: planned
+    depends_on: [WI8-18]
+    exit:
+      - Local win / global loss fixture
+
+  - id: WI8-20
+    name: time-sensitive reinterpretation
+    status: planned
+    depends_on: [WI8-19]
+    exit:
+      - Historical readback not rewritten
+
+  - id: WI8-21
+    name: reader comprehension and factual source protocols
+    status: planned
+    depends_on: [WI8-20]
+    exit:
+      - Consent-based reports and dated provenance
+
+  - id: WI8-22
+    name: cross-medium transformations
+    status: planned
+    depends_on: [WI8-21]
+    exit:
+      - Meaning links and medium-specific limits
+
+  - id: WI8-23
+    name: upstream integration and proof-carrying release
+    status: planned
+    depends_on: [WI8-22]
+    exit:
+      - Existing v4–v7 pass plus receipts
+
+
+  # ------------------------------------------------------------------------
+  # Planned — Part 4 · Japan Story OS (JP-181-JP-340)   (source: extensions/wi8/japan04/plans/japan04_waves.json)
+  # ------------------------------------------------------------------------
+  - id: WI8-24
+    name: Baseline / source reconciliation
+    status: planned
+    depends_on: [WI8-R2]
+    exit:
+      - Pinned GitHub revision, complete source-page coverage and exact requirement inventory
+      - negative control - Changing Git HEAD or removing a source locator blocks acceptance
+
+  - id: WI8-25
+    name: Young-author private creation
+    status: planned
+    depends_on: [WI8-24]
+    exit:
+      - Local draft snapshots and consent-based review contract
+      - negative control - Rejected revision cannot overwrite any original bytes
+
+  - id: WI8-26
+    name: Cultural epistemic type system
+    status: planned
+    depends_on: [WI8-25]
+    exit:
+      - External fact and fictional canon never collapse
+      - negative control - Invented rite cannot become externally verified
+
+  - id: WI8-27
+    name: Place/time-source precision
+    status: planned
+    depends_on: [WI8-26]
+    exit:
+      - Location, festival, school and transit uncertainty retained
+      - negative control - Unverified last-train clock is not invented
+
+  - id: WI8-28
+    name: Script/romanization/name policy
+    status: planned
+    depends_on: [WI8-27]
+    exit:
+      - Kanji ambiguity and lossy ASCII fallback preserved
+      - negative control - Unknown kanji reading is not silently guessed
+
+  - id: WI8-29
+    name: School/family/daily-life variants
+    status: planned
+    depends_on: [WI8-28]
+    exit:
+      - Institution- and family-specific contextual profiles
+      - negative control - Non-April school is not automatically rejected
+
+  - id: WI8-30
+    name: Sacred/religious sites
+    status: planned
+    depends_on: [WI8-29]
+    exit:
+      - Temple/shrine/context-specific source checks
+      - negative control - Temple cannot inherit mandatory torii choreography
+
+  - id: WI8-31
+    name: Yōkai and folklore variants
+    status: planned
+    depends_on: [WI8-30]
+    exit:
+      - Variant genealogy, source links and right types
+      - negative control - Conflicting local versions coexist without forced canonicalization
+
+  - id: WI8-32
+    name: Ainu/Ryukyuan/source dignity
+    status: planned
+    depends_on: [WI8-31]
+    exit:
+      - Community-primary evidence and bounded cultural claims
+      - negative control - Okinawa customs not overwritten by Kyoto defaults
+
+  - id: WI8-33
+    name: World-scoped Ki-Threads
+    status: planned
+    depends_on: [WI8-32]
+    exit:
+      - Legacy technique aliases and optional per-world power rules
+      - negative control - No-magic novel is not forced to use ranks or power costs
+
+  - id: WI8-34
+    name: Characters and social-register choices
+    status: planned
+    depends_on: [WI8-33]
+    exit:
+      - Honorific/relationship shifts and age independence
+      - negative control - Sarcastic name change not treated as automatic cultural failure
+
+  - id: WI8-35
+    name: Genre lenses, not recipes
+    status: planned
+    depends_on: [WI8-34]
+    exit:
+      - Optional slice-of-life/quiet experiment modes
+      - negative control - No mandatory tournament, 12 episodes, or culture beat quota
+
+  - id: WI8-36
+    name: Novel/manga/audio/game boundaries
+    status: planned
+    depends_on: [WI8-35]
+    exit:
+      - Derivative previews preserve source canon references
+      - negative control - Audio/manga export alone cannot write to canon
+
+  - id: WI8-37
+    name: Writer Desk modes and questions
+    status: planned
+    depends_on: [WI8-36]
+    exit:
+      - Critique, question-only and proposal contracts
+      - negative control - Questions-only cannot silently ghostwrite a scene
+
+  - id: WI8-38
+    name: Source-aware local research index
+    status: planned
+    depends_on: [WI8-37]
+    exit:
+      - Attributable source cards, denied tool instructions
+      - negative control - Malicious retrieved wiki cannot trigger manuscript upload
+
+  - id: WI8-39
+    name: Provenance/licensing permissions
+    status: planned
+    depends_on: [WI8-38]
+    exit:
+      - Rights-aware source snippets and unadopted seed cards
+      - negative control - Copyright excerpt excluded from publish-ready package
+
+  - id: WI8-40
+    name: Legacy Japan v1 migration
+    status: planned
+    depends_on: [WI8-39]
+    exit:
+      - Old CID/CHAR/TECH/NAME/LOC IDs preserve original bytes
+      - negative control - Ambiguous/duplicate ID cannot silently overwrite
+
+  - id: WI8-41
+    name: Adversarial cultural QA
+    status: planned
+    depends_on: [WI8-40]
+    exit:
+      - Named positive & negative variation fixtures pass locally
+      - negative control - False nationwide generalizations are not accepted
+
+  - id: WI8-42
+    name: Human calibration and real writer feedback
+    status: planned
+    depends_on: [WI8-41]
+    exit:
+      - Attributed author/reader reports with explicit unverified states
+      - negative control - Automated aesthetic grade never labeled reader-verified
+
+  - id: WI8-43
+    name: Canonical merge and release proof
+    status: planned
+    depends_on: [WI8-42]
+    exit:
+      - Upstream v4-v7 regression, exact authority, independent receipts
+      - negative control - Local test pass never upgrades upstream wave to shipped
+

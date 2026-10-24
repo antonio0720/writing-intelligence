@@ -1,10 +1,32 @@
-# Writing Intelligence v7 — Cheatsheet
+# Writing Intelligence v8 — Cheatsheet
 
-One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
+One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
 
-**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v7.0.0
+**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v8.0.0
 
 ---
+
+## v8 in one line
+
+8.0.0 ships **Story Intelligence**: four offline fiction engines carrying 340 numbered requirements — fiction & thriller (FI-01–60), arc / want-need / ending (N061–120), the craft (C121–180), Japan Story OS (JP-181–340). **A structural pass is not a good novel**: every publication gate HOLDS (exit 3). Run `bash scripts/test-v8.sh`. Status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
+
+## v8 commands
+
+| Engine | Command | Does |
+|---|---|---|
+| Fiction & Thriller | `python3 scripts/wi-fiction.py audit --input story.json` | tension, rule integrity, power limits and cost, promise debt |
+| | `… text-signals --text ch.txt` | pattern signals, never verdicts |
+| | `… explain-rule FI-25` · `… catalog` | the 60 rules |
+| Arc & Ending | `python3 scripts/wi-arc.py classify --want attained --need unfulfilled` | bittersweet |
+| | `… evaluate · as-of · diff · impact --input arc.json` | two clocks, state diffs, downstream impact |
+| The Craft | `python3 extensions/wi8/craft03/scripts/wi-craft.py evaluate --input scene.json` | openings, action, opposition, suspense, sequences |
+| Japan Story OS | `python3 extensions/wi8/japan04/cli/wi8_japan.py check project.json` | scoped cultural claims, folklore variants, names |
+| | `… studio questions-only draft.txt` · `… init VAULT` | ask-first studio, private author vault |
+| Gates | `wi-fiction.py gate --mode publication` · `wi-arc.py`/`wi-craft.py gate --stage publication` · `wi8_japan.py preflight` | **HOLD (exit 3) / not authorized (exit 2), by design** |
+
+Ending algebra: want attained + need fulfilled **sweet** · attained + not fulfilled **bittersweet** · not attained (thwarted, renounced, sacrificed) + fulfilled **semi-sweet** · neither **bitter** · partial, unresolved, disputed, open or reviewer-inferred → **not_classifiable**.
+
+Exit codes: `0` ran · `2` malformed / blocked · `3` editorial or publication hold.
 
 ## v7 in one line
 
@@ -43,10 +65,10 @@ Executable today: B, C, D, E, F, G (claim atoms), H, I, K, L (bundles), **M, N, 
 
 ## Install — one line per surface
 
-**Two bundles.** The payload reached 229 files against a 200-file ceiling, so it split at the seam: `writing-intelligence.skill` is the runtime (150 files — skill, doctrine, schemas, agents, `scripts/wi.py`, fixtures) and `writing-intelligence-craft.skill` is the craft library (79 files — 27 genre packs, voiceprints, anti-patterns, compiler references, diagnostics). Install both. A clone gets you both halves at once.
+**Three bundles.** A bundle may hold at most 200 files. `writing-intelligence.skill` is the runtime (191 files — skill, doctrine, schemas, agents, `scripts/wi.py`, manifests and receipts, fixtures), `writing-intelligence-craft.skill` is the craft library (86 files — genre packs, voiceprints, anti-patterns, compiler references including v8's fiction references, diagnostics) and `writing-intelligence-story.skill` is v8 Story Intelligence (184 files — the four story engines, registers, schemas, suites). Install all three. A clone gets you everything at once.
 
 ```bash
-# Claude Code / terminal agent — user-scoped skill (both halves, one clone)
+# Claude Code / terminal agent — user-scoped skill (everything, one clone)
 git clone https://github.com/antonio0720/writing-intelligence ~/.claude/skills/writing-intelligence
 
 # Claude Code — project-scoped
@@ -55,8 +77,10 @@ git clone https://github.com/antonio0720/writing-intelligence .claude/skills/wri
 # Claude.ai / Cowork — upload the runtime bundle (Settings -> Capabilities -> Skills -> Upload)
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence.skill
 
-# ...then take the craft bundle from Releases and upload it the same way:
-# https://github.com/antonio0720/writing-intelligence/releases/latest
+# ...then the craft and story bundles, uploaded the same way:
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+# pinned versions with checksums: https://github.com/antonio0720/writing-intelligence/releases/latest
 
 # CLI only — the deterministic core, one file, no dependencies
 curl -O https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/scripts/wi.py && python3 wi.py --version

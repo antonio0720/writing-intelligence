@@ -7,6 +7,43 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [8.0.0] — 2026-10-24 — **Story Intelligence**
+
+### The Leap
+
+v4 through v7 built an evidence standard for prose that makes claims: a claim is anchored to an exact span, a change is simulated before it exists, a merge refuses to invent a number, and a program cannot mark a wave shipped without a receipt. **v8 holds fiction to the same standard** — not by pretending a checksum can tell a good novel from a bad one, but by separating, permanently, what code can prove from what an editor decides and what readers feel.
+
+v8 was delivered as four independent packages, each built and tested on its own, and folded into one release. 340 numbered requirements, four offline engines, one rule: **a structural pass is not a good novel.**
+
+### Added — the four parts
+
+- **Part 1 · Fiction & Thriller Intelligence** (FI-01–FI-60, B001–B060) — `scripts/wi-fiction.py` and `scripts/fiction_v8/`: typed constraints for tension, rule integrity, power limits and their cost, dangling references and promise debt; text signals that are reported as signals, never verdicts; a three-stage release gate (draft → editorial → publication). Doctrine `references/v8/FICTION_INTELLIGENCE_CONSTITUTION.md`, `RULE_CROSSWALK.md`; compiler references `novel_architecture.md`, `fiction_rule_integrity.md`, `reader_experience.md`; `references/diagnostics/fiction_quality_separation.md`; `references/genre_packs/fiction_v8_addendum.md`; rules `rules/fiction_v8_rules.json`; schemas `schemas/v8/fiction_*.schema.json`; profiles `policies/fiction_profiles.json`; suite `tests/v8/` (41 tests)
+- **Part 2 · Arc, Want/Need & Ending Intelligence** (N061–N120) — `scripts/wi-arc.py` and `scripts/arc_v8/`: two clocks per assertion (when it held in the story, when the workspace learned it); want, need and belief versions with provenance; the ending algebra — sweet, semi-sweet, bittersweet, bitter — derived only when the author's own assertions support it, `not_classifiable` otherwise; arc family kept independent of ending result; impact frontiers and opening/closing state diffs. Doctrine `references/v8/ARC_ENDING_CONSTITUTION.md`, `ENDING_ALGEBRA.md`, `ARC_STATE_MACHINE.md`, `EDITORIAL_JUDGMENT.md`; `references/compiler/arc_ending_projection.md`; `references/genre_packs/fiction_arc_v8_addendum.md`; rules `rules/arc_120_requirements.json`, `rules/arc_60_new_requirements.md`; schemas `schemas/v8/arc_*.schema.json`; suite `tests/v8_arc/`
+- **Part 3 · The Craft** (C121–C180) — `extensions/wi8/craft03/`: opening strategy and fair reveal contracts, action geometry and resources, fight agency and consequence, antagonistic causality and bounded opposition, suspense and subtext contracts, hierarchical sequence outcomes, time-sensitive reinterpretation (`as-of`), dated reference hygiene, cross-medium equivalence signals. 8 schemas, 29 instrumented requirements, `wi-craft.py evaluate | validate | as-of | gate | rules | schema`
+- **Part 4 · Japan Story OS** (JP-181–JP-340) — `extensions/wi8/japan04/`: cultural claims typed as `external_fact`, `fictional_canon` or `interpretation` and scoped by place, period and institution; folklore variants that coexist rather than collapse; script, romanization and name policy that never infers one reading from kanji; Ainu and Ryukyuan source dignity; a private author vault with original-byte snapshots and non-destructive proposals for young writers; studio modes that ask before they write; release preflight that is never an authorization. 12 schemas, 141 tests, `wi8_japan.py check | preflight | init | draft-* | studio | untrusted-scan | migration-preview`. The cumulative 001–340 register is in `source/notes/`
+- **`scripts/test-v8.sh`** — one integration check across all four: the four suites unchanged, positive controls, refusals that must exit 2, publication gates that must HOLD with exit 3, the ending algebra (including the partial-want case that must stay unclassified), and a count proving the registers carry exactly 340 numbered requirements
+- **`writing-intelligence-story.skill`** — a third installable bundle, `packs/story/SKILL.md`, carrying the four engines, their rules, schemas and suites
+- **`plans/v8.manifest.yaml`** — the one v8 status source: WI8-R0–R2 shipped with receipts in `plans/receipts/`, and FI8-03–FI8-06 and WI8-00–WI8-43 carried from the four package proposals as `planned`
+- **`references/v8/README.md`** — the index, the reading order, and where each package's integrity file lives
+
+### Changed
+
+- **`SKILL.md`** — v8 paragraph, v8 rule and commands; description rewritten for v8 inside the 1024-character limit
+- **`packs/craft/SKILL.md`** — version 8.0.0; now carries and points to the v8 fiction compiler references and genre addenda
+- **`scripts/build-skill.sh`** — builds and verifies three bundles; runs `scripts/test-v8.sh` before building and again inside the extracted story bundle; same 200-file ceiling and frontmatter checks for all three
+- **`scripts/wi.py`** — version string 8.0.0. Nothing else in the core changed
+- **CI** — `scripts/test-v8.sh` runs on every push; the bundle and release workflows build and publish the story bundle
+
+### Unchanged
+
+Every v4, v5, v6 and v7 command, exit code, digest and bundle format. The v4 suite passes 3/3, v5 32/32, v6 70/70 and v7 12/12 after the merge. No package file replaced an existing file: all four installers ran fail-closed with zero collisions. MIT.
+
+### Honestly not shipped
+
+Canonical integration into `wi.py` and the v6 semantic graph, extraction of scenes from a full manuscript, model-based literary judgment, reader recruitment and studies, Japanese cultural authenticity adjudication and morphological parsing, EPUB and print proofs, and publishing. Every one is a planned wave in `plans/v8.manifest.yaml`, and any document presenting one as working is a defect.
+
+---
+
 ## [7.0.0] — 2026-10-21 — **The Institutional Intelligence Expansion**
 
 ### The Leap

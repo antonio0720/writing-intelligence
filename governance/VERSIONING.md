@@ -208,10 +208,11 @@ use, because a pre-release artifact is still an artifact somebody may verify a y
 
 ## Skill Bundle Version Alignment
 
-The payload ships as two bundles, and both are versioned with the repository:
+The payload ships as three bundles (two before v8), all versioned with the repository:
 
 - `writing-intelligence.skill` — the runtime
 - `writing-intelligence-craft.skill` — the craft library
+- `writing-intelligence-story.skill` — v8 Story Intelligence (`packs/story/SKILL.md`)
 
 `SKILL.md` carries the version stamp, and `scripts/build-skill.sh` refuses to build unless
 the CLI version, the `SKILL.md` stamp and the `CHANGELOG.md` heading are one number.

@@ -1,0 +1,70 @@
+{
+  "program": "WI8-SI",
+  "status": "PASS",
+  "baseline_sha": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "measured_at": "2026-10-24",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin 25.5.0"
+  },
+  "approving_authority": {
+    "name": "Antonio T. Smith Jr.",
+    "role": "repository owner, Density6 LLC",
+    "decision": "combine the four independent v8 packages into Writing Intelligence v8, adding and never removing, and release it on GitHub and to every Claude surface",
+    "date": "2026-10-24"
+  },
+  "checkpoint": "WI8-R0",
+  "objective": "Merge the four independent v8 packages additively, losing nothing and changing no v4-v7 behaviour",
+  "sources": [
+    "writing-intelligence-fiction-v8-upgrade.zip (42 files)",
+    "writing-intelligence-v8-arc-ending-independent.zip (53 files)",
+    "writing-intelligence-v8-craft-third-independent.zip (51 files)",
+    "writing-intelligence-v8-japan-story-os-fourth-independent.zip (80 files)"
+  ],
+  "commands": [
+    "shasum -a 256 -c SHA256SUMS.txt / ARC_SHA256SUMS.txt / CRAFT03_SHA256SUMS.txt, and python3 extensions/wi8/japan04/tools/verify_checksums.py, in each extracted package",
+    "python3 scripts/install_additive.py --target REPO --apply (fiction)",
+    "python3 scripts/install_arc_additive.py --target REPO --apply (arc)",
+    "python3 scripts/install_craft03_additive.py --target REPO --apply (craft, into extensions/wi8/craft03)",
+    "python3 extensions/wi8/japan04/tools/additive_install.py --repo REPO --expected-head HEAD --apply (Japan)",
+    "copy the 11 arc files its installer excludes (README and SOURCE_SPECIFICATION to docs/v8/, the rest at their own paths) and the Japan archive-root files",
+    "for every file in every package: cmp against its path in the tree",
+    "git diff --name-status d4524f3 (working tree)"
+  ],
+  "observed_result": {
+    "package_checksums": "all four verified, 0 errors",
+    "installer_collisions": 0,
+    "package_files": 226,
+    "package_files_missing_from_tree": 0,
+    "package_files_not_byte_identical": 0,
+    "tree_vs_baseline": {
+      "added": 231,
+      "modified": 22,
+      "deleted": 0
+    },
+    "modified_paths": "documentation (README, SKILL, USER_GUIDE, CHEATSHEET, ROADMAP, CHANGELOG, CONTRIBUTING, INSTALL, OPERATOR_MANUAL, VERSIONING, ANNOUNCEMENT, agents/certification/deliveries/benchmarks READMEs, packs/craft/SKILL.md), CI workflows, scripts/build-skill.sh (third bundle), scripts/wi.py (VERSION string only), tests/v7/test_wi7.sh (version check generalised to the newest manifest, negative twin proven)"
+  },
+  "negative_controls": [
+    {
+      "id": "reinstall-refused",
+      "expectation": "each installer, run again against the merged tree, refuses to write",
+      "observed_exit": {
+        "fiction": 2,
+        "arc": 2,
+        "craft": 2,
+        "japan": 2
+      },
+      "observed": "fiction: REFUSE existing target files; no partial install. japan: REFUSED (checkout not clean) - its weaker refusal reason is recorded as observed"
+    }
+  ],
+  "independent_readback": {
+    "method": "a fresh clone of github.com/antonio0720/writing-intelligence detached at d4524f3, compared file by file against the merged tree",
+    "value": "342 baseline files, 0 missing, 22 changed (exactly the modified_paths above); remote main read back as d4524f3caa5f75e005b23f94dcd1c71bb5002127, so the push is a fast-forward"
+  },
+  "unknown": [
+    "no human editor, reader, cultural reviewer or rights counsel has reviewed the merged packages",
+    "the arc package's own scripts/check_arc_package.py verifies the package as extracted, not this merged tree, and reports the remapped README and SOURCE_SPECIFICATION as missing there"
+  ],
+  "remaining_issue": null,
+  "next_authorized_action": "WI8-R1"
+}

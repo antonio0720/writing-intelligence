@@ -2,6 +2,8 @@
 
 Two classes of benchmark, measured two different ways, because they answer two different questions.
 
+**v8 adds story cases** — `cases/fiction_v8_60.md` (the 60 fiction & thriller requirements), `cases/arc_v8_adversarial.md` with `arc_v8_vectors.json` (ending algebra and arc refusals), and the craft and Japan adversarial sets at `extensions/wi8/craft03/benchmarks/cases/CRAFT03_ADVERSARIAL.md` and `extensions/wi8/japan04/benchmarks/`. All of them are **Class B**: pass or fail on mechanical and refusal behaviour. None of them scores literary quality — v8's rule is that a structural pass is not a good novel, so story quality is never a Class A number produced by a tool. Run them with `bash scripts/test-v8.sh`.
+
 **Class A — prose quality.** Scored 0–100 against `references/diagnostics/scorecard.md`. This is the craft floor and it is unchanged in kind from v3. Prose quality is a judgement against a rubric, and pretending it is a measurement would be its own dishonesty.
 
 **Class B — runtime correctness.** Pass or fail. Not scored, not weighted, never averaged. A merge either fabricated a number or it did not. There is no 87% of not fabricating a number.

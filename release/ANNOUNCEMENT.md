@@ -1,3 +1,38 @@
+# Writing Intelligence v8 — A Green Check Is Not a Good Novel
+
+**By Antonio T. Smith Jr. — Founder & CEO, Density6 LLC**
+
+---
+
+For four versions this project has held one kind of writing to a hard standard. A grant figure points at an exact span of an exact source or it comes back `needs_source`. A change is simulated before it exists. Two people who disagree get both numbers preserved, never an average neither of them wrote. A program cannot call a wave shipped without a receipt.
+
+Fiction was the half left out, because fiction is where the tempting lie is different. Nobody fabricates a citation in a thriller. What gets fabricated is *judgment*: a tool that scores your chapter 78, tells you your ending is "satisfying", or rewrites your villain because a pattern said villains should be scarier. It reads like help. It is a machine claiming access to the one thing it cannot see — what a reader will feel.
+
+**v8 brings fiction under the standard without telling that lie.**
+
+It ships four engines, 340 numbered requirements, offline and dependency-free:
+
+- **Fiction & Thriller Intelligence** — does the power stay inside its limits, and does it pay what you said it costs? Is every promise to the reader eventually kept? Does tension actually move?
+- **Arc, Want/Need & Ending Intelligence** — two clocks for every character state, and the ending algebra: what they wanted against what they needed gives sweet, semi-sweet, bittersweet or bitter. Only from the author's own assertions. A partial want is *not classifiable*, and the tool says so instead of guessing.
+- **The Craft** — openings, fight geometry, an antagonist who cannot know what he could not have learned, suspense contracts, mixed sequence outcomes, references that date.
+- **Japan Story OS** — a cultural fact needs a source scoped by place and period; a fictional canon needs the author's adoption; a yōkai can have five regional variants and keep all of them; a fourteen-year-old's drafts stay in a private vault and are never overwritten.
+
+And then the part that matters most. **Every publication gate holds.** Mechanical consistency, an interpretive signal, an editor's judgment and a reader's reaction are four different facts, and no engine promotes one into another. The tool will tell you a cause comes after its effect. It will not tell you your book is good. That is for your editor and your readers, and the gate waits for them.
+
+**8.0.0 ships the engines; it does not pretend to ship the rest.** Reading a whole manuscript, reader trials, cultural review and canonical integration into the meaning graph are planned waves, each named, none presented as working.
+
+Free. Open source. MIT. Forever.
+
+[github.com/antonio0720/writing-intelligence](https://github.com/antonio0720/writing-intelligence)
+
+— Antonio T. Smith Jr.
+
+---
+
+*The v5 announcement follows, unchanged.*
+
+---
+
 # Writing Intelligence v5.0 — The Sentence You Can Defend
 
 **By Antonio T. Smith Jr. — Founder & CEO, Density6 LLC**

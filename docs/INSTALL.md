@@ -1,6 +1,6 @@
 # Install
 
-Writing Intelligence v5 runs on eight surfaces. They share one doctrine and differ in what they can physically do — whether a filesystem exists, whether a workspace can persist, whether a proof can be recomputed.
+Writing Intelligence v8 runs on eight surfaces. They share one doctrine and differ in what they can physically do — whether a filesystem exists, whether a workspace can persist, whether a proof can be recomputed.
 
 Pick your surface, install once, then read [the capability matrix](#the-capability-matrix) so you know which half of the system you are getting. **Free. Open source. MIT. Forever.**
 
@@ -32,7 +32,18 @@ Three cells deserve their own sentences.
 
 ---
 
-## What is inside the `.skill` bundle
+## What is inside the `.skill` bundles (v8: three of them)
+
+Since v8 the payload ships as **three bundles**, each under the 200-file ceiling, each built and verified by `scripts/build-skill.sh`:
+
+| Bundle | Files | Holds |
+|---|---|---|
+| `writing-intelligence.skill` | 191 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
+| `writing-intelligence-craft.skill` | 86 | The craft library — genre packs, voiceprints, anti- and positive patterns, diagnostics, the compiler references, including v8's fiction references and genre addenda |
+| `writing-intelligence-story.skill` | 184 | v8 Story Intelligence — the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, `references/v8`, `rules/`, `schemas/v8`, `policies/`, `tests/v8`, `tests/v8_arc`, `scripts/test-v8.sh` |
+
+Install all three on every surface that takes uploaded skills. The section below describes the original single-bundle layout and is kept for history; the table above is current.
+
 
 A skill bundle may contain **at most 200 files**. Over that, the upload is
 rejected outright — it does not degrade, it simply will not load. So the bundle
@@ -83,10 +94,12 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
 
 ## 2. Cowork and Claude.ai — the uploaded bundle
 
-1. Download **`writing-intelligence.skill`**:
+1. Download **all three bundles**:
 
    ```bash
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence.skill
+   curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
+   curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
    ```
 
    This tracks `main`, so it always matches these instructions. CI rebuilds the bundle on every push and fails if it does not byte-match the committed one, so this file cannot quietly go stale.
@@ -94,7 +107,8 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
    Want a pinned version? Take it from [Releases](https://github.com/antonio0720/writing-intelligence/releases), where each bundle ships with a `.sha256` beside it. Note that `releases/latest` resolves to the newest **published release** — if a version has landed on `main` and has not been released yet, `latest` is behind it.
 
 2. In Claude: **Settings → Capabilities → Skills → Upload skill** (labelled **Settings → Skills** in some versions).
-3. Select the downloaded `.skill` file.
+3. Select a downloaded `.skill` file. Repeat for each of the three; each appears as its own skill (`writing-intelligence`, `writing-intelligence-craft`, `writing-intelligence-story`).
+4. If a v7 copy is already installed, replace it: delete or disable the old skill of the same name, then upload the v8 file.
 
 **Verify what you downloaded** before uploading:
 
@@ -105,7 +119,7 @@ shasum -a 256 writing-intelligence.skill
 
 The bundle is a zip carrying the full doctrine payload — `SKILL.md`, `README.md`, `USER_GUIDE.md`, `CHEATSHEET.md`, all `references/` (including `references/v5/`), `schemas/`, `agents/`, `docs/`, `tests/` and `scripts/wi.py`. It excludes the REST service and repository scaffolding, which are not useful inside a chat surface and more than double the download.
 
-**Cowork gets the whole deterministic core**, because Cowork has a filesystem and a shell. Claude.ai without a filesystem does not — see §4.
+**Cowork gets the whole deterministic core and all four v8 story engines**, because Cowork has a filesystem and a shell. Claude.ai without a filesystem does not — see §4.
 
 ---
 

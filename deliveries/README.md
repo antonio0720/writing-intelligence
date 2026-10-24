@@ -3,6 +3,10 @@
 Finished work that has been shipped somewhere — a landing page, a filing, a
 covenant, a brief.
 
+## Story deliveries under v8
+
+A manuscript, chapter or series bible filed here is a rendering, like any other delivery. If it went through the v8 engines, file the projection digest and the engine reports beside it, and record the gate state honestly: an engine `HOLD` at publication stays a `HOLD` in the record until a named editor and a reader study say otherwise.
+
 ## What a delivery is under v6
 
 Before v6, a delivery was a document that was written and then checked. The

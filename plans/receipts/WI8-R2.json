@@ -1,0 +1,62 @@
+{
+  "program": "WI8-SI",
+  "status": "PASS",
+  "baseline_sha": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "measured_at": "2026-10-24",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin 25.5.0"
+  },
+  "approving_authority": {
+    "name": "Antonio T. Smith Jr.",
+    "role": "repository owner, Density6 LLC",
+    "decision": "combine the four independent v8 packages into Writing Intelligence v8, adding and never removing, and release it on GitHub and to every Claude surface",
+    "date": "2026-10-24"
+  },
+  "checkpoint": "WI8-R2",
+  "objective": "Ship three installable bundles under the upload limits, reproducibly, with the v8 check passing inside the story bundle",
+  "commands": [
+    "bash scripts/build-skill.sh --no-root (twice, outputs compared)",
+    "unzip -Z1 on each bundle",
+    "SKILL.md frontmatter description length inside each bundle"
+  ],
+  "observed_result": {
+    "runtime": {
+      "files_before_receipts": 187,
+      "description_chars": 989,
+      "reproducible": true,
+      "files_released": 191,
+      "note": "187 files when measured, before its three receipts and references/v8/README.md were added; 191 in the released bundle, still under the 200-file limit"
+    },
+    "craft": {
+      "files": 86,
+      "description_chars": 951,
+      "reproducible": true,
+      "sha256": "7d4c66355b160e39d0b9c0430a385dfb813b23416af40c95d216cf72a6bc1ffb"
+    },
+    "story": {
+      "files": 184,
+      "description_chars": 965,
+      "reproducible": true,
+      "sha256": "27150a6e619d60190790bcff41f86133f2ab1660964aac9ce3ba825e55e7360c"
+    },
+    "note": "the runtime bundle carries plans/receipts, including this file, so its digest is not recorded here; it is reproducible by the same two-build comparison and CI enforces it"
+  },
+  "negative_controls": [
+    {
+      "id": "description-over-limit",
+      "expectation": "a story SKILL.md description over 1024 characters is refused by the build",
+      "observed_exit": 1,
+      "observed": "FAIL description is 1046 characters, over by 22; the limit is 1024"
+    }
+  ],
+  "independent_readback": {
+    "method": "each bundle unzipped into an empty directory and counted; the story bundle's scripts/test-v8.sh run there",
+    "value": "runtime 187, craft 86, story 184 files (limit 200); v8 integration 19 passed, 0 failed inside the story bundle"
+  },
+  "unknown": [
+    "upload to claude.ai and Cowork is a separate act, recorded outside this receipt"
+  ],
+  "remaining_issue": null,
+  "next_authorized_action": "FI8-03 / WI8-00 / WI8-12 / WI8-24, all planned"
+}

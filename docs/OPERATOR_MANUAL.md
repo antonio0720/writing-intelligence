@@ -2,6 +2,16 @@
 
 For the user who has moved past basic prompts and is running the system on real work, repeatedly, at quality scale.
 
+## v8 — operating on story work
+
+The disciplines below still hold. For fiction, v8 adds four engines (see [`../references/v8/README.md`](../references/v8/README.md)) and three operator rules:
+
+1. **Project before you diagnose.** Build the typed story projection with the author, mark it `draft_projection`, and run `validate` before `audit` or `evaluate`. A refused projection (exit 2) is information, not an obstacle.
+2. **Report the state, never a score.** Every finding is a mechanical defect, a signal for review, the author's call, or a question for readers. Never summarise a run as "the book is good" — every publication gate holds (exit 3), by design.
+3. **Run `bash scripts/test-v8.sh` after any change to the story engines or their registers.** It must read 19 passed, 0 failed, and 340 requirements.
+
+Pattern: *author brief → projection → validate → audit / evaluate / classify → editorial conversation → revised projection → as-of / impact → gate (HOLD) → human editor → reader study.*
+
 ## The Operator's Discipline
 
 1. **Always declare the intake contract.** Don't trust auto-detection on important work.

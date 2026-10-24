@@ -4,6 +4,8 @@ Writing Intelligence decomposes the 11-pass kernel into a coordinated multi-agen
 
 **Manifest**: `agents/agent_manifest.yaml` — canonical roster, dependencies, schemas, conflict resolution.
 
+**v8:** on fiction, the Narrative Architect, Structure Engineer, Dialogue Commander and Stress Tester can hand a typed story projection to the v8 engines (`scripts/wi-fiction.py`, `scripts/wi-arc.py`, `extensions/wi8/craft03/scripts/wi-craft.py`, `extensions/wi8/japan04/cli/wi8_japan.py`) and cite their findings by requirement ID. The engines report; the agents and the author decide. No agent may present an engine pass as a verdict on the book.
+
 ---
 
 ## The Roster

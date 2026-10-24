@@ -1,10 +1,10 @@
-# Writing Intelligence v7
+# Writing Intelligence v8
 
 [![Release](https://img.shields.io/github/v/release/antonio0720/writing-intelligence?label=release&color=0b7285)](https://github.com/antonio0720/writing-intelligence/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0b7285)](LICENSE)
 [![Dependencies](https://img.shields.io/badge/dependencies-none-0b7285)](scripts/wi.py)
 
-**Institutional Intelligence on the Sovereign Meaning Runtime.**
+**Story Intelligence on the Sovereign Meaning Runtime** — the evidence standard of v4–v7, now for fiction too.
 
 Every writing tool on the market makes prose *sound* better. Some can now tell you whether a sentence is supported. None of them can tell you what a change would do before you make it, who was allowed to make it, or what is still true afterward — and none of them will refuse to invent a number when two people disagree.
 
@@ -14,7 +14,25 @@ This one does all four, offline, with no model running, and can prove it to some
 
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com)
 
-[**See it work**](#see-it-work) · [**60-second tour**](#the-60-second-tour) · [**Install**](#install) · [**The eighteen laws**](#the-eighteen-laws) · [**What runs and what does not**](#what-runs-and-what-does-not) · [**What it refuses to do**](#what-it-refuses-to-do)
+[**What v8 is**](#what-v8-is-in-one-paragraph) · [**See it work**](#see-it-work) · [**60-second tour**](#the-60-second-tour) · [**Install**](#install) · [**The eighteen laws**](#the-eighteen-laws) · [**What runs and what does not**](#what-runs-and-what-does-not) · [**What it refuses to do**](#what-it-refuses-to-do)
+
+---
+
+## What v8 is, in one paragraph
+
+v8 is **Story Intelligence** — the fiction half of this system held to the same standard v4–v7 built for claims and evidence. It folds four independently built and tested packages into one release: **Fiction & Thriller Intelligence** (FI-01–FI-60 — tension, rule integrity, power limits and their cost, promise debt, reader experience), **Arc, Want/Need & Ending Intelligence** (N061–N120 — two-clock character state and the sweet / semi-sweet / bittersweet / bitter ending algebra), **The Craft** (C121–C180 — openings, action geometry, antagonistic causality, suspense, sequence outcomes, dated references) and the **Japan Story OS** (JP-181–JP-340 — scoped cultural claims, coexisting folklore variants, name and romanization policy, a private vault for young authors). **340 numbered requirements**, each with a stable ID, an owner, an acceptance condition and an honest implementation state. Four offline engines, stdlib-only Python, read-only against the manuscript, deterministic and digest-bound.
+
+> **The v8 rule:** *a structural pass is not a good novel.* Mechanical consistency, interpretive signal, human editorial judgment and independent reader reception are four states, and no engine promotes one into another. Every publication gate holds — **HOLD (exit 3)**, and the Japan Story OS preflight refuses with exit 2 — until a human editor and real readers have spoken.
+
+```bash
+bash scripts/test-v8.sh                                                 # all four engines, 19 checks
+python3 scripts/wi-fiction.py audit --input story.json                  # fiction & thriller audit
+python3 scripts/wi-arc.py classify --want attained --need unfulfilled   # -> bittersweet
+python3 extensions/wi8/craft03/scripts/wi-craft.py evaluate --input scene.json
+python3 extensions/wi8/japan04/cli/wi8_japan.py check project.json
+```
+
+**8.0.0 ships the four engines as offline tools, with receipts; it does not ship their canonical integration.** Merging them into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review are waves FI8-03–06 and WI8-00–WI8-43, all planned. Index: [`references/v8/README.md`](references/v8/README.md) · status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml) · release notes: [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md)
 
 ---
 
@@ -36,7 +54,7 @@ v3 governs *how well* the writing is built. v4 governs *what may be claimed abou
 
 Seven identifications. Each has a mechanism behind it and a failure code when it is absent.
 
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → **v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program)**
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines)**
 
 ---
 
@@ -349,22 +367,23 @@ Each v6 law takes an earlier one further rather than replacing it. **M** rests o
 
 ## Install
 
-**Two bundles. Install both.**
+**Three bundles. Install all three.**
 
-The installable payload reached 229 files, and a skill bundle may hold at most 200. A bundle over that ceiling does not degrade — it does not load, which would make every install instruction on this page false. Trimming again would have meant cutting the craft library, which is the half of this system that does the writing. So the payload splits along the seam that was already there:
+A skill bundle may hold at most 200 files. A bundle over that ceiling does not degrade — it does not load, which would make every install instruction on this page false. At v6 the payload split into the runtime and the craft library; v8's four story engines are ~180 files on their own, so they ship as a third bundle under the same ceiling and the same checks:
 
 | Bundle | Files | Contains |
 |---|---|---|
-| **`writing-intelligence.skill`** | 150 | The runtime: the skill, the v4/v5/v6 doctrine, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
-| **`writing-intelligence-craft.skill`** | 79 | The craft library: 27 genre packs, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern detectors, the 19 compiler references, the diagnostic set |
+| **`writing-intelligence.skill`** | 191 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
+| **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern detectors, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
+| **`writing-intelligence-story.skill`** | 184 | **New in v8.** Story Intelligence: the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, their 340-requirement registers, schemas and suites, and `scripts/test-v8.sh` |
 
-They are one system in two artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate and prints the arithmetic, so it cannot regress into an upload nobody can install.
+The runtime now holds 191 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in three artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate for all three and prints the arithmetic, so it cannot regress into an upload nobody can install. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate and prints the arithmetic, so it cannot regress into an upload nobody can install.
 
 If only the runtime is present, the craft doctrine summarized in [`SKILL.md`](SKILL.md) still governs and the genre packs are one `git clone` away — degraded, and honestly degraded, rather than broken.
 
 ### Claude Code or any terminal agent — as a skill *(recommended)*
 
-One clone gets you both halves and the CLI.
+One clone gets you all three bundles' contents, the CLI and the v8 engines.
 
 ```bash
 git clone https://github.com/antonio0720/writing-intelligence \
@@ -383,7 +402,14 @@ curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main
 
 Then **Settings → Capabilities → Skills → Upload skill**. That link tracks `main`, so it always matches the version of this README you are reading — CI fails if the committed bundle and a fresh build of the tree ever disagree.
 
-Take the craft bundle from [**Releases**](https://github.com/antonio0720/writing-intelligence/releases/latest), where pinned versions of both live with their checksums, and upload it the same way.
+Do the same for the other two — both are committed at the repository root, beside the runtime:
+
+```bash
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+```
+
+Pinned versions of all three, with checksums, are on [**Releases**](https://github.com/antonio0720/writing-intelligence/releases/latest).
 
 ### CLI only — no model required
 
@@ -403,6 +429,8 @@ Do not take this README's word for any of it.
 bash tests/v4/test_wi.sh     # 3 checks  — the v4 accountability floor
 bash tests/v5/test_wi5.sh    # 32 checks — workspace, staleness, bundles, drift
 bash tests/v6/test_wi6.sh    # 70 checks — authority, decisions, merge, capsules
+bash tests/v7/test_wi7.sh    # 12 checks — doctrine, receipts, version, description limit
+bash scripts/test-v8.sh      # 19 checks — the four v8 story engines, every publication gate HOLDS
 python3 scripts/wi.py doctor # what this surface can and cannot do
 ```
 
@@ -417,6 +445,8 @@ The fixtures are adversarial on purpose: an inflated figure, a reshaped quotatio
 Law C — *never report work not done* — applies to this project's claims about itself as strictly as to anything it governs. This section is a feature of the release, not an apology.
 
 **Executable today, offline, with no model:** the whole v4 floor (`preserve` · `scan-sources` · `extract-claims` · `verify` · `gate`); the whole v5 graph (`init` · `ingest` · `atomize` · `anchor` · `graph` · `impact` · `diff` · `test` · `explain` · `bundle` · `verify-release` · `doctor`); and the sixteen v6 commands (`canon` · `branch` · `propose` · `proposals` · `simulate` · `decide` · `commit` · `log` · `merge` · `conflicts` · `authority` · `obligations` · `as-of` · `constraints` · `capsule` · `why`).
+
+**Executable in v8, offline, with no model:** `scripts/wi-fiction.py` (`validate` · `audit` · `gate` · `text-signals` · `explain-rule` · `catalog`), `scripts/wi-arc.py` (`validate` · `evaluate` · `gate` · `as-of` · `impact` · `diff` · `classify` · `rules`), `extensions/wi8/craft03/scripts/wi-craft.py` (`evaluate` · `validate` · `as-of` · `gate` · `rules` · `schema`) and `extensions/wi8/japan04/cli/wi8_japan.py` (`check` · `preflight` · `init` · `draft-save` · `draft-read` · `draft-propose` · `draft-decide` · `draft-history` · `publish-preview` · `migration-preview` · `studio` · `untrusted-scan`). They read a typed JSON projection of a story; **they do not read a whole manuscript, judge literary quality, recruit readers, or certify cultural accuracy** — those are planned waves in [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
 **Specified, normatively described, and not executable anywhere:**
 
@@ -512,6 +542,16 @@ Schemas are what turn a skill into infrastructure: CLI execution, CI writing che
 SKILL.md                  The skill. Start here if you are a model.
 scripts/wi.py             The canonical deterministic core. One file, stdlib only, offline.
 
+references/v8/            Story Intelligence: fiction & arc constitutions, ending algebra, arc state machine, editorial judgment, rule crosswalk, index
+scripts/wi-fiction.py     v8 Fiction & Thriller engine (FI-01..FI-60)
+scripts/wi-arc.py         v8 Arc, Want/Need & Ending engine (N061..N120)
+scripts/test-v8.sh        v8 integration check
+extensions/wi8/craft03/   v8 The Craft (C121..C180)
+extensions/wi8/japan04/   v8 Japan Story OS (JP-181..JP-340)
+rules/                    v8 requirement registers
+schemas/v8/               v8 projection, findings, gate and report schemas
+packs/story/              The story bundle's SKILL.md
+references/v7/            The Institutional Intelligence program and RFC-0001
 references/v6/            The sovereign meaning runtime (24 documents)
   CONSTITUTION              The eighteen laws, the twelve runtime layers, the failure codes
   EXECUTABLE_MEANING        Why a document became a build artifact
@@ -567,6 +607,9 @@ services/api/             REST reference runtime for the v3 craft kernel
 | [`USER_GUIDE.md`](USER_GUIDE.md) | Working with the system day to day |
 | [`CHEATSHEET.md`](CHEATSHEET.md) | One page, every command, mode, status and error code |
 | [`docs/INSTALL.md`](docs/INSTALL.md) | Every surface and what each can actually do |
+| [`references/v8/README.md`](references/v8/README.md) | Index of v8 Story Intelligence — the four parts, reading order, status |
+| [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md) | What 8.0.0 ships and what it does not |
+| [`references/v7/README.md`](references/v7/README.md) | The v7 Institutional Intelligence program |
 | [`references/v6/README.md`](references/v6/README.md) | Index of the v6 doctrine, and the order to read it in |
 | [`references/v6/MIGRATION_V5_TO_V6.md`](references/v6/MIGRATION_V5_TO_V6.md) | Upgrading from v5 |
 | [`docs/MIGRATION_v4_to_v5.md`](docs/MIGRATION_v4_to_v5.md) | Upgrading from v4 |

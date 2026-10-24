@@ -1,14 +1,39 @@
 ---
 name: writing-intelligence
-description: Writing Intelligence v7 — Institutional Intelligence on the Sovereign Meaning Runtime. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop) plus a semantic state machine — claims anchored to an exact span of an exact source version, branches, proposals bound to reviewed state, expiring grants, merge that preserves conflicts instead of averaging them, counterfactual simulation, as-of queries, and proof capsules verified offline with no model. v7 opens the program for consequential work (research, legal, capital, grants, contracts) under authentic authorship, with a receipt behind every claimed status. Use whenever the user wants to write, rewrite, edit, draft, ghostwrite, redline, audit, fact-check or verify prose — grants, dissertations, policy, legal, investor material, books, speeches, fiction. Trigger when unnamed — 'clean this up', 'is this accurate', 'make this sound like me', 'check my sources', 'what breaks if this number changes'.
+description: Writing Intelligence v8 — Story Intelligence on the Sovereign Meaning Runtime. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop), the v7 institutional program (claims anchored to exact source spans, branches, expiring grants, conflict-preserving merge, simulation, offline proof capsules) and, new in v8, 340 numbered fiction requirements as offline tools — a fiction and thriller audit (tension, rule cost, power limits, promise debt), arc, want/need and ending algebra, the craft of openings, fights, opposition, suspense and sequences, and a Japan Story OS for culturally careful worlds. A structural pass is never a good-novel verdict; publication gates HOLD for human and reader review. Use whenever the user wants to write, rewrite, edit, ghostwrite, audit, fact-check or verify prose — grants, legal, policy, novels, thrillers, manga, speeches. Trigger when unnamed — 'clean this up', 'make this sound like me', 'does my ending land', 'check my sources'.
 ---
 
-# Writing Intelligence v7 — Institutional Intelligence on the Sovereign Meaning Runtime
+# Writing Intelligence v8 — Story Intelligence on the Sovereign Meaning Runtime
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 7.0.0
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → **v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work)**
+**Version:** 8.0.0
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines: fiction & thriller, arc & ending, the craft, Japan Story OS)**
+
+---
+
+## v8 in one paragraph
+
+v8 is **Story Intelligence** — the fiction half of this system brought up to the standard v4–v7 built for evidence. It folds four independently built and independently tested packages into one release: **Fiction & Thriller Intelligence** (60 requirements, FI-01–FI-60 / B001–B060 — tension, rule integrity, power limits and cost, promise debt, reader experience), **Arc, Want/Need & Ending Intelligence** (N061–N120 — two-clock character state, want/need versions, the sweet / semi-sweet / bittersweet / bitter ending algebra, arc family kept independent of ending result), **The Craft** (C121–C180 — openings, action geometry, antagonistic causality, suspense contracts, mixed sequence outcomes, dated reference hygiene) and the **Japan Story OS** (JP-181–JP-340 — cultural claims scoped by place, period and source, folklore variants that coexist, name and romanization policy, a private author vault for young writers, release preflight). 340 numbered requirements, each with a stable ID, an owner, an acceptance condition and an honest implementation state. Every engine is offline, stdlib-only Python, read-only against the manuscript, deterministic, and digest-bound.
+
+**The v8 rule:** *a structural pass is not a good novel.* Mechanical consistency, interpretive signal, human editorial judgment and independent reader reception are four different states and are never coerced into one another. Every publication gate in v8 holds — **HOLD (exit 3)**, and the Japan Story OS preflight refuses with exit 2 — until a human editor and real readers have spoken, by design. A need is an interpretation attributed to a person, never a model's access to a character's soul; a cultural fact needs a scoped source, a fictional canon needs an author's adoption, and missing information stays missing.
+
+**What 8.0.0 ships, and what it does not.** Shipped, with receipts in `plans/receipts/WI8-R*.json`: the four engines installed additively (zero collisions, no v4–v7 file changed in behaviour), their own suites passing inside this repository, every v4–v7 regression unchanged, and a third installable bundle, `writing-intelligence-story`, that carries them. Planned, and said so: canonical integration into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review — waves FI8-03–06 and WI8-00–WI8-43 in `plans/v8.manifest.yaml`. Index: `references/v8/README.md`.
+
+### v8 commands (run from the repository or the `writing-intelligence-story` bundle)
+
+```bash
+python3 scripts/wi-fiction.py audit --input story.json        # FI-01..FI-60 fiction & thriller audit
+python3 scripts/wi-fiction.py text-signals --text chapter.txt # pattern signals, never verdicts
+python3 scripts/wi-arc.py classify --want attained --need unfulfilled  # -> bittersweet
+python3 scripts/wi-arc.py evaluate --input arc.json           # two-clock arc and ending check
+python3 extensions/wi8/craft03/scripts/wi-craft.py evaluate --input scene.json
+python3 extensions/wi8/japan04/cli/wi8_japan.py check project.json
+# wi-fiction `gate --mode publication` and wi-arc / wi-craft `gate --stage publication` exit 3 (HOLD) by design;
+# wi8_japan `preflight` exits 2 — a preflight is never an authorization
+```
+
+Exit codes across all four: `0` analysis ran or mechanical-only pass, `2` malformed input or structural block, `3` editorial or publication hold.
 
 ---
 
@@ -233,7 +258,10 @@ The refusals are load-bearing, not decorative. Full reasoning in [`references/v6
 
 ---
 
-## The companion pack
+## The companion packs
+
+**Three bundles in v8.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library below, which now also carries the v8 fiction compiler references and genre addenda), and `writing-intelligence-story` (the four v8 story engines, their rules, schemas and suites). Install all three; each stands alone, and each is under the 200-file ceiling.
+
 
 The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern detectors, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.
 

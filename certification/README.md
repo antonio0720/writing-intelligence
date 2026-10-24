@@ -2,6 +2,8 @@
 
 Writing Intelligence v6.0.0 is a runtime. Someone operates it, under authority, and the decisions they record become permanent state. Certification is an optional way to show you can do that without corrupting the record.
 
+**v8 note:** certification never certifies a story. A story operator can show re-derivable artifacts — a validated projection, a finding cited by requirement ID, an ending classified only from the author's assertions — but no tier can stand in for the editor and reader evidence every v8 publication gate waits for.
+
 Certification is **not required to use Writing Intelligence**. The skill is free and open under MIT. It costs nothing, it gates nothing, and nothing in the tool checks for it.
 
 ## The hard rule

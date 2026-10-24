@@ -1,6 +1,6 @@
 # Roadmap
 
-Writing Intelligence is a living project. **v6.0 shipped August 2026. v7.0 shipped October 2026** — as governance, with the institutional workflows planned and stated as planned. Here's where it goes next.
+Writing Intelligence is a living project. **v6.0 shipped August 2026. v7.0 shipped October 2026** — as governance, with the institutional workflows planned and stated as planned. **v8.0 shipped October 2026** — Story Intelligence, four offline fiction engines, with their canonical integration planned and stated as planned. Here's where it goes next.
 
 Built by **Antonio T. Smith Jr. / Density6 LLC**
 
@@ -19,10 +19,28 @@ Each version proved one thing and then made the next thing necessary.
 | **v5.0** | Proof-carrying authorship. The account travels with the document and survives the absence of everything that made it. |
 | **v6.0** | Executable meaning. A body of meaning can be changed by several people across time, under scoped authority, without anyone losing track of what is still true — and without the system inventing an answer when they disagree. |
 | **v7.0** | Institutional intelligence, governed before it is built. A program for consequential work can refuse to call itself done: every shipped wave carries a receipt, and the doctrine no longer contradicts its own refusal of detector evasion. |
+| **v8.0** | Story intelligence. Fiction can be held to an evidence standard without pretending code can judge a novel: mechanical consistency, interpretive signal, editorial judgment and reader reception are four states, and every publication gate holds until people have spoken. |
 
 v5 answers *is this supported?* v6 answers *what changed, what did that break, who was allowed to do it, and what would it cost to accept?* The second set of questions is not a bigger version of the first. It requires the system to hold state across time and to have an opinion about who may move it, and neither is a feature that can be bolted onto a verifier.
 
 ---
+
+## v8 — Story Intelligence (WI8-SI)
+
+Four packages, 340 requirements, one rule: a structural pass is not a good novel. Index: [`references/v8/README.md`](references/v8/README.md). Status lives in one place: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
+
+### Shipped in 8.0.0 — with receipts
+
+- [x] **WI8-R0** — the four packages installed by their own fail-closed installers, zero collisions, no v4–v7 behaviour changed, nothing from the packages dropped ([receipt](plans/receipts/WI8-R0.json))
+- [x] **WI8-R1** — the four engines run from one tree; `scripts/test-v8.sh` 19/19; every publication gate HOLDS; 340 requirements counted; v4–v7 unchanged ([receipt](plans/receipts/WI8-R1.json))
+- [x] **WI8-R2** — three bundles under the 200-file ceiling, descriptions under 1024 characters, reproducible, v8 passing inside the extracted story bundle ([receipt](plans/receipts/WI8-R2.json))
+
+### Planned — not built
+
+- [ ] **FI8-03 → FI8-06** — canonical Storyworld OS extraction and graph adapter, full-manuscript developmental evaluation, EPUB/print proof and an independent reader trial, governed upstream release
+- [ ] **WI8-00 → WI8-11** — arc and ending: closed-type-compatible projection into the v6 graph, bitemporal desires and beliefs, conservative ending derivation, reader calibration, canon-authorized acceptance, publication preflight
+- [ ] **WI8-12 → WI8-23** — the craft: openings and fair reveals, action geometry, fight agency, antagonist composition, suspense and subtext, sequence outcomes, reinterpretation, cross-medium transformations
+- [ ] **WI8-24 → WI8-43** — Japan Story OS: young-author private creation, the cultural epistemic type system, place/time precision, names and romanization, sacred sites, yōkai variants, Ainu and Ryukyuan source dignity, genre lenses, medium boundaries, research index, rights, legacy migration, adversarial cultural QA, human calibration, canonical merge
 
 ## v7 — the Institutional Intelligence Expansion (WI7-IIP)
 

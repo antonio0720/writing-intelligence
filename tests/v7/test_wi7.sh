@@ -125,8 +125,14 @@ expect_refused "a wave shipped before its dependency" "$TMP/early.yaml"
 
 # --- One version, one description inside the loader's limit -----------------
 V=$(python3 scripts/wi.py --version | awk '{print $2}')
-grep -q "^\*\*Version:\*\* $V" SKILL.md && grep -q "^core_version: $V" plans/v7.manifest.yaml \
-  && pass "CLI, SKILL.md and the v7 manifest agree on $V" \
+# The CLI, SKILL.md and the NEWEST program manifest must name one version.
+# Since v8 the newest manifest is plans/v8.manifest.yaml; the v7 manifest keeps
+# the core_version it shipped with (7.0.0), which may never exceed the CLI.
+LATEST=$(ls plans/v*.manifest.yaml | sort -V | tail -1)
+V7CORE=$(awk '/^core_version:/{print $2}' plans/v7.manifest.yaml)
+grep -q "^\*\*Version:\*\* $V" SKILL.md && grep -q "^core_version: $V" "$LATEST" \
+  && [ "$(printf '%s\n%s\n' "$V7CORE" "$V" | sort -V | tail -1)" = "$V" ] \
+  && pass "CLI, SKILL.md and the newest manifest ($LATEST) agree on $V" \
   || fail "version disagreement ($V)"
 
 python3 - <<'PY' && pass "SKILL.md description is inside the 1024-character limit" || fail "SKILL.md description exceeds 1024 characters"

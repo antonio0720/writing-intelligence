@@ -1,14 +1,71 @@
-# Writing Intelligence v7 — User Guide
+# Writing Intelligence v8 — User Guide
 
 The day-to-day manual for the Sovereign Meaning Runtime.
 
-**Laws:** [`references/v6/CONSTITUTION.md`](references/v6/CONSTITUTION.md) · **v5 laws, still binding:** [`references/v5/CONSTITUTION.md`](references/v5/CONSTITUTION.md) · **One page:** [`CHEATSHEET.md`](CHEATSHEET.md) · **Install:** [`docs/INSTALL.md`](docs/INSTALL.md) · **Craft kernel, unchanged:** [`SKILL.md`](SKILL.md)
+**Laws:** [`references/v6/CONSTITUTION.md`](references/v6/CONSTITUTION.md) · **v5 laws, still binding:** [`references/v5/CONSTITUTION.md`](references/v5/CONSTITUTION.md) · **One page:** [`CHEATSHEET.md`](CHEATSHEET.md) · **Install:** [`docs/INSTALL.md`](docs/INSTALL.md) · **Craft kernel, unchanged:** [`SKILL.md`](SKILL.md) · **v8 Story Intelligence:** [`references/v8/README.md`](references/v8/README.md)
 
 Free. Open source. MIT. Forever.
 
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com).
 
 ---
+
+## What changed for you in v8
+
+- **Nothing you already run changed.** Every v4–v7 command, exit code, digest and bundle format is identical; `wi --version` now says 8.0.0. The v7 suite still passes 12/12.
+- **Fiction now has engines.** Four offline tools, 340 numbered requirements: **Fiction & Thriller Intelligence** (FI-01–FI-60 — tension, rule integrity, power limits and their cost, promise debt, reader experience), **Arc, Want/Need & Ending Intelligence** (N061–N120 — two-clock character state and the sweet / semi-sweet / bittersweet / bitter ending algebra), **The Craft** (C121–C180 — openings, action geometry, antagonistic causality, suspense, sequence outcomes, dated references) and the **Japan Story OS** (JP-181–JP-340 — scoped cultural claims, coexisting folklore variants, name and romanization policy, a private vault for young authors).
+- **A green check is not a good book.** The engines separate what code can prove (a broken reference, a power used past its limit, a cost never paid, a cause that comes after its effect) from what needs your call and what needs readers. Every publication gate HOLDS with exit 3 — that is the design, not a bug.
+- **A third skill bundle.** Install `writing-intelligence-story.skill` beside the runtime and the craft library. See [Story Intelligence](#story-intelligence-v8) below.
+
+## Story Intelligence (v8)
+
+### The workflow
+
+1. **Write first.** The eleven passes still build the prose. The v8 engines diagnose structure; they never write your book.
+2. **Project the story.** The engines read a typed JSON projection — characters, events, wants, needs and beliefs with provenance, powers and their costs, scenes and promises — not raw prose. Build it with the author. Mark author annotations `origin: draft_projection`; never present a fixture or a guess as canon. Schemas: `schemas/v8/` and `extensions/wi8/*/schemas/`.
+3. **Validate, then evaluate.** `validate` refuses malformed or contradictory projections (exit 2). `audit` / `evaluate` report findings by state — *mechanical defect*, *signal for review*, *author's call*, *needs readers*.
+4. **Ask the ending.** `wi-arc.py classify --want <attained|thwarted|renounced|sacrificed> --need <fulfilled|unfulfilled|rejected>` derives the quadrant only from the author's own assertions: want attained + need fulfilled is sweet, attained + not fulfilled bittersweet, not attained + fulfilled semi-sweet, neither bitter. A partial, unresolved or disputed want or need, an open `--closure` or a `--need-basis reviewer_inferred` is `not_classifiable` — the engine refuses to invent certainty.
+5. **Time-travel.** `as-of` answers what was true in the story at an event, and what the workspace knew at a time — the same two clocks v6 gives claims.
+6. **Gate.** `gate` passes mechanical checks and HOLDS at editorial and publication stages until a human editor and independent readers have spoken.
+
+### Prompts that work
+
+- *"Here's my magic system and chapter 12. Does the power stay inside its limits, and does it cost what I said it costs?"* → fiction audit (FI rules on power and cost)
+- *"Is my villain too smart?"* → the craft engine's opposition rules (bounded strategic opposition, no planner omniscience)
+- *"My hero gets what she wanted and loses who she was. Is that the ending I think it is?"* → `wi-arc.py classify` (bittersweet)
+- *"Chapter 3 drags."* → tension and sequence-outcome findings, reported as signals for you to judge
+- *"My story is set in a Kyoto high school during Obon. What do I need sources for?"* → Japan Story OS `check`, separating `external_fact`, `fictional_canon` and `interpretation`
+- *"I'm 14 and I want to keep my drafts private."* → `wi8_japan.py init` creates a local vault; proposals never overwrite your original bytes
+
+### Commands
+
+```bash
+bash scripts/test-v8.sh
+python3 scripts/wi-fiction.py catalog                       # the 60 FI rules
+python3 scripts/wi-fiction.py explain-rule FI-25
+python3 scripts/wi-fiction.py validate --input story.json
+python3 scripts/wi-fiction.py audit --input story.json --out report.json
+python3 scripts/wi-fiction.py text-signals --text chapter.txt
+python3 scripts/wi-fiction.py gate --input story.json --mode publication   # exit 3 HOLD
+python3 scripts/wi-arc.py rules --id N064
+python3 scripts/wi-arc.py evaluate --input arc.json
+python3 scripts/wi-arc.py as-of --input arc.json --event ev-2 --known-at 2026-10-24T13:00:00-05:00
+python3 scripts/wi-arc.py diff --input arc.json --start ev-0 --end ev-4 --known-at 2026-10-24T13:00:00-05:00 --character ch-ada
+python3 scripts/wi-arc.py impact --input arc.json --changed want-ada-v2
+python3 extensions/wi8/craft03/scripts/wi-craft.py rules --id C174
+python3 extensions/wi8/craft03/scripts/wi-craft.py evaluate --input scene.json
+python3 extensions/wi8/craft03/scripts/wi-craft.py as-of --input scene.json --known-at 2026-10-23T20:00:00Z
+python3 extensions/wi8/japan04/cli/wi8_japan.py check project.json
+python3 extensions/wi8/japan04/cli/wi8_japan.py studio questions-only draft.txt
+python3 extensions/wi8/japan04/cli/wi8_japan.py untrusted-scan lore.txt
+python3 extensions/wi8/japan04/cli/wi8_japan.py init ~/private-vault
+```
+
+Exit codes, all four engines: `0` ran / mechanical-only pass · `2` malformed or structural block · `3` editorial or publication hold.
+
+### What v8 does not do
+
+Read a whole manuscript and extract its scenes, judge literary quality with a model, run reader studies, certify Japanese cultural accuracy, parse Japanese morphology, render EPUB or print, or publish anything. Each is a planned wave in [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
 ## What changed for you in v7
 

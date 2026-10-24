@@ -1,13 +1,13 @@
 ---
 name: writing-intelligence-craft
-description: The craft library for Writing Intelligence — 27 genre packs (grant and NOFO, policy brief, journalism, medical, legal, investor memo, technical doc, book, resume, sermon, speech, newsletter, social, fiction, screenplay and more), the measurable voiceprint system, the anti-slop detector set, the positive-pattern corpus, the diagnostic scan library and the full 11-pass compiler reference. Load this alongside writing-intelligence whenever the task is to write, rewrite, edit, ghostwrite, redline or restructure prose in a specific genre or a specific person's voice, or whenever a draft needs diagnosing for machine-writing patterns, hedging, abstraction drift, cadence flatness or structural collapse. Trigger when unnamed — 'make this sound like me', 'this reads like AI wrote it', 'tighten this up', 'what genre conventions am I breaking', 'why is this boring'.
+description: The craft library for Writing Intelligence — 27 genre packs (grant and NOFO, policy brief, journalism, medical, legal, investor memo, technical doc, book, resume, sermon, speech, newsletter, social, fiction, screenplay and more), the measurable voiceprint system, the anti-slop detector set, the positive-pattern corpus, the diagnostic scan library, the full 11-pass compiler reference and v8's novel-architecture, rule-integrity, reader-experience and arc-ending references. Load this alongside writing-intelligence whenever the task is to write, rewrite, edit, ghostwrite, redline or restructure prose in a specific genre or a specific person's voice, or whenever a draft needs diagnosing for machine-writing patterns, hedging, abstraction drift, cadence flatness or structural collapse. Trigger when unnamed — 'make this sound like me', 'this reads like AI wrote it', 'tighten this up', 'what genre conventions am I breaking', 'why is this boring'.
 ---
 
 # Writing Intelligence — The Craft Library
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 6.0.0
+**Version:** 8.0.0
 **Companion to:** `writing-intelligence` — the Sovereign Meaning Runtime
 
 ---
@@ -18,7 +18,7 @@ This bundle is the craft corpus of Writing Intelligence — the reference materi
 
 It ships as its own installable bundle for one reason, and the reason is arithmetic rather than taste: **a skill bundle may contain at most 200 files.** A bundle that exceeds the ceiling does not degrade and does not warn — it simply does not load, which would turn every install instruction in the repository into a false claim. The runtime and the library together are 229 files. Split, they are 150 and 79, and both have room to grow.
 
-Install both. They are two halves of one system.
+Install all three — `writing-intelligence` (the runtime), this library, and `writing-intelligence-story` (the v8 story engines). They are one system in three artifacts.
 
 ---
 
@@ -34,6 +34,7 @@ The governing skill is `writing-intelligence`. It holds the eighteen laws, the e
 | Running Pass 3 — the diagnostic scan | `references/diagnostics/` |
 | Executing or extending any of the eleven passes | `references/compiler/` |
 | Grounding a claim about writing research | `references/academic/` |
+| Building a novel, thriller, series or ending (v8) | `references/compiler/novel_architecture.md`, `fiction_rule_integrity.md`, `reader_experience.md`, `arc_ending_projection.md`, then the engines in `writing-intelligence-story` |
 
 ---
 
@@ -53,12 +54,12 @@ These are the craft rules. They are not softened by being in the smaller bundle.
 
 | Directory | Files | Holds |
 |---|---|---|
-| `references/genre_packs/` | 27 | One pack per genre — arena, objections, structure, failure modes |
-| `references/compiler/` | 19 | Pass-by-pass execution references for the 11-pass kernel |
+| `references/genre_packs/` | 29 | One pack per genre — arena, objections, structure, failure modes — plus the two v8 fiction addenda |
+| `references/compiler/` | 23 | Pass-by-pass execution references for the 11-pass kernel, plus v8's novel architecture, fiction rule integrity, reader experience and arc-ending projection |
 | `references/voiceprints/` | 10 | The measurable voiceprint system and worked profiles |
 | `references/anti_patterns/` | 7 | Detectors for machine-writing tells, hedging, abstraction drift |
 | `references/positive_patterns/` | 6 | What good construction looks like, with worked examples |
-| `references/diagnostics/` | 6 | The Pass 3 diagnostic scan library |
+| `references/diagnostics/` | 7 | The Pass 3 diagnostic scan library, plus v8's fiction quality separation |
 | `references/academic/` | 2 | Grounding literature for claims about writing |
 
 ---

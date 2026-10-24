@@ -1,4 +1,4 @@
-# Contributing to Writing Intelligence v6
+# Contributing to Writing Intelligence v8
 
 Welcome. Writing Intelligence is free and open under MIT. Contributions are how it stays alive and how it gets better than its author alone could make it.
 
@@ -30,6 +30,10 @@ Every contribution must satisfy all four. The v4 and v5 material below is not de
 | `tests/v6/` | The 70-check regression suite: canonicalization, authority, decisions, simulation, merge, bitemporal query, obligations, capsules, constraints |
 | `plans/v6.manifest.yaml` | The implementation program as an inspectable object. CI validates it; `references/v6/BUILD_MANIFEST.md` is the document it governs, not the other way round |
 | `packs/craft/` | The craft bundle's own `SKILL.md` — the entry point for `writing-intelligence-craft.skill` |
+| `packs/story/` | The story bundle's own `SKILL.md` — the entry point for `writing-intelligence-story.skill` (v8) |
+| `references/v8/`, `rules/`, `schemas/v8/`, `policies/` | v8 Story Intelligence doctrine, the FI and N requirement registers, schemas and profiles |
+| `scripts/wi-fiction.py`, `scripts/wi-arc.py`, `extensions/wi8/craft03/`, `extensions/wi8/japan04/` | The four v8 engines. Each package keeps its own suite and installer; `scripts/test-v8.sh` runs them together |
+| `plans/v7.manifest.yaml`, `plans/v8.manifest.yaml` | The v7 and v8 programs. A wave is shipped only with a PASS receipt in `plans/receipts/` |
 | `agents/` | The 12 specialist agents and `agent_manifest.yaml` |
 | `services/api/` | The REST reference runtime for the **v3 craft kernel**. It does not expose the v5 or v6 verification tier, and that is Law K rather than an oversight |
 | `governance/` | RFC process, ADR template, versioning rules, release checklist |
@@ -75,10 +79,10 @@ Releases are published by `.github/workflows/release.yml`, never by hand. There 
 
 Either way the job refuses to publish unless, in this order:
 
-1. `tests/v4/test_wi.sh`, `tests/v5/test_wi5.sh` and `tests/v6/test_wi6.sh` all pass — a release whose verifier is broken installs cleanly and quietly certifies nothing, which is the worst artifact this project could ship;
+1. `tests/v4/test_wi.sh`, `tests/v5/test_wi5.sh`, `tests/v6/test_wi6.sh`, `tests/v7/test_wi7.sh` and `scripts/test-v8.sh` all pass — a release whose verifier is broken installs cleanly and quietly certifies nothing, which is the worst artifact this project could ship;
 2. `check-manifest.py` passes, so no shipped wave names a command that does not answer;
 3. every link resolves;
-4. both bundles build;
+4. all three bundles build;
 5. the tag, `wi.py --version` and the `CHANGELOG.md` heading all agree.
 
 Only then is the tag created — a commit that fails its own release gate never gets stamped with a version number. And if the tag already exists it must point at the commit that was built, or the job stops: publishing assets under a tag naming a different commit is the one failure here nobody can see afterwards, because the release page looks entirely normal.
@@ -289,6 +293,13 @@ Five of these are not negotiable and will be closed rather than revised:
 Every accepted contribution is acknowledged in `CHANGELOG.md`. Operators who contribute multiple accepted minor or major changes can apply for Architect tier (see `certification/operator_levels.md`).
 
 ---
+
+## Contributing to v8 Story Intelligence
+
+- **A new story rule needs a number, an owner, an acceptance condition, a positive and a negative example, and an honest implementation state** (`executable`, `partially_executable`, or `editorial_judgment`). Add it to the register that owns its domain — `rules/fiction_v8_rules.json` (FI), `rules/arc_120_requirements.json` (N), `extensions/wi8/craft03/rules/craft_c121_c180.json` (C) or `extensions/wi8/japan04/references/JAPAN_REQUIREMENTS_181_340.json` (JP) — and update the 340 count in `scripts/test-v8.sh` deliberately, never by accident.
+- **Every executable rule ships with a negative twin** that must go red.
+- **No engine may certify publication, literary quality, reader satisfaction or cultural accuracy.** A change that lets a publication gate exit 0 without independent evidence is refused.
+- **Cultural material needs scoped sources and rights.** Do not commit third-party excerpts, screenplay dialogue or images; cite them.
 
 ## License
 

@@ -1,0 +1,67 @@
+{
+  "program": "WI8-SI",
+  "status": "PASS",
+  "baseline_sha": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "measured_at": "2026-10-24",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin 25.5.0"
+  },
+  "approving_authority": {
+    "name": "Antonio T. Smith Jr.",
+    "role": "repository owner, Density6 LLC",
+    "decision": "combine the four independent v8 packages into Writing Intelligence v8, adding and never removing, and release it on GitHub and to every Claude surface",
+    "date": "2026-10-24"
+  },
+  "checkpoint": "WI8-R1",
+  "objective": "Prove the four engines run together from one tree, refuse what they must refuse, hold every publication gate, and leave v4-v7 unchanged",
+  "commands": [
+    "bash scripts/test-v8.sh",
+    "bash tests/v4/test_wi.sh",
+    "bash tests/v5/test_wi5.sh",
+    "bash tests/v6/test_wi6.sh",
+    "bash tests/v7/test_wi7.sh"
+  ],
+  "observed_result": {
+    "test_v8": {
+      "exit": 0,
+      "result": "19 passed, 0 failed",
+      "requirements": "FI=60 N=60 C=60 JP=160 total 340",
+      "stdout_sha256": "a07f1fade6b707611e53f22e6d77d6ad0383bfb779e52de3a08410d6c625de5d"
+    },
+    "v4": "3/3",
+    "v5": "32/32",
+    "v6": "70/70",
+    "v7": "12/12"
+  },
+  "negative_controls": [
+    {
+      "id": "publication-gate-mutated-to-certify",
+      "expectation": "disabling the fiction engine's publication evidence checks turns scripts/test-v8.sh red",
+      "observed_exit": 1,
+      "observed": "17 passed, 2 failed - the package suite (3 failures) and 'publication HOLDS without readers (wanted exit 3, got 0)'",
+      "stdout_sha256": "06f5c56de5d155a9a34c9c757b11cd403fd2bde0591be5afd0bd0f2d8150edc8"
+    },
+    {
+      "id": "requirement-dropped",
+      "expectation": "removing one requirement from a register turns the 340 count red",
+      "observed_exit": 1,
+      "observed": "registers carry 339 numbered requirements, expected 340 (JP=159)"
+    },
+    {
+      "id": "version-disagreement",
+      "expectation": "a SKILL.md version that disagrees with the CLI turns the v7 suite red",
+      "observed": "FAIL version disagreement (8.0.0)"
+    }
+  ],
+  "independent_readback": {
+    "method": "scripts/test-v8.sh run inside the extracted writing-intelligence-story.skill, a separate tree with no repository around it",
+    "value": "19 passed, 0 failed"
+  },
+  "unknown": [
+    "the engines read typed JSON projections; no full manuscript was extracted or evaluated",
+    "no reader study, editorial review or cultural review was run; every publication gate holding is the expected and only claimed outcome"
+  ],
+  "remaining_issue": null,
+  "next_authorized_action": "WI8-R2"
+}

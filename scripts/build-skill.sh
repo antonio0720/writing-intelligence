@@ -6,6 +6,8 @@
 #   dist/writing-intelligence.skill          the uploadable bundle (zip)
 #   dist/writing-intelligence.skill.sha256   checksum for release verification
 #   writing-intelligence.skill               copy at repo root, for direct download
+#   dist/writing-intelligence-craft.skill    the craft library bundle
+#   dist/writing-intelligence-story.skill    the v8 Story Intelligence bundle
 #
 # The build is reproducible: file order is sorted and every mtime is normalized,
 # so the same tree produces the same bytes and the published checksum means
@@ -71,6 +73,9 @@ PAYLOAD=(
   references/v5
   references/v6
   references/v7
+  # v8's engines live in the story bundle; its index travels here so the
+  # runtime's SKILL.md can point at it.
+  references/v8/README.md
   schemas
   scripts/wi.py
   scripts/check-manifest.py
@@ -102,6 +107,35 @@ CRAFT_PAYLOAD=(
   references/genre_packs
   references/positive_patterns
   references/voiceprints
+)
+
+# The third bundle: Story Intelligence (v8).
+#
+# v8 adds four fiction engines — fiction & thriller, arc & ending, the craft,
+# and the Japan Story OS — with 340 numbered requirements, their schemas and
+# their suites. That is ~180 files. The runtime had 14 files of headroom and
+# the craft library is doctrine, not executables, so neither could take them.
+# They ship as their own bundle, held to the same ceiling and the same checks.
+STORY_NAME="writing-intelligence-story"
+STORY_SKILL=packs/story/SKILL.md
+STORY_PAYLOAD=(
+  LICENSE
+  NOTICE
+  PATENTS.md
+  references/v8
+  rules
+  schemas/v8
+  policies
+  scripts/wi-fiction.py
+  scripts/fiction_v8
+  scripts/wi-arc.py
+  scripts/arc_v8
+  scripts/test-v8.sh
+  tests/v8
+  tests/v8_arc
+  benchmarks/arc_v8_vectors.json
+  extensions/wi8/craft03
+  extensions/wi8/japan04
 )
 
 # The upload limit. Not a style preference — a bundle over this does not load.
@@ -207,6 +241,13 @@ echo "    v6 schemas: $V6_SCHEMAS"
 
 [ -f "$CRAFT_SKILL" ] \
   || { echo "FAIL missing craft bundle skill: $CRAFT_SKILL" >&2; exit 1; }
+[ -f "$STORY_SKILL" ] \
+  || { echo "FAIL missing story bundle skill: $STORY_SKILL" >&2; exit 1; }
+
+V8_DOCS=$(ls references/v8/*.md 2>/dev/null | wc -l | tr -d ' ')
+[ "$V8_DOCS" -ge 7 ] \
+  || { echo "FAIL expected >=7 v8 reference docs, found $V8_DOCS" >&2; exit 1; }
+echo "    v8 reference docs: $V8_DOCS"
 
 # The version in the CLI, the skill and the changelog must be one number.
 CLI_V=$(python3 scripts/wi.py --version 2>/dev/null | awk '{print $2}')
@@ -227,6 +268,14 @@ if command -v python3 >/dev/null 2>&1; then
       exit 1
     fi
   done
+  # v8: the four story engines and their cross-engine twins.
+  if RESULT=$(bash scripts/test-v8.sh 2>&1); then
+    echo "$RESULT" | tail -1 | sed 's/^/    /'
+  else
+    echo "$RESULT" | sed 's/^/    /'
+    echo "FAIL scripts/test-v8.sh did not pass; refusing to build a bundle" >&2
+    exit 1
+  fi
 else
   echo "    WARN python3 not found; verifier regressions not run" >&2
 fi
@@ -409,6 +458,84 @@ unzip -qq "$CRAFT_BUNDLE" -d "$CVERIFY"
 rm -rf "$CSTAGE" "$CVERIFY"
 echo "    craft bundle verified"
 
+# --------------------------------------------------------------------------
+# The story bundle (v8). Same ceiling, same frontmatter rules, and the v8
+# integration check must pass inside the extracted artifact, not only here.
+# --------------------------------------------------------------------------
+echo "==> Story bundle"
+
+SSTAGE="$(mktemp -d)"
+SROOT="$SSTAGE/$STORY_NAME"
+mkdir -p "$SROOT"
+cp -L "$STORY_SKILL" "$SROOT/SKILL.md"
+for p in "${STORY_PAYLOAD[@]}"; do
+  [ -e "$p" ] || { echo "FAIL missing story payload path: $p" >&2; exit 1; }
+  mkdir -p "$SROOT/$(dirname "$p")"
+  if [ -d "$p" ]; then cp -RL "$p" "$SROOT/$(dirname "$p")/"; else cp -L "$p" "$SROOT/$p"; fi
+done
+# The craft and Japan packages each carry their own .github workflow, and the
+# craft package's checksum manifest covers it: stripping it would make the
+# package's own integrity check fail inside the bundle. So it ships.
+find "$SROOT" \( -name '__pycache__' -o -name '.DS_Store' -o -name '*.pyc' \) \
+     -exec rm -rf {} + 2>/dev/null || true
+
+SFILES=$(find "$SROOT" -type f | wc -l | tr -d ' ')
+echo "    staged $SFILES files (limit $MAX_FILES)"
+if [ "$SFILES" -gt "$MAX_FILES" ]; then
+  echo "FAIL story bundle has $SFILES files; the skill upload limit is $MAX_FILES" >&2
+  exit 1
+fi
+
+STORY_SKILL_PATH="$SROOT/SKILL.md" python3 - <<'STORYFM' || exit 1
+import os, re, sys
+MAX_NAME, MAX_DESC = 64, 1024
+src = open(os.environ["STORY_SKILL_PATH"], encoding="utf-8").read()
+if not src.startswith("---\n"):
+    sys.exit("FAIL story SKILL.md has no YAML frontmatter")
+fm = src[4:src.find("\n---", 4)]
+bad = []
+for key, limit in (("name", MAX_NAME), ("description", MAX_DESC)):
+    m = re.search(r"^%s:[ \t]+(.*)$" % key, fm, re.M)
+    if not m:
+        sys.exit("FAIL story SKILL.md frontmatter has no %s:" % key)
+    v = m.group(1).strip().strip('"\'')
+    if len(v) > limit:
+        bad.append("%s is %d characters, over by %d; the limit is %d"
+                   % (key, len(v), len(v) - limit, limit))
+    if key == "description" and ": " in v:
+        bad.append("description contains ': ' — unquoted plain scalars must not")
+    if key == "name" and not re.match(r"^[a-z0-9][a-z0-9-]*$", v):
+        bad.append("name %r must be lowercase letters, digits and hyphens" % v)
+if bad:
+    for b in bad:
+        print("FAIL " + b, file=sys.stderr)
+    sys.exit(1)
+print("    story SKILL.md frontmatter intact")
+STORYFM
+
+find "$SROOT" -exec touch -t 200001010000.00 {} + 2>/dev/null || true
+STORY_BUNDLE="$OUT_DIR/$STORY_NAME.skill"
+rm -f "$STORY_BUNDLE"
+( cd "$SSTAGE" && find "$STORY_NAME" -print | sort | zip -qX9 "$STORY_BUNDLE" -@ )
+SSIZE=$(wc -c < "$STORY_BUNDLE" | tr -d ' ')
+echo "    $STORY_BUNDLE ($SSIZE bytes)"
+
+SVERIFY="$(mktemp -d)"
+unzip -qq "$STORY_BUNDLE" -d "$SVERIFY"
+[ -f "$SVERIFY/$STORY_NAME/SKILL.md" ] \
+  || { echo "FAIL story bundle has no SKILL.md" >&2; exit 1; }
+if command -v python3 >/dev/null 2>&1; then
+  if RESULT=$( cd "$SVERIFY/$STORY_NAME" && bash scripts/test-v8.sh 2>&1 ); then
+    echo "$RESULT" | tail -1 | sed 's/^/    /'
+  else
+    echo "$RESULT" | sed 's/^/    /'
+    echo "FAIL scripts/test-v8.sh fails inside the extracted story bundle" >&2
+    exit 1
+  fi
+fi
+rm -rf "$SSTAGE" "$SVERIFY"
+echo "    story bundle verified"
+
 if [ "$CHECK_ONLY" -eq 1 ]; then
   echo "==> --check: no artifacts written"
   exit 0
@@ -436,9 +563,19 @@ fi
 [ -f "$OUT_DIR/$CRAFT_NAME.skill.sha256" ] \
   && cat "$OUT_DIR/$CRAFT_NAME.skill.sha256" | sed 's/^/    /'
 
+if command -v shasum >/dev/null 2>&1; then
+  ( cd "$OUT_DIR" && shasum -a 256 "$STORY_NAME.skill" > "$STORY_NAME.skill.sha256" )
+elif command -v sha256sum >/dev/null 2>&1; then
+  ( cd "$OUT_DIR" && sha256sum "$STORY_NAME.skill" > "$STORY_NAME.skill.sha256" )
+fi
+[ -f "$OUT_DIR/$STORY_NAME.skill.sha256" ] \
+  && cat "$OUT_DIR/$STORY_NAME.skill.sha256" | sed 's/^/    /'
+
 if [ "$UPDATE_ROOT" -eq 1 ]; then
   cp "$BUNDLE" "$REPO/$NAME.skill"
   cp "$CRAFT_BUNDLE" "$REPO/$CRAFT_NAME.skill"
+  cp "$STORY_BUNDLE" "$REPO/$STORY_NAME.skill"
+  echo "    updated $REPO/$STORY_NAME.skill"
   echo "    updated $REPO/$NAME.skill"
   echo "    updated $REPO/$CRAFT_NAME.skill"
 fi
@@ -446,6 +583,7 @@ fi
 echo
 echo "Built $NAME.skill        — $FILES files, $SIZE bytes."
 echo "Built $CRAFT_NAME.skill — $CFILES files, $CSIZE bytes."
+echo "Built $STORY_NAME.skill — $SFILES files, $SSIZE bytes."
 echo
-echo "Install both. They are two halves of one system."
+echo "Install all three. They are one system in three artifacts."
 echo "Upload path: Claude → Settings → Capabilities → Skills → Upload skill"
