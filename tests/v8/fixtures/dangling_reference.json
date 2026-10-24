@@ -1,0 +1,188 @@
+{
+  "schema": "wi.fiction.manuscript/v1",
+  "work": {
+    "id": "sample-novel",
+    "title": "The Quiet Signal",
+    "central_conflict": "Locate the missing witness without sacrificing her identity",
+    "emotional_center": "Two estranged sisters disagree on the cost of rescue",
+    "central_resolution": "The witness survives; their family bond changes",
+    "opening_promises": [
+      "Can they save the witness?"
+    ],
+    "delivered_promises": [
+      "Can they save the witness?"
+    ]
+  },
+  "coverage": {
+    "scenes": true,
+    "characters": true,
+    "world_rules": true,
+    "mysteries": true,
+    "ending": true,
+    "threats": true
+  },
+  "scenes": [
+    {
+      "id": "S1",
+      "order": 1,
+      "chapter": "1",
+      "act": 1,
+      "tension": 2,
+      "pressures": [
+        "relational"
+      ],
+      "state_signature": "A",
+      "state_deltas": [
+        "sister chooses to cooperate"
+      ],
+      "recovery": false,
+      "major_suspense": false
+    },
+    {
+      "id": "S2",
+      "order": 2,
+      "chapter": "2",
+      "act": 1,
+      "tension": 4,
+      "pressures": [
+        "institutional"
+      ],
+      "state_signature": "B",
+      "state_deltas": [
+        "escape route destroyed"
+      ],
+      "new_danger": "wiretap exposed",
+      "consequences": [
+        "witness location compromised"
+      ],
+      "major_suspense": true,
+      "recovery": false
+    },
+    {
+      "id": "S3",
+      "order": 3,
+      "chapter": "3",
+      "act": 2,
+      "tension": 1,
+      "pressures": [
+        "emotional"
+      ],
+      "state_signature": "C",
+      "state_deltas": [
+        "sisters form truce"
+      ],
+      "recovery": true,
+      "major_suspense": false
+    },
+    {
+      "id": "S4",
+      "order": 4,
+      "chapter": "4",
+      "act": 3,
+      "tension": 5,
+      "pressures": [
+        "moral"
+      ],
+      "state_signature": "D",
+      "state_deltas": [
+        "protagonist refuses the bargain"
+      ],
+      "consequences": [
+        "public evidence release"
+      ],
+      "recovery": false,
+      "major_suspense": true
+    }
+  ],
+  "characters": [
+    {
+      "id": "A",
+      "role": "protagonist",
+      "private_desire": "be trusted by sibling",
+      "history": "abandoned home after trial",
+      "contradiction": "brave in public, fearful of confession",
+      "desire_conflict": "wants secrecy; rescue requires admitting a lie",
+      "key_choice_scene_ids": [
+        "S4"
+      ]
+    },
+    {
+      "id": "B",
+      "role": "ally",
+      "private_desire": "keep family together",
+      "history": "grew up in witness protection",
+      "contradiction": "asks for honesty but deceives authorities",
+      "desire_conflict": "safety and loyalty conflict"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "R1",
+      "actors": [
+        "A",
+        "B"
+      ],
+      "states": [
+        {
+          "scene_id": "S1",
+          "trust": -2,
+          "cause": "long separation"
+        },
+        {
+          "scene_id": "S3",
+          "trust": 1,
+          "cause": "revealed sacrifice"
+        }
+      ]
+    }
+  ],
+  "mysteries": [
+    {
+      "id": "M1",
+      "question": "Can they save the witness?",
+      "raised_scene": "S1",
+      "importance": "major",
+      "resolution_scene": "UNKNOWN_SCENE"
+    }
+  ],
+  "world_rules": [
+    {
+      "id": "P1",
+      "mechanism": "The signal reaches only line-of-sight devices",
+      "permits": [
+        "direct_beam"
+      ],
+      "forbids": [
+        "remote_hack"
+      ],
+      "costs": [
+        "battery"
+      ],
+      "demonstrated_in": [
+        "S2"
+      ],
+      "authority": "operator consent"
+    }
+  ],
+  "plants": [
+    {
+      "id": "F1",
+      "scene_id": "S1",
+      "payoff_scene": "S4",
+      "consequence": "A planted key proves identity"
+    }
+  ],
+  "interventions": [
+    {
+      "id": "I1",
+      "scene_id": "S4",
+      "requires_cost": true,
+      "cost_paid": true
+    }
+  ],
+  "assessments": [],
+  "waivers": [],
+  "publication": {
+    "release_target": "none"
+  }
+}

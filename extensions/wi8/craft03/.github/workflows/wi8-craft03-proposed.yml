@@ -1,0 +1,16 @@
+# Proposal workflow: located inside a standalone bundle, not installed into a GitHub Actions active directory.
+name: WI8 Craft03 local validation (proposal)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'extensions/wi8/craft03/**'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: bash extensions/wi8/craft03/tests/v8_craft/run.sh

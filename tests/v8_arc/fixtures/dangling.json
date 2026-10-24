@@ -1,0 +1,483 @@
+{
+  "schema": "wi.arc.projection/v1",
+  "source": {
+    "repo": "antonio0720/writing-intelligence",
+    "branch": "main",
+    "graph_root": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "origin": "fixture",
+    "extracted_at": "2026-10-24T11:00:00-05:00"
+  },
+  "scope": "novel_final",
+  "characters": [
+    {
+      "id": "ch-ada",
+      "name": "Ada",
+      "role": "protagonist",
+      "arc_family": "positive_change"
+    },
+    {
+      "id": "ch-beck",
+      "name": "Beck",
+      "role": "ensemble",
+      "arc_family": "flat"
+    },
+    {
+      "id": "ch-cero",
+      "name": "Cero",
+      "role": "ensemble",
+      "arc_family": "fall"
+    },
+    {
+      "id": "ch-dela",
+      "name": "Dela",
+      "role": "ensemble",
+      "arc_family": "open"
+    }
+  ],
+  "events": [
+    {
+      "id": "ev-0",
+      "order": 0,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "scene_ref": "scene-0",
+      "causes": []
+    },
+    {
+      "id": "ev-1",
+      "order": 1,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "scene_ref": "scene-1",
+      "causes": [
+        "ev-0"
+      ]
+    },
+    {
+      "id": "ev-2",
+      "order": 2,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "scene_ref": "scene-2",
+      "causes": [
+        "ev-1"
+      ]
+    },
+    {
+      "id": "ev-3",
+      "order": 3,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "scene_ref": "scene-3",
+      "causes": [
+        "ev-2"
+      ]
+    },
+    {
+      "id": "ev-4",
+      "order": 4,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "scene_ref": "scene-4",
+      "causes": [
+        "ev-3"
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "id": "want-ada-v1",
+      "logical_id": "want-ada-v1",
+      "revision": 1,
+      "kind": "want",
+      "character_ref": "ch-ada",
+      "valid_from": "ev-0",
+      "valid_until": "ev-2",
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "scope": "central",
+        "proposition": "Win the city medal"
+      }
+    },
+    {
+      "id": "want-ada-v2",
+      "logical_id": "want-ada-v1",
+      "revision": 2,
+      "kind": "want",
+      "character_ref": "ch-ada",
+      "valid_from": "ev-2",
+      "valid_until": null,
+      "known_at": "2026-10-24T12:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-2"
+      ],
+      "derived_from": [
+        "ev-1"
+      ],
+      "payload": {
+        "scope": "central",
+        "proposition": "Bring a witness home safely"
+      },
+      "supersedes": "want-ada-v1"
+    },
+    {
+      "id": "need-ada",
+      "logical_id": "need-ada",
+      "revision": 1,
+      "kind": "need",
+      "character_ref": "ch-ada",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Learn to ask for help rather than hide"
+      }
+    },
+    {
+      "id": "choice-ada",
+      "logical_id": "choice-ada",
+      "revision": 1,
+      "kind": "choice",
+      "character_ref": "ch-ada",
+      "valid_from": "ev-3",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-3"
+      ],
+      "derived_from": [],
+      "payload": {
+        "action": "Asks a rival for help"
+      }
+    },
+    {
+      "id": "ending-ada",
+      "logical_id": "ending-ada",
+      "revision": 1,
+      "kind": "ending",
+      "character_ref": "ch-ada",
+      "valid_from": "ev-4",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-4",
+        "ev-not-existent"
+      ],
+      "derived_from": [
+        "want-ada-v2",
+        "need-ada",
+        "choice-ada"
+      ],
+      "payload": {
+        "want_ref": "want-ada-v2",
+        "need_ref": "need-ada",
+        "choice_ref": "choice-ada",
+        "want_outcome": "attained",
+        "need_outcome": "fulfilled",
+        "closure": "closed"
+      }
+    },
+    {
+      "id": "want-beck",
+      "logical_id": "want-beck",
+      "revision": 1,
+      "kind": "want",
+      "character_ref": "ch-beck",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Protect the council archive"
+      }
+    },
+    {
+      "id": "need-beck",
+      "logical_id": "need-beck",
+      "revision": 1,
+      "kind": "need",
+      "character_ref": "ch-beck",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Remain loyal to principled honesty"
+      }
+    },
+    {
+      "id": "choice-beck",
+      "logical_id": "choice-beck",
+      "revision": 1,
+      "kind": "choice",
+      "character_ref": "ch-beck",
+      "valid_from": "ev-3",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-3"
+      ],
+      "derived_from": [],
+      "payload": {
+        "action": "Reveals the archive location at great cost"
+      }
+    },
+    {
+      "id": "ending-beck",
+      "logical_id": "ending-beck",
+      "revision": 1,
+      "kind": "ending",
+      "character_ref": "ch-beck",
+      "valid_from": "ev-4",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-4"
+      ],
+      "derived_from": [
+        "want-beck",
+        "need-beck",
+        "choice-beck"
+      ],
+      "payload": {
+        "want_ref": "want-beck",
+        "need_ref": "need-beck",
+        "choice_ref": "choice-beck",
+        "want_outcome": "sacrificed",
+        "need_outcome": "fulfilled",
+        "closure": "closed"
+      }
+    },
+    {
+      "id": "want-cero",
+      "logical_id": "want-cero",
+      "revision": 1,
+      "kind": "want",
+      "character_ref": "ch-cero",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Gain control of the river gate"
+      }
+    },
+    {
+      "id": "need-cero",
+      "logical_id": "need-cero",
+      "revision": 1,
+      "kind": "need",
+      "character_ref": "ch-cero",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Treat loved ones as people rather than assets"
+      }
+    },
+    {
+      "id": "choice-cero",
+      "logical_id": "choice-cero",
+      "revision": 1,
+      "kind": "choice",
+      "character_ref": "ch-cero",
+      "valid_from": "ev-3",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-3"
+      ],
+      "derived_from": [],
+      "payload": {
+        "action": "Betrays a sibling"
+      }
+    },
+    {
+      "id": "ending-cero",
+      "logical_id": "ending-cero",
+      "revision": 1,
+      "kind": "ending",
+      "character_ref": "ch-cero",
+      "valid_from": "ev-4",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-4"
+      ],
+      "derived_from": [
+        "want-cero",
+        "need-cero",
+        "choice-cero"
+      ],
+      "payload": {
+        "want_ref": "want-cero",
+        "need_ref": "need-cero",
+        "choice_ref": "choice-cero",
+        "want_outcome": "attained",
+        "need_outcome": "unfulfilled",
+        "closure": "closed"
+      }
+    },
+    {
+      "id": "want-dela",
+      "logical_id": "want-dela",
+      "revision": 1,
+      "kind": "want",
+      "character_ref": "ch-dela",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Reach the abandoned observatory"
+      }
+    },
+    {
+      "id": "need-dela",
+      "logical_id": "need-dela",
+      "revision": 1,
+      "kind": "need",
+      "character_ref": "ch-dela",
+      "valid_from": "ev-0",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-0"
+      ],
+      "derived_from": [],
+      "payload": {
+        "proposition": "Accept someone who betrayed her"
+      }
+    },
+    {
+      "id": "choice-dela",
+      "logical_id": "choice-dela",
+      "revision": 1,
+      "kind": "choice",
+      "character_ref": "ch-dela",
+      "valid_from": "ev-3",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-3"
+      ],
+      "derived_from": [],
+      "payload": {
+        "action": "Refuses a bargain"
+      }
+    },
+    {
+      "id": "ending-dela",
+      "logical_id": "ending-dela",
+      "revision": 1,
+      "kind": "ending",
+      "character_ref": "ch-dela",
+      "valid_from": "ev-4",
+      "valid_until": null,
+      "known_at": "2026-10-24T11:00:00-05:00",
+      "provenance": {
+        "basis": "author_asserted",
+        "actor_id": "writer-1"
+      },
+      "evidence_refs": [
+        "ev-4"
+      ],
+      "derived_from": [
+        "want-dela",
+        "need-dela",
+        "choice-dela"
+      ],
+      "payload": {
+        "want_ref": "want-dela",
+        "need_ref": "need-dela",
+        "choice_ref": "choice-dela",
+        "want_outcome": "thwarted",
+        "need_outcome": "rejected",
+        "closure": "closed"
+      }
+    }
+  ]
+}

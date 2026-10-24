@@ -1,0 +1,113 @@
+{
+  "schema": "wi.fiction.manuscript/v1",
+  "work": {
+    "id": "sample-novel",
+    "title": "The Quiet Signal",
+    "central_conflict": "Locate the missing witness without sacrificing her identity",
+    "emotional_center": "Two estranged sisters disagree on the cost of rescue",
+    "central_resolution": "The witness survives; their family bond changes",
+    "opening_promises": [
+      "Can they save the witness?"
+    ],
+    "delivered_promises": [
+      "Can they save the witness?"
+    ]
+  },
+  "coverage": {
+    "scenes": true,
+    "ending": false,
+    "world_rules": false,
+    "characters": false
+  },
+  "scenes": [
+    {
+      "id": "S1",
+      "order": 1,
+      "chapter": "1",
+      "act": 1,
+      "tension": 5,
+      "major_suspense": true,
+      "pressures": [
+        "physical"
+      ],
+      "state_deltas": [],
+      "recovery": false
+    },
+    {
+      "id": "S2",
+      "order": 2,
+      "chapter": "2",
+      "act": 1,
+      "tension": 5,
+      "major_suspense": true,
+      "pressures": [
+        "physical"
+      ],
+      "state_deltas": [],
+      "recovery": false
+    },
+    {
+      "id": "S3",
+      "order": 3,
+      "chapter": "3",
+      "act": 1,
+      "tension": 5,
+      "major_suspense": true,
+      "pressures": [
+        "physical"
+      ],
+      "state_deltas": [],
+      "recovery": false
+    },
+    {
+      "id": "S4",
+      "order": 4,
+      "chapter": "4",
+      "act": 1,
+      "tension": 5,
+      "major_suspense": true,
+      "pressures": [
+        "physical"
+      ],
+      "state_deltas": [],
+      "recovery": false
+    },
+    {
+      "id": "S5",
+      "order": 5,
+      "chapter": "5",
+      "act": 1,
+      "tension": 5,
+      "major_suspense": true,
+      "pressures": [
+        "physical"
+      ],
+      "state_deltas": [],
+      "recovery": false
+    },
+    {
+      "id": "S6",
+      "order": 6,
+      "chapter": "6",
+      "act": 1,
+      "tension": 5,
+      "major_suspense": true,
+      "pressures": [
+        "physical"
+      ],
+      "state_deltas": [],
+      "recovery": false
+    }
+  ],
+  "characters": [],
+  "relationships": [],
+  "mysteries": [],
+  "world_rules": [],
+  "plants": [],
+  "interventions": [],
+  "assessments": [],
+  "waivers": [],
+  "publication": {
+    "release_target": "none"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WI fiction release gate",
+  "type": "object",
+  "required": [
+    "schema",
+    "mode",
+    "input_digest",
+    "policy_digest",
+    "verdict",
+    "issues"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.fiction.gate/v1"
+    },
+    "mode": {
+      "enum": [
+        "draft",
+        "editorial",
+        "publication"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "BLOCK",
+        "HOLD",
+        "ELIGIBLE_FOR_HUMAN_DECISION",
+        "DRAFT_CHECKS_COMPLETE"
+      ]
+    },
+    "issues": {
+      "type": "array"
+    }
+  }
+}

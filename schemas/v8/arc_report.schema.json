@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/arc_report.schema.json",
+  "title": "Arc v8 Audit Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "status",
+    "source_digest",
+    "findings",
+    "characters",
+    "limits"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.arc.report/v1"
+    },
+    "status": {
+      "enum": [
+        "invalid",
+        "evaluated"
+      ]
+    },
+    "source_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "source_graph_root": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "origin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "coverage": {
+      "type": "object"
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": [
+        "code",
+        "severity",
+        "location",
+        "requirement",
+        "message",
+        "evidence"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "review",
+            "info"
+          ]
+        },
+        "location": {
+          "type": "string"
+        },
+        "requirement": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

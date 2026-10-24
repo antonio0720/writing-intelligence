@@ -1,0 +1,554 @@
+{
+  "assertion": "Machine findings establish only the supplied structural data and observed text patterns. No automated score proves artistic quality or reader experience.",
+  "catalog_digest": "sha256:b6b379298cd549123b9da6df59a9e9a9757276139607a6ffd196f531563a18b3",
+  "input_digest": "sha256:c4ab9feb6dee1b974c71b71754938978454b242d859972e6f2d2c9cce142caf7",
+  "results": [
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-01",
+      "method": "heuristic",
+      "status": "UNASSESSED",
+      "title": "Metaphor Saturation Governor",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-02",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Figurative Language Value Test",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-03",
+      "method": "heuristic",
+      "status": "UNASSESSED",
+      "title": "Manuscript-Wide Repetition Detection",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-04",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Metaphor Family Registry",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-05",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Plain Prose Counterweight",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-06",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Narrative Overexplanation Detector",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-07",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Emotional Declaration Restraint",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-08",
+      "method": "heuristic",
+      "status": "UNASSESSED",
+      "title": "Sentence-Rhythm Diversity Audit",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-09",
+      "method": "heuristic",
+      "status": "UNASSESSED",
+      "title": "Authorial Intrusion Detector",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-10",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Sensory Progression Engine",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-11",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Descriptive Compression Operator",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-12",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Prose Preservation Rule",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-13",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Escalation Novelty Law",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-14",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Tension Plateau Detector",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-15",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Threat Consequence Requirement",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-16",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Threat Specificity Test",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-17",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Suspense Information-Asymmetry Engine",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-18",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Earned Mystery Doctrine",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-19",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Mystery Debt Ledger",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-20",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Failure-Driven Escalation",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-21",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Antagonist Competence Standard",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-22",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Escalation Variety Requirement",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-23",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Tension Recovery Discipline",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-24",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Chapter-Ending Integrity",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-25",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Human Before Function Law",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-26",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Personal Desire Conflict Engine",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-27",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Costly Rule Violation Test",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-28",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Distinct Character Decision Profiles",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-29",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Relationship Evolution Ledger",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-30",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Emotional Memory Continuity",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-31",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Human Stakes Translation",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-32",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Character Agency Verification",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-33",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Competence Without Emotional Uniformity",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-34",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Emotional Payoff Audit",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-35",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "World Rules Constitution",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-36",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Power Boundary Enforcement",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-37",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Cost Conservation Doctrine",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-38",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Victory Versus Closure Distinction",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-39",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Consent and Authority Conflict Model",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-40",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Timeline Perspective Registry",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-41",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Canon Contradiction Classification",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-42",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Speculative Mechanism Demonstration",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-43",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Scientific Claim Boundary",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-44",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Worldbuilding Restraint",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-45",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Novel-Length Escalation Graph",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-46",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Act-to-Act Transformation Test",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-47",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Third-Act Acceleration Audit",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-48",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Opening Promise Verification",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-49",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Payoff Quality Engine",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-50",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Ending Without Explanation Law",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-51",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Standalone Satisfaction / Series Continuation Test",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-52",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Emotional Center Protection",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-53",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Front Matter Separation",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-54",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Document Placement Validator",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-55",
+      "method": "heuristic",
+      "status": "UNASSESSED",
+      "title": "Mathematical and Symbol Rendering Verification",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-56",
+      "method": "typed",
+      "status": "UNASSESSED",
+      "title": "Publishing Metadata Completeness",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-57",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Timeline and Cross-Book Reference Proofing",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-58",
+      "method": "editorial",
+      "status": "UNASSESSED",
+      "title": "Typesetting and Pagination Audit",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-59",
+      "method": "process",
+      "status": "UNASSESSED",
+      "title": "Independent Reader Evaluation",
+      "waiver": null
+    },
+    {
+      "assessments": [],
+      "events": [],
+      "id": "FI-60",
+      "method": "process",
+      "status": "UNASSESSED",
+      "title": "Genre-Specific Publication Gate",
+      "waiver": null
+    }
+  ],
+  "schema": "wi.fiction.audit/v1",
+  "schema_errors": [],
+  "summary": {
+    "UNASSESSED": 60
+  },
+  "text_digest": null,
+  "work_id": "sample-novel"
+}

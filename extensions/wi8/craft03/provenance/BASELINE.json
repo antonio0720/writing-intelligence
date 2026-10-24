@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/antonio0720/writing-intelligence",
+  "branch": "main",
+  "observed_commit": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "observed_at": "2026-10-24",
+  "upstream_modified": false,
+  "source_filename": "Pasted markdown(20261024-164505).md",
+  "source_sha256": "200f4fef359c229e0f4b446b83e75ded2a91a93dea09c7c048e6dc8f583e6fa9",
+  "source_evidence_boundary": "User-supplied 60-requirement summary; the underlying 51-page PDF was not uploaded in this turn and was not independently inspected.",
+  "licensing": "New materials only; source text included here for private merge traceability, not a redistribution license for third-party excerpts."
+}

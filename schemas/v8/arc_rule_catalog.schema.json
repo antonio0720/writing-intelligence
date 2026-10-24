@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/arc_rule_catalog.schema.json",
+  "type": "object",
+  "required": [
+    "schema",
+    "program",
+    "count",
+    "carried_forward_count",
+    "new_count",
+    "requirements"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.arc.rule_catalog/v1"
+    },
+    "program": {
+      "const": "WI8-ARC"
+    },
+    "count": {
+      "const": 120
+    },
+    "carried_forward_count": {
+      "const": 60
+    },
+    "new_count": {
+      "const": 60
+    },
+    "merger_rule": {
+      "type": "string"
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 120,
+      "maxItems": 120,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "title",
+          "normative_text",
+          "origin",
+          "implementation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[BN][0-9]{3}$"
+          },
+          "number": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "normative_text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "origin": {
+            "type": "string"
+          },
+          "implementation": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

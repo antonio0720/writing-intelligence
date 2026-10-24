@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_reference.schema.json",
+  "title": "Factual/Medium Source v1",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "statement"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "enum": [
+        "fictional",
+        "real_world",
+        "theory",
+        "cultural_reference"
+      ]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "effective_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rights_status": {
+      "enum": [
+        "original",
+        "licensed",
+        "public_domain",
+        "fair_use_review",
+        "unknown"
+      ]
+    },
+    "used_verbatim": {
+      "type": "boolean"
+    },
+    "claims_current": {
+      "type": "boolean"
+    },
+    "freshness_policy": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

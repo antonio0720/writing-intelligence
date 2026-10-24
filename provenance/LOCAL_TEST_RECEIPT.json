@@ -1,0 +1,31 @@
+{
+  "schema": "wi.fiction.local-build-receipt/v1",
+  "date": "2026-10-24",
+  "baseline_commit": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "local_verification": {
+    "commands": [
+      "bash tests/v8/run.sh",
+      "python3 -m compileall -q scripts tests/v8",
+      "jsonschema Draft202012Validator.check_schema for five schemas",
+      "jsonschema validate for 3 instances"
+    ],
+    "observed": "41 unittest cases passed; negative controls passed; 5 schemas and 3 instances validated; no canonical repo mutation"
+  },
+  "negative_controls": [
+    "world forbidden operation => BLOCK / exit 2",
+    "explicitly unpaid resource cost => BLOCK",
+    "unreviewed publication => HOLD / exit 3",
+    "unverified retcon cannot bypass forbidden operation",
+    "unverified editorial waiver cannot pass required review"
+  ],
+  "upstream_not_run": [
+    "scripts/wi.py doctor",
+    "tests/v4/test_wi.sh",
+    "tests/v5/test_wi5.sh",
+    "tests/v6/test_wi6.sh",
+    "tests/v7/test_wi7.sh",
+    "scripts/build-skill.sh",
+    "GitHub CI, PR, release, deployment, real manuscript reader study"
+  ],
+  "state": "local proposed add-only package; independent human validation and upstream integration remain OPEN"
+}

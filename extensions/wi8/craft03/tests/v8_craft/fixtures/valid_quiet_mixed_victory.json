@@ -1,0 +1,361 @@
+{
+  "schema": "wi8.craft.projection/v1",
+  "origin": "fixture",
+  "events": [
+    {
+      "id": "ev-0",
+      "order": 0,
+      "causes": [],
+      "known_at": "2026-10-24T10:00:00-05:00"
+    },
+    {
+      "id": "ev-1",
+      "order": 1,
+      "causes": [
+        "ev-0"
+      ],
+      "known_at": "2026-10-24T10:00:00-05:00"
+    },
+    {
+      "id": "ev-2",
+      "order": 2,
+      "causes": [
+        "ev-1"
+      ],
+      "known_at": "2026-10-24T10:00:00-05:00"
+    },
+    {
+      "id": "ev-3",
+      "order": 3,
+      "causes": [
+        "ev-2"
+      ],
+      "known_at": "2026-10-24T10:00:00-05:00"
+    },
+    {
+      "id": "ev-4",
+      "order": 4,
+      "causes": [
+        "ev-3"
+      ],
+      "known_at": "2026-10-24T10:00:00-05:00"
+    },
+    {
+      "id": "ev-5",
+      "order": 5,
+      "causes": [
+        "ev-4"
+      ],
+      "known_at": "2026-10-24T10:00:00-05:00"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "sc-0",
+      "event_id": "ev-0",
+      "medium": "novel"
+    },
+    {
+      "id": "sc-1",
+      "event_id": "ev-1",
+      "medium": "novel"
+    },
+    {
+      "id": "sc-2",
+      "event_id": "ev-2",
+      "medium": "novel"
+    },
+    {
+      "id": "sc-3",
+      "event_id": "ev-3",
+      "medium": "novel"
+    },
+    {
+      "id": "sc-4",
+      "event_id": "ev-4",
+      "medium": "novel"
+    },
+    {
+      "id": "sc-5",
+      "event_id": "ev-5",
+      "medium": "novel"
+    }
+  ],
+  "opening": {
+    "scene_id": "sc-0",
+    "quiet": true,
+    "strategies": [
+      "relationship",
+      "concealed_clue"
+    ],
+    "causal_anchor_ids": [
+      "ev-4"
+    ],
+    "promises": [
+      {
+        "id": "p-1",
+        "dimension": "relationship",
+        "setup_scene": "sc-0",
+        "payoff_scene": "sc-5"
+      }
+    ],
+    "clues": [
+      {
+        "id": "c-1",
+        "exposed_scene": "sc-0",
+        "revealed_scene": "sc-5",
+        "salience": "low"
+      }
+    ],
+    "misdirections": [
+      {
+        "id": "m-1",
+        "kind": "character_belief"
+      }
+    ]
+  },
+  "spaces": [
+    {
+      "id": "archive",
+      "nodes": [
+        "desk",
+        "hall",
+        "stairs"
+      ],
+      "edges": [
+        [
+          "desk",
+          "hall"
+        ],
+        [
+          "hall",
+          "stairs"
+        ]
+      ],
+      "sight_lines": [
+        [
+          "hall",
+          "desk"
+        ],
+        [
+          "desk",
+          "hall"
+        ],
+        [
+          "hall",
+          "stairs"
+        ]
+      ]
+    }
+  ],
+  "fights": [
+    {
+      "id": "fight-1",
+      "scene_id": "sc-4",
+      "space_id": "archive",
+      "actors": [
+        {
+          "id": "ava",
+          "position": "desk",
+          "objective": "protect the notebook",
+          "resources": {
+            "stamina": 5,
+            "ammo": 2
+          }
+        },
+        {
+          "id": "lan",
+          "position": "hall",
+          "objective": "take notebook",
+          "resources": {
+            "stamina": 6,
+            "ammo": 1
+          }
+        }
+      ],
+      "beats": [
+        {
+          "id": "b-1",
+          "actor": "ava",
+          "to": "hall",
+          "perceived_by": [
+            "lan"
+          ],
+          "move": "sidestep",
+          "resource_delta": {
+            "stamina": -1
+          }
+        },
+        {
+          "id": "b-2",
+          "actor": "lan",
+          "to": "hall",
+          "move": "reach",
+          "resource_delta": {
+            "stamina": -1
+          }
+        }
+      ],
+      "resulting_changes": [
+        "relationship-ava-lan",
+        "notebook-rescued"
+      ]
+    }
+  ],
+  "opposition": {
+    "forces": [
+      {
+        "id": "library_rules",
+        "kind": "institution",
+        "archetypes": []
+      }
+    ],
+    "plans": [
+      {
+        "id": "plan-1",
+        "owner": "lan",
+        "claimed_robust": false,
+        "alternative_responses": [
+          "ava-escapes",
+          "ava-resists"
+        ],
+        "steps": [
+          {
+            "id": "step-1",
+            "choice_dependencies": [
+              {
+                "actor": "ava",
+                "independent_actor": true,
+                "contingency_id": "if-ava-resists"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "suspense": {
+    "pledges": [
+      {
+        "id": "pledge-1",
+        "raised_scene": "sc-0",
+        "payoff_scene": "sc-5",
+        "payoff_evidence": [
+          "notebook-marker"
+        ]
+      }
+    ],
+    "beats": [
+      {
+        "id": "kb-1",
+        "scene_id": "sc-3",
+        "reader_knows": [
+          "lan_waiting"
+        ],
+        "actor_knowledge": {
+          "ava": [
+            "notebook_exists"
+          ],
+          "lan": [
+            "lan_waiting"
+          ]
+        },
+        "used_knowledge": {
+          "ava": [
+            "notebook_exists"
+          ]
+        }
+      }
+    ],
+    "clocks": [
+      {
+        "id": "clock-1",
+        "expiry_condition": "library shuts at dusk",
+        "changes_choices": [
+          "ava must hurry"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "id": "dialogue-1",
+        "speaker": "ava",
+        "tactic": "conceal the exit plan",
+        "resulting_change": "lan asks for proof"
+      }
+    ]
+  },
+  "goals": [
+    {
+      "id": "goal-book",
+      "level": "novel",
+      "owner": "ava"
+    },
+    {
+      "id": "goal-archive",
+      "level": "sequence",
+      "parent_id": "goal-book",
+      "owner": "ava"
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "outcome-archive",
+      "goal_id": "goal-archive",
+      "event_id": "ev-4",
+      "local_result": "achieved",
+      "resource_cost": 2,
+      "relationship_cost": 1,
+      "antagonist_benefit": 3,
+      "interpretations": [
+        {
+          "observer": "ava",
+          "known_at": "2026-10-23T11:00:00-05:00",
+          "interpretation": "local victory"
+        },
+        {
+          "observer": "ava",
+          "known_at": "2026-10-24T11:00:00-05:00",
+          "interpretation": "the rival gained leverage",
+          "revealed_by_event": "ev-5"
+        }
+      ]
+    }
+  ],
+  "twists": [
+    {
+      "id": "twist-1",
+      "required_event_ids": [
+        "ev-0",
+        "ev-4"
+      ],
+      "guaranteed": false,
+      "counterfactuals": [
+        "if the notebook burned, the reveal changes"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "source-1",
+      "kind": "fictional",
+      "statement": "The archive doors lock at sunset",
+      "rights_status": "original"
+    }
+  ],
+  "adaptations": [
+    {
+      "id": "adapt-1",
+      "source_scene": "sc-4",
+      "target_scene": "sc-5",
+      "medium": "audio",
+      "source_meaning_ids": [
+        "rescue-notebook"
+      ],
+      "target_meaning_ids": [
+        "rescue-notebook"
+      ]
+    }
+  ],
+  "reader_reviews": []
+}

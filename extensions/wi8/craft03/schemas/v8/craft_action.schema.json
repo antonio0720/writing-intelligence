@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_action.schema.json",
+  "title": "Fight Projection v1",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [
+    "id",
+    "scene_id",
+    "space_id",
+    "actors",
+    "beats",
+    "resulting_changes"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scene_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "space_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "position": {
+            "type": "string",
+            "minLength": 1
+          },
+          "objective": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resources": {
+            "type": "object",
+            "properties": {
+              "ammo": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "stamina": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "supplies": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "mobility": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "position",
+          "objective",
+          "resources"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to": {
+            "type": "string",
+            "minLength": 1
+          },
+          "perceived_by": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "move": {
+            "type": "string",
+            "minLength": 1
+          },
+          "adaptation_or_motif": {
+            "type": "string",
+            "minLength": 1
+          },
+          "twist": {
+            "type": "boolean"
+          },
+          "setup_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resource_delta": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          "canon_mobility_exception_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recovery_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "actor"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "resulting_changes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

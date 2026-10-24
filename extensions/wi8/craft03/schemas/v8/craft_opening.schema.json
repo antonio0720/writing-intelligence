@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_opening.schema.json",
+  "title": "Opening Projection v1",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [
+    "scene_id"
+  ],
+  "properties": {
+    "scene_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "strategies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "quiet": {
+      "type": "boolean"
+    },
+    "spectacle": {
+      "type": "boolean"
+    },
+    "causal_anchor_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "nonlinear": {
+      "type": "boolean"
+    },
+    "disclosure_contract": {
+      "type": "object",
+      "properties": {
+        "assumed_time": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assumed_pov": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reframe_scene": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [],
+      "additionalProperties": true
+    },
+    "promises": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dimension": {
+            "type": "string",
+            "minLength": 1
+          },
+          "payoff_scene": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "deliberate_defer": {
+            "type": "boolean"
+          },
+          "setup_scene": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "dimension"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "clues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "exposed_scene": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revealed_scene": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nonlinear_order": {
+            "type": "boolean"
+          },
+          "retroactively_inserted": {
+            "type": "boolean"
+          },
+          "salience": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "exposed_scene",
+          "revealed_scene"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "misdirections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "character_belief",
+              "misleading_image",
+              "unreliable_speaker",
+              "authorial_falsehood"
+            ]
+          },
+          "intentional_unreliability": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "genre_tag": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

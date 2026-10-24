@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_suspense.schema.json",
+  "title": "Suspense and Speech Projection v1",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "pledges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "raised_scene": {
+            "type": "string",
+            "minLength": 1
+          },
+          "payoff_scene": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "declared_carry": {
+            "type": "boolean"
+          },
+          "payoff_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id",
+          "raised_scene"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scene_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reader_knows": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "actor_knowledge": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "used_knowledge": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "scene_id"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "clocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expiry_condition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "changes_choices": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "dialogue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "speaker": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tactic": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resulting_change": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "speaker"
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

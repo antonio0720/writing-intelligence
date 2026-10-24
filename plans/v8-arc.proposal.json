@@ -1,0 +1,152 @@
+{
+  "schema": "wi8.arc.manifest/v1",
+  "program": "WI8-ARC",
+  "baseline": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "status": "additive_package_locally_testable_not_released",
+  "upstream_written": false,
+  "dependency": "canonical v6 meaning graph and v5 Storyworld OS",
+  "waves": [
+    {
+      "id": "WI8-00",
+      "title": "Pin baseline and repo law",
+      "status": "planned",
+      "depends_on": [],
+      "exit_conditions": [
+        "GitHub HEAD readback",
+        "Source rights and conflict map"
+      ]
+    },
+    {
+      "id": "WI8-01",
+      "title": "Type contracts and closed-type-compatible projection",
+      "status": "planned",
+      "depends_on": [
+        "WI8-00"
+      ],
+      "exit_conditions": [
+        "JSON schema validation",
+        "No second graph state"
+      ]
+    },
+    {
+      "id": "WI8-02",
+      "title": "Bitemporal desires, beliefs and decisions",
+      "status": "planned",
+      "depends_on": [
+        "WI8-01"
+      ],
+      "exit_conditions": [
+        "as-of positive/negative controls",
+        "No history overwrite"
+      ]
+    },
+    {
+      "id": "WI8-03",
+      "title": "Conservative ending derivation",
+      "status": "planned",
+      "depends_on": [
+        "WI8-02"
+      ],
+      "exit_conditions": [
+        "all four quadrants",
+        "ambiguous and partial refuse"
+      ]
+    },
+    {
+      "id": "WI8-04",
+      "title": "Arc family independent of ending result",
+      "status": "planned",
+      "depends_on": [
+        "WI8-03"
+      ],
+      "exit_conditions": [
+        "flat, positive, fall, corruption fixtures",
+        "no mandatory transformation"
+      ]
+    },
+    {
+      "id": "WI8-05",
+      "title": "Character relation and impact witnesses",
+      "status": "planned",
+      "depends_on": [
+        "WI8-04"
+      ],
+      "exit_conditions": [
+        "scene and event refs",
+        "causal edge cross-check"
+      ]
+    },
+    {
+      "id": "WI8-06",
+      "title": "Ending/catharsis evaluator and human boundary",
+      "status": "planned",
+      "depends_on": [
+        "WI8-05"
+      ],
+      "exit_conditions": [
+        "last-scene choice witness",
+        "no machine claims reader happiness"
+      ]
+    },
+    {
+      "id": "WI8-07",
+      "title": "Carried-forward 60 rule integration",
+      "status": "planned",
+      "depends_on": [
+        "WI8-06"
+      ],
+      "exit_conditions": [
+        "merge with earlier zip without duplicate owners",
+        "upstream regression"
+      ]
+    },
+    {
+      "id": "WI8-08",
+      "title": "Reader calibration",
+      "status": "planned",
+      "depends_on": [
+        "WI8-07"
+      ],
+      "exit_conditions": [
+        "blinded study instrument",
+        "measured disagreements"
+      ]
+    },
+    {
+      "id": "WI8-09",
+      "title": "Canon-authorized acceptance",
+      "status": "planned",
+      "depends_on": [
+        "WI8-08"
+      ],
+      "exit_conditions": [
+        "core simulate/authority/commit in real workspace",
+        "negative revocation test"
+      ]
+    },
+    {
+      "id": "WI8-10",
+      "title": "Publication preflight",
+      "status": "planned",
+      "depends_on": [
+        "WI8-09"
+      ],
+      "exit_conditions": [
+        "rights, metadata, reader feedback independently verified",
+        "independent rendering checks"
+      ]
+    },
+    {
+      "id": "WI8-11",
+      "title": "Independent release proof",
+      "status": "planned",
+      "depends_on": [
+        "WI8-10"
+      ],
+      "exit_conditions": [
+        "v4-v7 tests",
+        "negative controls and signed receipts"
+      ]
+    }
+  ]
+}

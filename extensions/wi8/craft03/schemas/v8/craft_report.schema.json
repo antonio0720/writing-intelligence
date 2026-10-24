@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_report.schema.json",
+  "title": "Craft 03 Report",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [
+    "schema",
+    "input_digest",
+    "structural_verdict",
+    "editorial_verdict",
+    "publication_verdict",
+    "counts",
+    "findings",
+    "knowledge_as_of",
+    "claims_not_established"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi8.craft.report/v1"
+    },
+    "input_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "structural_verdict": {
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ]
+    },
+    "editorial_verdict": {
+      "enum": [
+        "HOLD",
+        "NOT_MEASURED"
+      ]
+    },
+    "publication_verdict": {
+      "const": "HOLD"
+    },
+    "claims_not_established": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "review_signals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "errors",
+        "review_signals",
+        "total"
+      ],
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "enum": [
+              "error",
+              "review",
+              "hold"
+            ]
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dimension": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "record": {
+            "type": "string"
+          },
+          "requirement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "severity",
+          "code",
+          "dimension",
+          "message",
+          "record",
+          "requirement"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "knowledge_as_of": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

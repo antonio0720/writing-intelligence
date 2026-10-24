@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/antonio0720/writing-intelligence",
+  "remote_ref": "main",
+  "observed_commit": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "date": "2026-10-24",
+  "read_method": "GitHub connected repository",
+  "user_source_sha256": "4ac6421b2efbd80d48cb63857cfe6d2fe8f47eae0de8795dd02936e44bfb7569",
+  "modifies_repository": false,
+  "status": "local add-only proposed v8 upgrade, not merged"
+}

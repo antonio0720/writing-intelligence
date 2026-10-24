@@ -1,0 +1,60 @@
+{
+  "schema": "wi.fiction.program-proposal/v1",
+  "program": "WI-FI8 Fiction & Thriller Intelligence",
+  "state": "proposal; not an official v8 release manifest",
+  "baseline_repo": "antonio0720/writing-intelligence",
+  "baseline_commit": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "milestones": [
+    {
+      "id": "FI8-00",
+      "name": "Preserve source and map canonical owners",
+      "status": "completed_locally",
+      "evidence": ["provenance/USER_REQUIREMENTS.txt", "provenance/BASELINE.json", "references/v8/FICTION_INTELLIGENCE_CONSTITUTION.md"],
+      "outstanding": ["upstream author review and accept"]
+    },
+    {
+      "id": "FI8-01",
+      "name": "Create additive rule catalog and typed reporting sidecar",
+      "status": "completed_locally",
+      "depends_on": ["FI8-00"],
+      "evidence": ["rules/fiction_v8_rules.json", "schemas/v8/fiction_ir.schema.json", "scripts/fiction_v8/engine.py"],
+      "outstanding": ["compare generated annotations against real novel and manually reviewed ground truth"]
+    },
+    {
+      "id": "FI8-02",
+      "name": "Implement negative controls and packaging",
+      "status": "completed_locally",
+      "depends_on": ["FI8-01"],
+      "evidence": ["tests/v8/test_fiction.py", "tests/v8/run.sh"],
+      "outstanding": ["full upstream regression and .skill bundling not run"]
+    },
+    {
+      "id": "FI8-03",
+      "name": "Canonical Storyworld OS extraction and graph adapter",
+      "status": "planned",
+      "depends_on": ["FI8-02"],
+      "exit": "sidecar source IDs and root digests resolve to canonical WI nodes; bitemporal and authority boundaries preserved"
+    },
+    {
+      "id": "FI8-04",
+      "name": "Full manuscript developmental evidence evaluation",
+      "status": "planned",
+      "depends_on": ["FI8-03"],
+      "exit": "independent human-edited scene annotations, open/ending promise matrix, reviewed all critical flags and blinded regression corpus"
+    },
+    {
+      "id": "FI8-05",
+      "name": "EPUB/print proof and independent reader trial",
+      "status": "planned",
+      "depends_on": ["FI8-04"],
+      "exit": "source-bound export checks, consented readers on exact digest, limitations reported and human release authorization"
+    },
+    {
+      "id": "FI8-06",
+      "name": "Upstream v8 decision and governed release",
+      "status": "planned",
+      "depends_on": ["FI8-05"],
+      "exit": "PR merged after v4-v7 regressions, installed bundles verified, status receipt accepted, version and docs updated truthfully"
+    }
+  ]
+}

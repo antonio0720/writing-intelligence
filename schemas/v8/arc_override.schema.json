@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/arc_override.schema.json",
+  "title": "Proposed Writer Deviation Record",
+  "description": "A declaration for canonical approval; this module never applies it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "override_id",
+    "rule_id",
+    "scope",
+    "reason",
+    "actor_id",
+    "base_graph_root",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.arc.override/v1"
+    },
+    "override_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+    },
+    "rule_id": {
+      "pattern": "^[BN][0-9]{3}$",
+      "type": "string"
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+      },
+      "minItems": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 10
+    },
+    "actor_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+    },
+    "base_graph_root": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "status": {
+      "const": "proposed"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_semantic_impact": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+      }
+    },
+    "authority_grant_ref": {
+      "type": "string"
+    }
+  }
+}

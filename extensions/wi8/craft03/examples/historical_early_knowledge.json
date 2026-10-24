@@ -1,0 +1,28 @@
+{
+  "schema": "wi8.craft.report/v1",
+  "input_digest": "sha256:83bc88fb77e62877eaf1dc8a2c34a286151db861c4d1e089985e7223f4b66165",
+  "structural_verdict": "PASS",
+  "editorial_verdict": "NOT_MEASURED",
+  "publication_verdict": "HOLD",
+  "claims_not_established": [
+    "reader_emotional_effect",
+    "literary_excellence",
+    "upstream_canonical_integration",
+    "publication_readiness"
+  ],
+  "counts": {
+    "errors": 0,
+    "review_signals": 0,
+    "total": 0
+  },
+  "findings": [],
+  "knowledge_as_of": {
+    "outcome-archive": [
+      {
+        "observer": "ava",
+        "known_at": "2026-10-23T11:00:00-05:00",
+        "interpretation": "local victory"
+      }
+    ]
+  }
+}

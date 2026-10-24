@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_opposition.schema.json",
+  "title": "Antagonist Projection v1",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "forces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "archetypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "harm_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sympathetic": {
+            "type": "boolean"
+          },
+          "harm_accounted": {
+            "type": "boolean"
+          },
+          "requires_villain": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claimed_robust": {
+            "type": "boolean"
+          },
+          "alternative_responses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "choice_dependencies": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "actor": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "independent_actor": {
+                        "type": "boolean"
+                      },
+                      "established_control": {
+                        "type": "boolean"
+                      },
+                      "contingency_id": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "actor"
+                    ],
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "id",
+          "owner"
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "wi8.craft.local-test-receipt/v1",
+  "package": "independent ZIP #3",
+  "status": "PASS_LOCAL_ONLY",
+  "upstream_release_status": "NOT_INTEGRATED",
+  "baseline_commit": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "commands": [
+    "python3 -m unittest discover -s tests/v8_craft -v",
+    "python3 scripts/check_craft_schemas.py",
+    "python3 scripts/check_craft03_package.py"
+  ],
+  "observed": {
+    "unittest_count": 95,
+    "unittest_result": "OK",
+    "schema_count": 8,
+    "fixtures_schema_validated": 7,
+    "instrumented_requirement_count": 29,
+    "requirement_registry_count": 60,
+    "upstream_waves_planned": 12,
+    "upstream_waves_shipped": 0
+  },
+  "negative_controls": [
+    "rejects fake canonical_export",
+    "negative resource underflow blocks",
+    "POV across missing sight line blocks",
+    "unknown event/goal reference blocks",
+    "omniscient antagonist plan prompts review",
+    "later interpretation does not overwrite old",
+    "publication gate always holds",
+    "installer refuses wrong commit/overwrite"
+  ],
+  "independent_readback": "ZIP extracted in new temp dir, checksums and all 95 unittests rerun; final sealing script records this below",
+  "limitations": [
+    "Upstream v4\u2013v7 regression tests not run: package not merged",
+    "No external reader evidence",
+    "Underlying 51-page source PDF not provided on this turn",
+    "Schema conformance is checked using separately installed jsonschema tooling, while runtime CLI is stdlib-only"
+  ]
+}

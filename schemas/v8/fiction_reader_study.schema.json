@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WI Fiction Independent Reader Study",
+  "type": "object",
+  "required": [
+    "schema",
+    "work_id",
+    "manuscript_digest",
+    "independent_readers",
+    "consent_confirmed",
+    "methodology",
+    "findings",
+    "reconciliation"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.fiction.reader-study/v1"
+    },
+    "work_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manuscript_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "independent_readers": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "consent_confirmed": {
+      "type": "boolean"
+    },
+    "methodology": {
+      "type": "string",
+      "minLength": 1
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension",
+          "anonymous_reader_id",
+          "scene_refs",
+          "observed_response"
+        ],
+        "properties": {
+          "dimension": {
+            "enum": [
+              "confusion",
+              "attachment",
+              "suspense",
+              "pacing",
+              "ending",
+              "other"
+            ]
+          },
+          "anonymous_reader_id": {
+            "type": "string"
+          },
+          "scene_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "observed_response": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "reconciliation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "study_limitations": {
+      "type": "string"
+    }
+  }
+}

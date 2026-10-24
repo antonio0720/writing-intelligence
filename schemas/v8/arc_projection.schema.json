@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/arc_projection.schema.json",
+  "title": "Read-only Fiction Arc Projection v1",
+  "description": "Portable validation shape for an export/fixture from canonical WI meaning graph, not a second canonical store. A matching digest must be verified by core.",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "actor_id"
+      ],
+      "properties": {
+        "basis": {
+          "enum": [
+            "author_asserted",
+            "reviewer_inferred",
+            "reader_reported",
+            "unverified",
+            "consistent_with_canon"
+          ]
+        },
+        "actor_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+        },
+        "source_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "logical_id",
+        "revision",
+        "kind",
+        "character_ref",
+        "valid_from",
+        "valid_until",
+        "known_at",
+        "provenance",
+        "payload",
+        "evidence_refs",
+        "derived_from"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "supersedes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "want",
+            "need",
+            "belief",
+            "ghost",
+            "arc_turn",
+            "choice",
+            "impact",
+            "relationship",
+            "cost",
+            "ending"
+          ]
+        },
+        "character_ref": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+        },
+        "valid_from": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+        },
+        "valid_until": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "known_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+          }
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+          }
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "want",
+                  "need",
+                  "belief",
+                  "ghost"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "proposition"
+                ],
+                "properties": {
+                  "proposition": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "ending"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "type": "object",
+                "required": [
+                  "want_ref",
+                  "need_ref",
+                  "want_outcome",
+                  "need_outcome",
+                  "closure"
+                ],
+                "properties": {
+                  "want_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+                  },
+                  "need_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+                  },
+                  "choice_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "want_outcome": {
+                    "enum": [
+                      "attained",
+                      "thwarted",
+                      "renounced",
+                      "sacrificed",
+                      "partial",
+                      "unresolved",
+                      "disputed",
+                      "n_a"
+                    ]
+                  },
+                  "need_outcome": {
+                    "enum": [
+                      "fulfilled",
+                      "unfulfilled",
+                      "rejected",
+                      "partial",
+                      "unresolved",
+                      "disputed",
+                      "n_a"
+                    ]
+                  },
+                  "closure": {
+                    "enum": [
+                      "closed",
+                      "open",
+                      "deliberately_ambiguous"
+                    ]
+                  },
+                  "reader_valence": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "moral_cost": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "justice": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source",
+    "scope",
+    "characters",
+    "events",
+    "assertions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.arc.projection/v1"
+    },
+    "scope": {
+      "enum": [
+        "working_draft",
+        "novel_final",
+        "series"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo",
+        "branch",
+        "graph_root",
+        "origin",
+        "extracted_at"
+      ],
+      "properties": {
+        "repo": {
+          "const": "antonio0720/writing-intelligence"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "graph_root": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "origin": {
+          "enum": [
+            "fixture",
+            "canonical_export"
+          ]
+        },
+        "extracted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "adapter_revision": {
+          "type": "string"
+        },
+        "readback_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "role",
+          "arc_family"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "protagonist",
+              "ensemble",
+              "supporting",
+              "antagonist"
+            ]
+          },
+          "arc_family": {
+            "enum": [
+              "positive_change",
+              "flat",
+              "corruption",
+              "fall",
+              "disillusionment",
+              "open",
+              "custom"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "order",
+          "known_at",
+          "scene_ref",
+          "causes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "known_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scene_ref": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+          },
+          "causes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+            }
+          }
+        }
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assertion"
+      }
+    }
+  }
+}

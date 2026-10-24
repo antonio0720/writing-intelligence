@@ -1,0 +1,27 @@
+{
+  "interface_version": "wi8.craft03/0.1.0-proposal",
+  "package": "writing-intelligence-v8-craft03-independent",
+  "canonical_repo": "antonio0720/writing-intelligence",
+  "canonical_ref": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "entrypoint": "scripts/wi-craft.py",
+  "python": ">=3.8",
+  "runtime_dependency_policy": "stdlib-only",
+  "network_access": false,
+  "canonical_graph_read": false,
+  "canonical_graph_write": false,
+  "extension_install_prefix": "extensions/wi8/craft03",
+  "accepted_origins": ["fixture", "draft_projection"],
+  "rejected_unimplemented_origins": ["canonical_export", "signed_canonical_export"],
+  "output_schema": "wi8.craft.report/v1",
+  "input_schema": "wi8.craft.projection/v1",
+  "gate_separation": ["mechanical_only", "editorial_review", "publication_hold"],
+  "canonical_adoption_requires": [
+    "approved graph-to-projection adapter",
+    "schema and node admission migration or compatible extension contract",
+    "source node/state digest verification",
+    "exact prior state binding",
+    "human authority and canon edit simulation",
+    "upstream v4-v7 regression and negative controls",
+    "release receipts with independent readback"
+  ]
+}

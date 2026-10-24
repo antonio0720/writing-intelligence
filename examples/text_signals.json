@@ -1,0 +1,37 @@
+{
+  "findings": [
+    {
+      "anchors": [],
+      "method": "heuristic",
+      "reason": "10 successive sentences in the same coarse length band; rhythm may be intentional",
+      "rule_id": "FI-08",
+      "severity": "review",
+      "status": "SIGNAL"
+    },
+    {
+      "anchors": [
+        "char:106"
+      ],
+      "method": "heuristic",
+      "reason": "Potential unearned narration about its own effects",
+      "rule_id": "FI-09",
+      "severity": "review",
+      "status": "SIGNAL"
+    },
+    {
+      "anchors": [
+        "char:252",
+        "char:263",
+        "char:299"
+      ],
+      "method": "heuristic",
+      "reason": "Potential raw math, encoding damage or placeholder requiring export inspection",
+      "rule_id": "FI-55",
+      "severity": "review",
+      "status": "SIGNAL"
+    }
+  ],
+  "limitation": "Heuristics are review leads, not proof of prose defects.",
+  "schema": "wi.fiction.text-signals/v1",
+  "text_sha256": "sha256:65650243d0674b7b9c6f07e5601aba97af0aee62c368ec4429e4f2e0dbd6d172"
+}

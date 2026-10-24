@@ -1,0 +1,380 @@
+{
+  "schema": "wi8.craft.finding_map/v1",
+  "source": "scripts/craft_v8/engine.py",
+  "source_of_truth": "executable call sites",
+  "finding_signals": [
+    {
+      "rule": "C121",
+      "finding_code": "WI8-C03-CUSTOM-STRATEGY",
+      "severity": "review",
+      "line": 217
+    },
+    {
+      "rule": "C121",
+      "finding_code": "WI8-C03-OPENING-SCENE",
+      "severity": "error",
+      "line": 220
+    },
+    {
+      "rule": "C122",
+      "finding_code": "WI8-C03-DISCONNECTED-HOOK",
+      "severity": "review",
+      "line": 250
+    },
+    {
+      "rule": "C124",
+      "finding_code": "WI8-C03-PAYOFF",
+      "severity": "error",
+      "line": 226
+    },
+    {
+      "rule": "C124",
+      "finding_code": "WI8-C03-PROMISE-DEBT",
+      "severity": "review",
+      "line": 224
+    },
+    {
+      "rule": "C126",
+      "finding_code": "WI8-C03-NONLINEAR-DISCLOSURE",
+      "severity": "review",
+      "line": 246
+    },
+    {
+      "rule": "C130",
+      "finding_code": "WI8-C03-CLUE-LINK",
+      "severity": "error",
+      "line": 230
+    },
+    {
+      "rule": "C130",
+      "finding_code": "WI8-C03-CLUE-ORDER",
+      "severity": "review",
+      "line": 237
+    },
+    {
+      "rule": "C130",
+      "finding_code": "WI8-C03-UNFAIR-CLUE",
+      "severity": "error",
+      "line": 239
+    },
+    {
+      "rule": "C131",
+      "finding_code": "WI8-C03-MISDIRECTION",
+      "severity": "error",
+      "line": 242
+    },
+    {
+      "rule": "C131",
+      "finding_code": "WI8-C03-UNFAIR-NARRATOR",
+      "severity": "review",
+      "line": 244
+    },
+    {
+      "rule": "C134",
+      "finding_code": "WI8-C03-BEAT-ACTOR",
+      "severity": "error",
+      "line": 275
+    },
+    {
+      "rule": "C134",
+      "finding_code": "WI8-C03-COMBAT-ID",
+      "severity": "error",
+      "line": 265
+    },
+    {
+      "rule": "C135",
+      "finding_code": "WI8-C03-FIGHT-LINK",
+      "severity": "error",
+      "line": 255
+    },
+    {
+      "rule": "C135",
+      "finding_code": "WI8-C03-GEOMETRY",
+      "severity": "error",
+      "line": 278
+    },
+    {
+      "rule": "C135",
+      "finding_code": "WI8-C03-IMPOSSIBLE-MOVE",
+      "severity": "error",
+      "line": 280
+    },
+    {
+      "rule": "C135",
+      "finding_code": "WI8-C03-SPACE-EDGE",
+      "severity": "error",
+      "line": 259
+    },
+    {
+      "rule": "C135",
+      "finding_code": "WI8-C03-START-POS",
+      "severity": "error",
+      "line": 271
+    },
+    {
+      "rule": "C136",
+      "finding_code": "WI8-C03-OMNISCIENCE",
+      "severity": "error",
+      "line": 286
+    },
+    {
+      "rule": "C136",
+      "finding_code": "WI8-C03-POV",
+      "severity": "error",
+      "line": 284
+    },
+    {
+      "rule": "C137",
+      "finding_code": "WI8-C03-INITIAL-RESOURCE",
+      "severity": "error",
+      "line": 269
+    },
+    {
+      "rule": "C137",
+      "finding_code": "WI8-C03-RESOURCE-NEGATIVE",
+      "severity": "error",
+      "line": 294
+    },
+    {
+      "rule": "C137",
+      "finding_code": "WI8-C03-RESOURCE-TYPE",
+      "severity": "error",
+      "line": 289
+    },
+    {
+      "rule": "C137",
+      "finding_code": "WI8-C03-UNEARNED-RECOVERY",
+      "severity": "review",
+      "line": 296
+    },
+    {
+      "rule": "C137",
+      "finding_code": "WI8-C03-UNKNOWN-RESOURCE",
+      "severity": "error",
+      "line": 291
+    },
+    {
+      "rule": "C139",
+      "finding_code": "WI8-C03-REPEAT-MOVE",
+      "severity": "review",
+      "line": 301
+    },
+    {
+      "rule": "C141",
+      "finding_code": "WI8-C03-UNEARNED-TWIST",
+      "severity": "review",
+      "line": 304
+    },
+    {
+      "rule": "C145",
+      "finding_code": "WI8-C03-EMPTY-ACTION",
+      "severity": "review",
+      "line": 306
+    },
+    {
+      "rule": "C146",
+      "finding_code": "WI8-C03-FORCED-VILLAIN",
+      "severity": "review",
+      "line": 313
+    },
+    {
+      "rule": "C154",
+      "finding_code": "WI8-C03-HARM-ERASURE",
+      "severity": "review",
+      "line": 311
+    },
+    {
+      "rule": "C159",
+      "finding_code": "WI8-C03-EMPTY-PAYOFF",
+      "severity": "review",
+      "line": 333
+    },
+    {
+      "rule": "C159",
+      "finding_code": "WI8-C03-PLEDGE-PAYOFF",
+      "severity": "error",
+      "line": 329
+    },
+    {
+      "rule": "C159",
+      "finding_code": "WI8-C03-PLEDGE-SCENE",
+      "severity": "error",
+      "line": 327
+    },
+    {
+      "rule": "C159",
+      "finding_code": "WI8-C03-UNPAID-PLEDGE",
+      "severity": "review",
+      "line": 331
+    },
+    {
+      "rule": "C160",
+      "finding_code": "WI8-C03-STATIC-DIALOGUE",
+      "severity": "review",
+      "line": 346
+    },
+    {
+      "rule": "C161",
+      "finding_code": "WI8-C03-KNOWLEDGE-TYPE",
+      "severity": "error",
+      "line": 337
+    },
+    {
+      "rule": "C161",
+      "finding_code": "WI8-C03-UNLEARNED-FACT",
+      "severity": "error",
+      "line": 340
+    },
+    {
+      "rule": "C165",
+      "finding_code": "WI8-C03-EMPTY-CLOCK",
+      "severity": "review",
+      "line": 343
+    },
+    {
+      "rule": "C168",
+      "finding_code": "WI8-C03-GOAL-CYCLE",
+      "severity": "error",
+      "line": 355
+    },
+    {
+      "rule": "C168",
+      "finding_code": "WI8-C03-GOAL-PARENT",
+      "severity": "error",
+      "line": 352
+    },
+    {
+      "rule": "C169",
+      "finding_code": "WI8-C03-OUTCOME-LINK",
+      "severity": "error",
+      "line": 359
+    },
+    {
+      "rule": "C169",
+      "finding_code": "WI8-C03-OUTCOME-VECTOR",
+      "severity": "error",
+      "line": 363
+    },
+    {
+      "rule": "C170",
+      "finding_code": "WI8-C03-INTERPRET-TIME",
+      "severity": "error",
+      "line": 370
+    },
+    {
+      "rule": "C170",
+      "finding_code": "WI8-C03-KNOWLEDGE-HISTORY",
+      "severity": "error",
+      "line": 372
+    },
+    {
+      "rule": "C170",
+      "finding_code": "WI8-C03-ORDER",
+      "severity": "error",
+      "line": 210
+    },
+    {
+      "rule": "C170",
+      "finding_code": "WI8-C03-REVEAL-EVENT",
+      "severity": "error",
+      "line": 375
+    },
+    {
+      "rule": "C170",
+      "finding_code": "WI8-C03-TIME",
+      "severity": "error",
+      "line": 208
+    },
+    {
+      "rule": "C171",
+      "finding_code": "WI8-C03-UNTESTED-PLAN",
+      "severity": "review",
+      "line": 321
+    },
+    {
+      "rule": "C172",
+      "finding_code": "WI8-C03-GOAL-REPLACEMENT",
+      "severity": "error",
+      "line": 354
+    },
+    {
+      "rule": "C173",
+      "finding_code": "WI8-C03-CAUSAL-ORDER",
+      "severity": "error",
+      "line": 205
+    },
+    {
+      "rule": "C173",
+      "finding_code": "WI8-C03-EVENT-CYCLE",
+      "severity": "error",
+      "line": 212
+    },
+    {
+      "rule": "C173",
+      "finding_code": "WI8-C03-EVENT-LINK",
+      "severity": "error",
+      "line": 202
+    },
+    {
+      "rule": "C173",
+      "finding_code": "WI8-C03-TWIST-PRECONDITION",
+      "severity": "review",
+      "line": 378
+    },
+    {
+      "rule": "C173",
+      "finding_code": "WI8-C03-TWIST-REF",
+      "severity": "error",
+      "line": 380
+    },
+    {
+      "rule": "C173",
+      "finding_code": "WI8-C03-UNTESTED-TWIST",
+      "severity": "review",
+      "line": 382
+    },
+    {
+      "rule": "C174",
+      "finding_code": "WI8-C03-OMNISCIENT-PLAN",
+      "severity": "review",
+      "line": 319
+    },
+    {
+      "rule": "C178",
+      "finding_code": "WI8-C03-RIGHTS",
+      "severity": "review",
+      "line": 392
+    },
+    {
+      "rule": "C179",
+      "finding_code": "WI8-C03-FRESHNESS",
+      "severity": "review",
+      "line": 390
+    },
+    {
+      "rule": "C179",
+      "finding_code": "WI8-C03-SOURCE-HYGIENE",
+      "severity": "review",
+      "line": 388
+    },
+    {
+      "rule": "C180",
+      "finding_code": "WI8-C03-ADAPT-SCENE",
+      "severity": "error",
+      "line": 395
+    },
+    {
+      "rule": "C180",
+      "finding_code": "WI8-C03-MEDIUM",
+      "severity": "review",
+      "line": 399
+    },
+    {
+      "rule": "C180",
+      "finding_code": "WI8-C03-SEMANTIC-LOSS",
+      "severity": "review",
+      "line": 397
+    }
+  ],
+  "requires_human_verdict_for_quality": true
+}

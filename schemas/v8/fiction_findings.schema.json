@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WI Fiction Audit Report",
+  "type": "object",
+  "required": [
+    "schema",
+    "work_id",
+    "input_digest",
+    "catalog_digest",
+    "summary",
+    "results",
+    "schema_errors"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.fiction.audit/v1"
+    },
+    "work_id": {
+      "type": "string"
+    },
+    "input_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "catalog_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "schema_errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "results": {
+      "type": "array",
+      "minItems": 60,
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "method",
+          "events",
+          "assessments"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "UNASSESSED",
+              "SIGNAL",
+              "DATA_GAP",
+              "DEFECT",
+              "EDITORIAL_FAIL",
+              "EDITORIAL_CONCERN",
+              "REVIEWED_PASS",
+              "NOT_APPLICABLE",
+              "WAIVED"
+            ]
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "rule_id",
+                "status",
+                "reason",
+                "anchors"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

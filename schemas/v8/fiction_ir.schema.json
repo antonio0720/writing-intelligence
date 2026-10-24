@@ -1,0 +1,669 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/fiction_ir.schema.json",
+  "title": "Fiction Manuscript Audit IR v1 (derived sidecar, not canon replacement)",
+  "type": "object",
+  "required": [
+    "schema",
+    "work",
+    "scenes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.fiction.manuscript/v1"
+    },
+    "work": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "central_conflict": {
+          "type": "string"
+        },
+        "emotional_center": {
+          "type": "string"
+        },
+        "central_resolution": {
+          "type": "string"
+        },
+        "opening_promises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "delivered_promises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "boolean"
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "chapter": {
+            "type": "string"
+          },
+          "act": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "pov": {
+            "type": "string"
+          },
+          "tension": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "major_suspense": {
+            "type": "boolean"
+          },
+          "recovery": {
+            "type": "boolean"
+          },
+          "pressures": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "physical",
+                "emotional",
+                "social",
+                "moral",
+                "informational",
+                "institutional",
+                "relational"
+              ]
+            }
+          },
+          "new_danger": {
+            "type": "string"
+          },
+          "new_info": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lost_options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "consequences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "state_deltas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "state_signature": {
+            "type": "string"
+          },
+          "power_uses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rule_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "canon_exception": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "rule_id",
+                "action"
+              ]
+            }
+          },
+          "anchor": {
+            "$ref": "#/$defs/anchor"
+          }
+        },
+        "required": [
+          "id",
+          "order",
+          "chapter",
+          "act"
+        ]
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "role": {
+            "type": "string"
+          },
+          "private_desire": {
+            "type": "string"
+          },
+          "history": {
+            "type": "string"
+          },
+          "contradiction": {
+            "type": "string"
+          },
+          "desire_conflict": {
+            "type": "string"
+          },
+          "key_choice_scene_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "appears_in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "role"
+        ]
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "actors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scene_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "trust": {
+                  "type": "integer",
+                  "minimum": -5,
+                  "maximum": 5
+                },
+                "cause": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "actors"
+        ]
+      }
+    },
+    "mysteries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "question": {
+            "type": "string"
+          },
+          "raised_scene": {
+            "$ref": "#/$defs/id"
+          },
+          "resolution_scene": {
+            "$ref": "#/$defs/id"
+          },
+          "deferred_reason": {
+            "type": "string"
+          },
+          "importance": {
+            "enum": [
+              "major",
+              "minor"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "question",
+          "raised_scene"
+        ]
+      }
+    },
+    "threats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "major": {
+            "type": "boolean"
+          },
+          "proven_consequence_scene": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "motifs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "uses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scene_id": {
+                  "$ref": "#/$defs/id"
+                },
+                "meaning": {
+                  "type": "string"
+                },
+                "intentional": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "world_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "mechanism": {
+            "type": "string"
+          },
+          "permits": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "forbids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "costs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "demonstrated_in": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "authority": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "mechanism"
+        ]
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "scene_id": {
+            "$ref": "#/$defs/id"
+          },
+          "story_time": {
+            "type": "string"
+          },
+          "record_time": {
+            "type": "string"
+          },
+          "anticipatory_record": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "emotional_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "scene_id": {
+            "$ref": "#/$defs/id"
+          },
+          "major": {
+            "type": "boolean"
+          },
+          "residue_scene_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "intentional_absence": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "act_states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "act": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
+          "objective": {
+            "type": "string"
+          },
+          "available_options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "known_facts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stakes": {
+            "type": "string"
+          },
+          "relationship_state": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "plants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "scene_id": {
+            "$ref": "#/$defs/id"
+          },
+          "payoff_scene": {
+            "$ref": "#/$defs/id"
+          },
+          "consequence": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "interventions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "scene_id": {
+            "$ref": "#/$defs/id"
+          },
+          "requires_cost": {
+            "type": "boolean"
+          },
+          "cost_paid": {
+            "type": "boolean"
+          },
+          "explicit_deferral": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "turning_points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "major": {
+            "type": "boolean"
+          },
+          "character_choice_scene": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "properties": {
+        "release_target": {
+          "enum": [
+            "none",
+            "print",
+            "ebook"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "edition": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "copyright": {
+          "type": "string"
+        },
+        "isbn": {
+          "type": "string"
+        },
+        "export_proof": {
+          "type": "string"
+        },
+        "pagination_review": {
+          "type": "string"
+        },
+        "metadata_review": {
+          "type": "string"
+        }
+      }
+    },
+    "assessments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "pattern": "^FI-(0[1-9]|[1-5][0-9]|60)$"
+          },
+          "verdict": {
+            "enum": [
+              "pass",
+              "concern",
+              "fail",
+              "not_applicable"
+            ]
+          },
+          "reviewer": {
+            "type": "string"
+          },
+          "reviewer_type": {
+            "enum": [
+              "human",
+              "model"
+            ]
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "rule_id",
+          "verdict",
+          "reviewer",
+          "reviewer_type",
+          "rationale",
+          "evidence_refs"
+        ]
+      }
+    },
+    "waivers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": {
+            "type": "string"
+          },
+          "scope": {
+            "$ref": "#/$defs/id"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "rule_id",
+          "scope",
+          "actor",
+          "rationale",
+          "evidence_refs"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "anchor": {
+      "type": "object",
+      "properties": {
+        "source_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_digest",
+        "start",
+        "end"
+      ]
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "wi8-craft-plan/v1",
+  "scope": "ZIP #3 only",
+  "all_waves_upstream_status": "planned",
+  "source_baseline_sha": "d4524f3caa5f75e005b23f94dcd1c71bb5002127",
+  "waves": [
+    {
+      "id": "WI8-12",
+      "name": "freeze ownership and deduplicate 121–180",
+      "status": "planned",
+      "depends_on": [],
+      "exit": "Baseline and overlap receipts across all ZIPs",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-13",
+      "name": "opening strategies and fair reveal contracts",
+      "status": "planned",
+      "depends_on": [
+        "WI8-12"
+      ],
+      "exit": "Six-genre fixture comparison and future source anchor",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-14",
+      "name": "action geometry, resources, bodily state",
+      "status": "planned",
+      "depends_on": [
+        "WI8-13"
+      ],
+      "exit": "Impossible routes and recovery regression",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-15",
+      "name": "fight agency and consequence",
+      "status": "planned",
+      "depends_on": [
+        "WI8-14"
+      ],
+      "exit": "Causal state changes and human review",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-16",
+      "name": "antagonist composition and indirect evidence",
+      "status": "planned",
+      "depends_on": [
+        "WI8-15"
+      ],
+      "exit": "Antagonist diversity and harm independent of sympathy",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-17",
+      "name": "bounded strategic opposition",
+      "status": "planned",
+      "depends_on": [
+        "WI8-16"
+      ],
+      "exit": "Alternative responses and logistical assumptions",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-18",
+      "name": "suspense and subtext contracts",
+      "status": "planned",
+      "depends_on": [
+        "WI8-17"
+      ],
+      "exit": "Promises, clocks and asymmetric knowledge",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-19",
+      "name": "hierarchical sequence outcomes",
+      "status": "planned",
+      "depends_on": [
+        "WI8-18"
+      ],
+      "exit": "Local win / global loss fixture",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-20",
+      "name": "time-sensitive reinterpretation",
+      "status": "planned",
+      "depends_on": [
+        "WI8-19"
+      ],
+      "exit": "Historical readback not rewritten",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-21",
+      "name": "reader comprehension and factual source protocols",
+      "status": "planned",
+      "depends_on": [
+        "WI8-20"
+      ],
+      "exit": "Consent-based reports and dated provenance",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-22",
+      "name": "cross-medium transformations",
+      "status": "planned",
+      "depends_on": [
+        "WI8-21"
+      ],
+      "exit": "Meaning links and medium-specific limits",
+      "upstream_receipt": null
+    },
+    {
+      "id": "WI8-23",
+      "name": "upstream integration and proof-carrying release",
+      "status": "planned",
+      "depends_on": [
+        "WI8-22"
+      ],
+      "exit": "Existing v4–v7 pass plus receipts",
+      "upstream_receipt": null
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+name: Fiction v8 Proposal Checks
+on:
+  pull_request:
+    paths:
+      - 'scripts/fiction_v8/**'
+      - 'scripts/wi-fiction.py'
+      - 'rules/fiction_v8_rules.json'
+      - 'policies/fiction_profiles.json'
+      - 'tests/v8/**'
+      - 'schemas/v8/**'
+  workflow_dispatch:
+jobs:
+  fiction-proposal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile source files
+        run: python3 -m compileall -q scripts/fiction_v8 scripts/wi-fiction.py tests/v8
+      - name: Regression and negative controls
+        run: bash tests/v8/run.sh
+      - name: Catalog scope verification
+        run: |
+          python3 scripts/wi-fiction.py catalog > /tmp/wi-fi8-catalog.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/wi-fi8-catalog.json'))
+          assert len(x['rules'])==60
+          assert len({r['id'] for r in x['rules']})==60
+          PY

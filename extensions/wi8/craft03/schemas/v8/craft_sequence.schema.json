@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_sequence.schema.json",
+  "title": "Goal/Outcome Projection v1",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [
+    "goals",
+    "outcomes",
+    "twists"
+  ],
+  "properties": {
+    "goals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "level": {
+            "enum": [
+              "novel",
+              "act",
+              "sequence",
+              "scene"
+            ]
+          },
+          "parent_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "replaces_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cause_event": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "level",
+          "owner"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "goal_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "local_result": {
+            "enum": [
+              "achieved",
+              "partial",
+              "failed",
+              "relinquished",
+              "unknown"
+            ]
+          },
+          "resource_cost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "relationship_cost": {
+            "type": "number",
+            "minimum": 0
+          },
+          "antagonist_benefit": {
+            "type": "number",
+            "minimum": 0
+          },
+          "interpretations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "observer": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "known_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "interpretation": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "revealed_by_event": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "observer",
+                "known_at",
+                "interpretation"
+              ],
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "id",
+          "goal_id",
+          "event_id",
+          "local_result"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "twists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_event_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "guaranteed": {
+            "type": "boolean"
+          },
+          "counterfactuals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

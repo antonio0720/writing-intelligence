@@ -1,0 +1,75 @@
+{
+  "schema": "wi.fiction.profiles/v1",
+  "principle": "A pattern is a technique, not a law; abnormal form may be justified by intentional dramatic effect. Frequencies create signals, never vetoes.",
+  "profiles": {
+    "draft": {
+      "mandatory_review_rules": [],
+      "min_independent_readers": 0,
+      "intent": "Author-facing diagnostics, not an approval claim"
+    },
+    "editorial": {
+      "mandatory_review_rules": [
+        "FI-12",
+        "FI-13",
+        "FI-18",
+        "FI-19",
+        "FI-25",
+        "FI-29",
+        "FI-30",
+        "FI-32",
+        "FI-35",
+        "FI-37",
+        "FI-41",
+        "FI-45",
+        "FI-48",
+        "FI-49",
+        "FI-51",
+        "FI-52"
+      ],
+      "min_independent_readers": 0,
+      "intent": "Human developmental review of the central dramatic and causal obligations"
+    },
+    "publication": {
+      "mandatory_review_rules": [
+        "FI-12",
+        "FI-13",
+        "FI-18",
+        "FI-19",
+        "FI-25",
+        "FI-29",
+        "FI-30",
+        "FI-32",
+        "FI-35",
+        "FI-37",
+        "FI-41",
+        "FI-45",
+        "FI-48",
+        "FI-49",
+        "FI-51",
+        "FI-52",
+        "FI-53",
+        "FI-54",
+        "FI-55",
+        "FI-56",
+        "FI-57",
+        "FI-58",
+        "FI-59",
+        "FI-60"
+      ],
+      "min_independent_readers": 2,
+      "intent": "Developmental, proofing and independent-reader evidence before human release decision; 2 readers is a configurable policy choice, not a statistically significant threshold"
+    }
+  },
+  "heuristic_options": {
+    "figuration_signals_per_1000": 22,
+    "repeated_ngram_min": 4,
+    "cadence_streak": 8
+  },
+  "hard_stop": [
+    "known world-rule violation",
+    "unaccounted explicitly required intervention cost",
+    "invalid typed evidence",
+    "unresolved human adjudicated material flaw"
+  ],
+  "non_goal": "Any scalar grade that promises a bestseller, reader experience, or literary achievement"
+}

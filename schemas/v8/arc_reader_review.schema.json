@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/antonio0720/writing-intelligence/schemas/v8/arc_reader_review.schema.json",
+  "title": "Separate human reader observational instrument",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_digest",
+    "responses",
+    "protocol_id"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.arc.reader_review/v1"
+    },
+    "source_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "protocol_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+    },
+    "responses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reader_id",
+          "blind",
+          "observed_at",
+          "attachment",
+          "comprehension",
+          "ending_satisfaction"
+        ],
+        "properties": {
+          "reader_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+          },
+          "blind": {
+            "type": "boolean"
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attachment": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "comprehension": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "ending_satisfaction": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "ambiguity_comment": {
+            "type": "string"
+          },
+          "confusion_spans": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]*$"
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

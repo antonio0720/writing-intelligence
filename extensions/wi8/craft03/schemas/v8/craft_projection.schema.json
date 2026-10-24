@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v8/craft_projection.schema.json",
+  "title": "Craft 03 Standalone Projection",
+  "description": "Standalone draft projection contract. No canonical graph writes or literary-quality attestation.",
+  "type": "object",
+  "required": [
+    "schema",
+    "origin",
+    "events",
+    "scenes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi8.craft.projection/v1"
+    },
+    "origin": {
+      "enum": [
+        "fixture",
+        "draft_projection"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "causes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "known_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "order"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "medium": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "event_id"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "opening": {
+      "$ref": "craft_opening.schema.json"
+    },
+    "spaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "sight_lines": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "nodes",
+          "edges"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "fights": {
+      "type": "array",
+      "items": {
+        "$ref": "craft_action.schema.json"
+      }
+    },
+    "opposition": {
+      "$ref": "craft_opposition.schema.json"
+    },
+    "suspense": {
+      "$ref": "craft_suspense.schema.json"
+    },
+    "goals": {
+      "$ref": "craft_sequence.schema.json#/properties/goals"
+    },
+    "outcomes": {
+      "$ref": "craft_sequence.schema.json#/properties/outcomes"
+    },
+    "twists": {
+      "$ref": "craft_sequence.schema.json#/properties/twists"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "craft_reference.schema.json"
+      }
+    },
+    "adaptations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_scene": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_scene": {
+            "type": "string",
+            "minLength": 1
+          },
+          "medium": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_meaning_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "target_meaning_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id",
+          "source_scene",
+          "target_scene",
+          "medium"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "reader_reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reviewer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "consent_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed_at": {
+            "type": "string",
+            "minLength": 1
+          },
+          "finding": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "reviewer",
+          "consent_ref",
+          "observed_at",
+          "finding"
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

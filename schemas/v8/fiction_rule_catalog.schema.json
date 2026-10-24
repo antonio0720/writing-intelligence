@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WI fiction rule catalog",
+  "type": "object",
+  "required": [
+    "schema",
+    "requirement_count",
+    "rules"
+  ],
+  "properties": {
+    "schema": {
+      "const": "wi.fiction.rule-catalog/v1"
+    },
+    "requirement_count": {
+      "const": 60
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 60,
+      "maxItems": 60,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "title",
+          "requirement",
+          "domain",
+          "canonical_owner",
+          "evaluation_method",
+          "executor",
+          "acceptance_test",
+          "positive_example",
+          "negative_example",
+          "implementation_status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FI-(0[1-9]|[1-5][0-9]|60)$"
+          },
+          "number": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          },
+          "evaluation_method": {
+            "enum": [
+              "heuristic",
+              "typed",
+              "editorial",
+              "process"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requirement": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

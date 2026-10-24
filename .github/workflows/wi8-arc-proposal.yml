@@ -1,0 +1,23 @@
+# Proposed CI for a future author-approved integration branch; not deployed.
+name: WI8 arc candidate tests
+on:
+  pull_request:
+    paths:
+      - 'scripts/arc_v8/**'
+      - 'scripts/wi-arc.py'
+      - 'schemas/v8/arc_*'
+      - 'tests/v8_arc/**'
+      - '.github/workflows/wi8-arc-proposal.yml'
+jobs:
+  arc-unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: bash tests/v8_arc/run.sh
+      - run: python3 scripts/check_arc_package.py

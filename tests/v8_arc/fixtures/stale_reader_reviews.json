@@ -1,0 +1,23 @@
+{
+  "schema": "wi.arc.reader_review/v1",
+  "source_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "protocol_id": "protocol-1",
+  "responses": [
+    {
+      "reader_id": "reader-1",
+      "blind": true,
+      "observed_at": "2026-10-24T11:00:00-05:00",
+      "attachment": 7,
+      "comprehension": 9,
+      "ending_satisfaction": 6
+    },
+    {
+      "reader_id": "reader-2",
+      "blind": true,
+      "observed_at": "2026-10-24T11:00:00-05:00",
+      "attachment": 6,
+      "comprehension": 8,
+      "ending_satisfaction": 7
+    }
+  ]
+}
