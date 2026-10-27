@@ -1,18 +1,31 @@
-# Writing Intelligence v9 proposal manifest (does not supersede v8).
+# Writing Intelligence v9 program state (does not supersede v8).
+# Owner: Antonio T. Smith Jr. Status vocabulary:
+#   PLANNED -> IN_PROGRESS -> PROTOTYPE -> VALIDATED -> SHIPPED
+# SHIPPED requires a PASS receipt, owner approval and a release; none exists.
+# This file stays outside plans/ until WI9-08 so the v7 version-alignment
+# check and the manifest checker are not handed a premature v9 manifest.
 program: WI9-AUTHORSHIP
 version_target: "9.0.0"
 release_status: PROPOSED
 date: "2026-10-27"
-baseline: "v8 repository main, see PR creation SHA"
-note: "Waves with code prototypes remain PROTOTYPE, not SHIPPED. No release receipts."
+baseline: "PR #8 head 80e7aef88441c2f2e9eb5734b43b601924592dac on base d9a180d9219e38c3305bbf1f30c3ed0600ab21f9"
+note: "No wave is SHIPPED. VALIDATED means a PASS receipt exists; owner approval is still required."
 waves:
-  WI9-00: {title: Baseline and evidence audit, status: PLANNED}
-  WI9-01: {title: Authorship and venue contract, status: PROTOTYPE}
-  WI9-02: {title: Firsthand material vault, status: PLANNED}
-  WI9-03: {title: Measured author voice baseline, status: PLANNED}
-  WI9-04: {title: Thought fidelity and semantic integrity, status: PLANNED}
-  WI9-05: {title: Meaning-first craft repair, status: PLANNED}
-  WI9-06: {title: Human-only venue hold, status: PROTOTYPE}
-  WI9-07: {title: Blinded editorial evaluation, status: PLANNED}
-  WI9-08: {title: Canonical integration and regression, status: PLANNED}
-  WI9-09: {title: Independent release and governance, status: PLANNED}
+  WI9-00: {title: Baseline and evidence audit, status: VALIDATED, receipt: plans/receipts/WI9-00.json, open: "owner approval of the baseline"}
+  WI9-01: {title: Authorship and venue contract, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "owner acceptance of schemas/v9/authorship-dossier.schema.json; v6 grant binding"}
+  WI9-02: {title: Firsthand material vault, status: PLANNED, open: "only experience_state typing exists; no private vault, redaction or consent withdrawal"}
+  WI9-03: {title: Measured author voice baseline, status: PROTOTYPE, open: "prototypes/wi9 voice command only; no consented corpus collected"}
+  WI9-04: {title: Thought fidelity and semantic integrity, status: PLANNED, open: "thought inventory and semantic diff not built"}
+  WI9-05: {title: Meaning-first craft repair, status: IN_PROGRESS, open: "05A doctrine repair and 05B scanner done; 05C partial; 05F-05G not run"}
+  WI9-06: {title: Human-only venue hold, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "real governed workflow not exercised"}
+  WI9-07: {title: Blinded editorial evaluation, status: PLANNED, open: "aggregator exists in prototypes/wi9; NOT EXECUTED, no corpus"}
+  WI9-08: {title: Canonical integration and regression, status: PLANNED, open: "wi.py integration, v9 manifest, bundles"}
+  WI9-09: {title: Independent release and governance, status: PLANNED, open: "release HOLD"}
+subwaves:
+  WI9-05A: {title: Meaning-led doctrine and 334-rule catalog, status: PROTOTYPE}
+  WI9-05B: {title: Portable editorial scan CLI with digests and offsets, status: PROTOTYPE}
+  WI9-05C: {title: Repetition and structural diagnostics, status: IN_PROGRESS}
+  WI9-05D: {title: Author false-positive judgments bound to digests, status: PROTOTYPE}
+  WI9-05E: {title: Source-based composition contract, status: PROTOTYPE}
+  WI9-05F: {title: Meaning, causality and voice evaluator, status: PLANNED}
+  WI9-05G: {title: Independent reader preference trial, status: PLANNED}

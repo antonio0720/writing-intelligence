@@ -7,6 +7,24 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
+## [Unreleased] — v9 proposal (PR #8), not released
+
+v8.0.0 remains the release. Nothing below changes a version string or ships in a tagged release; each item is PROTOTYPE or IN_PROGRESS in `references/v9/WAVES.yaml`.
+
+### Added
+- **`scripts/wi-authorship.py release`** — checks a reviewed submission against a person's decision bound to the exact draft digest, an unexpired authority grant covering release and the named venue, and a venue contract recording submission as open. Returns `RELEASE_ELIGIBLE` or `HOLD`; transmits nothing
+- **Claim coverage in `wi-authorship.py audit`** — every consequential claim the v4 classifier finds in the draft must overlap an anchored evidence span; one anchored sentence can no longer carry unsourced claims beside it
+- **`schemas/v9/authorship-dossier.schema.json`** (`wi9-authorship-2`) and `tests/v9/test_schema_parity.py`
+- **`prototypes/wi9/`** — the owner's reference kernel: 334-rule editorial phrase catalog and scanner, digest-bound review ledger, model-neutral composition contract, voice statistics, benchmark aggregator (84 tests)
+- **`references/v9/defects.md`**, **`references/v9/ENGINEERING_HANDOFF.md`**, receipts `plans/receipts/WI9-00.json` and `WI9-P0.json`
+- `tests/v9/test_authorship_p0.py` (P0 negative controls) and `tests/v9/test_doctrine_meaning_led.py`; the v9 CI lane runs both suites on Python 3.8, 3.11 and 3.13 and fails if a disabled guard survives
+
+### Changed
+- `wi-authorship.py` hardened against the twelve P0 defects in `references/v9/defects.md`: bounded, symlink-free reads per path component; root, nested-type and JSON depth checks; pinned document and source digests for submissions; unique evidence ids and unambiguous draft anchors; `ANCHOR_RESOLVED` reported separately from support; the contribution log checked against the declared origin on every venue; unlisted assistance refused on human-only venues; every report marked `self_reported` and `release_authorized: false`
+- Craft doctrine rewritten meaning-led: `inject_variance` became `repair_rhythm`, numeric variance quotas and detector-risk scoring removed, the detector benchmark retired as a method, and a gold example that invented statistics corrected. `variance_injected` stays readable in `prose_rewrite_log.schema.json` for old logs and is no longer emitted
+
+---
+
 ## [8.0.0] — 2026-10-24 — **Story Intelligence**
 
 ### The Leap

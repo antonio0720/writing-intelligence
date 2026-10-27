@@ -23,58 +23,40 @@ The trigger was an AI-generated three-part essay about miniature worlds: the con
 - **WI9-I TRACEABLE TRANSFORMATION:** Preserve source and every edit; declare whether a change is mechanical proofreading, suggested edit, authored revision or substantive generation.
 - **WI9-J REVIEW, DON'T AUTO-PUBLISH:** Source checks do not authenticate a person's identity or mental authorship. Release decisions remain scoped human judgments.
 
-## Prototype included
+## What exists on this branch
 
-`scripts/wi-authorship.py audit --input dossier.json` reads a JSON dossier and local text sources. It checks exact source anchors, optional SHA-256, consent flags, firsthand-source eligibility, claimed document origin, declared contribution history, draft passage-to-evidence links and venue policy. It **does not rewrite** prose, rate it "human," perform detector evasion, or certify authorship. It never turns an AI draft into a human-authored document. `REVIEW` means a limited checklist passed; it is **not publication authorization**.
+All of it is experimental and reviewable; none of it is a release. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md).
 
-### Dossier format
+### `scripts/wi-authorship.py` — authorship-claim declaration checker
 
-```json
-{
-  "schema": "wi9-authorship-1",
-  "document": {
-    "path": "draft.txt",
-    "origin": "ai_generated",
-    "arena": "journalism",
-    "venue_policy": "human_only",
-    "intended_use": "research_demo"
-  },
-  "evidence": [
-    {
-      "id": "observation-1",
-      "claim": "The writer personally built miniature environments.",
-      "kind": "firsthand",
-      "source_path": "notes.txt",
-      "exact_excerpt": "I have personally built miniature environments.",
-      "source_origin": "human_authored",
-      "consent": true,
-      "sha256": null
-    }
-  ],
-  "contribution_log": [
-    {"kind": "ai_research"}
-  ],
-  "document_claim_anchors": [],
-  "voice_samples": []
-}
-```
+This is a **declaration checker, not an authorship verifier**. `audit --input dossier.json` returns `REVIEW` (limited checks passed, exit 0) or `HOLD` (exit 3). `release --input dossier.json` returns `RELEASE_ELIGIBLE` (exit 0) or `HOLD` (exit 3) and transmits nothing. Every report carries `declaration_status: self_reported` and, for `audit`, `release_authorized: false`.
 
-Paths resolve relative to the dossier directory. Sources are not sent to a service. The `origin` and `consent` entries are **self-declarations**, not facts independently verified by the tool. The checker returns HOLD for a human-only submission whose origin is not human-authored or whose declared contribution history includes AI-generated or substantively AI-rewritten prose. Consequential submissions must carry a contribution history and exact draft passage-to-evidence links; missing/unanchored firsthand claims also HOLD. It reports missing voice samples as a non-blocking advisory. It **cannot prove** whether a self-declared human-only manuscript was actually written by a person.
+`audit` checks: the root and nested types; bounded, symlink-free reads under the dossier directory (POSIX `O_NOFOLLOW` per component; refuses to run elsewhere); the draft against its pinned `expected_sha256` (required for any submission); unique evidence ids; exact source anchors and pinned source digests; typed `experience_state` (a planned or hypothetical item cannot support a firsthand claim) and `support_status`; draft anchors that resolve uniquely in the draft; **claim coverage** — every consequential claim the v4 classifier in `scripts/wi.py` finds in the draft must overlap an anchored span, so one safe anchor cannot carry three unsourced claims; the contribution log against the declared origin on every venue; and human-only venue rules, where assistance the venue contract does not list is refused.
+
+`release` additionally requires: a person's `review_decision` whose `target_sha256` is the exact draft digest, an authority grant held by that person that covers `release` and the named venue and has not expired, a venue contract recording `submit` as open, and an unpassed deadline. The grant is a declaration until WI9-08 binds it to the v6 grant store.
+
+Dossier contract: [`schemas/v9/authorship-dossier.schema.json`](../../schemas/v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `wi9-authorship-1` dossiers are still read). `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
+
+Paths resolve relative to the dossier directory. Sources are not sent to a service. It **cannot prove** whether a self-declared human-only manuscript was actually written by a person, and exact excerpt presence is a text anchor, not truth or entailment.
+
+### `prototypes/wi9/` — reference kernel (WI9-05)
+
+The owner's reference kernel, ported unchanged except where a defect was repaired: a **334-rule editorial phrase catalog** (321 literal, 13 regex, 11 categories) and scanner with exact code-point offsets and document/rule digests; a review ledger that binds each keep-or-revise decision to the exact document and rule pack (offset-aware review times since D-15); a model-neutral composition contract that refuses human-only venues outright and can only reach `DRAFT_REVIEW_REQUIRED`; voice-sample statistics; and a benchmark aggregator that holds until 60 matched cases exist. A phrase match is an editorial question. It never declares a passage AI-generated and never triggers a rewrite.
 
 ## Planned architecture (no false shipped claims)
 
 | Wave | Name | Exit condition | Status |
 |---|---|---|---|
-| WI9-00 | Baseline & evidence audit | Reproduce existing v8 tests; capture bounded defect and input SHA | PLANNED |
-| WI9-01 | Authorship contract | Machine-readable venue policy, human/AI contribution history, meaningful disclosure | PROTOTYPE |
-| WI9-02 | Firsthand material vault | Opt-in private author notes, exact anchors, consent + redaction, no external uploads | PLANNED |
-| WI9-03 | Voice baseline | 3+ consented samples / >=500 words each; compare to human blind judgments, not detectors | PLANNED |
+| WI9-00 | Baseline & evidence audit | Reproduce existing v4–v8 tests; record defects with code locations | VALIDATED — receipt WI9-00; owner approval pending |
+| WI9-01 | Authorship contract | Machine-readable venue policy, human/AI contribution history, meaningful disclosure | PROTOTYPE — schema 2, hardened checker |
+| WI9-02 | Firsthand material vault | Opt-in private author notes, exact anchors, consent + redaction, no external uploads | PLANNED — `experience_state` typing only |
+| WI9-03 | Voice baseline | 3+ consented samples / >=500 words each; compare to human blind judgments, not detectors | PROTOTYPE — statistics only, no corpus |
 | WI9-04 | Thought fidelity | Preserve author claims, uncertainty and point of view across revisions | PLANNED |
-| WI9-05 | Craft repair | Correct overbalanced transitions, hollow contrasts and unsupported examples based on meaning | PLANNED |
-| WI9-06 | Human-only venue gate | Enforce research-only vs pitch modes and author declaration, refusal negative tests | PROTOTYPE |
-| WI9-07 | Editorial benchmark | Author-rated fidelity, originality of observation, evidence accuracy, editor-rated usefulness | PLANNED |
+| WI9-05 | Craft repair | Correct overbalanced transitions, hollow contrasts and unsupported examples based on meaning | IN_PROGRESS — doctrine repaired, scanner prototyped |
+| WI9-06 | Human-only venue gate | Enforce research-only vs pitch modes and author declaration, refusal negative tests | PROTOTYPE — `release` gate added |
+| WI9-07 | Editorial benchmark | Author-rated fidelity, originality of observation, evidence accuracy, editor-rated usefulness | PLANNED — NOT EXECUTED |
 | WI9-08 | Integration | Additive integration into `wi.py`, CLI docs, schema, regression and versioned release | PLANNED |
-| WI9-09 | Independent review & rollout | Artifact verification, negative controls, external review, owner's release decision | PLANNED |
+| WI9-09 | Independent review & rollout | Artifact verification, negative controls, external review, owner's release decision | PLANNED — release HOLD |
 
 ### Measurement, not mythology
 
@@ -90,9 +72,9 @@ Compare each candidate with (a) the author's original material, (b) the original
 6. No randomly inserted typos, fabricated admissions, staged personal scenes or detector-driven paraphrasing.
 7. Existing v4–v8 releases, packages and tests remain unmodified until the proper integration wave.
 
-## Required correction to existing craft guidance
+## Correction to existing craft guidance (done in WI9-05A)
 
-`references/anti_patterns/cadence.md` currently says to alternate sentence lengths by formula to avoid a detector. `references/anti_patterns/structures.md` even gives a purported statistical "human" variance target and instructs making the pattern look random. Those prescriptions conflict with the later v7 ban on evasion and can actively reduce authorial fidelity. WI9-05 should replace this with the rule: **revise for meaning, voice, clarity and evidence; let cadence result from the author's thinking and genre.** Detector-oriented rewriting has no release role.
+The v8 craft doctrine told writers to alternate sentence lengths by formula, inject "unpredictability", swap synonyms to dodge repetition counts and score "AI detection risk". That conflicted with the v7 ban on evasion and reduced authorial fidelity. The instruction lived in more files than `cadence.md` and `structures.md` (see D-14 in [`defects.md`](defects.md)); every one now says: **revise for meaning, voice, clarity and evidence; let cadence result from the author's thinking and genre.** `inject_variance` is now `repair_rhythm`, and `tests/v9/test_doctrine_meaning_led.py` fails if a detector-oriented instruction returns. Detector-oriented rewriting has no release role.
 
 ## Venue example: HARO miniature worlds
 

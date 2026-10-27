@@ -1,0 +1,80 @@
+{
+  "checkpoint": "WI9-00",
+  "program": "WI9-AUTHORSHIP",
+  "owner": "Antonio T. Smith Jr.",
+  "status": "PASS",
+  "baseline_sha": "80e7aef88441c2f2e9eb5734b43b601924592dac",
+  "base_sha": "d9a180d9219e38c3305bbf1f30c3ed0600ab21f9",
+  "objective": "Reproduce the v4-v8 regressions and the 16 v9 prototype tests at the PR #8 head before any v9 change, and register the P0 defects against exact code locations",
+  "measured_at": "2026-10-27",
+  "environment": {
+    "python": "3.9.6",
+    "os": "Darwin 25.5.0",
+    "checkout": "fresh git clone of github.com/antonio0720/writing-intelligence, branch proposal/v9-authentic-voice-provenance-20261027 at baseline_sha, clean status"
+  },
+  "commands": [
+    "git rev-parse HEAD origin/main",
+    "python3 scripts/wi.py --version",
+    "python3 -m unittest discover -s tests/v9 -p 'test_*.py'",
+    "bash tests/v4/test_wi.sh",
+    "bash tests/v5/test_wi5.sh",
+    "bash tests/v6/test_wi6.sh",
+    "bash tests/v7/test_wi7.sh",
+    "bash scripts/test-v8.sh",
+    "python3 scripts/check-manifest.py",
+    "python3 scripts/check-links.py",
+    "bash scripts/build-skill.sh --check"
+  ],
+  "observed_result": {
+    "local_head": "80e7aef88441c2f2e9eb5734b43b601924592dac",
+    "origin_main": "d9a180d9219e38c3305bbf1f30c3ed0600ab21f9",
+    "wi_version": "wi 8.0.0",
+    "exit_codes": {
+      "v9_prototype_16_tests": 0,
+      "v4": 0,
+      "v5": 0,
+      "v6": 0,
+      "v7": 0,
+      "v8": 0,
+      "check_manifest": 0,
+      "check_links": 0,
+      "build_skill_check": 0
+    },
+    "summary_lines": {
+      "v9_prototype_16_tests": "Ran 16 tests ... OK",
+      "v8": "v8 integration: 19 passed, 0 failed",
+      "check_links": "all links resolve",
+      "build_skill_check": "==> --check: no artifacts written"
+    },
+    "reference_zip_sha256": "610453b2048bf1a1aae417515656c696d49afa43591a82de40a12481c47724b8",
+    "reference_zip_sha256sums_verified": true,
+    "reference_kernel_tests": "Ran 81 tests ... OK (python 3.9.6, extracted in isolation)",
+    "defect_register": "references/v9/defects.md"
+  },
+  "negative_controls": [
+    {
+      "id": "baseline-on-moved-head",
+      "expectation": "if the PR head differs from baseline_sha at measurement, this receipt is void and the baseline is re-measured",
+      "observed": "git ls-remote returned 80e7aef88441c2f2e9eb5734b43b601924592dac for the branch, equal to the local head"
+    },
+    {
+      "id": "zip-tamper",
+      "expectation": "a reference file whose bytes differ from SHA256SUMS.txt is refused before it is read or ported",
+      "observed": "shasum -a 256 -c SHA256SUMS.txt reported OK for every file"
+    }
+  ],
+  "independent_readback": {
+    "method": "GitHub Actions run records for the same head_sha, read through the GitHub API, separate from the local checkout",
+    "value": {
+      "ci_run": {"id": 40554939305, "head_sha": "80e7aef88441c2f2e9eb5734b43b601924592dac", "conclusion": "success"},
+      "wi9_prototype_run": {"id": 40554938865, "head_sha": "80e7aef88441c2f2e9eb5734b43b601924592dac", "conclusion": "success"}
+    }
+  },
+  "unknown": [
+    "the baseline has not been approved by the owner",
+    "Python 3.8 was not run locally; GitHub CI covers it",
+    "no author corpus, editorial pilot or external review exists"
+  ],
+  "decision": "HOLD",
+  "release_authority": null
+}
