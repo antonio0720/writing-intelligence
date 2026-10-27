@@ -485,7 +485,7 @@ CI also checks that every relative link in this repository resolves (`python3 sc
 
 ## Getting help
 
-- **Bugs and detector benchmarks:** [Issues](https://github.com/antonio0720/writing-intelligence/issues) — templates exist for bug reports, new genre packs, new voiceprints, new anti-patterns and detector benchmarks.
+- **Bugs and editorial-quality reports:** [Issues](https://github.com/antonio0720/writing-intelligence/issues) — templates exist for bug reports, new genre packs, new voiceprints, new anti-patterns and editorial-quality reports. Detector scores are never a criterion.
 - **Proposing changes to doctrine:** [`../governance/RFC_PROCESS.md`](../governance/RFC_PROCESS.md). Changing what `verified`, `stale`, `BLOCK`, `permitted` or `source quarantine` *promises* requires an RFC and a benchmark case that fails before the change and passes after it.
 - **Contributing:** [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
 

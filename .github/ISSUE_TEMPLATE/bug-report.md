@@ -1,6 +1,6 @@
 ---
-name: Bug Report — Output Still Sounds AI-Generated
-about: The compiler produced output that sounds like AI, gets flagged by a detector, or doesn't match the expected voice
+name: Bug Report — Output Is Generic, Wrong-Voiced or Lost Meaning
+about: The compiler produced generic or templated output, lost meaning, invented a fact, or doesn't match the expected voice
 title: "[BUG] "
 labels: bug
 assignees: ''
@@ -17,8 +17,8 @@ Paste what the compiler produced.
 
 ## What's wrong with the output?
 Be specific:
-- [ ] Still sounds like AI (describe which part)
-- [ ] Flagged by a detector (which one? what score?)
+- [ ] Generic or templated prose (describe which part)
+- [ ] Added a fact, number, scene or quote no source supplied
 - [ ] Wrong voice (expected X, got Y)
 - [ ] Lost the argument or meaning during rewrite
 - [ ] Hard-ban phrase survived in output

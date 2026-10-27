@@ -48,8 +48,8 @@ Structural Control ..... [N]/5
 ```
 AUTO-FAIL CONDITIONS:
 [✓] or [✗] Hard-ban phrases (3+ = fail)      Found: [N]
-[✓] or [✗] Perplexity flatness               Detected: [yes/no]
-[✓] or [✗] Sentence-length uniformity         Std dev: [N]
+[✓] or [✗] Predictable filler                 Detected: [yes/no]
+[✓] or [✗] Undifferentiated run (same job/weight) Span: [P/S]
 [✓] or [✗] Zero domain vocabulary             Found: [N] domain terms
 [✓] or [✗] Unsupported universal claim        Found: [N]
 [✓] or [✗] Fabricated citation                Found: [N]
@@ -76,56 +76,57 @@ P5  █░░░░░░░░░  1 violation   [closing collapse]
 HOTTEST PARAGRAPH: P4 — recommend full rewrite
 ```
 
-### 5. Statistical Profile
+### 5. Statistical Profile (descriptive only)
+
+These counts describe the draft. They are not targets: no number here is
+raised or lowered for its own sake, and none predicts or is tuned against an
+AI-detector score. A count earns attention only when it points at a reading
+problem a person can name.
 
 ```
 STATISTICAL PROFILE:
 ──────────────────────────────────────────────────
 Sentence count:          [N]
 Mean sentence length:    [N] words
-Sentence length std dev: [N] words  [TARGET: ≥8]
+Sentence length std dev: [N] words
 Min sentence length:     [N] words
 Max sentence length:     [N] words
-Sentences ≤6 words:      [N] ([N] per 500 words) [TARGET: ≥1 per 500]
-Sentences ≥30 words:     [N] ([N] per 500 words) [TARGET: ≥1 per 500]
+Sentences ≤6 words:      [N] ([N] per 500 words)
+Sentences ≥30 words:     [N] ([N] per 500 words)
 
 Paragraph count:         [N]
 Mean paragraph length:   [N] sentences
-Para length std dev:     [N] sentences [TARGET: ≥2]
+Para length std dev:     [N] sentences
 1-sentence paragraphs:   [N]
 6+ sentence paragraphs:  [N]
 
 Vocabulary:
-  Unique words per 500:  [N]  [TARGET: ≥150]
+  Unique words per 500:  [N]
   Domain-specific terms: [N]
-  Uncommon words:        [N]  [TARGET: ≥2 per 300]
   Most repeated word:    "[word]" × [N]
 
 Transitions:
-  Most used transition:  "[phrase]" × [N]  [TARGET: ≤2 per 1000]
+  Most used transition:  "[phrase]" × [N]
   Transition variety:    [N] unique transitions
 ──────────────────────────────────────────────────
 ```
 
-### 6. AI Detection Risk Assessment
+### 6. Reader Experience
 
 ```
-AI DETECTION RISK:
+READER EXPERIENCE:
 ──────────────────────────────────────────────────
-Perplexity uniformity:    [LOW/MEDIUM/HIGH] risk
-Sentence burstiness:      [LOW/MEDIUM/HIGH] risk
-Vocabulary predictability: [LOW/MEDIUM/HIGH] risk
-Transition homogeneity:   [LOW/MEDIUM/HIGH] risk
-Structural uniformity:    [LOW/MEDIUM/HIGH] risk
-Opening pattern:          [LOW/MEDIUM/HIGH] risk
-Closing pattern:          [LOW/MEDIUM/HIGH] risk
+Where does a reader lose the thread?   [span + reason]
+Where is the point buried?             [span + reason]
+Where does the prose assert nothing
+  a reader could check or use?         [span + reason]
+Where does rhythm hide which sentence
+  carries the weight?                  [span + reason]
+Opening: does it start on the subject? [yes/no + span]
+Closing: does it earn its last line?   [yes/no + span]
 
-OVERALL DETECTION RISK:   [LOW/MEDIUM/HIGH]
-
-[If HIGH]: Specific passages flagged:
-  - Lines [N-N]: Sentence-length cluster (all 15-18 words)
-  - Lines [N-N]: Vocabulary flatness (zero surprises in 5 sentences)
-  - Lines [N-N]: LLM list rhythm detected
+Detector score: NOT MEASURED, NOT TARGETED. An external detector result may be
+archived as an observation; it never changes a finding or a fix.
 ──────────────────────────────────────────────────
 ```
 
@@ -145,9 +146,11 @@ CRITICAL VIOLATIONS:
    "Here's the thing about..."
    FIX: Delete opener. Start with the claim directly.
 
-2. P4/S4-S7 | F-02: Perplexity flatness | CRITICAL
-   4 consecutive sentences, all 16-18 words, all S-V-O
-   FIX: Vary lengths (aim: 8, 24, 6, 31). Change structures.
+2. P4/S4-S7 | F-02: Predictable filler | CRITICAL
+   4 consecutive sentences restate one point at one altitude
+   FIX: Keep the sentence that carries the point; replace the restatements
+        with the mechanism or the evidence, or cut them. [needs source] where a
+        fact is missing.
 
 3. P1/S1 | F-13: Opening weakness | SEVERE
    "In today's digital landscape..."
@@ -205,7 +208,7 @@ COMPILER RECOMMENDATION:
 For quick checks, return only:
 
 ```
-SCORE: [N]/100 | GRADE: [X] | DETECTION RISK: [LOW/MED/HIGH]
+SCORE: [N]/100 | GRADE: [X] | UNSOURCED CLAIMS: [N]
 Top 3 violations: [list]
 Top fix: [most impactful single action]
 ```

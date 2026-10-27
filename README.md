@@ -18,6 +18,18 @@ Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO,
 
 ---
 
+## Writing Intelligence v9 — in progress, not released
+
+**8.0.0 is the release.** v9 (program WI9-AUTHORSHIP, owner Antonio T. Smith Jr.) is open as draft [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8) and is not shipped. Its aim: keep the author's real experience, positions, voice and evidence intact, and enforce a venue's authorship rules — without fabricated anecdotes and without detector evasion.
+
+- **Authorship-claim declaration checker** — [`scripts/wi-authorship.py`](scripts/wi-authorship.py) `audit | release`. It checks self-reported origin, consent and contribution history for consistency with each other and with the venue; holds human-only submissions that declare AI prose or unrecorded AI assistance; requires every consequential claim the v4 classifier finds to be anchored to an exact span of a pinned source; and binds a person's release decision and authority grant to the exact draft digest. `REVIEW` is never permission to send; `RELEASE_ELIGIBLE` is never proof of human authorship; nothing is transmitted.
+- **Experimental reference kernel** — [`prototypes/wi9/`](prototypes/wi9/README.md): a 334-rule editorial phrase scanner (321 literals, 13 bounded regex rules; every match is an editorial question, never an AI verdict), a digest-bound human review ledger, and a model-neutral composition contract that refuses to request prose for human-only venues and never reaches a release state.
+- **Doctrine repaired** — the v8 craft library no longer prescribes sentence-length quotas, synonym swaps or other edits aimed at detector statistics; `repair_rhythm` replaces the retired v8 length-quota operator, and rhythm is judged by a reader, not a statistic.
+
+**AI-detector scores are never a target, a gate or a claim.** An external detector result may be archived as an observation and nothing more. Status and remaining waves: [`references/v9/README.md`](references/v9/README.md) · [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml).
+
+---
+
 ## What v8 is, in one paragraph
 
 v8 is **Story Intelligence** — the fiction half of this system held to the same standard v4–v7 built for claims and evidence. It folds four independently built and tested packages into one release: **Fiction & Thriller Intelligence** (FI-01–FI-60 — tension, rule integrity, power limits and their cost, promise debt, reader experience), **Arc, Want/Need & Ending Intelligence** (N061–N120 — two-clock character state and the sweet / semi-sweet / bittersweet / bitter ending algebra), **The Craft** (C121–C180 — openings, action geometry, antagonistic causality, suspense, sequence outcomes, dated references) and the **Japan Story OS** (JP-181–JP-340 — scoped cultural claims, coexisting folklore variants, name and romanization policy, a private vault for young authors). **340 numbered requirements**, each with a stable ID, an owner, an acceptance condition and an honest implementation state. Four offline engines, stdlib-only Python, read-only against the manuscript, deterministic and digest-bound.
@@ -374,7 +386,7 @@ A skill bundle may hold at most 200 files. A bundle over that ceiling does not d
 | Bundle | Files | Contains |
 |---|---|---|
 | **`writing-intelligence.skill`** | 191 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
-| **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern detectors, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
+| **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern diagnostics, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
 | **`writing-intelligence-story.skill`** | 184 | **New in v8.** Story Intelligence: the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, their 340-requirement registers, schemas and suites, and `scripts/test-v8.sh` |
 
 The runtime now holds 191 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in three artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate for all three and prints the arithmetic, so it cannot regress into an upload nobody can install. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate and prints the arithmetic, so it cannot regress into an upload nobody can install.

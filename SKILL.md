@@ -263,7 +263,7 @@ The refusals are load-bearing, not decorative. Full reasoning in [`references/v6
 **Three bundles in v8.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library below, which now also carries the v8 fiction compiler references and genre addenda), and `writing-intelligence-story` (the four v8 story engines, their rules, schemas and suites). Install all three; each stands alone, and each is under the 200-file ceiling.
 
 
-The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern detectors, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.
+The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern diagnostics, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.
 
 Install both. If only this one is present, the craft doctrine summarized below still governs; the genre packs are then reference material one `git clone` away rather than in context.
 
@@ -333,7 +333,7 @@ Every piece of writing processed by v3.0 runs through eleven sequential passes. 
 | 6 | Sentence Surgery | Remove slop, inject variance, sharpen language | `SentenceSurgeryLogV3` |
 | 7 | Voice Restoration | Restore author fingerprint and voice integrity | `VoiceMatchReportV3` |
 | 8 | Genre & Arena Alignment | Fit output to channel, profession, platform, reader | `ArenaAlignmentV3` |
-| 9 | Adversarial Stress Battery | Attack the draft as reader, editor, skeptic, detector | `StressBatteryV3` |
+| 9 | Adversarial Stress Battery | Attack the draft as reader, editor, skeptic, author | `StressBatteryV3` |
 | 10 | Score & Delivery Packaging | Produce final draft, scorecard, notes, formats | `DeliveryBundleV3` |
 | 11 | Memory & Benchmark Update | Save learnings and regression data | `MemoryBenchmarkUpdateV3` |
 
@@ -375,8 +375,8 @@ Read `references/anti_patterns/phrases.md`, `structures.md`, `cadence.md`, `fake
 - Argument gaps (unsupported claims, missing premises)
 - Evidence gaps (assertions without backing)
 - Tone drift (sections that shift register without cause)
-- Perplexity flatness (vocabulary predictability across paragraphs)
-- Burstiness deficit (lack of sentence-length variance)
+- Predictable filler (runs of sentences that assert nothing a reader could check or use)
+- Undifferentiated rhythm (every sentence doing the same job at the same weight — a reading problem, never an authorship signal or a detector target)
 
 ### 2.6 Pass 4 — Architecture Compile
 
@@ -402,17 +402,17 @@ Read `references/compiler/arena_delivery.md` + each active pack from `references
 
 Interrogate:
 1. What would a skeptical, smart reader attack first?
-2. What sentence could appear in any AI output?
+2. What sentence could appear in any document on this topic, by anyone?
 3. What could be cut without losing meaning?
 4. What line actually lands?
 5. Does the opening earn the next 30 seconds?
 6. Does the closing leave residue?
-7. Is there a single sentence a human would never write this way?
+7. Is there a sentence this author would never write this way?
 8. (Narrative) Would a reader turn the page?
 9. (Narrative) Does the final image burn?
 10. (Dialogue) Can you tell who's speaking with names removed?
 11. (High-stakes) What is the worst-faith reading of the strongest claim?
-12. (Detector) Could a detector flag any passage on cadence alone?
+12. (Author) Is there a passage where rhythm hides which sentence carries the point, or a claim the author would not recognize as theirs?
 
 Emit `StressBatteryV3`.
 
@@ -473,7 +473,7 @@ v3.0 preserves and extends the seven v2.0 rubrics, then adds a v3-grade composit
 **Automatic Fail Conditions (score capped at 65 regardless of other marks):**
 
 - 3+ hard-ban phrases detected
-- Perplexity flatness across 5+ consecutive sentences
+- Predictable filler across 5+ consecutive sentences (nothing a reader could check or use)
 - Zero domain-specific vocabulary in 500+ words
 - Argument contains unsupported universal claim
 - Fabricated citation, statistic, or quote
@@ -497,7 +497,7 @@ v3.0 decomposes the kernel into a coordinated multi-agent writing board. Each ag
 | 7 | Sentence Surgeon | Repair prose without flattening voice | Rewrite log |
 | 8 | Dialogue Commander | Fix conversation, subtext, tension | Dialogue stress report |
 | 9 | Narrative Architect | Audit storyworld, chapter, arc, series | Narrative report |
-| 10 | Stress Tester | Adversarial battery: reader / editor / skeptic / detector | Stress battery |
+| 10 | Stress Tester | Adversarial battery: reader / editor / skeptic / author | Stress battery |
 | 11 | Scorekeeper | Score all applicable rubrics | Scorecard |
 | 12 | Delivery Packager | Format final assets to arena spec | Delivery bundle |
 
@@ -608,7 +608,7 @@ Preserved from v2.0 (19) + 5 new in v3.0:
 | `make_executable` | Convert insight into action steps |
 | `genre_transfer(from, to)` | Rewrite in target genre, preserve content |
 | `audience_shift(from, to)` | Adjust register for different reader |
-| `inject_variance` | Add sentence-length and vocabulary unpredictability |
+| `repair_rhythm` | Reshape sentences so rhythm follows meaning (replaces the retired v8 length-quota operator; no length quotas or detector targets) |
 | `kill_padding` | Remove every sentence not advancing the argument |
 | `strengthen_closing` | Rewrite final paragraph for maximum residue |
 | `scene_audit` | Run chapter construction checklist |

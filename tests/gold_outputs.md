@@ -8,20 +8,39 @@ for output quality.
 
 ---
 
+## The rule for every example in this file
+
+A rewrite may add only what the author's own material supplies. Each example
+below shows the **source card** the author provided; every fact in the
+"After" comes from that card, and anything the card does not supply is marked
+`[needs source]` rather than invented. The figures on the cards are synthetic
+teaching fixtures — they are not claims about any real company, study or
+person. (v9 replaced the v8 versions of Examples 1–5, which added named
+actors, studies and statistics that no source supplied — the exact
+fabrication v4 Law C forbids — and claimed a rewrite would change a detector's
+classification.)
+
+---
+
 ## Sentence-Level Transformations
 
-### Example 1: Removing AI Residue + Adding Specificity
+### Example 1: Removing Templated Framing + Adding Specificity
 
 Before:
 "In today's rapidly evolving digital landscape, artificial intelligence is
 transforming the way businesses operate."
 
-After:
-"Amazon cut 27,000 warehouse jobs in 2024 and replaced them with robotic
-picking systems that cost 40% less per unit handled."
+Source card (author's notes): *Our warehouse replaced manual picking on two of
+six lines with automated pickers in March; cost per order on those lines fell
+from $1.10 to $0.70.*
 
-Score delta: +35 points. The rewrite names an actor, provides a number,
-specifies a mechanism, and grounds the claim in verifiable reality.
+After:
+"In March we automated picking on two of our six warehouse lines. Cost per
+order on those lines fell from $1.10 to $0.70."
+
+Score delta: +35 points. The rewrite names the actor, the change and the
+measured result — all from the author's card. Nothing about other companies
+was added.
 
 ### Example 2: Deflating Inflated Verbs
 
@@ -29,31 +48,39 @@ Before:
 "Our platform revolutionizes how teams collaborate by leveraging cutting-edge
 AI to optimize workflow efficiency."
 
+Source card (pilot report): *Tasks are routed by each member's open load and
+due date. Pilot: 34 teams, median completion 4.2 → 2.8 days.*
+
 After:
-"The platform routes tasks based on each team member's current load and
-deadline proximity. Average completion time dropped from 4.2 to 2.8 days
-across 340 teams in the pilot."
+"The platform routes each task by the assignee's open load and due date. In
+a 34-team pilot, median completion time fell from 4.2 to 2.8 days."
 
-Score delta: +30 points. "Revolutionizes" → specific mechanism. "Leveraging
+Score delta: +30 points. "Revolutionizes" → the mechanism. "Leveraging
 cutting-edge AI" → what it actually does. "Optimize workflow efficiency" →
-measured outcome.
+the measured outcome, scoped to the pilot that measured it.
 
-### Example 3: Variance Injection
+### Example 3: Rhythm From Meaning
 
-Before (uniform — std dev ~3):
+Before:
 "The study examined social media usage patterns. Researchers collected data
 from over five thousand participants. The findings revealed significant
 correlations. These results suggest important implications for policy."
 
-After (varied — std dev ~11):
-"Five thousand participants. That's the dataset. What Twenge's team found in
-it should have ended the 'social media is fine' argument: adolescents logging
-more than three hours daily showed depressive symptom rates 35% above baseline,
-and the curve wasn't linear — it bent sharply at the two-hour mark, suggesting
-a threshold effect rather than a dose-response gradient."
+Source card: *Cohort study, about 5,000 adolescents. Heavier daily use was
+associated with more reported depressive symptoms. Design is observational;
+the authors state it cannot show cause.*
 
-Score delta: +40 points. Sentence lengths: 3, 4, 48 words. The variance alone
-would shift this from "AI-flagged" to "human-classified" on most detectors.
+After:
+"About five thousand adolescents, followed over time. Those who used social
+media more each day reported more depressive symptoms — an association, not
+proof of cause, as the study's authors say themselves. What that means for
+policy depends on effect sizes [needs source] the summary does not give."
+
+Score delta: +40 points. The four same-weight sentences became one point
+(the association), its limit (observational) and an honest gap
+([needs source]). Rhythm changed because the content has a claim, a
+qualification and a missing number — not to hit a length pattern. No
+researcher, percentage or threshold was invented.
 
 ---
 
@@ -67,16 +94,19 @@ There are many different perspectives on how education should be approached.
 In this essay, I will explore some of the key issues related to education
 reform and discuss potential solutions."
 
-After:
-"The U.S. spends $15,000 per student annually — more than every G7 nation
-except Luxembourg — and ranks 25th in math among OECD countries. Money is not
-the constraint. How the money reaches classrooms is. Seventy-three percent of
-education funding flows through local property taxes, which means the zip code
-a child is born into determines the quality of the education they receive. This
-is not an allocation inefficiency. It is a design feature."
+Source card: *State budget office: per-pupil spending in the top-funded
+district is 2.1× the bottom district; most of the gap traces to local
+property-tax revenue.*
 
-Score: 88/100. Specific data. Named mechanism. Clear thesis. Provocative
-closing claim. Variance in sentence length (15, 5, 21, 23, 8 words).
+After:
+"In this state, the best-funded district spends 2.1 times as much per pupil
+as the worst-funded one, and most of that gap comes from local property
+taxes. So the question is not how much the state spends. It is how the
+money reaches classrooms — and right now a child's address decides it."
+
+Score: 88/100. A sourced figure, a named mechanism, a clear thesis that the
+evidence supports. The comparison to other countries in the v8 version was
+removed: no source supplied it.
 
 ### Example 5: Evidence Paragraph
 
@@ -85,19 +115,20 @@ Before:
 work from home report being happier and more efficient. Companies that adopt
 remote work policies tend to see positive results."
 
-After:
-"Bloom's 2022 study of 1,612 employees at a major travel agency — the largest
-randomized controlled trial on hybrid work to date — found that hybrid workers
-(three office days, two remote) showed 35% lower attrition, equivalent
-satisfaction scores, and no measurable productivity loss. But Bloom himself
-qualifies the finding: the gains concentrated in individual-task roles. For
-roles requiring real-time collaboration, the picture was murkier, with
-managers reporting a 15-20% increase in coordination costs that didn't appear
-in the productivity metrics."
+Source card: *[Citation the author supplies]: randomized trial of hybrid
+schedules at one employer; lower attrition in the hybrid group; no measured
+productivity loss; authors note results may not generalize to
+collaboration-heavy roles.*
 
-Score: 91/100. Named researcher. Named study design. Specific sample size.
-Specific results with qualifiers. Counterpoint from the same source. Honest
-about what the evidence doesn't show.
+After:
+"A randomized trial at one employer [citation] found lower attrition among
+hybrid workers and no measured productivity loss. The authors limit the
+claim themselves: the result may not hold for roles that depend on real-time
+collaboration. 'Many studies' becomes one study, scoped to what it tested."
+
+Score: 91/100. One named source in place of "many studies", its result, and
+its own stated limit. Effect sizes appear only if the citation supplies
+them; the v8 version invented them.
 
 ---
 
@@ -135,7 +166,9 @@ mobile, the Q4 mobile launch slips to Q1 2027.
 brief the mobile team Monday."
 
 Score: 93/100. Every claim has a number. Every recommendation has an owner.
-Every risk is quantified. Decision point is clear with a deadline.
+Every risk is quantified. Decision point is clear with a deadline. Every
+figure here is the author's own operating data (the "before" omitted it); a
+rewrite that lacked that data would mark each figure `[needs source]`.
 
 ---
 

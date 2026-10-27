@@ -105,7 +105,7 @@ agents:
 
   - id: stress_tester
     title: Stress Tester
-    role: Adversarial battery (reader / editor / skeptic / detector)
+    role: Adversarial battery (reader / editor / skeptic / author)
     artifact: stress_battery_report
     schema: (embedded; see agent spec)
     pass: 9

@@ -122,16 +122,16 @@ EVALUATION CRITERIA:
 
 ---
 
-## Adversarial Sample: Detector Stress Test
+## Adversarial Sample: Editorial Stress Test
 
-Take any output from the compiler and verify:
-- [ ] Sentence-length standard deviation ≥7 across 10+ sentences
-- [ ] No vocabulary word appears more than 3 times per 500 words (excluding articles/prepositions)
-- [ ] At least 2 uncommon but precise words per 300 words
-- [ ] No transition word/phrase used more than twice in 1000 words
-- [ ] At least one sentence ≤6 words per 500 words
-- [ ] At least one sentence ≥30 words per 500 words
-- [ ] Paragraph lengths have standard deviation ≥2 sentences
-- [ ] No two consecutive paragraphs open with the same word or syntactic pattern
-- [ ] Vocabulary perplexity is non-uniform (spiky, not flat)
-- [ ] If submitted to GPTZero, Turnitin AI, or Originality.ai, the output scores as human-written
+Take any output from the compiler and verify, as a reader would:
+- [ ] Each paragraph has one job, and a reader can name the sentence carrying it
+- [ ] Rhythm changes where the thought changes shape — no sentence was resized only to vary length
+- [ ] A term that names one thing stays one term; no synonym was swapped in to lower a repetition count
+- [ ] Every transition states a real logical relation
+- [ ] Every fact, number, scene and quote traces to the author's sources, or is marked [needs source]
+- [ ] Every remaining hot-phrase match (`prototypes/wi9/`) has an editorial decision recorded
+
+AI-detector scores are not a criterion here or anywhere in Writing
+Intelligence. A detector result may be archived as an external observation
+only (`tests/detector_benchmark_suite.md`).

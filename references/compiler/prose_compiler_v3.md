@@ -62,14 +62,22 @@ Allowed when they serve a real function:
 
 ---
 
-## Variance Injection Rules
+## Rhythm From Meaning
 
-- No three consecutive sentences within ±5 words of each other in length
-- No two consecutive paragraphs with the same opening syntactic structure
-- Vocabulary must include at least 2 domain-specific or uncommon words per 300 words
-- Transition variety: no single transition word/phrase used more than twice per 1000 words
-- At least one sentence per 500 words must be ≤ 6 words
-- At least one sentence per 500 words must be ≥ 30 words
+These replace the retired v8 length and vocabulary quotas, which aimed at detector
+statistics. There are no length, vocabulary or transition quotas.
+
+- When several consecutive sentences do the same job at the same weight, find
+  the one that carries the point and let the others support, qualify or go.
+- Length changes where the thought changes shape — a turn, a concession, a
+  consequence, a step in a mechanism — and nowhere else.
+- Use the subject's own exact terms where it has them; never add rare or
+  "surprising" words to meet a count, and never swap synonyms for a term that
+  names the same thing.
+- A transition earns its place by stating a real logical relation (because,
+  although, unless). Remove transitions that announce rather than connect.
+- Leave a sentence alone when it already carries its meaning well.
+- Never target, predict or report an AI-detector score as a reason for a change.
 
 ---
 
@@ -79,7 +87,8 @@ Allowed when they serve a real function:
 |---|---|
 | `hard_ban_removed` | Removed a phrase from the hard-ban list |
 | `soft_ban_removed` | Removed a soft-ban phrase (with earned-exception override possible) |
-| `variance_injected` | Modified sentence length / structure to break repetition |
+| `rhythm_repaired` | Reshaped sentences so rhythm follows meaning (point, support, turn) |
+| `variance_injected` | **Legacy v8 name.** Accepted when reading old logs; never emitted by v9 |
 | `compression` | Removed words without losing meaning |
 | `specificity_added` | Replaced abstraction with concrete actor / number / example |
 | `abstract_to_scene` | Converted conceptual passage into grounded narrative |

@@ -6,7 +6,7 @@
 
 ## Job
 
-Attack the draft from every adversarial viewpoint. Reader. Editor. Skeptic. Detector. Surface every weakness before delivery.
+Attack the draft from every adversarial viewpoint. Reader. Editor. Skeptic. Author. Surface every weakness before delivery. No interrogation asks whether an AI detector would flag the text; detector scores are never a target (`references/v4/NON_GOALS.md`).
 
 ## Inputs
 
@@ -21,17 +21,17 @@ Attack the draft from every adversarial viewpoint. Reader. Editor. Skeptic. Dete
 A stress battery report answering twelve interrogations:
 
 1. What would a skeptical, smart reader attack first?
-2. What sentence could appear in any AI output?
+2. What sentence could appear in any document on this topic, by anyone?
 3. What could be cut without losing meaning?
 4. What line actually lands?
 5. Does the opening earn the next 30 seconds?
 6. Does the closing leave residue?
-7. Is there a single sentence a human would never write this way?
+7. Is there a sentence this author would never write this way?
 8. (Narrative) Would a reader turn the page?
 9. (Narrative) Does the final image burn?
 10. (Dialogue) Can you tell who's speaking with names removed?
 11. (High-stakes) What is the worst-faith reading of the strongest claim?
-12. (Detector) Could a detector flag any passage on cadence alone?
+12. (Author) Is there a passage where rhythm hides which sentence carries the point, or a claim the author would not recognize as theirs?
 
 ## Behavior
 
@@ -39,7 +39,7 @@ A stress battery report answering twelve interrogations:
 2. Score each on a 0-10 scale.
 3. For any score < 7, surface the specific passage and a proposed fix.
 4. For (11), produce the steel-man counter-argument. If the draft doesn't address it, flag.
-5. For (12), run a cadence signature check against `references/anti_patterns/cadence.md` + `cadence_expanded.md`.
+5. For (12), run the cadence signatures in `references/anti_patterns/cadence.md` + `cadence_expanded.md` as editorial questions, and check every claim the author would have to stand behind against their own sources.
 
 ## Hard Rules
 

@@ -2,13 +2,14 @@
 
 ## Purpose
 
-50+ identifiable cadence patterns that signal AI generation, lazy writing,
-or genre-specific cliché. Each entry includes the pattern signature,
-detection threshold, and fix protocol.
+50+ identifiable cadence patterns that signal templated, lazy or
+genre-clichéd writing. Each entry includes the pattern signature, a review
+threshold, and a meaning-led fix. A match is an editorial question about a
+specific span; it never establishes who or what wrote the text, and a fix is
+never made to change a classifier's output.
 
 The original cadence.md covers 9 major signatures. This library extends
-into subtler, more specialized patterns that sophisticated detectors and
-experienced editors catch.
+into subtler, more specialized patterns that experienced editors catch.
 
 ---
 
@@ -198,17 +199,17 @@ Fix: The paragraph must END further than it STARTED.
 
 ---
 
-## Category F: Subtle Statistical Patterns
+## Category F: Subtle Surface Patterns
 
 ### F01: Vocabulary Ceiling
 No word in the passage falls outside the 10,000 most common English words.
 Detection: Vocabulary analysis showing zero rare-word usage.
-Fix: Introduce 2-3 precise, domain-appropriate uncommon words per 500 words.
+Fix: Where a common word is vague, replace it with the exact term the subject actually uses (the part name, the statute, the dose). Never add rare words to meet a count.
 
 ### F02: Comma Regularity
 Commas appearing at statistically regular intervals (e.g., every 8-10 words).
 Detection: Comma interval standard deviation below 3 across 10+ sentences.
-Fix: Vary sentence structure. Some sentences with no commas. Some with 3+.
+Fix: Regular commas usually mean every sentence has the same clause shape. Restructure where the logic differs — a condition, a contrast, a list of real items — and leave alone sentences whose structure fits their content.
 
 ### F03: Conjunction Monotony
 "And" is the only conjunction used across 500+ words.
@@ -218,12 +219,12 @@ Fix: Use "but," "yet," "so," "while," "although," "unless," "because" — each e
 ### F04: Pronoun Density Flatness
 "It" / "they" / "this" appearing at uniform density without variance.
 Detection: Pronoun frequency per sentence remains constant across 10+ sentences.
-Fix: Alternate between naming the subject and using pronouns. Vary referent clarity.
+Fix: Name the subject wherever a pronoun's referent is unclear or has drifted; use the pronoun where the referent is obvious. Clarity decides, not alternation.
 
 ### F05: Perfect Parallelism
 Every list item, every comparison, every pair follows identical grammatical structure.
 Detection: 4+ parallel structures in 500 words with zero variation.
-Fix: Break one parallel for emphasis. Intentional asymmetry signals human craft.
+Fix: Keep parallel structure where the items really are parallel. Break it where one item differs in weight or kind, so the grammar tells the reader the truth about the content.
 
 ---
 
@@ -242,6 +243,6 @@ Fix: Break one parallel for emphasis. Intentional asymmetry signals human craft.
 
 This library extends `references/anti_patterns/cadence.md`. When running
 Pass 1 (Diagnostic Scan), check against BOTH the original 9 signatures
-AND this expanded library. The expanded library catches patterns that
-unsophisticated detectors miss but experienced editors and advanced
-AI classifiers identify.
+AND this expanded library. Every finding is reported with its span and its
+question; the author decides. Phrase and rhythm matches are editorial
+diagnostics and are never used to target or predict an AI-detector score.

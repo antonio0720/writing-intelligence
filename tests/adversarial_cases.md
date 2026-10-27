@@ -2,203 +2,179 @@
 
 ## Purpose
 
-These tests specifically target the weaknesses that AI detectors exploit.
-Each test includes the attack vector (what the detector looks for), the
-input, and the pass/fail criteria.
+These cases attack the draft the way a hard reader, editor or skeptic would.
+Each names the reader failure it probes, the input, and pass/fail criteria a
+person can judge. None of them measures, predicts or targets an AI-detector
+score: v9 retired the detector-oriented versions of tests 1, 2, 4, 8 and 9
+(see `tests/detector_benchmark_suite.md` and `references/v9/QUALITY_BENCHMARK.md`).
+No criterion may be met by adding a fact, scene, number or quote the author's
+sources do not contain; a missing fact is marked [needs source].
 
 ---
 
-## Test 1: Perplexity Flatness Attack
+## Test 1: Predictable Filler
 
-**Attack vector**: AI detectors measure per-word perplexity. LLM output has
-abnormally LOW perplexity variance — each word is predictable given the
-previous words. Human writing has SPIKY perplexity — unexpected word choices
-create peaks.
+**Reader failure**: the passage keeps talking and never tells the reader
+anything they could check, use or argue with.
 
-**Input**: Write a 300-word passage about climate change policy.
+**Input**: Write a 300-word passage about a climate policy the author has
+sources on.
 
 **Pass criteria**:
-- [ ] At least 5 words per 100 words that a language model would NOT predict as
-  the top-3 likely next word (measured by surprise factor)
-- [ ] At least 2 domain-specific or uncommon words per 100 words
-- [ ] No stretch of 5+ consecutive sentences where every word is the "expected" choice
-- [ ] Vocabulary includes at least one word from outside the top 5,000 most common English words per 200 words
-- [ ] At least one sentence uses an unexpected syntactic structure (inversion, appositive, interrupted clause)
+- [ ] Every sentence either states a checkable fact, a decision, a mechanism, a consequence, a concession or a question the author actually holds
+- [ ] No run of 5+ sentences restating one point at one altitude
+- [ ] The subject's own exact terms are used where it has them (statute, program, unit) — never rare words added for their own sake
+- [ ] Every factual sentence traces to a supplied source, or is marked [needs source]
 
-**Technique**: inject_variance operator + voice restoration with distinctive vocabulary
+**Technique**: `repair_rhythm` + `add_specificity` from the author's sources
 
 ---
 
-## Test 2: Burstiness Deficit Attack
+## Test 2: Undifferentiated Rhythm
 
-**Attack vector**: AI detectors measure sentence-length burstiness. Human
-writers produce sentences with high standard deviation in length. LLMs
-produce sentences that cluster around a mean.
+**Reader failure**: every sentence has the same length and weight, so the
+reader cannot tell which one carries the point.
 
-**Input**: Rewrite a 500-word AI-generated essay on urban planning.
+**Input**: Rewrite a 500-word essay on urban planning whose sentences all do the
+same job.
 
 **Pass criteria**:
-- [ ] Sentence-length standard deviation ≥8 words across the full passage
-- [ ] At least one sentence ≤5 words per 200 words
-- [ ] At least one sentence ≥35 words per 200 words
-- [ ] No 4+ consecutive sentences within ±4 words of each other
-- [ ] Paragraph-length standard deviation ≥2 sentences
-- [ ] At least one 1-sentence paragraph in the passage
-- [ ] At least one paragraph with 6+ sentences
+- [ ] A reader can name the sentence in each paragraph that carries the point
+- [ ] Sentence length changes where the thought changes shape (turn, concession, consequence), and an editor can say why at each change
+- [ ] No sentence was lengthened, shortened or split only to vary length
+- [ ] Core argument and every fact preserved (`wi.py diff` reports no meaning change)
 
-**Technique**: Variance injection in Pass 3 + paragraph physics in Pass 2
+**Technique**: `repair_rhythm` in Pass 6 + paragraph physics in Pass 2
 
 ---
 
-## Test 3: Transition Homogeneity Attack
+## Test 3: Transition Homogeneity
 
-**Attack vector**: LLMs overuse a small set of transition words/phrases.
-Detectors flag transition pattern repetition.
+**Reader failure**: the same connectors announce every move, so real logical
+relations (cause, contrast, condition) are indistinguishable from padding.
 
 **Input**: Write a 5-paragraph argumentative essay on education funding.
 
 **Pass criteria**:
-- [ ] No transition word or phrase appears more than once in the entire piece
-- [ ] At least 2 paragraphs transition through structural juxtaposition (no connector word at all)
-- [ ] "However," "Moreover," "Furthermore," "Additionally" each used ≤1 time total
-- [ ] At least one transition achieved through a question
-- [ ] At least one transition achieved through a return to a previous image or idea
-- [ ] No paragraph opens with the same word as any other paragraph
+- [ ] Every transition states a true logical relation between the ideas it joins
+- [ ] Transitions that announce rather than connect ("Moreover," "Furthermore") are removed or justified
+- [ ] Where a paragraph follows naturally, it needs no connector at all
+- [ ] Repeated connectors are acceptable when the relation really repeats
 
-**Technique**: Anti-pattern enforcement from cadence.md + structural transitions
+**Technique**: Anti-pattern review from cadence.md + structural transitions
 
 ---
 
-## Test 4: Vocabulary Predictability Attack
+## Test 4: Vague Vocabulary
 
-**Attack vector**: LLMs draw from a predictable vocabulary distribution.
-Human writers include domain-specific terms, colloquialisms, precise
-technical language, and occasional rare words that break the distribution.
+**Reader failure**: general words stand in for the exact terms of the subject,
+so the reader cannot tell what is being claimed.
 
-**Input**: Write a 400-word analysis of a Supreme Court decision.
+**Input**: Write a 400-word analysis of a court decision the author has the text of.
 
 **Pass criteria**:
-- [ ] At least 3 legal-domain terms used correctly
-- [ ] At least 1 word that would be rare in typical LLM output (not jargon for jargon's sake — genuinely the right word)
-- [ ] No word used more than 3 times (excluding articles, prepositions, pronouns)
-- [ ] Vocabulary profile includes words from at least 3 different register levels (formal, standard, conversational)
-- [ ] At least one metaphor or analogy drawn from outside the legal domain
+- [ ] Legal terms are used correctly and only where they name the thing meant
+- [ ] Every characterization of the holding traces to the decision's own text
+- [ ] A term that names the same thing stays the same term (no synonym swapping)
+- [ ] Any analogy clarifies a real feature of the decision, not decoration
 
-**Technique**: Voiceprint application + scene grounding + vocabulary variance injection
+**Technique**: Voiceprint application + `add_specificity` from the source
 
 ---
 
-## Test 5: Opening Pattern Attack
+## Test 5: Opening Pattern
 
-**Attack vector**: LLMs overwhelmingly open with generalized context-setting
-or throat-clearing. This pattern is detectable.
+**Reader failure**: the opening spends the reader's attention on throat-clearing
+before reaching the subject.
 
-**Input**: Write 10 different 100-word passages on 10 different topics. Each
-must open differently.
+**Input**: Write 10 different 100-word passages on 10 different topics.
 
 **Pass criteria**:
-- [ ] No two passages open with the same syntactic structure
 - [ ] No passage opens with "In today's..." / "In an era of..." / "Throughout history..."
-- [ ] At least 3 openings use concrete specifics (a number, a name, a date, an object)
-- [ ] At least 2 openings use a scene or sensory detail
-- [ ] At least 1 opening uses a direct, falsifiable claim
-- [ ] At least 1 opening uses a question (genuine, not rhetorical)
-- [ ] No opening exceeds 20 words before reaching the main point
+- [ ] Each opening reaches its subject within its first sentence
+- [ ] Openings differ because their subjects differ, not because variety was imposed
+- [ ] Any concrete opening detail (number, name, date, scene) comes from the author's material
 
-**Technique**: Openings reference file + variance enforcement
+**Technique**: Openings reference file
 
 ---
 
-## Test 6: Paragraph Structure Homogeneity Attack
+## Test 6: Paragraph Structure Homogeneity
 
-**Attack vector**: LLM paragraphs default to topic-sentence → support → support →
-transition. This uniformity is detectable.
+**Reader failure**: every paragraph follows topic-sentence → support → support →
+transition regardless of what it has to do.
 
 **Input**: Write an 800-word essay on any topic.
 
 **Pass criteria**:
-- [ ] At least 3 different paragraph shapes used (from paragraph_shapes.md)
-- [ ] At least one paragraph that opens with evidence, not a claim
-- [ ] At least one paragraph that opens with a scene or image
-- [ ] At least one paragraph that opens with a question
-- [ ] No two consecutive paragraphs share the same internal structure
-- [ ] At least one paragraph is ≤2 sentences
-- [ ] At least one paragraph is ≥7 sentences
+- [ ] Each paragraph has one job an editor can name
+- [ ] Paragraph shape follows the job (evidence first when evidence is the point; a single fact standing alone when it turns the argument)
+- [ ] No paragraph exists only to vary the pattern
+- [ ] No two paragraphs do the same job
 
 **Technique**: Paragraph physics + structural rewrite in Pass 2
 
 ---
 
-## Test 7: Closing Pattern Attack
+## Test 7: Closing Pattern
 
-**Attack vector**: LLMs overwhelmingly close with summary or vague aspiration.
+**Reader failure**: the close restates what the reader just read or retreats
+into vague aspiration.
 
 **Input**: Write 5 different 300-word persuasive passages with different closings.
 
 **Pass criteria**:
 - [ ] No closing summarizes the preceding content
 - [ ] No closing uses "In conclusion" / "Ultimately" / "At the end of the day"
-- [ ] At least 1 closing extends the argument into new implication
-- [ ] At least 1 closing issues a specific challenge
-- [ ] At least 1 closing returns to the opening image/idea transformed
-- [ ] At least 1 closing is a single, quiet sentence
+- [ ] Each closing does one earned thing: an implication, a specific challenge, a return to an opening image transformed, or a remaining risk
 - [ ] No closing contains "only time will tell" or "remains to be seen"
 
-**Technique**: Endings reference file + stress test in Pass 5
+**Technique**: Endings reference file + stress test
 
 ---
 
-## Test 8: Full Detection Battery
+## Test 8: Full Editorial Battery
 
-**Attack vector**: Submit compiler output to multiple detectors simultaneously.
+**Reader failure**: any of the above, in a full piece.
 
-**Input**: Generate a 1,000-word essay through the full 6-pass pipeline.
-
-**Pass criteria (external tools)**:
-- [ ] GPTZero: scores as "likely human-written" (>80% human probability)
-- [ ] Turnitin AI Detection: flags <15% AI-generated content
-- [ ] Originality.ai: scores as "original" (>85% human)
-- [ ] Copyleaks: classifies as human
-- [ ] ZeroGPT: classifies as human
-
-**Pass criteria (internal metrics)**:
-- [ ] Sentence-length standard deviation ≥8
-- [ ] Vocabulary perplexity non-uniform
-- [ ] Zero hard-ban phrases
-- [ ] Zero cadence signature matches (3+ characteristics)
-- [ ] Score ≥85 on 100-point system
-- [ ] Voice integrity score ≥8/10
-
-**Technique**: Full pipeline, all passes, with voiceprint and genre pack applied
-
----
-
-## Test 9: The Rewrite Gauntlet
-
-**Input**: Take a 500-word passage that scores 95%+ AI-probability on GPTZero.
-Run it through the full pipeline.
+**Input**: Generate a 1,000-word essay through the full pipeline from the author's sources.
 
 **Pass criteria**:
-- [ ] Output scores <20% AI-probability on GPTZero
-- [ ] Core argument preserved (peer review confirms same thesis and evidence)
+- [ ] Zero hard-ban phrases; every remaining hot-phrase match has a recorded editorial decision (`prototypes/wi9/wi9_phrase_review.py`)
+- [ ] Zero cadence signature matches (3+ characteristics) left unexplained
+- [ ] Every consequential claim anchored to a source span, or held
+- [ ] Score ≥85 on the 100-point system; voice integrity ≥8/10 judged against consented author samples
+- [ ] The author accepts every proposition as theirs
+
+AI-detector results are not a pass criterion. If someone runs one, the result
+may be archived as an external observation; it changes nothing.
+
+---
+
+## Test 9: The Meaning-Preserving Rewrite
+
+**Input**: Take a 500-word passage dense with filler and templated rhythm. Run
+it through the full pipeline.
+
+**Pass criteria**:
+- [ ] Core argument preserved (`wi.py diff` and a peer reviewer confirm the same thesis and evidence)
+- [ ] No fact, scene, quote or number added that the input or its sources did not contain
 - [ ] Word count within ±20% of original
-- [ ] Score ≥80 on 100-point system
-- [ ] No reader unfamiliar with the test would suspect AI involvement
+- [ ] Score ≥80 on the 100-point system
+- [ ] An editor can explain every changed sentence in terms of clarity, credibility or meaning
 
 ---
 
 ## Test 10: Voice Consistency Under Pressure
 
-**Input**: Write 3 passages of 300 words each using the same custom voiceprint,
-on three completely different topics.
+**Input**: Write 3 passages of 300 words each using the same custom voiceprint
+(built from consented, human-authored samples), on three different topics.
 
 **Pass criteria**:
 - [ ] A blind reader identifies all three as written by the same person
-- [ ] Sentence-length mean within ±3 words across all three passages
-- [ ] Sentence-length standard deviation within ±2 across all three
-- [ ] Vocabulary tier consistent across all three
-- [ ] At least 2 distinctive markers (from the voiceprint) present in each passage
-- [ ] No passage triggers AI detection
+- [ ] The author recognizes all three as their voice and their positions
+- [ ] Measured voiceprint features stay within the author's own sample range (descriptive, not a target)
+- [ ] No distinctive marker was invented; each traces to the author's samples
 
 ---
 
@@ -210,7 +186,7 @@ on three completely different topics.
 
 **Attack vector**: AI-generated dialogue gives all characters the same vocabulary
 tier, sentence length, and rhetorical style. Characters are interchangeable.
-This is a soft detection signal — not for AI detectors, but for editorial quality.
+This is an editorial-quality signal.
 
 **Input**: Write a 600-word dialogue scene between three characters: a military
 officer, a teenage student, and a corporate attorney. The scene concerns a
@@ -252,7 +228,7 @@ to uncover.
 - [ ] The false relief is identifiable — a moment where tension appears to decrease before the fatal detail
 - [ ] Violence (if present) is ≤15% of total word count and has visible cost
 - [ ] The button (final line/image) is a single beat — not a summary paragraph
-- [ ] Sentence-length standard deviation ≥10 across the full passage (action sections drive it up)
+- [ ] Sentence rhythm tracks the phases: compressed where the action is, slower where silence or aftermath sits (judged by a reader, not a statistic)
 - [ ] No phase occupies more than 45% of the total word count (pressure phase can be long but not everything)
 
 **Technique**: Chapter construction doctrine + tension mechanics + thriller scene architecture
@@ -354,7 +330,7 @@ and a button.
 - [ ] Button: single beat, carries the chapter's weight
 
 **Pass criteria (prose quality)**:
-- [ ] Sentence-length standard deviation ≥8
+- [ ] Rhythm follows meaning (a reader can name the sentence carrying each beat)
 - [ ] Zero hard-ban phrases
 - [ ] Zero cadence signature matches
 - [ ] Voiceprint consistent throughout
@@ -364,8 +340,6 @@ and a button.
 - [ ] Score ≥80 on power dynamics scoring system
 - [ ] Score ≥80 on tension mechanics scoring system
 
-**Pass criteria (detection)**:
-- [ ] GPTZero: >80% human probability
-- [ ] No passage triggers AI detection on any major detector
+**Not a criterion**: any AI-detector result. Detector scores are never a target.
 
 **Technique**: Full 7-pass pipeline with all v2.0 modules active

@@ -33,11 +33,14 @@ A score is only as honest as the scorer's willingness to give low numbers.
 
 | Score | Description |
 |---|---|
-| 9-10 | Sentence lengths vary dramatically and purposefully. Paragraph lengths vary. The prose has internal music. Reading it aloud reveals cadence. |
-| 7-8 | Good variance with occasional flat stretches. |
-| 5-6 | Noticeable uniformity. Multiple passages where sentences cluster within ±5 words. |
-| 3-4 | Monotonous. Sentence lengths and structures repeat mechanically. |
-| 1-2 | Completely flat. Every sentence sounds the same. Detectors would flag this immediately. |
+| 9-10 | Sentence shape follows the thought: the point lands, the mechanism has room, the turn is audible. Reading it aloud reveals cadence that serves meaning. |
+| 7-8 | Rhythm mostly serves meaning, with occasional flat stretches. |
+| 5-6 | Noticeable uniformity. Several passages where every sentence does the same job at the same weight. |
+| 3-4 | Monotonous. Structures repeat mechanically and the reader cannot tell what is central. |
+| 1-2 | Completely flat. Every sentence sounds the same and nothing stands out as the point. |
+
+Rhythm is scored by a reader's experience, never by a length statistic or a
+predicted AI-detector result.
 
 ### Voice Integrity (10 points)
 
@@ -112,9 +115,9 @@ A score is only as honest as the scorer's willingness to give low numbers.
 These cap the maximum score at 65 regardless of other category marks:
 
 1. Three or more hard-ban phrases detected
-2. Perplexity flatness: 5+ consecutive sentences with vocabulary predictability score above 0.9
-3. Sentence-length standard deviation below 4 across any 8-sentence span
-4. Zero domain-specific or uncommon vocabulary in 500+ words
+2. Predictable filler: 5+ consecutive sentences that assert nothing a reader could check or use
+3. An undifferentiated run of 8+ sentences in which no sentence carries more weight than another (judged by a reader, not a length statistic)
+4. Zero domain-specific vocabulary in 500+ words where the subject has its own exact terms
 5. Argument contains unsupported universal claim treated as premise
 6. Fabricated citation, statistic, quote, or study
 7. Opening paragraph uses a dictionary definition

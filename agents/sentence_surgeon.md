@@ -24,7 +24,7 @@ Repair prose sentence-by-sentence while preserving authorial voice. Log every tr
 ## Behavior
 
 1. Apply hard bans, soft bans, earned exceptions.
-2. Run the variance injection rules (sentence-length variance, transition variety, vocabulary tier).
+2. Apply the rhythm-from-meaning rules (`references/compiler/prose_compiler_v3.md`): repair runs where every sentence does the same job, without length quotas, synonym swaps or detector targets.
 3. Implement epistemic ledger decisions (soften universals, qualify inflated verbs, attach citations).
 4. Compress per Pass 0 contract.
 5. Log every cut, strengthening, preservation with rationale and voice impact.

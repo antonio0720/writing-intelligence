@@ -194,4 +194,4 @@ Run these passes in order:
 5. **Voice pass**: Does this sound like a student in this class wrote it?
 6. **Citation pass**: Format correct? Coverage complete? Paraphrase distance sufficient?
 7. **Compression pass**: Can any paragraph lose 20% without damage?
-8. **Final polish pass**: Anti-slop check. Variance injection. Opening and closing audit.
+8. **Final polish pass**: Anti-slop check. Rhythm repaired from meaning, not from quotas. Opening and closing audit.
