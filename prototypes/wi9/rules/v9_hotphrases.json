@@ -1,0 +1,3015 @@
+{
+  "schema": "wi9.hotphrases/1",
+  "version": "0.2.0-experimental",
+  "title": "Meaning-led editorial hot phrases, not AI detection",
+  "owner": "Antonio T. Smith Jr.",
+  "use": "Highlight source-light cliches, repetitive rhetorical templates, and vague authority. Manual judgment required; never change prose solely to lower an AI-detector score.",
+  "rules": [
+    {
+      "id": "empty_emphasis_001",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that matters",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_002",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "this matters",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_003",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "it matters",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_004",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that is important",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_005",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that's important",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_006",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "and that changes everything",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_007",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "this changes everything",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_008",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "this is a big deal",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_009",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "here's the thing",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_010",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "here is the thing",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_011",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "here's why",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_012",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "here is why",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_013",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "here's what",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_014",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the truth is",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_015",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the reality is",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_016",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "here's the kicker",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_017",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "make no mistake",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_018",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "at the end of the day",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_019",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the bottom line",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_020",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the bottom line is",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_021",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "bottom line",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_022",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "when all is said and done",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_023",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the key takeaway",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_024",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "what this tells us",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_025",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "what this means is",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_026",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "it goes without saying",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_027",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "needless to say",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_028",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the bigger picture",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_029",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that's the difference",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_030",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "and that is the point",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_031",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that's the point",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_032",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "in other words",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_033",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "it all comes down to",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_034",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that's what makes it powerful",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_035",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "this is significant",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_036",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that's meaningful",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_037",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "the important part",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_038",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "why does this matter",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_039",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "why this matters",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_040",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "this matters because",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_041",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "that's where things get interesting",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_042",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "and here is why",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_emphasis_043",
+      "category": "empty_emphasis",
+      "kind": "literal",
+      "expression": "there is a reason for that",
+      "severity": "review",
+      "question": "What specific decision, consequence, or observation makes this important?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_001",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "studies show",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_002",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "research shows",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_003",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "research suggests",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_004",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "experts agree",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_005",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "many experts agree",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_006",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "scientists say",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_007",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "research has proven",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_008",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "it is widely known",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_009",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "it is well known",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_010",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "as we all know",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_011",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "widely recognized",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_012",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "proven to",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_013",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "universally accepted",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_014",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "the data speaks for itself",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_015",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "the numbers do not lie",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_016",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "the numbers don't lie",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_017",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "across the board",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_018",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "everyone knows",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_019",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "it is clear that",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_020",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "it's clear that",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_021",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "there is no doubt that",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_022",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "without question",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_023",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "undeniably",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_024",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "it's undeniable",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_025",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "it cannot be overstated",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_026",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "time and time again",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_027",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "more than ever",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_028",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "more relevant than ever",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_029",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "there is growing evidence",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_030",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "numerous studies",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_031",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "countless studies",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_032",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "according to research",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_claim_033",
+      "category": "generic_claim",
+      "kind": "literal",
+      "expression": "experts have long recognized",
+      "severity": "evidence",
+      "question": "Can you identify an actual source, date, sample, or bounded observation?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_001",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "in today's fast-paced world",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_002",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "in a fast-paced world",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_003",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "in an ever-evolving landscape",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_004",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "in the ever-evolving landscape",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_005",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "in the dynamic landscape",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_006",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "navigate the complexities",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_007",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "game-changer",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_008",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "game changer",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_009",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "paradigm shift",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_010",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "disruptive innovation",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_011",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "revolutionizing",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_012",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "unlock the potential",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_013",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "unlock the power of",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_014",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "leverage the power of",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_015",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "harness the power of",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_016",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "cutting-edge",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_017",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "state-of-the-art",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_018",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "robust solution",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_019",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "seamless integration",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_020",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "holistic approach",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_021",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "transformational journey",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_022",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "transformative potential",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_023",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "unlock opportunities",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_024",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "unprecedented opportunities",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_025",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "exciting times",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_026",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "next level",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_027",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "take it to the next level",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_028",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "move the needle",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_029",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "value proposition",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_030",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "drive meaningful outcomes",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_031",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "foster collaboration",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_032",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "mission-critical",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_033",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "data-driven insights",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_034",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "end-to-end",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_035",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "scalable solution",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_036",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "frictionless experience",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_037",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "world-class",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_038",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "best-in-class",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_039",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "powerful tool",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_040",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "rich tapestry",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_041",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "stands as a testament",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_042",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "groundbreaking innovation",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_043",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "ever-changing landscape",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_044",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "at scale",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_045",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "holistic solution",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_046",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "game changing",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_047",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "innovative solutions",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_048",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "unlock new possibilities",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_049",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "seamlessly integrate",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_050",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "incredible opportunity",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_051",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "amazing potential",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_052",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "industry-leading",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "marketing_abstraction_053",
+      "category": "marketing_abstraction",
+      "kind": "literal",
+      "expression": "reimagine what is possible",
+      "severity": "review",
+      "question": "Which concrete action, product behavior, or measurable change is being claimed?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_001",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "let's dive in",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_002",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "let's delve into",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_003",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "let's unpack",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_004",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "let's explore",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_005",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "let's break it down",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_006",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "delve into",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_007",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "deep dive",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_008",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "it is worth noting",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_009",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "it's worth noting",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_010",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "worth noting",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_011",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "importantly",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_012",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "interestingly",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_013",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "notably",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_014",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "noteworthy",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_015",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "furthermore",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_016",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "moreover",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_017",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "additionally",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_018",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in conclusion",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_019",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "to summarize",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_020",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in summary",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_021",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in essence",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_022",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "on the other hand",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_023",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "first and foremost",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_024",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "the key is to",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_025",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "by doing so",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_026",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "with that in mind",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_027",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "imagine a world where",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_028",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "picture this",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_029",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "whether you're a",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_030",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "by the same token",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_031",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "for context",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_032",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "what sets this apart",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_033",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "one might argue",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_034",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "this begs the question",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_035",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "the answer is simple",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_036",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "what if i told you",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_037",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "without further ado",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_038",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in this article",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_039",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in this guide",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_040",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in the following sections",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_041",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "we will explore",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_042",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "we will dive into",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_043",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "let us take a closer look",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_044",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "now more than ever",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_045",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "to put it simply",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_046",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "in layman’s terms",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "staged_explanation_047",
+      "category": "staged_explanation",
+      "kind": "literal",
+      "expression": "to understand why",
+      "severity": "review",
+      "question": "Does this transition help the reader follow evidence, or merely announce the structure?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_001",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "that's not to say",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_002",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "this is not to say",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_003",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "that's not necessarily",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_004",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "with that being said",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_005",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "it is important to remember",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_006",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "it is important to recognize",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_007",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "it should be noted that",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_008",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "it is also worth mentioning",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_009",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "there is no one-size-fits-all",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_010",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "nuanced approach",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_011",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "complex and multifaceted",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_012",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "no simple answer",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_013",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "there's no silver bullet",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_014",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "there is no silver bullet",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_015",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "it's complicated",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_016",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "not without its challenges",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_017",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "while there are challenges",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_018",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "it remains to be seen",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_019",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "in many ways",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_020",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "in some respects",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_021",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "in a sense",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_022",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "arguably",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_023",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "to a certain extent",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_024",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "in this context",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "qualifier_padding_025",
+      "category": "qualifier_padding",
+      "kind": "literal",
+      "expression": "on a deeper level",
+      "severity": "review",
+      "question": "Is this uncertainty genuine and appropriately scoped, or just padding?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_001",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "and that's just the beginning",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_002",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the possibilities are endless",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_003",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "only time will tell",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_004",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the future is bright",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_005",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "as we move forward",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_006",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "time will tell",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_007",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "a new era",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_008",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the path ahead",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_009",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the journey continues",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_010",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "at its core",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_011",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the stage is set",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_012",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "as never before",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_013",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the conversation is only beginning",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_014",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "this changes how we think about",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_015",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "in an increasingly complex world",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_016",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the future holds",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_017",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the world is changing",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_018",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the next chapter",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_019",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the road ahead",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_020",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "in the end",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_021",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "ultimately",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_022",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "at the heart of it all",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_023",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the takeaway is simple",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_024",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "one thing is certain",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_025",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "we are only scratching the surface",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_026",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the future starts now",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_027",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "it is a reminder that",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_028",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "this is a powerful reminder",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "generic_closure_029",
+      "category": "generic_closure",
+      "kind": "literal",
+      "expression": "the real opportunity lies in",
+      "severity": "review",
+      "question": "What earned consequence or unresolved question should end the passage?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_001",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "let's be honest",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_002",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "here's what nobody tells you",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_003",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "to be honest",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_004",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "honestly",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_005",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "truth be told",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_006",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "spoiler alert",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_007",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "real talk",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_008",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "here's my take",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_009",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "i can't stress this enough",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_010",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "if i'm being honest",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_011",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "believe it or not",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_012",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "i'm not gonna lie",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_013",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "you might be surprised",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_014",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "let's face it",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_015",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "here's the catch",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_016",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "sound familiar",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_017",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "think about it",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_018",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "the fact is",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_019",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "here's what most people miss",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_020",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "what nobody talks about",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_021",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "you see",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_022",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "i'll be honest",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_023",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "no sugarcoating",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_024",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "the harsh truth",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_025",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "the uncomfortable truth",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "performed_candor_026",
+      "category": "performed_candor",
+      "kind": "literal",
+      "expression": "a hard pill to swallow",
+      "severity": "review",
+      "question": "Does this phrase reflect the actual speaker, or perform authenticity?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_001",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "tapestry of",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_002",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "symphony of",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_003",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "dance between",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_004",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "journey of discovery",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_005",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "beacon of hope",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_006",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "shining example",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_007",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a testament to",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_008",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a catalyst for change",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_009",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "the fabric of society",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_010",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a sea of opportunities",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_011",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "the key to success",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_012",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "the cornerstone of",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_013",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a roadmap to success",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_014",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "pave the way",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_015",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "chart a course",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_016",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "bridge the gap",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_017",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "unlock the door",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_018",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "the tip of the iceberg",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_019",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a double-edged sword",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_020",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "the secret sauce",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_021",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a recipe for success",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "empty_metaphor_022",
+      "category": "empty_metaphor",
+      "kind": "literal",
+      "expression": "a wake-up call",
+      "severity": "review",
+      "question": "Does the metaphor clarify a mechanism better than direct language?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_001",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "consider this",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_002",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "ask yourself",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_003",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "think of it this way",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_004",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "have you ever wondered",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_005",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "you may be wondering",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_006",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "you might be asking",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_007",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "you heard that right",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_008",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "sound too good to be true",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_009",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "but wait",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_010",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "read that again",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_011",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "you read that right",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_012",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "let that sink in",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_013",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "here is the good news",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_014",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "here's the good news",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_015",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "ready to get started",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_016",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "are you ready",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_017",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "what does this mean for you",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_018",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "why should you care",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_019",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "so what does this mean",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "forced_audience_engagement_020",
+      "category": "forced_audience_engagement",
+      "kind": "literal",
+      "expression": "so where do we go from here",
+      "severity": "review",
+      "question": "Is direct address useful for this audience and genre?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_001",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "empower individuals",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_002",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "empower businesses",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_003",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "empower organizations",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_004",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "unlock efficiency",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_005",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "drive growth",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_006",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "transform how we",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_007",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "drive impact",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_008",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "maximize potential",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_009",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "minimize friction",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_010",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "optimize outcomes",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_011",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "accelerate innovation",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_012",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "enhance productivity",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_013",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "create meaningful change",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_014",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "drive transformation",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_015",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "achieve excellence",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_016",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "deliver value",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_017",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "elevate the experience",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_018",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "scale effortlessly",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_019",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "solve complex challenges",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_020",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "streamline processes",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_021",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "enable seamless",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_022",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "redefine the future",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "domainless_solutionism_023",
+      "category": "domainless_solutionism",
+      "kind": "literal",
+      "expression": "reshape the landscape",
+      "severity": "review",
+      "question": "Who does what, under which conditions, with what observable result?",
+      "context_note": "Not a claim of machine authorship; allow legitimate domain use and direct quotations."
+    },
+    {
+      "id": "contrast_not_just",
+      "category": "overused_rhetorical_structure",
+      "kind": "regex",
+      "expression": "\\bnot\\s+just\\b.{1,110}?\\bbut\\s+(?:also\\s+)?\\b",
+      "severity": "review",
+      "question": "Review whether both sides name meaningfully different facts.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "contrast_not_about",
+      "category": "overused_rhetorical_structure",
+      "kind": "regex",
+      "expression": "\\b(?:it\\s+is|it\\x27s)\\s+not\\s+about\\b.{1,120}?\\b(?:it\\s+is|it\\x27s)\\s+about\\b",
+      "severity": "review",
+      "question": "A contrast needs evidence rather than a reframed platitude.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "contrast_more_less",
+      "category": "overused_rhetorical_structure",
+      "kind": "regex",
+      "expression": "\\bless\\s+about\\b.{1,90}?\\bmore\\s+about\\b",
+      "severity": "review",
+      "question": "Keep only if the argument establishes the difference.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "contrast_not_because",
+      "category": "overused_rhetorical_structure",
+      "kind": "regex",
+      "expression": "\\bnot\\s+because\\b.{1,110}?\\bbut\\s+because\\b",
+      "severity": "review",
+      "question": "Check whether the stated cause is sourced and nontrivial.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "contrast_not_merely",
+      "category": "overused_rhetorical_structure",
+      "kind": "regex",
+      "expression": "\\bnot\\s+merely\\b.{1,110}?\\bbut\\b",
+      "severity": "review",
+      "question": "Preserve genuine distinctions; challenge surface symmetry.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "false_heroic_turn",
+      "category": "overused_rhetorical_structure",
+      "kind": "regex",
+      "expression": "\\b(?:the\\s+real\\s+(?:question|issue|problem))\\s+(?:isn\\x27t|is\\s+not)\\b.{1,120}?\\b(?:it\\x27s|it\\s+is)\\b",
+      "severity": "review",
+      "question": "Check whether the pivot advances the argument.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "formulaic_three_step",
+      "category": "staged_explanation",
+      "kind": "regex",
+      "expression": "\\bfirst(?:ly)?\\b[^.!?\\n]{10,140}\\bsecond(?:ly)?\\b[^.!?\\n]{10,140}\\bthird(?:ly)?\\b",
+      "severity": "review",
+      "question": "Check whether the sequence carries dependency or is merely decorative.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "pseudo_synthesis",
+      "category": "empty_emphasis",
+      "kind": "regex",
+      "expression": "\\bwhat\\s+(?:really|truly)\\s+matters\\s+is\\b",
+      "severity": "review",
+      "question": "Replace abstract declaration with the concrete condition or outcome.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "generic_statement_of_value",
+      "category": "domainless_solutionism",
+      "kind": "regex",
+      "expression": "\\b(?:is|are)\\s+(?:more\\s+than\\s+just|not\\s+simply)\\s+\\w+",
+      "severity": "review",
+      "question": "Check that the sentence provides concrete evidence.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "meta_conclusion",
+      "category": "generic_closure",
+      "kind": "regex",
+      "expression": "\\b(?:ultimately|in\\s+the\\s+end)\\s*,?\\s+(?:it\\s+all|everything|the\\s+answer)\\b",
+      "severity": "review",
+      "question": "Avoid a closing that only recycles the main claim.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "empty_impact_claim",
+      "category": "domainless_solutionism",
+      "kind": "regex",
+      "expression": "\\b(?:significant|meaningful|lasting|substantial)\\s+(?:impact|change|difference)\\b",
+      "severity": "review",
+      "question": "Specify the actor, measure, baseline or mechanism.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "unsourced_frequency",
+      "category": "generic_claim",
+      "kind": "regex",
+      "expression": "\\b(?:countless|innumerable)\\s+(?:people|studies|examples|organizations|cases)\\b",
+      "severity": "evidence",
+      "question": "Use an attributable count or narrow the claim.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    },
+    {
+      "id": "social_media_staccato",
+      "category": "staged_explanation",
+      "kind": "regex",
+      "expression": "(?m)^[A-Z][^\\n.!?]{2,45}[.!]\\n[A-Z][^\\n.!?]{2,45}[.!]\\n[A-Z][^\\n.!?]{2,45}[.!]",
+      "severity": "review",
+      "question": "Evaluate repetitive short-line rhetoric for fit to the genre.",
+      "context_note": "Pattern match alone is insufficient to justify a rewrite."
+    }
+  ]
+}

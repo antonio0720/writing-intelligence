@@ -1,0 +1,33 @@
+{
+  "schema": "wi9.preflight/1",
+  "document": {
+    "path": "sample_essay.txt",
+    "origin": "ai_generated",
+    "arena": "journalism",
+    "intended_use": "research",
+    "mission": "Study miniature worlds with original evidence",
+    "expected_sha256": "ecb8b733971fdbe248340f592d1f33076d938c87268f6d70c6a76a404fa822f7"
+  },
+  "venue": {
+    "policy": "human_only",
+    "policy_source": "user-supplied HARO request, October 27, 2026"
+  },
+  "contributions": [
+    {
+      "kind": "ai_research"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "experience-1",
+      "kind": "firsthand",
+      "origin": "human_authored",
+      "consent": true,
+      "path": "author_statement.txt",
+      "claim": "Author reports firsthand miniature experience",
+      "exact_excerpt": "I have personally built, collected, or designed miniature environments"
+    }
+  ],
+  "claim_links": [],
+  "full_claim_review": false
+}

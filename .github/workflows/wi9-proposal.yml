@@ -7,8 +7,15 @@ on:
   pull_request:
     paths:
       - scripts/wi-authorship.py
+      - scripts/wi.py
+      - schemas/v9/**
       - tests/v9/**
       - references/v9/**
+      - references/anti_patterns/**
+      - references/diagnostics/**
+      - references/compiler/**
+      - prototypes/wi9/**
+      - SKILL.md
       - .github/workflows/wi9-proposal.yml
   workflow_dispatch:
 
@@ -27,8 +34,33 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Read-only provenance and policy negative controls
-        run: python -m unittest discover -s tests/v9 -p 'test_authorship.py' -v
+      - name: Authorship checker, schema parity and meaning-led doctrine
+        run: python -m unittest discover -s tests/v9 -p 'test_*.py' -v
+      - name: Reference kernel (334 editorial rules, review ledger, composition contract)
+        run: python -m unittest discover -s prototypes/wi9/tests -p 'test_*.py' -v
+      - name: A disabled guard must turn the suite red
+        run: |
+          set -u
+          cp scripts/wi-authorship.py /tmp/wa.orig
+          mutate() {
+            python - "$1" "$2" <<'PY'
+          import sys
+          p = 'scripts/wi-authorship.py'
+          s = open(p).read()
+          assert sys.argv[1] in s, sys.argv[1]
+          open(p, 'w').write(s.replace(sys.argv[1], sys.argv[2], 1))
+          PY
+            if python -m unittest discover -s tests/v9 -p 'test_authorship*.py' >/dev/null 2>&1; then
+              echo "::error::mutation survived: $3"; cp /tmp/wa.orig scripts/wi-authorship.py; exit 1
+            fi
+            echo "caught: $3"
+            cp /tmp/wa.orig scripts/wi-authorship.py
+          }
+          mutate '"hold" if submission and strict else "advisory"' '"advisory"' "claim coverage hold"
+          mutate 'elif document_hash is not None and expected_doc != document_hash:' 'elif False:' "document digest compare"
+          mutate 'if origin == "human_authored" and kinds_seen & AI_PROSE:' 'if False:' "origin contradicts log"
+          mutate 'elif expires < now:' 'elif False:' "grant expiry"
+          cmp scripts/wi-authorship.py /tmp/wa.orig
       - name: Never claim a release or detector guarantee
         run: |
           python - <<'PY'
@@ -37,5 +69,7 @@ jobs:
           assert 'not a provenance record' in doc
           assert 'PROPOSAL ONLY' in doc
           assert 'No target for AI detector score' in doc
+          waves = Path('references/v9/WAVES.yaml').read_text()
+          assert 'SHIPPED}' not in waves and 'status: SHIPPED' not in waves, 'no v9 wave may read SHIPPED'
           print('WI9 proposal guards present')
           PY

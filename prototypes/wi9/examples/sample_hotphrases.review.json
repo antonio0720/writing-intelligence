@@ -1,0 +1,17 @@
+{
+  "schema": "wi9.editorial.review/1",
+  "document_sha256": "28ad24b3f3c35706c7ce6750a9524a68dc1c2955130822720429eadfcf125559",
+  "rules_sha256": "198992304815011f397a5b2930ba9c885c8ac599158b9ea5de767a018bcd2349",
+  "decisions": [
+    {
+      "rule_id": "empty_emphasis_001",
+      "start": 0,
+      "end": 12,
+      "excerpt": "That matters",
+      "status": "retain_as_written",
+      "rationale": "The phrase is followed by the specific late-payment event and does causal work here.",
+      "reviewer": "Antonio T. Smith Jr.",
+      "reviewed_at": "2026-10-27T17:00:00-05:00"
+    }
+  ]
+}
