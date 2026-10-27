@@ -1,0 +1,41 @@
+name: WI9 authorship prototype (non-release)
+
+on:
+  push:
+    branches:
+      - proposal/v9-authentic-voice-provenance-20261027
+  pull_request:
+    paths:
+      - scripts/wi-authorship.py
+      - tests/v9/**
+      - references/v9/**
+      - .github/workflows/wi9-proposal.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.8", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Read-only provenance and policy negative controls
+        run: python -m unittest discover -s tests/v9 -p 'test_authorship.py' -v
+      - name: Never claim a release or detector guarantee
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          doc = Path('references/v9/README.md').read_text()
+          assert 'not a provenance record' in doc
+          assert 'PROPOSAL ONLY' in doc
+          assert 'No target for AI detector score' in doc
+          print('WI9 proposal guards present')
+          PY
