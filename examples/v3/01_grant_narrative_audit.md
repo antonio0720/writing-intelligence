@@ -62,7 +62,7 @@ A representative v3.0 run on a Statement of Need paragraph for a federal NOFO re
 
 > In FY25, the [Organization]'s after-school program served 312 youth (ages 11-17) across three Delta-region counties. Independent evaluation by Mid-South Research Group documented 89% twelve-month retention and a 0.74 GPA improvement among regularly attending participants. The proposed FY26-FY27 expansion adds two sites and 240 new participants while preserving the current per-participant cost of $2,140.
 
-(Note: Number fields populated from the user's actual program data — not invented. The example uses placeholder names where real ones would be required.)
+(Note: **Synthetic.** The organization, evaluator, counties and every figure in this example are invented placeholders standing for the user's own program data. In real use each number must be supplied by the author or marked `[needs source]`, never supplied by the rewriter. The scorecard below is an illustrative maintainer judgment, not a measured result.)
 
 ## Scorecard Summary
 

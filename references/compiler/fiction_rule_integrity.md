@@ -32,3 +32,11 @@ The proposed sidecar presently enforces only direct `forbids` matching and expli
 ## Scientific claim boundaries
 
 Scientific claims in exposition must be labeled `accepted_science`, `contested_hypothesis`, `fictional_extrapolation` or `invented_mechanism` in full implementation. Nothing in a work's fictional canon proves a fact about reality. To assert such a fact outside the story, use the existing external-source verification system.
+
+---
+
+## v9 Meaning-First Order (proposed) — Fiction rule integrity
+
+v9 leaves the FI-35 to FI-44 contract and its checks unchanged and adds no fiction rule.
+
+Where v9 touches it: in a fictional canon, an invented event is fine inside the story and is not the nonfiction fabrication the claim-integrity pass blocks. The v9 `experience_state` and first-person-claim checks apply to nonfiction and author-voice material, not to canon facts. A canon-integrity pass remains separate from the authorship declaration and the release gate.

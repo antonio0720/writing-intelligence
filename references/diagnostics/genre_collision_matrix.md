@@ -102,3 +102,20 @@ The user's explicit instruction always wins. If the user says "write this grant 
 ## Extension Rule
 
 New genre packs added to the repository must declare their position on each dimension and propose a row to this matrix when they enter the collision space. PRs that add a pack without updating this matrix will be rejected.
+
+---
+
+## v9: Collisions in Claim Coverage and Venue Contract
+
+Two v9 facts interact with this matrix. Neither changes a row.
+
+**1. The strict-evidence winners also set the claim-coverage burden.** The dossier schema names four strict arenas: `journalism`, `academic`, `legal` and `government`. Where a row above makes `academic`, `journalism`, `legal_positioning` or `government_brief` the evidence-discipline winner, the dossier's `arena` should be declared accordingly. Other evidence winners (`medical_writing`, `patent_claims`, `grant_nofo`) are not named strict arenas in the checker; declare the nearest arena and treat the rest as an editorial obligation. Every consequential claim must overlap an anchored evidence span, and evidence whose `support_status` is `needs_source` or `conflicted` blocks a submission. A collision resolved in favour of a warmer or more persuasive pack (for example `sales` over `academic`) does not relax that burden; the user-sovereignty override changes tone, not the need for a source.
+
+**2. The venue contract outranks the whole matrix for assistance.** Which pack wins is a style question. Whether an AI system may write or rewrite the text at all is decided first by the venue (principle WI9-G). If the venue is human-only, the stack may produce a research brief but not the submission copy, whatever pack won. The matrix is not consulted to override that.
+
+Other notes:
+
+- A collision resolved by "high-stakes compliance override" is logged in `collision_resolutions` with a rationale. That log is the trace for principle WI9-I; it is not a record of authorship.
+- The matrix says nothing about voice. Voiceprint similarity (see `references/voiceprints/`) is a diagnostic and never settles a collision.
+- Fiction rows (`fiction + journalism`, `thriller_scene_architecture + cinematic_narration`) are unchanged by v9. Fiction quality gates are not touched; see `fiction_quality_separation.md`.
+- Nothing here has been run against the unexecuted 60-case editorial benchmark (WI9-07). These rows are craft doctrine, not measured outcomes.

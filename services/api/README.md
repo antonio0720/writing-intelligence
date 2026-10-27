@@ -95,3 +95,7 @@ docker run -p 4090:4090 -e WI_API_TOKENS=your-token wi-api
 ```
 
 `WI_REPO_ROOT` (default `/app` in the image) tells the service where `agents/` + `schemas/` live.
+
+## v9 preview
+
+The v9 authorship checker and reference kernel are CLI-only and are not served here (planned under WI9-08; v9 is a preview on PR #8, not a release). Separately, the diagnostic and stress passes described above (sentence-length variance, AI-opener detection, a "detector" viewpoint) are v3.1 heuristics kept as shipped. Under v9 doctrine they are editorial signals for a human reader: none is evidence of who wrote a passage, and none is a target to edit toward.

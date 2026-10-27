@@ -167,3 +167,15 @@ The Delivery Packager emits a delivery bundle that:
 - Contains no content not present in approved upstream artifacts
 
 If any of the above fails, Pass 8/10 has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — Pass 8
+
+The delivery decision is the v9 release gate (editorial pass 9), kept apart from the editorial score.
+
+- **Venue first.** For a `human_only` arena, no AI-written or AI-rewritten submission package is produced, even if a person later presses send. Permitted output is a research brief, issue map and interview prompts. Re-check the venue's rules before any editing; if even AI-assisted rewriting is prohibited, do not run it.
+- **Release conditions.** `release` requires venue compliance, evidence review, a person's decision bound to the exact document sha256, an unexpired authority grant held by that person for this venue, and an open `submit` term. Anything unresolved is `hold_for_review` or `block`.
+- **What it does not do.** The shipped bundle does not transmit. `scripts/wi-authorship.py release` returns RELEASE_ELIGIBLE or HOLD and sends nothing; its grant is a declaration until WI9-08 binds it to the v6 grant store.
+- **Scores.** A style score, hot-phrase count or detector result never changes `delivery_decision`. A detector percentage is, at most, an optional diagnostic with vendor, version and date; never a target.
+- **Repackaging.** Moving one text across arenas does not change who wrote it; carry the contribution log with it.

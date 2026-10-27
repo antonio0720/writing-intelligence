@@ -37,6 +37,21 @@ Exit codes across all four: `0` analysis ran or mechanical-only pass, `2` malfor
 
 ---
 
+## v9 preview (proposed, not released)
+
+8.0.0 is the release. v9 (program WI9-AUTHORSHIP, [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8)) is a preview and is on HOLD until WI9-09; do not describe it as shipped, and report no benchmark or quality result for it (the WI9-07 benchmark has not run). When a task touches **authorship, venue rules, evidence, voice or cadence**, apply these rules and use the v9 tools from the repository:
+
+- **Source before style.** Author notes, transcripts and drafts come first. Never write an "I did / I saw" scene the author has not supplied; a hypothetical stays labeled hypothetical, and a roadmap is not a completed build.
+- **Venue contract first.** Read the venue's rule before drafting. For a **human-only** venue, produce research briefs and interview prompts only — no AI-written or AI-rewritten pitch, reply or essay for submission, even if the person will press send.
+- **Evidence by anchor.** Check a draft's consequential claims with `python3 scripts/wi-authorship.py audit --input dossier.json` (REVIEW exit 0 / HOLD exit 3) and a person's release decision with `… release …` (RELEASE_ELIGIBLE / HOLD). Both check **self-reported declarations**; neither authenticates a writer, proves a source true, or sends anything. REVIEW is never permission to send.
+- **Voice is evidence.** A voiceprint comes from consented, human-authored samples (3+, 500+ words each, per genre), reviewed by the author. Resemblance to a voice never changes a declared origin.
+- **Cadence follows thought.** Repair rhythm (`repair_rhythm`) because the thought changes shape, never to move an AI-detector number. Detector scores are never a target, a gate or a claim; no typos, quotas or "human-looking" noise.
+- **Phrase findings are questions.** `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE` flags editorial questions (334 rules); the author decides, via the review ledger (`wi9_phrase_review.py`). A match is never proof of AI authorship and never triggers an automatic rewrite.
+
+Index: `references/v9/README.md` · defects: `references/v9/defects.md` · waves: `references/v9/WAVES.yaml` · dossier contract: `schemas/v9/authorship-dossier.schema.json`.
+
+---
+
 ## v7 in one paragraph
 
 v7 is the **Institutional Intelligence Expansion** (program WI7-IIP): the work whose consequences are academic, legal, financial, contractual, regulatory or institutional — dissertations, filings, investor rooms, grants and bids. **7.0.0 ships the governance, not the domain workflows.** It froze the baseline, proved v4/v5/v6 reproduce exactly (3/32/70 assertions, byte-identical bundles), repaired the academic doctrine so no pack instructs detector evasion or fabricated authorship, and made the program checkable: a wave in `plans/v7.manifest.yaml` is shipped only with a PASS receipt carrying its command, result, negative control and independent readback. The doctoral, legal, capital, grants, procurement and deal workflows are waves WI7-03 to WI7-19, all planned — say so when asked, and never present one as working. Program: `references/v7/INSTITUTIONAL_INTELLIGENCE_PROGRAM.md`. Why this is "v7": `references/v7/RFC-0001-VERSIONING.md`.
@@ -248,6 +263,7 @@ The v5 layer remains authoritative for its own subject matter: [`references/v5/`
 The refusals are load-bearing, not decorative. Full reasoning in [`references/v6/NON_GOALS.md`](references/v6/NON_GOALS.md).
 
 - **Detector evasion.** Anti-slop is a craft objective — prose that does not pattern-match to machine writing because it is genuinely better built. It is not a laundering service.
+- **Passing off or fabricated experience (v9 preview).** No invented firsthand scene, no submission-ready prose for a human-only venue, no randomly planted imperfections, no detector score as a target. The authorship checker tests declarations only.
 - **Source generation.** It will never construct a citation. If a claim needs support and none exists in the supplied material, the output is `needs_source`. Inventing a plausible reference is the single most damaging thing this system could do.
 - **Truth verification.** It verifies support within the sources supplied. It cannot tell you the source is right.
 - **Absolute quality scores.** Scores are relative to a stated profile, arena and mission. There is no universal writing number, and there is no overall health gauge.
@@ -330,7 +346,7 @@ Every piece of writing processed by v3.0 runs through eleven sequential passes. 
 | 3 | Diagnostic Scan | Identify residue, gaps, drift, slop, weak claims | `DiagnosticReportV3` |
 | 4 | Architecture Compile | Build section, paragraph, scene, or argument structure | `ArchitecturePlanV3` |
 | 5 | Evidence & Epistemic Ledger | Classify claims, sources, inferences, recommendations | `EpistemicLedgerV3` |
-| 6 | Sentence Surgery | Remove slop, inject variance, sharpen language | `SentenceSurgeryLogV3` |
+| 6 | Sentence Surgery | Remove slop, repair rhythm where meaning requires it, sharpen language | `SentenceSurgeryLogV3` |
 | 7 | Voice Restoration | Restore author fingerprint and voice integrity | `VoiceMatchReportV3` |
 | 8 | Genre & Arena Alignment | Fit output to channel, profession, platform, reader | `ArenaAlignmentV3` |
 | 9 | Adversarial Stress Battery | Attack the draft as reader, editor, skeptic, author | `StressBatteryV3` |
@@ -388,11 +404,11 @@ Read `references/compiler/epistemic_ledger.md`. Classify each major sentence as 
 
 ### 2.8 Pass 6 — Sentence Surgery
 
-Read `references/compiler/prose_compiler_v3.md`. Apply hard bans, soft bans, earned exceptions. Inject variance. Compress without loss. Track every transformation in `SentenceSurgeryLogV3`. Every cut, strengthening, and preservation is recorded.
+Read `references/compiler/prose_compiler_v3.md`. Apply hard bans, soft bans, earned exceptions. Repair rhythm where meaning requires it — never to hit a length quota or move a detector score (v9). Compress without loss. Track every transformation in `SentenceSurgeryLogV3`. Every cut, strengthening, and preservation is recorded.
 
 ### 2.9 Pass 7 — Voice Restoration
 
-Read `references/voiceprints/voice_fingerprint_engine.md` + the applicable voiceprint. Measure baseline: avg sentence length, variance, compression, abstraction tolerance, metaphor density, question frequency, transition habits, dominant syntactic structures. Detect drift. Restore fingerprint. Emit `VoiceMatchReportV3` showing whether fidelity increased or decreased.
+Read `references/voiceprints/voice_fingerprint_engine.md` + the applicable voiceprint. Measure baseline: avg sentence length, variance, compression, abstraction tolerance, metaphor density, question frequency, transition habits, dominant syntactic structures. Detect drift. Restore fingerprint. A fingerprint comes from consented, human-authored samples; resemblance never changes a declared origin (v9). Emit `VoiceMatchReportV3` showing whether fidelity increased or decreased.
 
 ### 2.10 Pass 8 — Genre & Arena Alignment
 

@@ -42,11 +42,17 @@ The governing skill is `writing-intelligence`. It holds the eighteen laws, the e
 
 These are the craft rules. They are not softened by being in the smaller bundle.
 
-1. **A voiceprint is measured, not described.** Feed it real text by the person. Adjectives like "warm but authoritative" are a starting brief, never a voiceprint. Measured features, author-declared preferences and model-judged resemblance are three different things and must never be blended into one score.
-2. **Anti-slop is a craft objective, not a laundering service.** The goal is prose that does not pattern-match to machine writing *because it is genuinely better built*. This library will never be used to help a document evade a detector.
+1. **A voiceprint is measured, not described.** Feed it real text by the person — consented, human-authored samples (v9: 3+ samples of 500+ words each, per genre, reviewed by the author). Adjectives like "warm but authoritative" are a starting brief, never a voiceprint. Measured features, author-declared preferences and model-judged resemblance are three different things and must never be blended into one score.
+2. **Anti-slop is a craft objective, not a laundering service.** The goal is prose that does not pattern-match to machine writing *because it is genuinely better built*. This library will never be used to help a document evade a detector. A phrase match is an editorial question, never proof of who or what wrote a passage. (v9 preview: cadence is repaired because the thought changes shape — `repair_rhythm` — never to move a detector number; no length quotas, synonym swaps or planted typos.)
 3. **A genre pack is a contract with a reader, not a template.** It names the arena, the reader's likely objection, the structural obligations and the failure modes. Filling in a shape without meeting the obligations produces a document that looks right and does nothing.
 4. **A diagnostic reports, it does not rewrite.** Every finding names the span, the pattern and the repair. The author decides. This is Law A, and it applies here exactly as it applies in the runtime.
 5. **There is no universal writing number.** Every score in this library is relative to a stated profile, arena and mission, and the profile is always printed beside the number.
+
+---
+
+## v9 preview — authorship and venue rules (proposed, not released)
+
+8.0.0 is the release; v9 is a preview on PR #8 and has not run its benchmark. When a craft task touches who wrote something or what the author lived: use only the author's supplied material for first-person scenes (never invent one; hypotheticals stay labeled); for a **human-only** venue give research briefs and interview prompts, not a ghostwritten submission; treat voice resemblance as style, never as authorship. The checkers (`scripts/wi-authorship.py`, `prototypes/wi9/`) live in the repository's runtime, not in this bundle — see `references/v9/README.md` there. They check declarations and flag editorial questions; they do not authenticate a writer.
 
 ---
 

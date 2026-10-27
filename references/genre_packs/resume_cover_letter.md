@@ -135,3 +135,13 @@ Each bullet:
 - + `small_business_operator.md`: founder bios
 - + `academic.md`: CVs
 - + `linkedin_post`: LinkedIn summaries
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** employers and applicant systems vary: some forbid AI-written applications, some allow editing help, and some require an applicant attestation. Check the current written application terms; unknown means HOLD.
+- **Anchored sources:** titles, dates, employers, degrees, certifications and metrics need documents the applicant can produce (offer letters, records, reviews). Do not invent a metric to sound stronger.
+- **Firsthand material:** the applicant's own jobs, projects and results. A role the person only planned, or a project they only observed, is not experience claimed. No borrowed accomplishments from another person.
+- **Disclosure:** the applicant is attesting to the content. Record the contribution log and treat any attestation as theirs alone.
+- **Phrase matches that may be legitimate:** `empty_emphasis` and `marketing_abstraction` ("results-driven", "passionate", "dynamic") are resume convention, but they carry little. Replace them with the specific action and outcome rather than deleting them because a scanner matched.

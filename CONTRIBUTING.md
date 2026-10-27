@@ -20,6 +20,7 @@ Every contribution must satisfy all four. The v4 and v5 material below is not de
 |---|---|
 | `scripts/wi.py` | **The canonical deterministic core.** One stdlib-only file. Every surface calls it; nothing reimplements it |
 | `references/v4/` | The 8 accountability documents — laws A–F. Still normative, unchanged by v5 and v6 |
+| `references/v9/`, `scripts/wi-authorship.py`, `prototypes/wi9/`, `schemas/v9/`, `tests/v9/` | The v9 preview: records and wave states, the authorship/venue checker, the reference kernel, the dossier schema, and their tests — not released |
 | `references/v5/` | The 20 v5 doctrine documents plus an index — graph, anchors, hashing, staleness, semantic diff, release, policy, workspace, security, non-goals. Still normative |
 | `references/v6/` | 24 files — 23 doctrine documents and an index. The constitution, the authority model, semantic version control, the merge protocol, counterfactual simulation, bitemporal state, proof obligations, capsules, autonomous execution, non-goals |
 | `schemas/` | 11 v3 craft schemas |
@@ -300,6 +301,21 @@ Every accepted contribution is acknowledged in `CHANGELOG.md`. Operators who con
 - **Every executable rule ships with a negative twin** that must go red.
 - **No engine may certify publication, literary quality, reader satisfaction or cultural accuracy.** A change that lets a publication gate exit 0 without independent evidence is refused.
 - **Cultural material needs scoped sources and rights.** Do not commit third-party excerpts, screenplay dialogue or images; cite them.
+
+## Contributing to v9 (authorship and venue checks — preview, not released)
+
+v9 is proposed on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); 8.0.0 is the release. Read [`references/v9/README.md`](references/v9/README.md), [`defects.md`](references/v9/defects.md) and [`WAVES.yaml`](references/v9/WAVES.yaml) first. The checker is `scripts/wi-authorship.py`; the reference kernel is `prototypes/wi9/`; the contract is `schemas/v9/authorship-dossier.schema.json`. Tests: `python3 -m unittest discover -s tests/v9 -p 'test_*.py'`, plus `bash tests/v7/test_wi7.sh` and `python3 scripts/check-links.py`.
+
+- **Every refusal gets a negative-control test.** A new HOLD code, venue rule or file-boundary check ships with a case that must be refused *and* a twin that must pass, so a check that refuses everything (or nothing) is caught. A guard that has only ever passed certifies nothing.
+- **Show the guard can fail.** Disable the check, watch the suite go red, restore it. If a mutation escapes, add the case that isolates it before you rely on the guard (the grant-expiry mutation in [`defects.md`](references/v9/defects.md) escaped once; a case was added). Record the mutation in the PR.
+- **Phrase rules need a judged example and a counterexample.** A new rule for `prototypes/wi9/rules/` names the editorial question it asks, a passage where the question is fair, and a passage where the same words are legitimate. It is a question, never a verdict of AI authorship, and never an automatic rewrite.
+- **No detector-score PRs.** A change whose purpose or evidence is moving a commercial detector's number — sentence-length quotas, synonym swaps, planted typos, "unpredictability" — is closed. `tests/v9/test_doctrine_meaning_led.py` fails if detector-oriented instruction returns; do not add a word to its exclusions to get green. Cadence is repaired because the thought changes shape (`repair_rhythm`).
+- **No invented firsthand.** Examples, fixtures and gold outputs are marked synthetic when they are. Do not attribute figures or quotes to real people, agencies or studies that nothing in the repository anchors; do not write a first-person scene for a user.
+- **Human-only venues stay research-only.** Nothing may generate a submission-ready pitch, reply or essay for a human-only venue, and `release` may never gain a path that sends.
+- **Declarations stay declarations.** Do not add a state named VERIFIED, "authenticated" or "human-certified". Reports keep `declaration_status: self_reported`.
+- **Keep the schema and the checker on one vocabulary.** `tests/v9/test_schema_parity.py` fails if they drift; change both in one PR. `wi9-authorship-1` dossiers must still be read, and old `variance_injected` log entries must still validate.
+- **Receipts, not narrative.** A wave moves state only with a receipt carrying the command, the result, a negative control and an independent readback. No PR marks a wave `SHIPPED` or changes a version string; that is WI9-09 and the owner's decision. Do not claim benchmark results, quality scores or editor validation — the WI9-07 benchmark has not run.
+- **Do not edit** the historical v4–v8 law texts, `release/RELEASE_NOTES_v*.md`, or `PATENTS.md` as part of v9 work.
 
 ## License
 

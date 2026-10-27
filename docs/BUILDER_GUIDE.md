@@ -144,3 +144,33 @@ Follow the agent spec format in `agents/*.md`. Each agent must declare:
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC
+
+## v9 preview: building on the authorship tools
+
+*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.* The v3.0 material above is unchanged; this section covers integrating the two v9 tools you can run today. Reference: [`../references/v9/README.md`](../references/v9/README.md).
+
+### `scripts/wi-authorship.py` exit codes
+
+| Command | Outcome | Exit |
+|---|---|---|
+| `audit --input dossier.json` | `REVIEW` (limited checks passed; not permission to send) | 0 |
+| `audit --input dossier.json` | `HOLD` | 3 |
+| `release --input dossier.json` | `RELEASE_ELIGIBLE` (transmits nothing) | 0 |
+| `release --input dossier.json` | `HOLD` | 3 |
+
+Treat any other non-zero exit as a failed run, not a pass. Parse the JSON report rather than the exit code alone, and branch on the verdict word.
+
+### Rules for a builder
+
+- **Validate the dossier first** against `schemas/v9/authorship-dossier.schema.json` (`wi9-authorship-2`; `wi9-authorship-1` is still read). Surface validation errors; do not coerce.
+- **Resolve paths relative to the dossier directory.** The checker refuses symlinks and needs POSIX `O_NOFOLLOW`; it will not run on Windows. Plan for Python 3.8+.
+- **Pin the draft.** A submission needs `expected_sha256`; recompute it at send time, not only at audit time.
+- **Never read `REVIEW` or `RELEASE_ELIGIBLE` as a send.** Sending is a separate, human-authorized step in your product.
+- **Show `declaration_status: self_reported`** wherever you show a verdict. Do not label a result "verified author" or "human-written".
+- **Do not build a detector-score field** into your UI or pipeline as a target, gate or claim (WI9-H). A vendor score may be stored as an optional diagnostic with vendor, version and date.
+
+### Experimental kernel
+
+`prototypes/wi9/` (`wi9_hotphrases.py scan`, `wi9_phrase_review.py`, `wi9_composition.py`, `wi9_core.py`) is the owner's reference kernel, not the CLI. A scan match is an editorial question and must be shown as one; a build must not auto-rewrite on a match. The composition contract refuses `human_only` venues and its best state is `DRAFT_REVIEW_REQUIRED`.
+
+Verify an integration against the repo's own suite: `python3 -m unittest discover -s tests/v9 -p 'test_*.py'`. What is not yet true: no benchmark against editors (WI9-07 has not run), no consented author corpus, and no external review.

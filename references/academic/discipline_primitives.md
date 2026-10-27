@@ -161,6 +161,18 @@ When writing in academic mode:
 
 1. Identify the discipline of the assignment
 2. Load the relevant primitives
-3. Ensure the paper uses AT LEAST 3 disciplinary primitives correctly
+3. Check whether the paper's argument actually uses disciplinary primitives, and correctly. Three is a rule of thumb for a substantial paper, not a quota to meet by adding vocabulary
 4. Flag any passage that uses a primitive incorrectly or superficially
 5. Verify that the analysis would be recognizable to a practitioner in the field
+
+---
+
+## v9: Primitives Are Lenses, Not Decoration
+
+A primitive is useful when the writer's own analysis performs it: an historian weighing a source's provenance, an economist separating a correlation from a mechanism. It is not useful as a vocabulary patch added to look disciplined. Three v9 consequences:
+
+- **Apply, don't display.** Naming "close reading" or "counterfactual" without doing it is the Framework Drop in `references/anti_patterns/fake_authority.md`. Check by asking what the sentence would lose if the term were deleted.
+- **The student's thought stays the student's (WI9-D).** A primitive can prompt a question ("what is the source's purpose?"); the answer, and the claim that follows from it, must come from the student's reading. Do not supply an interpretation of a text the student has not read.
+- **Nothing here supplies evidence.** The "What Strong Writing Looks Like" examples describe the move; they contain no real citations to reuse, and any example facts are illustrative. Real writing names real sources the writer has read, and never an invented study, page or quotation.
+
+The human-only and disclosure rules in `academic_mode.md` ("v9: Academic Integrity") apply to any assignment that uses these primitives. Fiction, poetry and creative nonfiction courses follow their own gates, which v9 does not change.

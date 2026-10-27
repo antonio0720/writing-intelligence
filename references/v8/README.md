@@ -45,3 +45,5 @@ bash scripts/test-v8.sh
 ```
 
 All four suites, the positive controls, the refusals (exit 2), the publication holds (exit 3), and the 340-requirement count.
+
+> **v9 preview (proposal, not a release):** the authorship-provenance work on PR #8 lives in [`../v9/README.md`](../v9/README.md). Craft guidance elsewhere in v8 that prescribed alternating or varying sentence lengths by formula is superseded in practice by v9's meaning-led rule: cadence follows the thought. It does not amend the law text above; v8.0.0 remains the published release.

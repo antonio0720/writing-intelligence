@@ -27,7 +27,7 @@ Identify the target voice. Measure the draft's current fingerprint. Compare to b
 2. If a baseline exists, load it. If not, build one from 3+ samples (request samples if absent).
 3. Compute the current fingerprint of the Pass-6 output.
 4. Compare. Compute deltas. Determine drift direction.
-5. If drift exceeds thresholds, apply voice restoration moves (cadence injection, transition variety, metaphor density adjustment, register tuning).
+5. If drift exceeds thresholds, apply voice restoration moves (cadence repair for meaning, transition variety, metaphor density adjustment, register tuning).
 6. Re-measure. Re-log.
 
 ## Hard Rules
@@ -41,3 +41,11 @@ Identify the target voice. Measure the draft's current fingerprint. Compare to b
 - Genre Marshal (re-checks arena alignment if voice shifted register)
 - Stress Tester (Pass 9)
 - Scorekeeper (Pass 10)
+
+## v9 preview notes
+
+*Preview (PR #8); not a release.*
+
+- A baseline for a human voice is built only from **consented, authentic samples** — three or more, 500 or more words each, per genre. Without them, say there is no baseline rather than building one from model text or a mixed pool.
+- A close match is a style observation. **Voice similarity never proves authorship** and never changes a `human_authored`, `ai_assisted` or `ai_generated` declaration. Report drift to the author as a question.
+- Restoration must not be tuned toward any detector or vendor score, and must not insert typos or invented admissions.

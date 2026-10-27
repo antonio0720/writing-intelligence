@@ -118,3 +118,30 @@ because models are trained toward balanced, non-committal positions.
 Fix: If the middle position is defensible, defend it with specific evidence and
 explain exactly where in the middle. If one side is actually stronger, say so.
 Equidistance is not wisdom — it's avoidance.
+
+---
+
+## v9: Distinctive Thought and the Catalog Cross-Reference
+
+Fake depth is what remains when a paragraph has no proposition of its own. The v9 test (WI9-D, protocol gate E03) is a **thought inventory**: name the proposition, then ask whether it contains a new distinction, action, piece of evidence, contradiction or consequence. If it does not, compress or cut; elegant restatement is not an improvement.
+
+**Catalog categories.** The experimental 334-rule catalog (`prototypes/wi9/rules/v9_hotphrases.json`; PR #8 proposal, not a release) touches these patterns in four places. A hit is an editorial question, with legitimate counterexamples, and never proof of how the text was made.
+
+| Pattern in this file | Catalog category and question |
+|---|---|
+| Wisdom Posture, Inflated Stakes, closing flourishes | `generic_closure`, `empty_emphasis`: what earned consequence or unresolved question should end the passage? What decision makes this important? |
+| Metaphor Substitution | `empty_metaphor`: does the metaphor clarify a mechanism better than direct language? |
+| False Paradox, Nuance Performance | `overused_rhetorical_structure` (regex rules such as "not just X but Y"): do both sides name meaningfully different facts? A pattern match alone never justifies a rewrite. |
+| Scope Escape, Definitional Loop | no dedicated rule; judged by the thought inventory above. |
+
+### When not to fix
+
+- **A paradox with a mechanism.** "The more routes the city added, the longer the commute felt" is a real claim if the writer shows the measurement and the conditions. The Fix section asks for proof; if proof is on the page, the paradox stays. (Synthetic example, not a finding.)
+- **A metaphor that carries the mechanism.** "The queue behaves like a pipe: cut the narrowest section and the whole flow changes" explains where the constraint is; keep it and follow it with the figure.
+- **A scope statement that names what is excluded and why.** "This report does not cover prepaid plans because the vendor refused to share records" is honest scoping, not a Scope Escape.
+- **Poetry, sermon and fiction endings.** An image or a refrain that closes a poem is doing literary work; the `generic_closure` question ("what earned consequence ends this?") is answered by the whole piece, and fiction gates are unchanged by v9.
+- **A middle position with a stated location.** "Closer to the manufacturer's figure than to the union's, because ..." earns its centrism.
+
+### Recording a keep/revise decision
+
+Log it in the review ledger (`prototypes/wi9/wi9_phrase_review.py`): `retain_as_written` for the earned versions above, `revise_for_clarity` when the idea is real and the wording blurs it, `needs_source` when the paradox or stake needs evidence the author has not given. Each entry carries a rationale of at least twelve characters, a reviewer and an offset-aware timestamp, and is bound to the document and rule-pack sha256. The ledger always reports `release_authorized: false`.

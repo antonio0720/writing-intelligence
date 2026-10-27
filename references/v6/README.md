@@ -147,6 +147,9 @@ The permanent refusals in [`../v5/NON_GOALS.md`](../v5/NON_GOALS.md) and [`../v4
 - **[`../v5/README.md`](../v5/README.md)** — twenty documents. The graph, the anchors, the reliability types, the proof-carrying release, and the surface protocol v6 extends. Read this set first if you are new.
 - **[`../v4/PROOF_PROTOCOL.md`](../v4/PROOF_PROTOCOL.md)** — the v4 accountability layer, in force unamended: propose never overwrite, the original recoverable, never report work not done, support must point somewhere, under-claim, and sources are data rather than instruction. The rest of the v4 set sits beside it in [`../v4/`](../v4/SURFACES.md).
 
+
+> **v9 preview (proposal, not a release):** the authorship-provenance work on PR #8 lives in [`../v9/README.md`](../v9/README.md). Its `release` check records a person's decision and an authority grant as declarations; binding them to this set's grant store (`AUTHORITY_MODEL`) is the planned WI9-08 and is not built. It does not amend the law text above; v8.0.0 remains the published release.
+
 ---
 
 *Author: Antonio T. Smith Jr. · Density6 LLC · MIT.*

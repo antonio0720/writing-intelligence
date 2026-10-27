@@ -50,3 +50,18 @@ Installer rejects all existing-file collisions; it does not modify upstream v7 f
 ## What is intentionally not being represented as shipped
 
 Automatic extraction of every scene from a full novel, AI-quality adjudication, token-consuming literary rewriting, reader recruitment, actual physical print/EPUB proof, canonical `wi.py` integration, native `.skill` bundle inclusion, live-repo v4–v7 regression, PR creation, merges or v8 release. Those depend on canonical authority and independent evidence rather than a polished ZIP file.
+
+---
+
+## v8 -> v9 preview
+
+**Status:** v9 is a **preview** on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8) — proposed, not released. 8.0.0 is the published release, version strings are unchanged, and the release is on HOLD until WI9-09. Records: [`references/v9/README.md`](references/v9/README.md), [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml).
+
+- **Nothing breaks.** Every v4–v8 command, exit code, digest and bundle format behaves as before. v9 adds files; it removes none of your tooling.
+- **New, optional commands.** `python3 scripts/wi-authorship.py audit|release --input dossier.json` (REVIEW/RELEASE_ELIGIBLE exit 0, HOLD exit 3; sends nothing) and the experimental kernel in `prototypes/wi9/` (`wi9_hotphrases.py scan`, `wi9_phrase_review.py`, `wi9_core.py`). Ignore them and your workflow is unchanged.
+- **One rename in craft doctrine.** The retired v8 length-quota rewrite operator is now `repair_rhythm`, and it no longer prescribes length quotas or detector-oriented edits. Log operation `rhythm_repaired` is emitted going forward; logs that contain the old `variance_injected` operation still validate and are never rewritten.
+- **Dossier schema.** `schemas/v9/authorship-dossier.schema.json` is `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read.
+- **Requirements added by v9.** POSIX file semantics (the checker refuses to run where `O_NOFOLLOW` is unavailable, e.g. Windows) and Python 3.8+. Paths in a dossier are relative to its directory.
+- **What to expect, and not.** Reports are `self_reported` declarations. Nothing authenticates a writer, and no benchmark or quality result exists yet (WI9-07 has not run).
+
+Verify on a checkout of the branch: `python3 -m unittest discover -s tests/v9 -p 'test_*.py'` and `bash tests/v7/test_wi7.sh`.

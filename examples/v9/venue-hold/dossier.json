@@ -1,0 +1,49 @@
+{
+  "schema": "wi9-authorship-2",
+  "document": {
+    "path": "draft.txt",
+    "origin": "ai_assisted",
+    "arena": "journalism",
+    "venue_policy": "human_only",
+    "intended_use": "submission",
+    "expected_sha256": "554948aab75aba0d9cbb185b3fb3a77d03ee2674fb8da5d0f31eb2eede9526cb"
+  },
+  "venue_contract": {
+    "venue": "Synthetic Reporter Desk",
+    "allowed_assistance": [
+      "mechanical_proofread"
+    ],
+    "allowed_operations": [
+      "research",
+      "submit"
+    ]
+  },
+  "contribution_log": [
+    {
+      "kind": "human_original"
+    },
+    {
+      "kind": "ai_substantive_rewrite"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e1",
+      "claim": "The author rebuilt the bridge twice.",
+      "kind": "firsthand",
+      "source_path": "notes.txt",
+      "sha256": "554948aab75aba0d9cbb185b3fb3a77d03ee2674fb8da5d0f31eb2eede9526cb",
+      "exact_excerpt": "I rebuilt the model bridge twice in March because the first glue joint sheared.",
+      "source_origin": "human_authored",
+      "experience_state": "observed",
+      "consent": true
+    }
+  ],
+  "document_claim_anchors": [
+    {
+      "exact_excerpt": "I rebuilt the model bridge twice in March because the first glue joint sheared.",
+      "evidence_id": "e1"
+    }
+  ],
+  "voice_samples": []
+}

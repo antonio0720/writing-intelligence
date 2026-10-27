@@ -283,3 +283,7 @@ wi authority issue --subject REVIEWER --capability claim.accept.quantity_change 
 
 Next: [`04-a-capsule-a-stranger-verifies.md`](04-a-capsule-a-stranger-verifies.md) —
 handing the result to somebody outside the organization.
+
+## Connection to v9
+
+*Preview (PR #8); proposed, not a release.* This is the model the v9 `release` grant follows. In `scripts/wi-authorship.py release`, the person who releases a package must hold an authority grant that covers `release` and the named venue and has not expired; the same check succeeds inside the window and fails after it with nobody revoking anything. One difference matters: in v9 the grant lives in the dossier as a declaration. Until WI9-08 binds it to the v6 grant store, it is not a canonical v6 grant, and the checker cannot tell whether the named person really holds the authority.

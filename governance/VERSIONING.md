@@ -193,6 +193,18 @@ Stated as a versioning constraint:
 
 ---
 
+## v9 (preview) — how it will be versioned
+
+v8.0.0 is the published release. v9 is a **preview** on PR #8 and nothing on that branch changes a version string: `scripts/wi.py --version`, the `SKILL.md` stamp and `plans/*.manifest.yaml` all still say v8, and `tests/v7` checks that they agree. A `9.0.0` tag needs WI9-09 (independent review) and the owner's approval; neither has happened.
+
+Decisions already made, so they are not re-argued in review:
+
+- **The v9 manifest stays out of `plans/` until WI9-08.** `scripts/check-manifest.py` reads the manifests in `plans/`; a v9 manifest placed there early would make planned waves look like release obligations. Until integration, wave state lives in `references/v9/WAVES.yaml`, and receipts live in `plans/receipts/`.
+- **The authorship dossier has its own schema version.** `schemas/v9/authorship-dossier.schema.json` is `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read. A change that alters what an existing dossier means needs a new schema version, and `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
+- **Legacy log values stay readable.** The rewrite log op `variance_injected` is still read and never emitted; v9 emits `rhythm_repaired`. Reading an old value is a compatibility surface — removing it would be a MAJOR change.
+- **v9 does not touch digest preimages.** Nothing in the preview changes a v5 or v6 digest, graph root or capsule closure root. A v9 change that did would follow [digest stability](#digest-stability-is-a-compatibility-surface) like any other.
+- **Expectation, not a decision.** The doctrine change (the rhythm operator rename and the retirement of detector benchmarking as a method) and a new CLI make a MAJOR bump the likely reading under the rules above. The owner decides at WI9-09.
+
 ## Pre-Release
 
 Use suffixes for pre-release versions:
@@ -233,6 +245,8 @@ Three schema families ship, each under its own namespace:
 | v3 craft | `schemas/` | 11 | declared per schema |
 | v5 state | `schemas/v5/` | 15 | `SCHEMA_VERSION = 5.0.0` |
 | v6 runtime | `schemas/v6/` | 20 | `V6_SCHEMA_VERSION = 6.0` |
+
+A fourth namespace, `schemas/v9/`, holds the preview authorship dossier schema (`wi9-authorship-2`). It is not part of the v8 release and is covered under [v9 (preview)](#v9-preview--how-it-will-be-versioned).
 
 Schema consumers MUST check version compatibility:
 

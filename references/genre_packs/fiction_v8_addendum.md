@@ -21,3 +21,14 @@ The scene turn remains necessary for scene engineering, but the novel-wide arc i
 ## Prose preservation
 
 A pattern alert may initiate a proposed edit but never justify automatic voice erasure. Ask what the unusual phrasing does that plain prose cannot; compare before/after on the whole paragraph and chapter; document author-approved deviations. A good technical rule protects exceptional literature, not only ordinary fluency.
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Gates unchanged:** v9 does not alter the v8 fiction addendum. This section adds provenance and venue notes only.
+- **Venue:** check each venue's current written AI policy before submission; unknown means HOLD.
+- **Anchored sources:** invented content needs none; researched detail does.
+- **Firsthand material:** for autofiction or memoir-leaning fiction, no borrowed memory. Experience claimed as the author's must originate with the author.
+- **Disclosure:** keep the contribution log of who drafted, suggested and revised.
+- **Phrase matches that may be legitimate:** in dialogue, matches are character voice; in narration they are editorial questions only, and a narrator's habitual phrasing can be the point.

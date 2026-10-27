@@ -28,10 +28,20 @@ Be specific:
 ## Expected behavior
 What should the output have looked like or sounded like?
 
+## v9 preview only (skip for v4–v8 behavior)
+If the problem involves the v9 proposal on PR #8 (`scripts/wi-authorship.py` or `prototypes/wi9/`):
+- Subcommand and exit code: `audit` / `release` / other — exit 0 or 3?
+- HOLD code(s) in `findings[].code` (e.g. `CLAIM_UNANCHORED`, `HUMAN_ONLY_CONFLICT`), or the REVIEW / RELEASE_ELIGIBLE you did not expect:
+- Dossier schema version: `wi9-authorship-1` or `wi9-authorship-2`
+- Commit or PR head you ran:
+- Attach the dossier only if it holds no private material; redact otherwise. Do not paste sources you do not have consent to share.
+
+Reminder: every v9 report is a declaration check (`declaration_status: self_reported`); a bug is the checker disagreeing with its own documented rules, not that it failed to prove who wrote a text.
+
 ## Environment
 - Platform: Claude.ai / Claude Code / Claude Projects / Other LLM
 - Voiceprint used: (if any)
 - Genre pack used: (if any)
 
 ## Score (if available)
-If you scored the output, what was the score and which categories were weakest?
+If you scored the output against the editorial rubric, which categories were weakest? Detector scores are not a bug-report criterion.

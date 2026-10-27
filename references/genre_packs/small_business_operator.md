@@ -164,3 +164,13 @@ Produce copy for the operator at the kitchen table — the solopreneur, the loca
 - + `real_estate.md`: solo agent operator
 - + `grant_nofo.md`: small business / community development capital
 - + `social_media.md`: founder voice across channels
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** the channels the owner writes for (website, directories, marketplaces, local press, suppliers) each have terms, and licensed trades have advertising rules. Check the current written terms; unknown means HOLD.
+- **Anchored sources:** prices, hours, licenses, warranties, service areas and customer counts need the owner's record. Reviews and testimonials need the customer's permission.
+- **Firsthand material:** the owner's real jobs, customers and years in business. Do not generate a founding story or a customer anecdote that never happened. A planned service is described as coming, not offered.
+- **Disclosure:** customers and local platforms may care about AI-written reviews and bios; the owner decides what to declare and records the contribution log.
+- **Phrase matches that may be legitimate:** `marketing_abstraction` ("quality service", "family owned") may be literally true for this business and is worth keeping with a specific fact beside it. `generic_closure` ("call today") is usually the point of the page.

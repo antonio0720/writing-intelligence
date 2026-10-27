@@ -202,3 +202,15 @@ If detection confidence is low (mixed signals, ambiguous input):
 - Default to casual_sharp voiceprint (most versatile)
 - Default to no genre pack (apply only universal rules)
 - Flag uncertainty in internal config: "LOW CONFIDENCE — may need user clarification"
+
+---
+
+## v9 Meaning-First Order (proposed) — Auto-Mode
+
+Auto-mode must read the v9 order before it selects a pipeline.
+
+- **Gates first.** Before mode detection, check for a declared venue contract and authorship origin. A `human_only` venue narrows every mode to research and interview support, and auto-mode must not route to Draft, Rewrite or Transfer for submission copy.
+- **Intake before drafting.** For Draft and Voice Match on personal or first-person work, auto-mode asks for the author's own sources and experiences (v9 editorial pass 1) instead of composing from a prior. Low-confidence detection raises a question; it does not invent material.
+- **Voice detection.** The "match to closest voiceprint" step is stylistic and non-authenticating. For "sound like me", the request needs the author's consented samples; without them, fall back to the default voiceprint and say so.
+- **Pass 5 is not skippable on request.** "Skip the stress test" is honoured for ordinary documents but not where first-person or consequential claims lack support.
+- **Outputs.** Auto-mode never selects release, and a Score-only run never implies fitness to submit. Overrides cannot lift a venue block.

@@ -2,13 +2,24 @@
 
 ## Principle
 
-Abstract prose floats. Grounded prose lands. The difference between writing
-that feels AI-generated and writing that feels human is often the presence
-of specific, concrete, sensory detail anchoring the ideas to reality.
+Abstract prose floats. Grounded prose lands. A reader trusts and remembers a
+passage that shows who did what, where, when and with what result, because each
+detail is something they can check or picture.
 
-AI-generated text defaults to abstraction because abstractions are statistically
-safer — they're less likely to be factually wrong. Human writers default to the
-specific because they've experienced specific things. This gap is exploitable.
+Abstraction is easy to write because it is hard to get wrong, and writers under
+deadline reach for it. Specific detail has to come from somewhere: what the
+author saw, did, measured or was told, or what a named source says.
+
+**v9 rule: the detail comes first, and it has to be real.** Ground a passage
+with material the author supplied or a source supports. Never invent a sensory
+detail, a number or a quotation to fill the gap in non-fiction, and never use
+specificity as a way to sound like a person. If the specifics are missing,
+the useful output is the question to ask the author. Fiction may invent
+within its own world; non-fiction may not.
+
+**The examples on this page are synthetic.** The names, figures, places and
+quotations illustrate technique. They are not real findings and must not be
+copied into a real document.
 
 ---
 
@@ -19,11 +30,13 @@ Replace generic categories with specific instances.
 
 | Abstract | Grounded |
 |---|---|
-| "A major tech company" | "Stripe" or "Palantir" or "Databricks" |
-| "A prominent researcher" | "Katalin Karikó" |
-| "A major city" | "São Paulo" or "Lagos" or "Austin" |
-| "A popular restaurant" | "The original Waffle House on East College Avenue in Avondale Estates" |
-| "A recent study" | "The 2024 Stanford HAI AI Index Report, Chapter 4" |
+| "A major tech company" | the actual company the author dealt with, e.g. "Northgate Systems" (synthetic) |
+| "A prominent researcher" | the researcher the author read or interviewed, with the paper or date |
+| "A major city" | the city where the event took place |
+| "A popular restaurant" | the restaurant the scene was set in, as the author remembers it |
+| "A recent study" | the study's author, year and title, from a copy the writer has read |
+
+The right-hand column is filled from the author's material or a read source. If it cannot be, leave the abstraction and flag it.
 
 ### The Sensory Anchor
 Insert one physical detail that grounds the reader in a real environment.
@@ -39,7 +52,7 @@ where the reader FEELS the tension.
 Anchor events in specific time.
 
 Before: "Recently, the market experienced a significant downturn."
-After: "Between March 8 and March 12, 2025, the NASDAQ dropped 9.4%."
+After (synthetic): "Between March 8 and March 12 of Year X, the fictional Exchange Index dropped 9.4%." A real version states the index, dates and figure from a source.
 
 Timestamps signal that the writer was paying attention to the specific
 moment, not generating a summary.
@@ -56,15 +69,13 @@ The object (cold coffee) communicates the internal state without naming it.
 Replace qualitative claims with quantitative ones.
 
 Before: "The project was significantly over budget."
-After: "The project budgeted $2.1M. Spent $4.8M. The delta funded nothing."
+After (synthetic figures): "The project budgeted $2.1M. Spent $4.8M. The delta funded nothing." Real figures come from the budget document, cited.
 
 ### The Contrast Pair
 Show two specific things side by side to illuminate a difference.
 
 Before: "Income inequality is a growing problem."
-After: "The median household in 78704 (Austin) earns $112,000. The median
-household in 78702, four miles east, earns $38,000. Same city. Same weather.
-Different country."
+After (synthetic figures for two invented neighborhoods): "The median household in Riverside East earns $112,000. The median household in Millbrook, four miles away, earns $38,000. Same city. Same weather. Different country." Real figures need a dated, cited source.
 
 ### The Action
 Replace states of being with actions.
@@ -77,8 +88,7 @@ on the table, then picked it up again."
 One real, specific quote from a real person grounds an entire paragraph.
 
 Before: "Critics have expressed concern about the policy."
-After: "Senator Whitehouse called it 'a bailout dressed up as infrastructure'
-during the March 14 floor session."
+After (synthetic; the speaker and words are invented): "Senator Alder called it 'a bailout dressed up as infrastructure' during the March 14 floor session." A real quotation is copied exactly from the transcript, with the date and speaker confirmed.
 
 ---
 
@@ -88,9 +98,10 @@ during the March 14 floor session."
    ground it with a name, number, object, scene, or quote.
 
 2. Every page (approximately 300 words) should contain at least one
-   grounding element that could NOT be generated from a language model's
-   statistical distribution — something specific enough that it signals
-   real-world knowledge or observation.
+   grounding element the writer can stand behind: a detail from their own
+   observation or notes, a named source they have read, or a figure they can
+   point to. Test it by asking "where did this come from?" If the answer is
+   "I made it up to sound specific", cut it.
 
 3. Grounding elements should be ACCURATE. A fabricated specific detail is
    worse than an honest abstraction. If you don't know the exact number,
@@ -114,12 +125,16 @@ Visualize writing as moving up and down a ladder:
 - **Top rung**: Pure abstraction ("Justice requires accountability")
 - **High rung**: Qualified generalization ("Democracies with independent judiciaries...")
 - **Middle rung**: Named category ("The U.S. federal court system...")
-- **Low rung**: Specific instance ("In Dobbs v. Jackson Women's Health, 2022...")
+- **Low rung**: Specific instance ("In a named, sourced case...")
 - **Ground level**: Sensory/experiential ("The courtroom gallery was silent for eleven seconds after the ruling was read")
 
 Strong writing moves constantly between rungs. Weak writing stays at one
-altitude. AI writing overwhelmingly stays at the top two rungs because
-abstraction is statistically safe.
+altitude. Hurried drafts, human or machine, tend to stay on the top two rungs
+because abstraction is easy and rarely wrong.
 
 The fix: After every abstract claim, descend at least two rungs within
 the same paragraph. After grounding, you earn the right to ascend again.
+
+### Ladder rule for v9
+
+Descend with material you have. If you cannot name a real instance for the claim you made on the top rung, the claim is not yet earned: ask the author for the event or source, or lower the claim. A hypothetical instance may be used if it is labeled as hypothetical in the sentence ("Suppose a clinic ..."); a hypothetical never stands in for something that happened.

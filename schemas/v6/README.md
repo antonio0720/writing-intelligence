@@ -89,3 +89,9 @@ Every schema document in this directory:
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC
+
+---
+
+## Later schemas
+
+*v9 preview (PR #8); proposed, not a release.* The v6 definition libraries are unchanged and no v6 digest moves. The v9 authorship dossier schema is a single standalone document, [`../v9/authorship-dossier.schema.json`](../v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `-1` is still read). It is not a `$defs` library and is not part of the v6 graph; its authority grant is a declaration until WI9-08 binds it to the v6 grant store.

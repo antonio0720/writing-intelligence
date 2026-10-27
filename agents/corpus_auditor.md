@@ -46,3 +46,12 @@ Map every source the compiler will read. Mark priority. Flag stale, contradictor
 
 - Structure Engineer (Pass 4)
 - Evidence Prosecutor (Pass 5)
+
+## v9 preview notes
+
+*Preview (PR #8); not a release.*
+
+- **Source custody.** For each source an author's dossier relies on, keep the pinned digest (`expected_sha256` for a submission draft, a digest for each source file) and the exact excerpt anchor. An anchor that resolves proves the excerpt exists there; it is not support for the claim, and `support_status` is judged separately.
+- **Consent.** Author notes, transcripts and voice samples enter the corpus only with the author's consent recorded. Do not mix model-written text into a voice baseline pool, and do not send private material to an external service.
+- **Experience state is part of the source record.** Classify author material by `experience_state` (`observed`, `said_by_author`, `sourced`, `measured`, `inferred`, `hypothetical`, `planned`), and keep hypothetical scenarios labeled as such. A roadmap or plan is not evidence that a thing was built (WI9-E).
+- Hard rules above are unchanged. There is still no consented author corpus on this branch, so describe corpus mapping as a process you apply, not as a corpus that exists.

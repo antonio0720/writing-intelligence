@@ -20,3 +20,5 @@ Operating law for every v7 domain:
 `SOURCE → QUALIFY → MODEL → AUTHOR → VERIFY → AUTHORIZE → EXECUTE → RECEIPT → RECONCILE → LEARN`.
 A domain may stop anywhere in that sequence and say why. It may never skip from
 generated prose to a claimed institutional outcome.
+
+> **v9 preview (proposal, not a release):** the authorship-provenance work on PR #8 lives in [`../v9/README.md`](../v9/README.md). It extends the v7 refusal of detector evasion into the doctrine files that v7's scan did not cover (defect D-14); the v7 operating law above is unchanged. It does not amend the law text above; v8.0.0 remains the published release.

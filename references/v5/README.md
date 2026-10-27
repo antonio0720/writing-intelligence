@@ -122,6 +122,9 @@ How it is built and where it runs.
 
 **Fiction and mixed-realm narrative:** [STORYWORLD_OS.md](STORYWORLD_OS.md) → [SEMANTIC_IR.md](SEMANTIC_IR.md) section 6 → [CONSTITUTION.md](CONSTITUTION.md) section 6.
 
+
+> **v9 preview (proposal, not a release):** the authorship-provenance work on PR #8 lives in [`../v9/README.md`](../v9/README.md). Its claim-coverage and venue-contract checks consume the evidence-anchor ideas defined in this set (`EVIDENCE_ANCHORS`, `RIGHTS_AND_CONSENT`) as self-reported declarations. It does not amend the law text above; v8.0.0 remains the published release.
+
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC

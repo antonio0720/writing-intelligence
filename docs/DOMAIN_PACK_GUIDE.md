@@ -65,3 +65,15 @@ Every pack must include all 15 sections:
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC
+
+## v9 preview: venue, authorship and strict-arena statements
+
+*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.* The 15-section schema above is unchanged. A new pack proposed during the v9 preview must also state, inside the sections it already has (for example "Required evidence", "Forbidden claims" and "Schema hooks"):
+
+- **Venue and authorship rules.** Which venues the domain publishes into, and each venue's class under the v9 contract (`unrestricted`, `disclose_ai` or `human_only`). For `human_only` venues, state that the pack produces research briefs only and never an AI-written or AI-rewritten pitch (WI9-G). The venue rule outranks the pack's structure and delivery format.
+- **Strict-arena status.** Say whether the domain is one of the strict arenas the authorship checker names (`journalism`, `academic`, `legal`, `government`) and, if so, what the stricter handling requires. If it is not, say so explicitly rather than leaving it implied.
+- **Experience rules.** What counts as a firsthand claim in the domain, and which `experience_state` values may back it. A hypothetical or planned item stays labeled (WI9-E).
+- **No detector targets.** Scoring adjustments, failure modes and benchmark cases must not use a detector score as a target or gate (WI9-H). Benchmarks measure editor- or author-judged fidelity and evidence accuracy.
+- **Phrase lists are questions.** If the pack ships domain phrases to watch for, label them as editorial questions for the author, never as evidence of how the text was produced.
+
+An RFC for a new pack answers these in the "Authorship, venue and evidence impact" step of `governance/RFC_PROCESS.md`. Nothing here has been run against a benchmark yet (WI9-07 is planned).

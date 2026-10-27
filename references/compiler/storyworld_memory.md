@@ -89,3 +89,11 @@ When a character drifts beyond ±15% on any major fingerprint metric (avg senten
 ## The Operating Promise
 
 If a writer abandons a project for six months, returns, and reads the storyworld memory, they should be able to resume mid-chapter without re-reading the entire series. That is the promise. Storyworld memory makes longform sovereign.
+
+---
+
+## v9 Meaning-First Order (proposed) — Storyworld memory
+
+v9 leaves this storyworld record unchanged and adds no fiction field.
+
+Where v9 touches it: the voice fingerprint per character is a style record. It is not provenance, and a voice match cannot change a work's declared origin. For narrative nonfiction in a storyworld record, keep real events with their sources and `experience_state`, apart from invented canon.

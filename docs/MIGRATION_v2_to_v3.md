@@ -1,5 +1,7 @@
 # Migrating from Writing Intelligence v2.0 → v3.0
 
+> **v9 note:** this guide is historical and unchanged. For the current upgrade path, including the v8 -> v9 preview (proposed, not released), see the v8 -> v9 section of [`UPGRADE_README.md`](../UPGRADE_README.md).
+
 v3.0 is a category jump, but it is **not** a breaking release. Your v2.0 prompts continue to work. The 7-pass kernel is preserved inside the 11-pass kernel. This guide walks you through what's new, what changed, and where to expand your practice.
 
 ## TL;DR

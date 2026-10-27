@@ -121,3 +121,21 @@ Extension.
 None. A certificate records what was true of a submitted portfolio on a date.
 
 This is a limit, not a feature, and it is stated in `README.md` under "What certification cannot tell you". An Apprentice certificate from a v3 portfolio says nothing about v6 practice. Tiers are not withdrawn when the runtime changes, because withdrawing them would imply the roster tracks current competence, and it does not.
+
+---
+
+## v9 preview competencies (optional, unscored)
+
+*Preview (PR #8); v9 is not released and no tier requires these lines yet. They use the same marks, `ok`, `FAIL` and `--`, and a `--` is not a pass. They become tier lines only if the owner adopts them at WI9-09.*
+
+| # | Check | Artifact the reviewer opens | `ok` when |
+|---|---|---|---|
+| V1 | Reads an authorship `HOLD` correctly | A dossier and its `audit` output | The candidate names the HOLD code, says which input caused it and fixes the input, not the check |
+| V2 | Claim coverage worked, not routed around | Draft, anchors, before and after `audit` | Each unmatched consequential claim was anchored, softened or cut; none was hidden by widening an anchor |
+| V3 | Presence is not support | Evidence list | The candidate distinguishes `ANCHOR_RESOLVED` from a recorded `support_status` |
+| V4 | Hypothetical stays labeled | Draft and `experience_state` entries | No planned or hypothetical item supports a firsthand claim |
+| V5 | Venue contract read first | Venue contract and package | For a human-only venue the package is a research brief, with no AI-written pitch |
+| V6 | Release is a person's decision | `release` input | The `review_decision` is bound to the exact draft digest and the grant covers `release` and the venue; the candidate says `RELEASE_ELIGIBLE` sent nothing |
+| V7 | Review ledger honest | Phrase scan, report and decisions | Each disposition has a rationale; none was set to clear a count; the candidate states a phrase match is a question, not detection |
+| V8 | Voice baseline consented | Sample list | Three or more consented authentic samples of 500 or more words per genre; the candidate states similarity is not proof of authorship |
+| V9 | No detector targeting | Revision history | No change was made to move a vendor score; cadence changes are justified by meaning |

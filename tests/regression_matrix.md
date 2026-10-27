@@ -57,6 +57,34 @@ This matrix tracks every place v3.0 has the potential to regress against v2.0. M
 | New genre packs without collision matrix update | PR template requires matrix update |
 | Schema changes without backwards compatibility | Maintainer review gate |
 
+## v9 Preview Lanes (PR #8 — proposal, not a release)
+
+v9 adds experimental lanes beside the v4–v8 suites. They are separate from them, change no version string, and guard the v9 proposal only. Passing them does not validate a wave: wave states live in `references/v9/WAVES.yaml`, and WI9-07 (the 60-case editorial benchmark) has not run.
+
+| Lane | Command | Guards |
+|---|---|---|
+| Authorship checker | `python3 -m unittest discover -s tests/v9 -p 'test_*.py'` | `scripts/wi-authorship.py` P0 negative controls, schema parity with `schemas/v9/authorship-dossier.schema.json`, and the meaning-led doctrine scan |
+| Reference kernel | `python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'` | 334-rule phrase scanner, review ledger digests, composition contract |
+| v7 consistency | `bash tests/v7/test_wi7.sh` | version strings agree across `wi.py`, `SKILL.md` and `plans/*.manifest.yaml` — v9 must not change them |
+| Links | `python3 scripts/check-links.py` | every relative link in the markdown resolves |
+
+### v9 hazards and their negative controls
+
+| Hazard | Negative control (must stay red when the guard is disabled) |
+|---|---|
+| A human-only venue accepts an assisted or generated draft | `HUMAN_ONLY_CONFLICT` / `SUBSTANTIVE_AI_CONTRIBUTION` HOLD, exit 3, even with a clean detector result — see `examples/v9/01-human-only-venue-hold.md` |
+| One safe anchor carries several unsourced claims | `CLAIM_UNANCHORED` HOLD per uncovered claim — see `examples/v9/02-claim-coverage.md` |
+| A planned or hypothetical item supports a firsthand claim | `experience_state` HOLD |
+| The reviewed bytes differ from the submitted bytes | `expected_sha256` mismatch HOLD; required for any submission |
+| An exact excerpt is read as truth | anchors report `ANCHOR_RESOLVED`, support stays `unadjudicated` |
+| REVIEW is read as permission | `audit` never returns a release state and prints a notice on stderr |
+| Release without a bound human decision or unexpired grant | `release` HOLD (`DECISION_REQUIRED`, `AUTHORITY_*`) |
+| A symlink or `..` path escapes the dossier folder | file-boundary refusals |
+| A detector-oriented instruction returns to the doctrine | `tests/v9/test_doctrine_meaning_led.py`, with a planted twin |
+| A phrase match is treated as proof of AI authorship or auto-rewritten | scanner reports questions with offsets and digests only; the review ledger needs a human disposition |
+
+Every v9 report is `declaration_status: self_reported`. These controls prove the declarations are checked for consistency; they do not prove who wrote a text.
+
 ## Watch List
 
 After each release, maintainers monitor:

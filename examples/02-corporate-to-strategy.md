@@ -4,7 +4,9 @@
 **Passes used**: Full pipeline
 **Voice**: sovereign commander
 **Genre**: strategy
-**Score delta**: 28 → 93
+**Illustrative rubric score**: 28 → 93 (a teaching judgment, not a measured result)
+
+> **Synthetic.** The company, accounts, engineers, figures and dates are invented for this page and stand for what the memo's author would supply from their own operating data. A real rewrite marks every figure it was not given as `[needs source]` instead of supplying one (v4 Law C). In v9 the "After" is shown as the output of a source card, not of the rewriter's imagination.
 
 ---
 
@@ -27,6 +29,10 @@ Our leadership team is committed to empowering our people to deliver best-in-cla
 
 ---
 
+## Source card (synthetic — the memo author's own data)
+
+*$8.4M ARR flat three quarters; net revenue retention 108% → 94% since January; two top-ten accounts (Meridian Health, $380K; Cortex Labs, $290K — both invented) in procurement review; 14 alternatives since 2022; last differentiating release September 2024; API layer requested by 7 of 10 at-risk accounts; engineering estimate 11 weeks; two named engineers can move off the mobile project, which absorbs a 6-week delay.*
+
 ## After (Score: 93/100)
 
 **Situation**: Revenue is flat at $8.4M ARR for three consecutive quarters. Net revenue retention dropped from 108% to 94% since January. Two of our ten largest accounts — Meridian Health ($380K ARR) and Cortex Labs ($290K ARR) — are in active procurement review with competitors.
@@ -43,8 +49,8 @@ Our leadership team is committed to empowering our people to deliver best-in-cla
 
 ### What Changed
 - Structure: SCIR (Situation → Complication → Implication → Recommendation)
-- 11 specific numbers
-- 2 named accounts, 2 named engineers
+- Specific numbers, every one from the source card
+- 2 named accounts, 2 named engineers (all invented for this page)
 - Timeline with specific dates
 - Risk section with mitigation
 - Decision point with deadline

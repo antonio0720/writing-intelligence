@@ -13,10 +13,10 @@ questions, and the second one is newer, so start wherever your problem is.
 A draft goes in, the passes run, and a better draft comes out. The unit of work
 is a paragraph and you assess the result by reading it.
 
-- [`01-ai-slop-to-human.md`](01-ai-slop-to-human.md) — generic AI output rebuilt into specific, voiced prose. Score 31 → 87.
-- [`02-corporate-to-strategy.md`](02-corporate-to-strategy.md) — buzzword announcement rebuilt as a strategy memo with numbers and owners. Score 28 → 93.
-- [`03-weak-academic-to-strong.md`](03-weak-academic-to-strong.md) — vague unsourced student writing rebuilt as evidence-dense argument. Score 38 → 88.
-- [`04-fiction-telling-to-showing.md`](04-fiction-telling-to-showing.md) — named emotions replaced with scene, sensory detail and subtext. Score 34 → 92.
+- [`01-ai-slop-to-human.md`](01-ai-slop-to-human.md) — a generic draft rebuilt into specific prose using only the author's own notes; gaps stay marked. Synthetic. Illustrative rubric score 31 → 87.
+- [`02-corporate-to-strategy.md`](02-corporate-to-strategy.md) — buzzword announcement rebuilt as a strategy memo from a synthetic source card. Illustrative score 28 → 93.
+- [`03-weak-academic-to-strong.md`](03-weak-academic-to-strong.md) — vague unsourced student writing rebuilt around source cards the student supplied. Illustrative score 38 → 88.
+- [`04-fiction-telling-to-showing.md`](04-fiction-telling-to-showing.md) — named emotions replaced with scene, sensory detail and subtext. Illustrative score 34 → 92.
 - [`05-genre-transfer-academic-to-sermon.md`](05-genre-transfer-academic-to-sermon.md) — the same loneliness data delivered as scholarship and then as a pastoral address. Same facts, rebuilt delivery.
 
 ## Kernel walkthroughs (v3)
@@ -39,6 +39,14 @@ Success is frequently a non-zero exit code.
 - [`v6/04-a-capsule-a-stranger-verifies.md`](v6/04-a-capsule-a-stranger-verifies.md) — a funder verifies one claim, offline, from two files, without receiving the workspace.
 
 Read `01` first. Simulation is the command that changes how the work feels.
+
+---
+
+## v9 examples (proposal preview)
+
+- [`v9/README.md`](v9/README.md) — two synthetic walkthroughs of `scripts/wi-authorship.py`, with real recorded output: [a human-only venue holds an assisted draft](v9/01-human-only-venue-hold.md), and [one anchor does not carry three claims](v9/02-claim-coverage.md).
+
+v9 is a proposal on PR #8, not a release. These examples show declarations being checked for consistency; they do not show authorship being verified, and no detector is used. The "scores" in examples 1–4 are illustrative maintainer judgments, not measured results.
 
 ---
 

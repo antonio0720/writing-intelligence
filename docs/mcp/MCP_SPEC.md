@@ -4,6 +4,8 @@
 
 This document specifies a Model Context Protocol server surface for Writing Intelligence v3.0. Clients (Claude Desktop, Claude Code, custom agents) consume the tools to embed v3.0 capability in their workflows.
 
+> **v9 preview note.** No MCP tool wraps the v9 authorship checker, the phrase scanner or the review ledger. They are **CLI-only** (`scripts/wi-authorship.py`, `prototypes/wi9/`). An MCP adapter is planned under WI9-08 and does not exist; v9 is a preview, not a release. A client must not present a `REVIEW` as permission to send, and `audit` cannot emit a release state. See [`../../references/v9/README.md`](../../references/v9/README.md).
+
 ## Server Name
 
 `writing-intelligence`

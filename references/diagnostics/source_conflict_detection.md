@@ -68,3 +68,27 @@ Detection passes when:
 - Every conflict has a resolution or is flagged for the user
 - No `block` conflict has been silently overridden
 - Every resolution carries a rationale
+
+---
+
+## v9: Conflicts and the Authorship Dossier
+
+In v9 a detected conflict has a place to land. The authorship declaration checker (`scripts/wi-authorship.py`, on the PR #8 proposal; a declaration checker, not an authorship verifier) records each piece of evidence with a `support_status` of `supported_by_reviewer`, `needs_source`, `conflicted` or `unadjudicated`.
+
+| Conflict outcome here | `support_status` in the dossier |
+|---|---|
+| `contradiction`, `scope_mismatch` or `fact_drift` unresolved, or `flag_for_user` pending | `conflicted` |
+| `block`, or a claim whose only support is a stale or lower-priority source | `needs_source` |
+| A reviewer adjudicated and the resolution carries a rationale | `supported_by_reviewer` (a person's declared judgment, not a verification of truth) |
+| Detection has not been run on this claim | `unadjudicated` |
+
+Rules that follow from this:
+
+- **Claim coverage.** Every consequential claim that the v4 claim classifier finds in the draft must overlap an anchored evidence span. One safe anchor cannot carry three claims, and a claim sitting in a conflicted pair has no clean anchor to borrow.
+- **A strict-arena submission cannot rest on `needs_source` or `conflicted` evidence.** In `audit`, an unresolved status on a submission in a strict arena (`journalism`, `academic`, `legal`, `government`) is a HOLD (`SUPPORT_UNRESOLVED`); outside those arenas the checker does not hold on it, so the editorial obligation remains. The resolution strategies above are how the status is moved, never a way to hide it.
+- **`a_wins` and `merge` do not silently erase the loser.** Keep the superseded source in the dossier with its digest, so the trace shows what was set aside and why (principle WI9-I). A stale source is flagged by a changed `sha256` (`SOURCE_DIGEST_MISMATCH`).
+- **Freshness is not truth.** The newer source wins by default under this file's procedure; that is a priority rule, and an exact excerpt match in the checker is a text anchor, not proof that the claim is true.
+- **Experience conflicts.** If the author's recollection (`said_by_author`) contradicts a dated record (`sourced` or `measured`), do not average them. Mark `conflicted` and ask the author; a `planned` or `hypothetical` item cannot be promoted to resolve the dispute.
+- **Tonal mismatch** stays non-blocking here. A voice comparison is a diagnostic, never evidence about who wrote the text.
+
+None of this checks who wrote anything: every report carries `declaration_status: self_reported`.

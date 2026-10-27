@@ -50,3 +50,13 @@ The last line is the most important line. It's what the audience carries home.
 - Flat energy throughout — no escalation, no climax
 - The "list speech" — five points of equal weight, none memorable
 - Closing with "thank you" instead of a final line that resonates
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** event organizers, employers and some competitions or school contests publish rules about who writes a speech; some require the speaker's own words. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** facts, quotations, statistics and historical claims need a source span; spoken audiences cannot check, so accuracy matters more, not less.
+- **Firsthand material:** the speaker's own stories, relationships and decisions. A story told as lived must be lived, and a speechwriter must not invent a memory for the speaker. A hypothetical is introduced as one.
+- **Disclosure:** speechwriting by a person for a principal is a long-standing practice, but AI drafting may need disclosure in some settings. Record the contribution log; the speaker approves the exact text.
+- **Phrase matches that may be legitimate:** `forced_audience_engagement`, `generic_closure` and `overused_rhetorical_structure` (triads, repetition) are oratory's working tools when spoken aloud. Read the line out loud before judging a match.

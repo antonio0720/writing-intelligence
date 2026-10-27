@@ -49,3 +49,13 @@
 - Proof section weaker than promise section
 - Guarantee buried or vague
 - Voice that switches from casual in the hook to corporate in the offer
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** ad platforms, email and text regulation, industry regulators and the company's own compliance set rules on claims and testimonials. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** performance claims, savings, testimonials, guarantees, prices and comparisons need a dated record or documented consent. Do not state a result, endorsement or scarcity the company cannot show.
+- **Firsthand material:** real customer outcomes the company holds with permission. A projected result is labeled as projected; a roadmap feature is not a product.
+- **Disclosure:** endorsements and sponsored content carry their own disclosure duties apart from any AI question. Record the contribution log, and keep release with the accountable marketer.
+- **Phrase matches that may be legitimate:** `forced_audience_engagement`, `empty_emphasis` and `generic_closure` ("act now", "limited time") are the genre's working vocabulary. A match is a check for substantiation, not an order to delete; an offer line needs a real deadline.

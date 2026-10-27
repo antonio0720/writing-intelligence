@@ -1,6 +1,6 @@
 # Roadmap
 
-Writing Intelligence is a living project. **v6.0 shipped August 2026. v7.0 shipped October 2026** — as governance, with the institutional workflows planned and stated as planned. **v8.0 shipped October 2026** — Story Intelligence, four offline fiction engines, with their canonical integration planned and stated as planned. Here's where it goes next.
+Writing Intelligence is a living project. **v6.0 shipped August 2026. v7.0 shipped October 2026** — as governance, with the institutional workflows planned and stated as planned. **v8.0 shipped October 2026** — Story Intelligence, four offline fiction engines, with their canonical integration planned and stated as planned. **v9 is a preview in progress and not released** (below). Here's where it goes next.
 
 Built by **Antonio T. Smith Jr. / Density6 LLC**
 
@@ -20,8 +20,32 @@ Each version proved one thing and then made the next thing necessary.
 | **v6.0** | Executable meaning. A body of meaning can be changed by several people across time, under scoped authority, without anyone losing track of what is still true — and without the system inventing an answer when they disagree. |
 | **v7.0** | Institutional intelligence, governed before it is built. A program for consequential work can refuse to call itself done: every shipped wave carries a receipt, and the doctrine no longer contradicts its own refusal of detector evasion. |
 | **v8.0** | Story intelligence. Fiction can be held to an evidence standard without pretending code can judge a novel: mechanical consistency, interpretive signal, editorial judgment and reader reception are four states, and every publication gate holds until people have spoken. |
+| **v9 (proposed, not released)** | Authorship provenance. What a text says about who wrote it, and which experiences it claims, is checked against the author's own declared material and the venue's rules — without ever claiming to authenticate a writer or optimizing a detector. |
 
 v5 answers *is this supported?* v6 answers *what changed, what did that break, who was allowed to do it, and what would it cost to accept?* The second set of questions is not a bigger version of the first. It requires the system to hold state across time and to have an opinion about who may move it, and neither is a feature that can be bolted onto a verifier.
+
+---
+
+## v9 — Authentic Voice & Authorship Provenance (WI9-AUTHORSHIP) — in progress, not released
+
+v9 is the next thing on the roadmap and it is **proposed, not shipped**: it lives on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8), **8.0.0 remains the release**, and the release is on **HOLD until WI9-09**. Sequence (from [`ENGINEERING_HANDOFF.md`](references/v9/ENGINEERING_HANDOFF.md) §6): truth boundary → corpus → author voice → thought preservation → craft → external evaluation → integration → release. States are the program's own ([`WAVES.yaml`](references/v9/WAVES.yaml)); **SHIPPED needs a PASS receipt, owner approval and a release, and no wave has one.** Record: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md).
+
+| Wave | Name | State today | Depends on | What is still open |
+|---|---|---|---|---|
+| WI9-00 | Baseline and evidence audit | **VALIDATED** (receipt `WI9-00`) | — | owner approval of the baseline |
+| WI9-01 | Authorship and venue contract | **PROTOTYPE** (`wi-authorship.py audit`/`release`, schema `wi9-authorship-2`, receipt `WI9-P0`) | 00; shares the contract with 06 | owner acceptance of the schema; binding the release grant to the v6 grant store; Windows file-safety strategy |
+| WI9-02 | Firsthand material vault | **PLANNED** | parallel with 01's schema | only `experience_state` typing exists — no private vault, redaction or consent withdrawal |
+| WI9-03 | Measured author voice baseline | **PROTOTYPE** (statistics only) | consented genuine author samples (3+ × 500+ words, per genre) | no consented corpus has been collected |
+| WI9-04 | Thought fidelity and semantic integrity | **PLANNED** | a stable evidence model; the v5 graph and v6 propose/simulate/decide | thought inventory and semantic diff not built |
+| WI9-05 | Meaning-first craft repair | **IN PROGRESS** | prototype in parallel; validate after 03 and 04 | 05A doctrine repair and 05B phrase scanner done; 05C partial; 05F (meaning/causality/voice evaluator) and 05G (reader preference trial) not run |
+| WI9-06 | Human-only venue hold | **PROTOTYPE** (`release` gate) | 00; shares the contract with 01 | no real governed workflow exercised |
+| WI9-07 | Blinded editorial evaluation | **PLANNED — NOT EXECUTED** | design early; execute after 03–06 | the 60-case corpus (15 each: journalism/expert commentary, executive correspondence, fiction, technical/institutional) and blinded editors — no results exist |
+| WI9-08 | Canonical integration and regression | **PLANNED** | validated candidate features; approved contracts | `wi.py` integration, v9 manifest, bundles, v4–v8 regressions |
+| WI9-09 | Independent release and governance | **PLANNED — release HOLD** | everything above | fresh-clone artifact checks, security and code review, external review, the owner's release decision, post-release readback |
+
+**What blocks release.** WI9-07 has not run (no corpus, no blinded review); WI9-03 has no consented voice samples; WI9-08 has not integrated or run the regressions against a candidate; WI9-09 has no independent review. Until each of those has a receipt, a README, a tag or a note saying v9 is released would be false. Version strings stay at 8.0.0 until WI9-09.
+
+**Not on the roadmap, on purpose.** An AI-detector score as a target, a gate or a claim; "100% human" promises; invented firsthand scenes; submission-ready prose for human-only venues.
 
 ---
 

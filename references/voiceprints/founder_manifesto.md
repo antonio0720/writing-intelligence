@@ -43,3 +43,9 @@ It announces what is being built and why it matters.
 - Self-congratulation disguised as mission
 - Competitive positioning disguised as principle
 - "Disruption" language without naming what's being displaced and why
+
+---
+
+## v9 Note: A Roadmap Is Not a Completed Build
+
+This voice is future-claiming by design, which is exactly where v9 principle WI9-E bites: a manifesto may announce what will be built, and it must never read as if it has been. Keep three states visibly apart in the prose: **built and measured** (with the source), **being built**, and **intended**. "We are building X" is true only if work has begun; "X changed how 400 clinics operate" needs a dated record of the 400. The Anti-Patterns already ban inspiration without mechanism; add that a stated mechanism must be one the founder can actually describe. Founder stories, origin moments and customer scenes come from the founder's own notes; they are not generated to fit the arc. The register is not a person's voice: for a specific founder, build a per-genre baseline from their consented samples.

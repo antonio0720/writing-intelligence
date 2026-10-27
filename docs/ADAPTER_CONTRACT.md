@@ -58,3 +58,18 @@ V6 Canonical meaning graph (authoritative)
 ## Explicit non-goals
 
 The adapter is **not implemented** in this ZIP. The fixture input is not proof of a real main-branch graph. No network, telemetry, writer action, GitHub mutation, manuscript import, external model inference, or deployment is performed by `scripts/wi-arc.py`.
+
+## v9 preview: an adapter never turns a verdict into a send
+
+*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.*
+
+The adapter described above is a read-only export boundary, and v9 adds a second rule for any adapter, connector or integration that sits between Writing Intelligence and a venue, CMS, email system or submission portal.
+
+- **`REVIEW` is not a send.** `scripts/wi-authorship.py audit` reports `REVIEW` when its limited checks passed, and every audit report carries `release_authorized: false`. An adapter must not read `REVIEW` as permission to transmit.
+- **`RELEASE_ELIGIBLE` is not a send either.** `scripts/wi-authorship.py release` returns `RELEASE_ELIGIBLE` only when a person's decision is bound to the exact draft sha256, an unexpired grant held by that person covers `release` and the named venue, and the venue contract lists `submit` as open. The command transmits nothing. An adapter that transmits must have its own, separate, authorized step by a person, and must re-check the draft digest at that moment.
+- **Honor `HOLD` (exit 3).** On `HOLD`, an adapter stops. It does not retry with a different dossier, strip a field or downgrade the venue class to get past it.
+- **Carry the declaration status.** Every report states `declaration_status: self_reported`. An adapter must not rewrite it as verified, and must not turn it into an authentication claim about a writer.
+- **A grant in a dossier is a declaration.** Until WI9-08 binds it to the v6 grant store, an adapter cannot treat a dossier's authority grant as the canonical grant.
+- A detector score is never an adapter input, gate or output field (WI9-H).
+
+The existing non-goals stand: the arc adapter is still not implemented, and nothing here makes a v9 verdict a canonical state change.

@@ -99,3 +99,13 @@ Always state the evidence level supporting each claim.
 - Statistical significance reported without clinical significance
 - Absolute risk presented as relative risk (or vice versa) without context
 - "No significant difference" interpreted as "no difference" (absence of evidence ≠ evidence of absence)
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** journals, health systems and regulators set rules on AI assistance, patient privacy and authorship criteria. Check the current written policy; unknown means HOLD. Never include identifiable patient data in an outside tool.
+- **Anchored sources:** doses, outcomes, effect sizes, guideline recommendations and contraindications need an exact span from the source read, with date and edition. A remembered clinical fact is not a citation.
+- **Firsthand material:** the clinician's own case notes and observations, de-identified, with consent where required. Planned or hypothetical cases are labeled as such.
+- **Disclosure:** many journals require declaring AI assistance, and authorship criteria usually require a human accountable for accuracy. Record the contribution log; a clinician signs off.
+- **Phrase matches that may be legitimate:** `qualifier_padding` ("may be associated with", "limited evidence suggests") is frequently accurate calibration and often required, and should survive unless the evidence is stronger than the hedge implies.

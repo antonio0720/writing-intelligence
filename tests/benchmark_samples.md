@@ -3,11 +3,18 @@
 ## Purpose
 
 These samples test whether the writing compiler produces output that is:
-1. Free of AI-detectable patterns
+1. Free of templated filler a reader would skim
 2. Distinctively voiced
 3. Argumentatively sound
-4. Structurally varied
+4. Built so its structure follows its meaning
 5. Editorially tight
+
+The inputs are generic by design. They contain no author facts, so a passing rewrite
+cannot add any: where the input gives no source, the correct output marks
+`[needs source]` or asks. A rewrite that "passes" by inventing an actor, number,
+scene or quote fails. "Score" lines refer to the maintainers' editorial rubric,
+not to any detector, and v9 has produced no measured score on these samples
+(WI9-07 has not run).
 
 Each sample includes an INPUT (text to process) and EVALUATION CRITERIA.
 
@@ -29,9 +36,7 @@ the significant risks that AI presents for our collective future."
 
 EVALUATION CRITERIA:
 - [ ] Zero hard-ban phrases remain
-- [ ] No three consecutive sentences within ±5 words of each other
-- [ ] Opening sentence names a specific actor, fact, or observation
-- [ ] At least one sentence ≤8 words and one ≥25 words
+- [ ] Opening sentence names a specific actor, fact, or observation the supplied material contains (otherwise it asks for one)
 - [ ] No "evolving," "transformative," "reshaping," "revolutionizing," "navigate"
 - [ ] The rewrite makes a specific claim, not a general observation
 - [ ] Score ≥80 on the 100-point system
@@ -51,12 +56,12 @@ social media companies should take more responsibility for the well-being
 of their users, especially minors."
 
 EVALUATION CRITERIA:
-- [ ] Every claim cites or names a specific source
-- [ ] "Many studies" replaced with named studies
-- [ ] "Significant impact" quantified
+- [ ] Every claim cites a source the author supplied, or is marked `[needs source]`
+- [ ] "Many studies" replaced with the studies the author named, or flagged as unsourced
+- [ ] "Significant impact" quantified only from supplied figures
 - [ ] Counterargument present or acknowledged
 - [ ] Qualifiers are honest (not performative hedging)
-- [ ] Voice sounds like a student in a specific class, not a generic essay
+- [ ] Voice matches the author's consented sample if one exists, otherwise the stated genre voice; not a generic essay
 - [ ] Score ≥80 on the 100-point system
 
 ---
@@ -73,8 +78,8 @@ are aligned on our shared vision for growth and excellence."
 
 EVALUATION CRITERIA:
 - [ ] Zero corporate buzzwords ("leverage," "synergy," "alignment," "stakeholders")
-- [ ] Every recommendation has an owner
-- [ ] Every claim about value is quantified
+- [ ] Every recommendation has an owner the author named (else `[needs owner]`)
+- [ ] Every claim about value is quantified from the author's data, or marked `[needs source]`
 - [ ] Document states what specifically needs to happen, by when, by whom
 - [ ] Risks identified
 - [ ] Readable in under 2 minutes
@@ -96,7 +101,7 @@ EVALUATION CRITERIA:
 - [ ] "Felt" / "thought" / "was" reduced by ≥50%
 - [ ] At least one specific sensory detail per 2 sentences
 - [ ] Emotional state shown through action/detail, not named
-- [ ] Sentence length variance: std dev ≥8
+- [ ] Sentence length follows the beats of the scene; no sentence resized only to vary length
 - [ ] No two paragraphs open with same syntactic structure
 - [ ] The passage creates emotional response WITHOUT declaring the emotion
 - [ ] Score ≥80 on the 100-point system
@@ -112,9 +117,9 @@ The Bible tells us to be strong and courageous. We should not be afraid.
 God is always with us. Let us pray."
 
 EVALUATION CRITERIA:
-- [ ] Specific scripture referenced (book, chapter, verse)
-- [ ] At least one personal or congregational moment named specifically
-- [ ] Cadence builds through the passage (not flat throughout)
+- [ ] Scripture referenced only where the speaker supplies it (book, chapter, verse), otherwise flagged
+- [ ] At least one personal or congregational moment the speaker supplied, named specifically
+- [ ] Cadence builds where the message builds (spoken delivery is a genre convention, not a score target)
 - [ ] Anaphora or call-response structure present
 - [ ] Dignity of congregation respected — not talked down to
 - [ ] Closing is not generic — it names a specific transformation available

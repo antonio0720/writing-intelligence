@@ -53,6 +53,15 @@ and high-quality, not to gatekeep.
 5. **Implementation.** An accepted RFC becomes a PR. The PR must link the RFC.
 6. **Merge gates.** The PR must pass the gates in [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md)
    and ship its negative fixture.
+7. **Authorship, venue and evidence review.** If the RFC could change what a document claims,
+   who is declared to have written it, or where it may be sent (a new pack, a new venue
+   class, a new contribution kind, a change to `scripts/wi-authorship.py`, `schemas/v9/` or
+   the phrase-review ledger), it fills in the "Authorship, venue and evidence impact" section
+   of the template. A reviewer checks that no detector score becomes a target or gate, that
+   `REVIEW` and `RELEASE_ELIGIBLE` still never act as a send, and that status words (proposed,
+   prototyped, implemented, measured, released) are not promoted.
+
+
 
 ---
 
@@ -277,6 +286,20 @@ circulation, and what this release cannot do for their holders.
 
 What this costs somebody holding a `.wic`, a `.wiab`, a decision record or a
 workspace produced before the change. If nothing, say why.
+
+---
+
+## Authorship, venue and evidence impact
+
+Delete this whole block only if **Touches authorship, venue or evidence** is `no`.
+
+- Touches authorship, venue or evidence: yes | no
+- Effect on `origin` declarations or the contribution log:
+- Effect on venue contracts (`unrestricted`, `disclose_ai`, `human_only`) and the rule that a venue outranks a pack:
+- Effect on claim coverage, `support_status` or `experience_state`:
+- Detector scores: confirm none becomes a target, gate or claim (WI9-H)
+- `REVIEW` / `RELEASE_ELIGIBLE` still never act as a send: yes | no
+- Status being claimed (proposed, prototyped, implemented, measured, released) and the evidence for it:
 
 ---
 

@@ -72,3 +72,17 @@ ELIGIBLE_FOR_HUMAN_DECISION or HOLD/BLOCK — never 'bestseller verified'
 ## What is implemented now
 
 The standalone CLI validates typed IDs and relationships, audits 60 rules as `UNASSESSED` unless supported, executes a subset of text and typed structural checks, produces deterministic reports and gates, and runs 41 unit/negative tests. It does **not** parse a novel into the IR, call LLM judgment, edit canon, write to GitHub, run the core WI runtime, export EPUB/PDF or substitute for independent readers. These are explicit integration milestones, not stealth 'done' claims.
+
+## v9 preview: what changes for fiction, and what does not
+
+*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.*
+
+**Unchanged.** The fiction IR, the 60 audited rules, the gates (`BLOCK` for forbidden power or unpaid explicit cost, `HOLD` for an untested publication), the failure semantics above and the rule that a structural pass is not a verdict on the book. v9 does not touch `scripts/wi-fiction.py`, `scripts/wi-arc.py`, the v8 rule catalog or any fiction gate.
+
+**What v9 adds around it.**
+- **No borrowed memory in memoir or autofiction.** Where a work presents itself as the author's real experience, assistance must not invent remembered scenes, conversations or feelings. Reconstruction is labeled as reconstruction. Invented events in plainly fictional work are the craft, and stay in the `fictional_canon` realm (WI9-E).
+- **The phrase scanner is a question.** `prototypes/wi9/wi9_hotphrases.py` may raise an editorial question about a stock phrase. In dialogue that is character voice, and the scanner skips quoted speech unless asked. A match never declares a passage machine-written and never triggers a rewrite.
+- **Origin is a declaration.** Whether a manuscript is `human_authored`, `ai_assisted` or `ai_generated` is declared by the author and checked for internal consistency by `scripts/wi-authorship.py`; no fiction engine output changes it, and no engine output authenticates a writer.
+- **Venue rules apply to fiction too.** A `human_only` venue (a magazine or contest, for instance) blocks AI-written or AI-rewritten submission packages regardless of how well the fiction audit scores.
+
+None of this has been benchmarked: WI9-07 has not run, and no editor or reader study of v9 exists.

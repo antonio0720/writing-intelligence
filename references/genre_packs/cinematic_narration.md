@@ -81,3 +81,13 @@ into the white space between scenes.
 - Narrating what a character thinks instead of what they do
 - Explaining the symbolism instead of trusting the image
 - Every paragraph the same length (uniform shot length = flat cinematography)
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** broadcast, streamer, festival and commissioned-documentary contracts usually state what may be generated and what must be credited. Check the current written terms; unknown means HOLD.
+- **Anchored sources:** narration that states a fact about a person, date or event needs an exact source span, as any documentary script does. Archive clips and interview transcripts are the anchors.
+- **Firsthand material:** the filmmaker's own footage, interviews and shoot notes. A reconstructed scene must be labeled as reconstruction; do not present it as witnessed.
+- **Disclosure:** guild and platform rules on synthetic writing or voice differ and change. Record the contribution log and let the producer decide what is declared.
+- **Phrase matches that may be legitimate:** `empty_metaphor` and `staged_explanation` are the language of voice-over, where a spoken line carries mood the picture cannot. A match is a prompt to ask whether the image already says it, not a defect.

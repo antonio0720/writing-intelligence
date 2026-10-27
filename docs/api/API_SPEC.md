@@ -4,6 +4,8 @@
 
 This document specifies a REST API surface that any Writing Intelligence v3.0 conformant implementation can expose. v3.0 ships the doctrine; v3.1 ships the reference implementation.
 
+> **v9 preview note.** The v9 authorship tools (`audit`, `release`) and the phrase scanner and review ledger are **CLI-only**. They are not exposed over this API and no endpoint here accepts or returns an authorship dossier. Exposure is planned under WI9-08 (integration) and does not exist; v9 itself is a preview, not a release. A service must not imply that any endpoint checks authorship, and the declaration-only `RELEASE_ELIGIBLE` state sends nothing. See [`../../references/v9/README.md`](../../references/v9/README.md).
+
 ## Base URL
 
 `https://api.writing-intelligence.example/v3`

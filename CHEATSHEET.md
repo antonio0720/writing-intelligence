@@ -1,8 +1,79 @@
 # Writing Intelligence v8 — Cheatsheet
 
-One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
+One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · v9 preview: [`references/v9/README.md`](references/v9/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
 
 **Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v8.0.0
+
+---
+
+## v9 preview — authorship and venue checks (PROPOSED, not released)
+
+8.0.0 is the release. v9 is a preview on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); the release is on HOLD until WI9-09. Nothing below changes a v4–v8 command. Detail: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md) · waves: [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml) · schema: [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
+
+| Command | Does | Exit |
+|---|---|---|
+| `python3 scripts/wi-authorship.py audit --input dossier.json [--out R.json]` | limited checks on a self-reported dossier | `0` REVIEW · `3` HOLD |
+| `python3 scripts/wi-authorship.py release --input dossier.json [--out R.json]` | is a person's bound release decision on file? Transmits nothing | `0` RELEASE_ELIGIBLE · `3` HOLD |
+| `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE [--format text\|json] [--include-quotes]` | 334 editorial rules (321 literal, 13 regex, 11 categories); offsets, line/column, document and rule sha256 | `0` ran |
+| `python3 prototypes/wi9/wi9_phrase_review.py --input F --report R.json --decisions D.json` | review ledger bound to the exact document and rule digests | validation result |
+| `python3 prototypes/wi9/wi9_core.py preflight\|plan\|diagnose\|voice\|benchmark …` | reference kernel (`preflight` is the older specimen; `wi-authorship.py` wins on disagreement) | see its README |
+| `python3 prototypes/wi9/wi9_composition.py` | model-neutral composition contract; refuses `human_only` venues; best state `DRAFT_REVIEW_REQUIRED` | library |
+
+**What the three states mean**
+
+- **REVIEW** — the limited checks passed. It is *not* permission to send, *not* a claim of human authorship, and `release_authorized` stays `false`. A stderr notice says so.
+- **HOLD** — at least one check failed. Each finding carries a `code`, a `level` and a `target`. Fix the dossier or the draft, re-run.
+- **RELEASE_ELIGIBLE** — `release` only. Requires a REVIEW audit, a person's `review_decision` whose `target_sha256` is the exact draft digest, an unexpired grant held by that person covering `release` and the named venue, a venue contract listing `submit`, and an unpassed deadline. It is still a declaration check; nothing is sent.
+
+Every report says `declaration_status: self_reported`. Nothing here authenticates a writer or proves a source true.
+
+**Minimal dossier** (`wi9-authorship-2`; `-1` is still read). Synthetic. Paths resolve relative to the dossier's directory — no absolute paths, `..` or symlinks.
+
+```json
+{
+  "schema": "wi9-authorship-2",
+  "document": {"path": "draft.txt", "origin": "human_authored",
+               "venue_policy": "unrestricted", "intended_use": "internal_review"},
+  "contribution_log": [{"kind": "human_original", "actor_declaration": "the author",
+                        "recorded_at": "2026-03-03T09:00:00-05:00"}],
+  "evidence": [{"id": "e1", "claim": "The author rebuilt the shelf unit twice.",
+                "kind": "firsthand", "source_path": "notes/shelf.txt",
+                "exact_excerpt": "rebuilt the shelf unit twice before the legs sat flat",
+                "source_origin": "human_authored", "consent": true,
+                "experience_state": "said_by_author"}],
+  "document_claim_anchors": [{"exact_excerpt": "rebuilt the shelf unit twice before the legs sat flat",
+                              "evidence_id": "e1"}]
+}
+```
+
+Required: `schema`, `document` (`path`, `origin`, `venue_policy`, `intended_use`), `evidence` (`id`, `claim`, `kind`, `source_path`, `exact_excerpt`, `consent: true`). For a submission also pin `document.expected_sha256` (and each source's `sha256` in strict arenas: journalism, academic, legal, government) and add `venue_contract`. Enums: origin `human_authored | ai_assisted | ai_generated` · venue_policy `human_only | disclose_ai | unrestricted` · intended_use `internal_review | research_demo | submission` · evidence kind `firsthand | external | interpretation` · experience_state `said_by_author | observed | measured | sourced | inferred | planned | hypothetical` · support_status `unadjudicated | supported_by_reviewer | needs_source | conflicted` · contribution kind `human_original | human_edit | mechanical_proofread | ai_research | ai_generated_prose | ai_substantive_rewrite`.
+
+**HOLD codes you will meet most**
+
+| Code | Fix |
+|---|---|
+| `CLAIM_UNANCHORED` | a consequential claim in the draft overlaps no anchored span — add the source and anchor, or cut/soften the claim (a HOLD for a strict-arena submission; an advisory elsewhere) |
+| `FIRSTHAND_UNVERIFIED` | a firsthand item needs `source_origin: human_authored` — a model's text or a roadmap is not your experience |
+| `FIRSTHAND_NOT_PERFORMED` | `planned` / `hypothetical` cannot support "I did" — label the passage hypothetical or supply the real note |
+| `DOCUMENT_DIGEST_UNPINNED` / `_MISMATCH` | pin `expected_sha256` (submission); a mismatch means the bytes changed — re-review |
+| `ORIGIN_CONTRADICTS_LOG` | declared origin and contribution log disagree — correct whichever is false |
+| `HUMAN_ONLY_CONFLICT` / `SUBSTANTIVE_AI_CONTRIBUTION` / `ASSISTANCE_NOT_PERMITTED` | a human-only submission declares a non-human origin, AI prose, or assistance the venue contract does not list — it cannot be submitted |
+| `CONSENT_ABSENT` · `SOURCE_DIGEST_MISMATCH` · `EXCERPT_MISSING` | consent not recorded; source changed; quote is not verbatim in the source |
+| `DOCUMENT_ANCHOR_AMBIGUOUS` | the excerpt occurs twice in the draft — add `start` |
+| `SUPPORT_UNRESOLVED` | a reviewer marked evidence `needs_source` / `conflicted` (HOLD for a strict-arena submission) |
+| `DECISION_TARGET_STALE` · `AUTHORITY_EXPIRED` · `AUTHORITY_VENUE` · `SUBMIT_NOT_PERMITTED` | (release) decision names another digest; grant expired or does not cover this venue; venue contract does not list `submit` |
+
+**Phrase scan.** A match is an editorial *question* — never proof of AI authorship, never an automatic rewrite. Dispositions in the review ledger: `retain_as_written` · `revise_for_clarity` · `needs_source` · `not_applicable`. A valid ledger means *reviewed*, not approved.
+
+**Never do (v9)**
+
+- Never treat an AI-detector score as a target, a gate or a claim. Do not rewrite to move one.
+- Never invent a firsthand scene, a quote, a date or a statistic. Hypothetical stays labeled hypothetical; a roadmap is not a completed build.
+- Never add typos, odd sentence lengths or "human-looking" noise. Repair rhythm because the thought changes shape (`repair_rhythm`; log op `rhythm_repaired`, legacy `variance_injected` still readable).
+- Never ask for a pitch or reply for a **human-only** venue. Produce a research brief and interview prompts only; the person writes the submission.
+- Never read `REVIEW` or `RELEASE_ELIGIBLE` as "human wrote this". They check declarations.
+
+v9 wave states: WI9-00 VALIDATED (owner approval pending) · 01 PROTOTYPE · 02 PLANNED · 03 PROTOTYPE · 04 PLANNED · 05 IN_PROGRESS · 06 PROTOTYPE · 07 PLANNED (benchmark not run) · 08 PLANNED · 09 PLANNED.
 
 ---
 

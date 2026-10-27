@@ -154,3 +154,13 @@ Produce borrower-facing communication — pre-approval letters, rate-sheet expla
 - + `real_estate.md`: co-marketing with realtors
 - + `legal_positioning.md`: disclosure language
 - + `small_business_operator.md`: solo loan officer brand
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** lenders operate under fair-lending, disclosure and recordkeeping rules, and an institution's compliance team may restrict AI drafting of borrower communications. Check the current written policy; unknown means HOLD. Keep borrower data out of outside tools unless policy allows.
+- **Anchored sources:** rates, terms, fees, eligibility and program rules need the current rate sheet or product guideline with its date. Do not state an approval, rate or timeline the file does not support.
+- **Firsthand material:** the officer's actual dealings with this borrower and file. A planned conversation or pending decision is not a completed one.
+- **Disclosure:** regulated communications may require review before sending; record the contribution log and keep the final release with the licensed person.
+- **Phrase matches that may be legitimate:** `generic_closure` ("please let me know if you need anything") and `qualifier_padding` ("subject to approval") often carry required hedges. Do not remove disclaimers that compliance expects.

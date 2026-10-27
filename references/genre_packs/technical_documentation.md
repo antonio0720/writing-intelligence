@@ -152,3 +152,13 @@ Produce developer-facing documentation a competent engineer can follow without a
 - + `academic.md`: technical whitepapers
 - + `email.md`: developer-facing release announcements
 - + `government_brief.md`: agency technical guidance
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** vendor docs, open-source projects and standards bodies often have contribution and licensing rules, and some projects restrict AI-generated contributions or require disclosure. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** versions, flags, commands, API behavior and limits need the source code, spec or a run the author actually did. State the version tested.
+- **Firsthand material:** the author's own run-through, logs and measured results. A planned feature is documented as planned, and an untested example is labeled untested. Do not present generated commands as verified.
+- **Disclosure:** project policies vary; record the contribution log, and keep a human responsible for correctness.
+- **Phrase matches that may be legitimate:** `staged_explanation` ("first, let's", "note that") is normal instructional structure, and `qualifier_padding` ("typically", "may") is often an honest statement of environment dependence. Keep them when they carry a real condition.

@@ -97,3 +97,16 @@ The argument graph passes when:
 - Hidden assumptions are surfaced or accepted as shared.
 - The conclusion is not pure summary.
 - Steel-man counter-argument is addressed in high-stakes contexts.
+
+---
+
+## v9 Meaning-First Order (proposed) — Argument specialization
+
+For persuasive work the v9 additions are the ones the miniature-worlds benchmark failed.
+
+- **Disconfirming evidence.** Record what observation would change the author's mind (E08) and keep honest uncertainty as uncertainty rather than rewriting it into confident generalization.
+- **Competing explanation.** Steel-Man Insertion must be a substantial plausible alternative drawn from the sources; an invented straw man earns nothing (E07).
+- **Causality.** Where the edge says `causes`, name the choice that changed the outcome; if causality is unestablished, the edge is `observation` or `hypothesis` (E06).
+- **Repeated reframing.** Several "not X; instead Y" conclusions are one idea said repeatedly. Test the mechanism and state the real distinction once.
+- **Hypotheticals.** A hypothetical case supports an argument as a labeled illustration only. It never serves as a firsthand case study or as proof.
+- **Human-only venues.** For a human-only outlet, this graph is built as a research brief and interview map for the author, not as an AI-written pitch.

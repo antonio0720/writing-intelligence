@@ -174,3 +174,13 @@ Tweet 8: The close. CTA, link, or punchline.
 - + `small_business_operator.md`: founder voice
 - + `church_leadership.md`: ministry social
 - + `newsletter.md`: cross-pollination
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** each platform, and any brand or sponsor, sets rules on AI-generated content, labeling, impersonation and paid-promotion disclosure, and these change often. Check the platform's current written policy; unknown means HOLD.
+- **Anchored sources:** statistics, quotes and news claims need a source span, and a screenshot or link is not a verified fact. Do not state a rumor as reported.
+- **Firsthand material:** what the poster actually did, saw or made. A planned launch is "coming", not "launched". No borrowed experience or invented personal anecdote.
+- **Disclosure:** some platforms ask for labels on synthetic media; sponsorship disclosures are separate duties. Record the contribution log and keep posting a human decision.
+- **Phrase matches that may be legitimate:** `forced_audience_engagement` ("thoughts?", "drop a comment") and `performed_candor` ("honest take") are native to the medium and can be a sincere ask. Keep them when the post really invites a reply or the candor is real.

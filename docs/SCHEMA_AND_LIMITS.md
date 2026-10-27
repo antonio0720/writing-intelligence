@@ -24,3 +24,26 @@ This system does not use a single weighted sum of `want`, `need`, `arc`, `reader
 ## Contract evolution
 
 Backward-compatible additions require a new `schema` version whenever semantics change, even if field names remain the same. On admission to main, native v6 canonical representations must own identity, time, authority and hashes; this sidecar must be safely discardable and reproducible from that source.
+
+---
+
+## v9 preview: the authorship dossier and its limits
+
+Everything below belongs to the v9 preview (PR #8), not to the v8.0.0 release, and is checked by `scripts/wi-authorship.py`.
+
+**Schema.** [`../schemas/v9/authorship-dossier.schema.json`](../schemas/v9/authorship-dossier.schema.json) — current version `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read. It describes the draft and its pinned `expected_sha256`, evidence spans (unique ids, exact excerpt, optional `start`, pinned source digest, typed `experience_state`, reviewer-recorded `support_status`), the contribution log, the declared origin, the venue contract and, for `release`, the person's `review_decision` and authority grant. `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
+
+**Limits the checker enforces.**
+
+| Limit | Value |
+|---|---|
+| Draft or source file | 5 MB; size is taken from the open descriptor and at most limit + 1 bytes are read |
+| Dossier file | 2 MB |
+| JSON nesting depth | 32 |
+| List and object sizes | bounded |
+| Paths | relative to the dossier directory; absolute paths, `..`, NUL bytes and symlinked files, directories or dossiers are refused |
+| Platform | POSIX only — component-by-component `os.open` with `dir_fd` and `O_NOFOLLOW`; where those do not exist the tool fails closed instead of reading less safely |
+
+**Phrase scanner limits** (`prototypes/wi9/wi9_hotphrases.py`, the 334-rule reference catalog): at most 500,000 characters of input and 500 reported hits per run. When either bound is reached the report sets a `truncated` flag; a truncated report is a partial list, not a clean bill. Quotes, URLs, code spans and fences are masked unless `--include-quotes`; the masking is heuristic.
+
+**What the dossier cannot establish.** Authorship is self-declared and every report says `declaration_status: self_reported`. An exact excerpt is a text anchor, not truth or entailment. Claim discovery depends on the v4 classifier, so a sentence it calls rhetoric is not checked. Python `re` has no timeout, so only reviewed local rule packs are accepted. See the open list in [`../references/v9/defects.md`](../references/v9/defects.md).

@@ -176,3 +176,15 @@ The Evidence Prosecutor emits a ledger that:
 - Records every decision with rationale
 
 If any of the above fails, Pass 5 has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — Pass 5
+
+The ledger is v9 editorial pass 5 (claim integrity) and the basis of claim coverage.
+
+- **Coverage.** Every consequential claim must sit on an anchored evidence span. One safe anchor cannot cover three unsourced claims. `scripts/wi-authorship.py audit` applies this check to a dossier using the v4 claim classifier; the ledger remains the full classifier of claim classes.
+- **First-person claims.** An `observed_fact` or first-person experience claim needs accepted supporting author material. Without it the entry is `missing`, and the result is HOLD, not a softer sentence. `experience_state` planned or hypothetical never satisfies it.
+- **What to compare.** Entity, quantity, timeline, speaker, completion status, cause and uncertainty, against the canonical source.
+- **Limits stated.** A quote match or digest match is a text anchor. It is not proof of semantic entailment and not proof of who wrote the passage; reports say `declaration_status: self_reported`.
+- **Separate verdicts.** A ledger pass is one input to the release gate (v9 editorial pass 9), never the gate itself, and a stylistic or editorial score cannot clear a `delivery_block`.

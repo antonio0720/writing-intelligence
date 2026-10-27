@@ -18,13 +18,15 @@ This is a doctrinal position, not modesty. A certificate is a claim about a pers
 
 Certification that certifies nothing is the worst artifact this project could ship. It would be a scored claim with no evidence pointer — the exact thing the runtime refuses to render as `supported`.
 
-Three ways a certification scheme becomes that, and the countermeasure taken here:
+Three ways a certification scheme becomes that, and the safeguard taken here:
 
-| Failure | How it happens | Countermeasure |
+| Failure | How it happens | Safeguard |
 |---|---|---|
 | Unfalsifiable rubric | Lines like "demonstrates system thinking" cannot be marked wrong | Every rubric line in `exam_rubrics.md` names an artifact and a check. A line a reviewer cannot fail by looking at a file is not a rubric line. |
 | Aggregate score hides a hole | A candidate averages 87 while fabricating one number | Runtime checks are pass / fail / `--`, never summed. `wi constraints` emits no aggregate score and neither does this. |
 | Certificate drifts from the tool | Tiers name capabilities the CLI never had | Every command, flag, capability string and error code named in these files was read out of `scripts/wi.py` or `tests/v6/test_wi6.sh` before it was written down. |
+
+**v9 preview note.** Certification never certifies authorship either. The v9 checker records a *declaration* of who wrote a piece; a candidate can show re-derivable artifacts (a dossier that reaches `REVIEW`, a `HOLD` they can explain, a review ledger bound to exact digests) but no tier says a person wrote a given manuscript. The optional v9 competencies are listed in [`operator_levels.md`](operator_levels.md) and are unscored preview lines until WI9-09.
 
 ## The four tiers
 

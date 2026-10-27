@@ -106,6 +106,17 @@ that cries tampering after an upgrade is a verifier nobody believes the next tim
 ### Neutral
 - ...
 
+## Authorship, venue and evidence impact
+
+Delete this section only if the decision cannot affect what a document claims, who is declared to have written it, or where it may be sent. If you delete it, say why in one line.
+
+- **Authorship declarations.** Does this change `origin`, the contribution log or how either is checked? Remember `scripts/wi-authorship.py` verifies a *declaration*; it does not authenticate a writer.
+- **Venue contracts.** Does it change what a `human_only`, `disclose_ai` or `unrestricted` venue allows, or the rule that a venue rule outranks a genre pack?
+- **Evidence and experience.** Does it change claim coverage, `support_status` or which `experience_state` values may back a firsthand claim? Hypothetical and planned items must stay labeled.
+- **Detectors.** Confirm no detector score becomes a target, gate or claim.
+- **Release.** Confirm nothing here makes `REVIEW` or `RELEASE_ELIGIBLE` act as a send.
+- **State honestly** whether the change is proposed, prototyped, implemented, measured or released; do not promote one to another.
+
 ## Alternatives considered
 
 - **Option A**: <description>. Rejected because <reason>.

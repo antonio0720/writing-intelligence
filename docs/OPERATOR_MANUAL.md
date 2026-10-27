@@ -12,6 +12,31 @@ The disciplines below still hold. For fiction, v8 adds four engines (see [`../re
 
 Pattern: *author brief → projection → validate → audit / evaluate / classify → editorial conversation → revised projection → as-of / impact → gate (HOLD) → human editor → reader study.*
 
+## v9 preview — operating `audit`, `release` and the review ledger
+
+v9 is a **preview on PR #8**, not a release; v8.0.0 is the published version. These are the operating rules for the two v9 tools you can run today. Reference: [`../references/v9/README.md`](../references/v9/README.md).
+
+1. **Gather the sources first, then the draft.** A dossier names the draft (with a pinned `expected_sha256`), the evidence spans that support it, the contribution log (who or what wrote which part), the declared origin and the venue contract. Source before style: nothing here helps you invent an experience the sources do not contain.
+2. **Run `audit`; read the whole report.** `REVIEW` (exit 0) means the limited checks passed and a person still has to decide. `HOLD` (exit 3) means stop. `audit` never authorizes release and every report carries `declaration_status: self_reported`.
+3. **Read the HOLD code, then fix the cause, never the check.** The codes you will meet most:
+
+| Reading | What it means | What to do |
+|---|---|---|
+| Unanchored consequential claim (claim coverage) | The v4 classifier found a claim in the draft that no anchored evidence span overlaps | Add the source span, soften the claim, or cut it. One anchor does not carry three claims |
+| `ORIGIN_CONTRADICTS_LOG` | Declared `human_authored`, but the contribution log shows AI prose | Correct the declaration or the log to what happened |
+| Planned or hypothetical `experience_state` backing a firsthand claim | A firsthand "I did" rests on something that was only planned or imagined | Keep it labeled hypothetical, or replace it with a confirmed experience |
+| `needs_source` or `conflicted` support | A reviewer recorded the evidence does not support the claim | Resolve it; a submission holds until you do |
+| Draft digest mismatch / ambiguous anchor | The draft changed after it was pinned, or an excerpt appears twice and needs `start` | Re-pin the digest after review; add `start` |
+| Human-only venue with unlisted assistance | The venue contract does not list the help recorded in the log | Remove the AI-written or AI-rewritten package; research briefs may be prepared separately |
+
+4. **Treat a resolved anchor as presence, not truth.** `ANCHOR_RESOLVED` means the exact excerpt exists at that place. Whether it supports the claim is `support_status`, recorded by a reviewer.
+5. **Run `release` only after a person has decided.** It needs a REVIEW audit, a `review_decision` bound to the exact draft sha256, an unexpired grant held by that person that covers `release` and the named venue, a venue contract listing `submit`, and an unpassed deadline. The grant is a declaration until WI9-08 binds it to the v6 grant store. `RELEASE_ELIGIBLE` transmits nothing; you still send it, by hand.
+6. **Use the phrase scan as an editor's question list.** `wi9_hotphrases.py scan` reports where a pattern appears (code-point offsets, line and column, document and rule digests). A match asks "does this sentence carry the author's thought?" It is never proof that anyone or anything wrote the passage, and never an automatic rewrite.
+7. **Record each decision in the review ledger.** `wi9_phrase_review.py --input F --report R --decisions D` binds each disposition (`retain_as_written`, `revise_for_clarity`, `needs_source`, `not_applicable`) to the exact document and rule digests, with a rationale, the reviewer's name and an offset-aware ISO 8601 review time that is not in the future. If the document or the rules change, the ledger no longer matches and you review again. A valid ledger means *reviewed*, never publication-approved, and the reviewer name is a self-declaration.
+8. **Never optimize to a detector.** Do not insert typos, shuffle sentence lengths or paraphrase to move a vendor score. If a detector result bothers you, ask the editorial question it points at and answer it from your sources and your thinking. The rhythm operator is `repair_rhythm`, applied because the thought changes shape.
+
+What v9 cannot do, so you do not ask it to: it cannot prove a person wrote a manuscript; it cannot decide a claim is true; it has not been benchmarked against editors (WI9-07 has not run); and it has no consented author corpus.
+
 ## The Operator's Discipline
 
 1. **Always declare the intake contract.** Don't trust auto-detection on important work.

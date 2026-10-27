@@ -63,6 +63,10 @@ Exit codes, all four engines: `0` analysis ran or mechanical-only pass · `2` ma
 - **Respect the genre.** A flat protagonist, an open ending, a quiet climax and a story with no Japanese folklore at all are valid inputs, not failures.
 - **For Japan-set work**, separate `external_fact` (needs a scoped source), `fictional_canon` (needs the author's adoption) and `interpretation` (cannot be machine-certified). Do not infer a unique reading of a name from its kanji. Ainu, Ryukyuan and living religious traditions need the right kind of source before publication.
 
+## v9 preview — authorship and firsthand material (proposed, not released)
+
+8.0.0 is the release; v9 is a preview on PR #8. For fiction and memoir-adjacent work: the author's lived experience is evidence they supply, never something to invent for them — do not write a "true" scene, a confession or a source the author has not provided, and keep hypotheticals labeled. Origin (`human_authored`, `ai_assisted`, `ai_generated`) is the author's honest declaration; a story that passes a v8 structural gate says nothing about who wrote it, and a convincing voice does not change it. For a venue that requires a human author, provide analysis and questions, not the submission itself. The declaration checker (`scripts/wi-authorship.py`) lives in the runtime repository, not in this bundle; it never authenticates a writer. No benchmark result exists for v9.
+
 ## What does not run
 
 Extraction of every scene from a full manuscript, canonical `wi.py` and v6 graph integration, model-based literary judgment, reader recruitment, cultural authenticity adjudication, Japanese morphological parsing, EPUB or print proofs, publishing. These are specified and planned — waves FI8-03–06 and WI8-00–WI8-43 in the runtime's `plans/v8.manifest.yaml` — and are never presented as working.

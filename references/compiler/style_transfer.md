@@ -183,3 +183,16 @@ For academic work, chain transfers so the student's own thinking stays visible:
 The content started with the author and every step is on the record. The
 academic polish refines the authorship; it never hides how the work was made.
 This is not a detector-evasion procedure (`references/v4/NON_GOALS.md`).
+
+---
+
+## v9 Meaning-First Order (proposed) — Style Transfer Engine
+
+Style transfer is v9 editorial pass 7 (author voice fidelity) applied across genres, with firm limits.
+
+- **Transferring style never transfers authorship.** A text transferred into someone's voice keeps its declared origin (`human_authored`, `ai_assisted`, `ai_generated`). A voice match cannot change it and cannot certify who wrote anything.
+- **Real third parties.** Never imitate a real third party's voice to pass as them. For a human-only venue, do not run transfer on a submission at all.
+- **Voice source.** Use the requesting author's consented human-origin samples (three or more per genre, 500+ words each); do not copy distinctive private phrases from another person's work without permission.
+- **Content atoms.** Step 1 atoms carry evidence IDs and `experience_state`; reconstruction adds no new firsthand event, quote or detail. Step 6 already forbids added content; v9 adds that a hypothetical stays labeled hypothetical.
+- **Decision.** The author sees before and after and accepts or rejects semantic changes. Voice statistics are secondary to that approval.
+- **Chaining.** The academic chain above stands. Never add imperfections the author did not write; record the contribution log and any disclosure the institution requires.

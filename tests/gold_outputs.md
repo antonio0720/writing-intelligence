@@ -4,7 +4,9 @@
 
 These are before/after pairs showing the compiler's transformations at
 sentence, paragraph, and section level. They serve as calibration targets
-for output quality.
+for output quality. The "Score" lines are illustrative rubric judgments written by
+the maintainers for teaching; they are not measured benchmark results and no
+v9 quality measurement has been run.
 
 ---
 
@@ -143,6 +145,8 @@ all stakeholders. Moving forward, it will be critical to ensure that our
 strategic priorities are properly communicated across the organization."
 
 ### Example 6: Strategy Section (After)
+
+Source card (synthetic, the author's operating notes): *$8.4M ARR flat three quarters; NRR 108% → 94%; two top-10 accounts in procurement review; 14 alternatives since 2022; last differentiating release Sept 2024; API layer requested by 7 of 10 at-risk accounts; engineering estimate 11 weeks; mobile can absorb a 6-week delay.* Every figure below comes from this card; the company is invented.
 
 "**Current state**: Revenue is $8.4M ARR, flat for three quarters. Net
 revenue retention dropped from 108% to 94% since Q1. Two of our top-10

@@ -12,21 +12,39 @@ This one does all four, offline, with no model running, and can prove it to some
 
 **Free. Open source. MIT. No account, no server, no API key, no telemetry. Forever.**
 
+*Release status: **8.0.0** is the published release. A **v9 preview** (authorship and venue checks) is proposed on PR #8 and is not released — see [below](#writing-intelligence-v9--preview-on-pr-8-not-released).*
+
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com)
 
-[**What v8 is**](#what-v8-is-in-one-paragraph) · [**See it work**](#see-it-work) · [**60-second tour**](#the-60-second-tour) · [**Install**](#install) · [**The eighteen laws**](#the-eighteen-laws) · [**What runs and what does not**](#what-runs-and-what-does-not) · [**What it refuses to do**](#what-it-refuses-to-do)
+[**v9 preview**](#writing-intelligence-v9--preview-on-pr-8-not-released) · [**What v8 is**](#what-v8-is-in-one-paragraph) · [**See it work**](#see-it-work) · [**60-second tour**](#the-60-second-tour) · [**Install**](#install) · [**The eighteen laws**](#the-eighteen-laws) · [**What runs and what does not**](#what-runs-and-what-does-not) · [**What it refuses to do**](#what-it-refuses-to-do)
 
 ---
 
-## Writing Intelligence v9 — in progress, not released
+## Writing Intelligence v9 — preview on PR #8, not released
 
-**8.0.0 is the release.** v9 (program WI9-AUTHORSHIP, owner Antonio T. Smith Jr.) is open as draft [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8) and is not shipped. Its aim: keep the author's real experience, positions, voice and evidence intact, and enforce a venue's authorship rules — without fabricated anecdotes and without detector evasion.
+**8.0.0 is the release.** v9 (program WI9-AUTHORSHIP, owner Antonio T. Smith Jr.) is open as draft [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8). It is **proposed, not shipped**, and the release is on HOLD until the final wave (WI9-09: independent review and the owner's release decision). Nothing in v4–v8 changed behaviour. Its aim: keep the author's real experience, positions, voice and evidence intact, and enforce a venue's authorship rules — without fabricated anecdotes and without detector evasion.
 
-- **Authorship-claim declaration checker** — [`scripts/wi-authorship.py`](scripts/wi-authorship.py) `audit | release`. It checks self-reported origin, consent and contribution history for consistency with each other and with the venue; holds human-only submissions that declare AI prose or unrecorded AI assistance; requires every consequential claim the v4 classifier finds to be anchored to an exact span of a pinned source; and binds a person's release decision and authority grant to the exact draft digest. `REVIEW` is never permission to send; `RELEASE_ELIGIBLE` is never proof of human authorship; nothing is transmitted.
-- **Experimental reference kernel** — [`prototypes/wi9/`](prototypes/wi9/README.md): a 334-rule editorial phrase scanner (321 literals, 13 bounded regex rules; every match is an editorial question, never an AI verdict), a digest-bound human review ledger, and a model-neutral composition contract that refuses to request prose for human-only venues and never reaches a release state.
-- **Doctrine repaired** — the v8 craft library no longer prescribes sentence-length quotas, synonym swaps or other edits aimed at detector statistics; `repair_rhythm` replaces the retired v8 length-quota operator, and rhythm is judged by a reader, not a statistic.
+**What exists on the branch** (all of it experimental and reviewable):
 
-**AI-detector scores are never a target, a gate or a claim.** An external detector result may be archived as an observation and nothing more. Status and remaining waves: [`references/v9/README.md`](references/v9/README.md) · [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml).
+| Piece | What it is | Where |
+|---|---|---|
+| **Authorship-claim declaration checker** | `scripts/wi-authorship.py audit \| release`. Checks self-reported origin, consent and contribution history for consistency with each other and with the venue; holds human-only submissions that declare AI prose or unlisted assistance; requires every consequential claim the v4 classifier finds to overlap an anchored span of a pinned source; binds a person's release decision and authority grant to the exact draft digest. `REVIEW` (exit 0) is never permission to send; `RELEASE_ELIGIBLE` (exit 0) is never proof of human authorship; `HOLD` is exit 3; nothing is transmitted. Every report says `declaration_status: self_reported`. | [`scripts/wi-authorship.py`](scripts/wi-authorship.py) · [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `-1` still read) |
+| **Experimental reference kernel** | A 334-rule editorial phrase scanner (321 literal, 13 regex, 11 categories; every match is an editorial question, never an AI verdict), a human review ledger bound to exact document and rule digests, voice-sample statistics, and a model-neutral composition contract that refuses to request prose for human-only venues and never reaches a release state. | [`prototypes/wi9/`](prototypes/wi9/README.md) |
+| **Doctrine repair** | The v8 craft library no longer prescribes sentence-length quotas, synonym swaps or other edits aimed at detector statistics. `repair_rhythm` replaces the retired v8 length-quota operator; rhythm is judged by a reader, not a statistic. | [`references/v9/defects.md`](references/v9/defects.md) (P0-12, D-14) |
+| **Records** | Defect register, wave states, editorial protocol, blinded-benchmark design, engineering handoff, receipts. | [`references/v9/README.md`](references/v9/README.md) · [`defects.md`](references/v9/defects.md) · [`WAVES.yaml`](references/v9/WAVES.yaml) · [`EDITORIAL_PROTOCOL.md`](references/v9/EDITORIAL_PROTOCOL.md) · [`QUALITY_BENCHMARK.md`](references/v9/QUALITY_BENCHMARK.md) · [`ENGINEERING_HANDOFF.md`](references/v9/ENGINEERING_HANDOFF.md) · [`plans/receipts/WI9-00.json`](plans/receipts/WI9-00.json), [`WI9-P0.json`](plans/receipts/WI9-P0.json) |
+
+```bash
+python3 scripts/wi-authorship.py audit   --input dossier.json   # REVIEW (0) or HOLD (3)
+python3 scripts/wi-authorship.py release --input dossier.json   # RELEASE_ELIGIBLE (0) or HOLD (3); sends nothing
+python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format text
+python3 -m unittest discover -s tests/v9 -p 'test_*.py'
+```
+
+**Where the waves stand** ([`WAVES.yaml`](references/v9/WAVES.yaml)): WI9-00 baseline VALIDATED (owner approval pending) · WI9-01 authorship contract PROTOTYPE · WI9-02 firsthand vault PLANNED · WI9-03 voice baseline PROTOTYPE (statistics only, no consented corpus) · WI9-04 thought fidelity PLANNED · WI9-05 craft repair IN_PROGRESS · WI9-06 human-only venue hold PROTOTYPE · WI9-07 blinded editorial benchmark PLANNED — **not executed** · WI9-08 canonical integration PLANNED · WI9-09 independent review PLANNED. Roadmap view: [`ROADMAP.md`](ROADMAP.md). How to walk through it: [`USER_GUIDE.md`](USER_GUIDE.md#authorship-and-venue-checks-v9-preview).
+
+**What v9 does not do.** It cannot authenticate who wrote a passage or show a source is true; an exact excerpt is a text anchor, not entailment. It reports no quality scores or benchmark results — none exist. It has no consented author corpus and no external review yet, runs only on POSIX, and its authority grant is a declaration until WI9-08 binds it to the v6 grant store.
+
+**AI-detector scores are never a target, a gate or a claim.** An external detector result may be archived as an observation and nothing more.
 
 ---
 
@@ -458,6 +476,8 @@ Law C — *never report work not done* — applies to this project's claims abou
 
 **Executable today, offline, with no model:** the whole v4 floor (`preserve` · `scan-sources` · `extract-claims` · `verify` · `gate`); the whole v5 graph (`init` · `ingest` · `atomize` · `anchor` · `graph` · `impact` · `diff` · `test` · `explain` · `bundle` · `verify-release` · `doctor`); and the sixteen v6 commands (`canon` · `branch` · `propose` · `proposals` · `simulate` · `decide` · `commit` · `log` · `merge` · `conflicts` · `authority` · `obligations` · `as-of` · `constraints` · `capsule` · `why`).
 
+**Executable as a v9 preview, offline, with no model (not released):** `scripts/wi-authorship.py` (`audit` · `release`) and the reference kernel in `prototypes/wi9/` (`wi9_hotphrases.py scan`, `wi9_phrase_review.py`, `wi9_core.py`). They check declarations and flag editorial questions; they do not authenticate a writer, verify sources, rewrite prose or run a detector. The 60-case benchmark (WI9-07) has not run.
+
 **Executable in v8, offline, with no model:** `scripts/wi-fiction.py` (`validate` · `audit` · `gate` · `text-signals` · `explain-rule` · `catalog`), `scripts/wi-arc.py` (`validate` · `evaluate` · `gate` · `as-of` · `impact` · `diff` · `classify` · `rules`), `extensions/wi8/craft03/scripts/wi-craft.py` (`evaluate` · `validate` · `as-of` · `gate` · `rules` · `schema`) and `extensions/wi8/japan04/cli/wi8_japan.py` (`check` · `preflight` · `init` · `draft-save` · `draft-read` · `draft-propose` · `draft-decide` · `draft-history` · `publish-preview` · `migration-preview` · `studio` · `untrusted-scan`). They read a typed JSON projection of a story; **they do not read a whole manuscript, judge literary quality, recruit readers, or certify cultural accuracy** — those are planned waves in [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
 **Specified, normatively described, and not executable anywhere:**
@@ -482,6 +502,7 @@ Law C — *never report work not done* — applies to this project's claims abou
 The refusals are load-bearing, not decorative. Full reasoning in [`references/v6/NON_GOALS.md`](references/v6/NON_GOALS.md).
 
 - **Detector evasion.** Anti-slop is a craft objective — prose that does not pattern-match to machine writing because it is genuinely better built. It is not a laundering service.
+- **Passing off AI prose as a person's, or writing for a human-only venue (v9 preview).** The authorship checker holds a human-only submission that declares AI prose or unlisted assistance; it never invents a firsthand scene, never adds noise to look human, and never treats a detector score as a target. For a human-only venue the permitted output is a research brief.
 - **Source generation.** It will never construct a citation. If a claim needs support and none exists, the output is `needs_source`. Inventing a plausible reference is the single most damaging thing this system could do, and the anchor model exists so it cannot happen quietly.
 - **Truth verification.** It verifies support within the sources you supplied. It cannot tell you the source is right, and it says so the first time it says anything.
 - **A universal truth score.** There is no number that stands in for the counts, and no overall health gauge. A dashboard is where a system with four honest reliability types quietly grows a fifth one called *overall*.
@@ -563,6 +584,11 @@ extensions/wi8/japan04/   v8 Japan Story OS (JP-181..JP-340)
 rules/                    v8 requirement registers
 schemas/v8/               v8 projection, findings, gate and report schemas
 packs/story/              The story bundle's SKILL.md
+references/v9/            v9 preview: README, defect register, WAVES.yaml, editorial protocol, benchmark design, handoff
+scripts/wi-authorship.py  v9 preview: authorship-claim declaration checker (audit, release)
+schemas/v9/               v9 preview: authorship-dossier schema (wi9-authorship-2)
+prototypes/wi9/           v9 preview: phrase scanner, review ledger, composition contract, reference kernel
+tests/v9/                 v9 preview: authorship, schema-parity and doctrine tests
 references/v7/            The Institutional Intelligence program and RFC-0001
 references/v6/            The sovereign meaning runtime (24 documents)
   CONSTITUTION              The eighteen laws, the twelve runtime layers, the failure codes
@@ -619,6 +645,7 @@ services/api/             REST reference runtime for the v3 craft kernel
 | [`USER_GUIDE.md`](USER_GUIDE.md) | Working with the system day to day |
 | [`CHEATSHEET.md`](CHEATSHEET.md) | One page, every command, mode, status and error code |
 | [`docs/INSTALL.md`](docs/INSTALL.md) | Every surface and what each can actually do |
+| [`references/v9/README.md`](references/v9/README.md) | The v9 preview (PR #8, not released) — authorship and venue checks, defect register, wave states |
 | [`references/v8/README.md`](references/v8/README.md) | Index of v8 Story Intelligence — the four parts, reading order, status |
 | [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md) | What 8.0.0 ships and what it does not |
 | [`references/v7/README.md`](references/v7/README.md) | The v7 Institutional Intelligence program |

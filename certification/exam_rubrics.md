@@ -173,3 +173,11 @@ Steward is the shortest audit and the hardest to pass. Nothing is submitted in a
 One reviewer: the maintainer, Antonio T. Smith Jr.
 
 This is a limit and it is stated in `README.md` under "What certification cannot tell you". Cross-reviewer calibration has not been demonstrated, because there has never been a second reviewer. Architect-tier operators may be invited into the pool; when a second reviewer exists, two reviewers will mark one application independently and the disagreements will be published, because that is the only way to find out whether the checklists mean the same thing to two people.
+
+---
+
+## v9 preview exercise (optional)
+
+*Preview (PR #8). Not required by any tier until the owner adopts it at WI9-09. Use only synthetic material; the reviewer must label it synthetic.*
+
+**Exercise 4 — Read an authorship HOLD.** Give the candidate a synthetic dossier that `scripts/wi-authorship.py audit` holds (for example a first-person claim backed only by a hypothetical item, or a draft edited after its digest was pinned). The candidate states the HOLD code, the input that caused it and the smallest honest correction. The reviewer re-runs `audit` on the corrected dossier. `ok` when it reaches `REVIEW` for a reason the candidate can explain and the candidate says `REVIEW` is not permission to send. `FAIL` if the candidate edits the checker, widens an anchor to swallow a claim, or relabels a hypothetical as confirmed. Exit codes: `REVIEW` 0, `HOLD` 3.

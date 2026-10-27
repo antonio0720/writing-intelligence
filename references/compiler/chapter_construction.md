@@ -401,3 +401,11 @@ Before declaring a chapter complete, audit:
 | Aftermath resonance | 8 | Final image/line burns into reader memory |
 
 **Grade thresholds**: Same as master scoring system (below 70 = weak, 70-79 = usable, 80-89 = strong, 90+ = masterpiece).
+
+---
+
+## v9 Meaning-First Order (proposed) — Chapter construction
+
+v9 leaves this fiction doctrine, its checklist and its scoring addendum unchanged. v9 adds no chapter gate, no new tension rule and no score.
+
+Where v9 touches it: the "load-bearing detail" rule is craft, not authorship evidence. A chapter checklist pass is not a release, and a chapter written or rewritten with AI help keeps that in its contribution log. Details in narrative nonfiction need a source, and a hypothetical scene is labeled.

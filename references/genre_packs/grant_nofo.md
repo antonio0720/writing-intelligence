@@ -145,3 +145,13 @@ Cases `GRANT-01` through `GRANT-05` in `benchmarks/cases/grant_narrative.md`.
 - + `small_business_operator.md`: SBA and community development capital
 - + `medical_writing.md`: health services grants
 - + `academic.md`: research grants (NIH, NSF)
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** each funder's NOFO or RFP states eligibility, page limits and any AI-use or certification clause; some require certifying that the application is the applicant's own. Check the current written text; unknown means HOLD.
+- **Anchored sources:** needs statements, prior outcomes, budgets and cited statistics need a dated source span. A funder's priorities quoted from the solicitation must match the solicitation exactly.
+- **Firsthand material:** the applicant's own track record, pilots and partner letters. A planned program is described as planned; a roadmap is not a completed project or a measured outcome.
+- **Disclosure:** certifications are made by the named applicant, so a model cannot sign them. Record the contribution log for the signatory.
+- **Phrase matches that may be legitimate:** `marketing_abstraction` words ("impact", "capacity", "sustainable") are often the solicitation's own required vocabulary. Echoing it is compliance; the editorial question is whether a specific figure sits beside it.

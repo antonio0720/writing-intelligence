@@ -369,3 +369,14 @@ Prioritize based on production cost vs. audience impact:
 | Cross-platform integration | 10 | Formats reference and enhance each other? |
 | No-spoiler architecture | 10 | Primary text remains complete without transmedia? |
 | Emotional impact | 10 | Does the transmedia content make the reader feel something new? |
+
+## v9: authorship, sources and venue
+
+*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Gates unchanged:** v9 does not alter the character-deepening gates. This section adds provenance and venue notes only.
+- **Venue:** games, shows, comics and licensed franchises carry contract and bible rules, often with IP ownership and AI clauses. Check the current written terms; unknown means HOLD.
+- **Anchored sources:** canon facts (dates, relationships, established abilities) need a span in the series bible or published work; do not contradict canon silently. A proposed backstory is labeled as proposed.
+- **Firsthand material:** the author's own creation notes and drafts. For characters drawn from real people or the author's life, no borrowed memory and no unconsented portrayal of a real person.
+- **Disclosure:** follows the contract and the contribution log.
+- **Phrase matches that may be legitimate:** in character dialogue and tie-in copy, matches are voice and brand diction. Review only when many characters share one verbal tic.

@@ -67,3 +67,14 @@ For collisions not covered by the defaults, see `references/diagnostics/genre_co
 2. The user can override auto-detection. User wins.
 3. Every conflict must produce a `collision_resolutions` entry. Silent resolution is forbidden.
 4. The stack drives Pass 4 (architecture), Pass 7 (voice weighting), Pass 8 (arena), Pass 10 (scoring weight).
+
+---
+
+## v9 Meaning-First Order (proposed) — Genre stack
+
+Genre packs are stylistic conventions; v9 sets what they cannot do.
+
+- **Conventions yield to evidence.** A genre's opening or closing convention cannot add an unsourced scene, anecdote or statistic.
+- **Venue stack.** A declared `human_only` venue rule belongs in the stack as a top-priority conflict dimension and overrides any genre or arena pack.
+- **Voice layer.** Voiceprints are style, not provenance; they cannot change declared authorship or make a text eligible for a venue.
+- **Questions not mandates.** Phrase and template lint from a genre pack is an editorial question, subject to the author's retain-or-revise decision.

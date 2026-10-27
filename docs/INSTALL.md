@@ -465,6 +465,35 @@ CI also checks that every relative link in this repository resolves (`python3 sc
 
 ---
 
+## Running the v9 preview tools
+
+**v9 is a preview, not a release.** v8.0.0 is the published version and every install route above installs v8. The v9 work lives on the proposal branch (PR #8) and has no installer: you run it from a repository checkout, standard library only, offline, Python 3.8 or newer. It does not change `scripts/wi.py`, `SKILL.md` or the bundles. See [`../references/v9/README.md`](../references/v9/README.md).
+
+```bash
+# 1. The authorship-claim declaration checker (not an authorship verifier)
+python3 scripts/wi-authorship.py audit   --input path/to/dossier.json   # REVIEW (exit 0) or HOLD (exit 3)
+python3 scripts/wi-authorship.py release --input path/to/dossier.json   # RELEASE_ELIGIBLE (exit 0) or HOLD (exit 3); transmits nothing
+
+# 2. The reference kernel (editorial questions, not detection)
+python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format text
+python3 prototypes/wi9/wi9_core.py preflight --root prototypes/wi9/examples --input research_case.json
+
+# 3. The tests
+python3 -m unittest discover -s tests/v9 -p 'test_*.py'            # checker, schema parity, meaning-led doctrine
+python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py' # reference kernel
+bash tests/v7/test_wi7.sh                                           # version strings must still agree
+```
+
+Three things to know before you rely on any of it:
+
+- **`REVIEW` is not permission to send.** `audit` can never emit a release state; every report says `declaration_status: self_reported`, because nothing here authenticates a writer. `RELEASE_ELIGIBLE` is a separate subcommand with stricter inputs and still sends nothing.
+- **POSIX only.** The checker reads files component by component with `O_NOFOLLOW` under the dossier's directory. Where `dir_fd` and `O_NOFOLLOW` do not exist (Windows), it refuses to run rather than read less safely. Paths in a dossier resolve relative to the dossier, never absolute, never `..`, never through a symlink.
+- **Nothing is installed or sent.** No network, no service, no model. A source you list in a dossier is read from disk and hashed, not uploaded.
+
+The dossier format and its limits are in [`SCHEMA_AND_LIMITS.md`](SCHEMA_AND_LIMITS.md). How to read a `HOLD` is in [`OPERATOR_MANUAL.md`](OPERATOR_MANUAL.md).
+
+---
+
 ## Troubleshooting
 
 **The skill does not trigger in Claude Code.** Confirm `~/.claude/skills/writing-intelligence/SKILL.md` exists and its YAML frontmatter is intact — the `name` and `description` fields are what the loader reads. Restart after installing.

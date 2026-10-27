@@ -247,10 +247,14 @@ Why this scores 91:
 
 Voice: investor_precision (adapted) | Genre: government_brief | Audience: agency director
 
+Synthetic throughout: the department, program, statute, policy number, counties and
+enforcement matter below are invented teaching fixtures. A real brief cites the real
+statute and names real places only from a source card the author supplied.
+
 "SUBJECT: Decision Required — FY2026 Water Infrastructure Grant Allocation
 
-ISSUE: The Department must allocate $47.3M in remaining FY2026 DWSRF funds
-by September 30 or forfeit the balance under 42 U.S.C. § 300j-12(a)(4).
+ISSUE: The Department must allocate $47.3M in remaining FY2026 program funds
+by September 30 or forfeit the balance under [statute citation — needs source].
 
 BACKGROUND: 14 eligible applications remain in review. Three exceed $10M and
 require Assistant Secretary concurrence per Departmental Policy 430.1. Current
@@ -263,7 +267,7 @@ Option A — Prioritize by population served. Process the 8 applications
 covering the largest populations first. Allocates $38.1M. Remaining $9.2M
 and 6 applications forfeit or carry to FY2027 under the extension provision.
 Risk: Two small-system applications with acute contamination issues
-(Denton County, TX; Lowndes County, AL) would not be processed.
+(County A; County B — synthetic) would not be processed.
 
 Option B — Prioritize by health risk severity. Process the 3 acute
 contamination cases first, then fill remaining capacity by population.
@@ -273,9 +277,9 @@ tighter. Requires overtime authorization for the review team.
 RECOMMENDATION: Option B. The $3.5M additional allocation and coverage of
 acute contamination cases outweigh the overtime cost (estimated $34,000).
 The two contamination cases involve documented health impacts currently
-under EPA enforcement action.
+under an open enforcement action (synthetic).
 
-COORDINATION: OCSPP concurs. OW concurs. Budget Office has confirmed
+COORDINATION: Office 1 concurs. Office 2 concurs. Budget Office has confirmed
 overtime authority exists under current CR.
 
 DECISION NEEDED BY: August 15, 2026."

@@ -122,3 +122,11 @@ The scene graph passes when:
 - Setting is auditable as a force, not a backdrop.
 - Dialogue exchanges average 2+ active tension elements.
 - The button is identified.
+
+---
+
+## v9 Meaning-First Order (proposed) — Scene graph
+
+v9 leaves the scene-graph node types, audit questions and confined-space rules unchanged.
+
+What v9 adds for a scene: scene changes must constrain choices and produce aftermath rather than repeat atmosphere (editorial pass 3), and an edit that adds or removes a beat is logged as an authored revision or substantive generation, not a mechanical fix. Fiction scenes do not need the nonfiction evidence IDs, but a narrative-nonfiction scene that claims a real event does, and a hypothetical scene must stay labeled hypothetical.

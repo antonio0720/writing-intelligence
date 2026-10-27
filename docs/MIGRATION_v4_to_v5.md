@@ -1,5 +1,7 @@
 # Migrating v4 → v5
 
+> **v9 note:** this guide is historical and unchanged. For the current upgrade path, including the v8 -> v9 preview (proposed, not released), see the v8 -> v9 section of [`UPGRADE_README.md`](../UPGRADE_README.md).
+
 **Short version: nothing breaks.** v5 is additive. The eleven passes, twelve engines, twelve agents, genre packs, voiceprints, schemas and anti-slop doctrine are unchanged, and so are the six v4 laws. Every v4 command takes the same arguments and produces the same verdict words.
 
 What v5 adds is memory: a workspace that knows what supports what, so an edit made three weeks after a check does not quietly inherit the check's result.

@@ -151,3 +151,15 @@ The Corpus Auditor produces a corpus map that:
 - Marks no `unsafe` source as usable
 
 If any of the above fails, Pass 2 has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — Pass 2
+
+Corpus governance is the custody half of v9 editorial passes 1 and 5.
+
+- **Source custody (E02).** Keep dated human notes, interview statements, prior writing, the original draft and cited research as separate source records. A model's memory of a claim, or a `generated_idea`, does not become an author observation by being written down; it stays non-citable, as the Source Types table already says.
+- **Experience state.** Add a state alongside `Source Status`: performed, planned or hypothetical. A `planned` or hypothetical item cannot support a first-person claim of having done something. A company roadmap is `planned`, not `performed`.
+- **Voice samples are sources too.** Samples used for voice baseline must be consented, human-origin, three or more per genre at 500+ words each, and are held apart from the material being edited. Voice statistics cannot authenticate origin.
+- **Fabrication Detection.** The existing blockers extend to an invented firsthand scene or composite anecdote presented as lived. That is a block, not a warning.
+- **Boundary.** Source status and exact-excerpt presence are text anchors. They do not prove truth, and they do not authenticate that a named person wrote the work.
