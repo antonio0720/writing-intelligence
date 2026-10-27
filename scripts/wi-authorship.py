@@ -62,6 +62,35 @@ def analyze(dossier, root):
     if venue == "human_only" and intended == "submission" and origin != "human_authored":
         flag("HUMAN_ONLY_CONFLICT", "hold",
              "Human-only submissions cannot package AI-generated or AI-assisted authorship.")
+    # Provenance is self-declared and must be complete enough to expose a
+    # conflict. This cannot establish the truth of any human-authorship claim.
+    contribution_log = dossier.get("contribution_log")
+    if intended == "submission" and not isinstance(contribution_log, list):
+        flag("CONTRIBUTION_LOG_REQUIRED", "hold",
+             "Submissions require a contribution history; missing data cannot certify eligibility.")
+        contribution_log = []
+    elif contribution_log is None:
+        contribution_log = []
+    elif not isinstance(contribution_log, list):
+        flag("CONTRIBUTION_LOG_INVALID", "hold", "contribution_log must be a list.")
+        contribution_log = []
+    for index, change in enumerate(contribution_log):
+        tag = "contribution_log[%d]" % index
+        if not isinstance(change, dict):
+            flag("CONTRIBUTION_INVALID", "hold", "Contribution must be an object.", tag)
+            continue
+        kind = change.get("kind")
+        if kind not in {"human_original", "ai_research", "ai_generated_prose",
+                        "ai_substantive_rewrite", "human_edit", "mechanical_proofread"}:
+            flag("CONTRIBUTION_KIND_INVALID", "hold", "Unknown contribution kind.", tag)
+        if venue == "human_only" and intended == "submission" and kind in {
+                "ai_generated_prose", "ai_substantive_rewrite"}:
+            flag("SUBSTANTIVE_AI_CONTRIBUTION", "hold",
+                 "A declared AI prose contribution conflicts with human-only venue rules.", tag)
+    if venue == "human_only" and intended == "submission" and not contribution_log:
+        flag("CONTRIBUTION_HISTORY_EMPTY", "hold",
+             "Human-only submission needs an explicit authorship history.")
+
     if venue == "human_only" and intended == "research_demo" and origin != "human_authored":
         flag("RESEARCH_ONLY", "info", "AI material here is research-only, not a pitch.")
     if venue == "disclose_ai" and origin != "human_authored":
@@ -72,6 +101,33 @@ def analyze(dossier, root):
         body, document_hash = safe_read(root, doc.get("path"))
     except (OSError, UnicodeError, ValueError, TypeError) as exc:
         flag("DOCUMENT_NOT_READABLE", "hold", str(exc))
+
+    # A source quote can exist while the submitted manuscript says something
+    # entirely unrelated. Submission candidates must supply exact text anchors
+    # into the candidate document, plus separate evidence anchors. Claims which
+    # cannot be anchored exactly require human review, not a pass.
+    passages = dossier.get("document_claim_anchors", [])
+    if intended == "submission" and doc.get("arena") in {"journalism", "academic", "legal", "government"}:
+        if not isinstance(passages, list) or not passages:
+            flag("DOCUMENT_CLAIM_ANCHORS_REQUIRED", "hold",
+                 "Consequential submissions must anchor claims to draft passages.")
+    if passages is not None and not isinstance(passages, list):
+        flag("DOCUMENT_CLAIM_ANCHORS_INVALID", "hold", "document_claim_anchors must be a list.")
+        passages = []
+    for index, passage in enumerate(passages or []):
+        tag = "document_claim_anchors[%d]" % index
+        if not isinstance(passage, dict):
+            flag("DOCUMENT_ANCHOR_INVALID", "hold", "Anchor must be an object.", tag)
+            continue
+        snippet = passage.get("exact_excerpt")
+        if not isinstance(snippet, str) or not snippet:
+            flag("DOCUMENT_ANCHOR_EMPTY", "hold", "Document passage excerpt required.", tag)
+        elif "body" not in locals() or snippet not in body:
+            flag("DOCUMENT_ANCHOR_MISSING", "hold",
+                 "Claim excerpt is absent from the submitted draft.", tag)
+        if not passage.get("evidence_id"):
+            flag("DOCUMENT_ANCHOR_UNLINKED", "hold",
+                 "Draft passage must name its evidence item.", tag)
 
     evidence = dossier.get("evidence")
     if not isinstance(evidence, list):
@@ -108,6 +164,14 @@ def analyze(dossier, root):
             flag("SOURCE_DIGEST_MISMATCH", "hold", "Source bytes changed.", tag)
         if not item.get("claim"):
             flag("CLAIM_MISSING", "hold", "Claim description required.", tag)
+
+    evidence_ids = {item.get("id") for item in evidence if isinstance(item, dict)
+                    and isinstance(item.get("id"), str) and item.get("id")}
+    for index, passage in enumerate(passages or []):
+        if isinstance(passage, dict) and passage.get("evidence_id") not in evidence_ids:
+            flag("DOCUMENT_EVIDENCE_NOT_FOUND", "hold",
+                 "Draft anchor references no known evidence item.",
+                 "document_claim_anchors[%d]" % index)
 
     samples = dossier.get("voice_samples", [])
     if not isinstance(samples, list):
