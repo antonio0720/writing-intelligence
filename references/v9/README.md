@@ -2,7 +2,7 @@
 
 **Status:** Experimental proposal, **not** the published v9 release. This branch does not change the v8 release, `SKILL.md`, or the canonical v4–v8 runtime. **Project author:** Antonio T. Smith Jr. — Density6 LLC. **Date:** 2026-10-27.
 
-**Full editorial protocol:** [`EDITORIAL_PROTOCOL.md`](EDITORIAL_PROTOCOL.md). **Wave states:** [`WAVES.yaml`](WAVES.yaml).
+**Full editorial protocol:** [`EDITORIAL_PROTOCOL.md`](EDITORIAL_PROTOCOL.md). **Blinded quality benchmark:** [`QUALITY_BENCHMARK.md`](QUALITY_BENCHMARK.md). **Wave states:** [`WAVES.yaml`](WAVES.yaml).
 
 ## Mission
 
