@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://writing-intelligence.dev/schemas/v9/authorship-dossier.schema.json",
+  "title": "AuthorshipDossierV9",
+  "description": "Input to scripts/wi-authorship.py (audit and release). Every origin, consent and contribution field is a SELF-DECLARATION: the checker tests completeness and consistency, never who wrote the text or whether a source is true. Owner: Antonio T. Smith Jr. Experimental (WI9-01 PROTOTYPE); tests/v9/test_schema_parity.py keeps every enum here equal to the checker's constants.",
+  "type": "object",
+  "required": ["schema", "document", "evidence"],
+  "properties": {
+    "schema": {"enum": ["wi9-authorship-1", "wi9-authorship-2"]},
+    "document": {
+      "type": "object",
+      "required": ["path", "origin", "venue_policy", "intended_use"],
+      "properties": {
+        "path": {"type": "string", "description": "Relative to the dossier directory; no absolute paths, '..' or symlinks."},
+        "origin": {"enum": ["ai_assisted", "ai_generated", "human_authored"]},
+        "venue_policy": {"enum": ["disclose_ai", "human_only", "unrestricted"]},
+        "intended_use": {"enum": ["internal_review", "research_demo", "submission"]},
+        "arena": {"type": "string", "description": "journalism, academic, legal and government are strict arenas."},
+        "mission": {"type": "string"},
+        "expected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Required for a submission: the exact reviewed bytes."}
+      }
+    },
+    "venue_contract": {
+      "type": "object",
+      "properties": {
+        "venue": {"type": "string"},
+        "allowed_assistance": {"type": "array", "items": {"$ref": "#/$defs/contributionKind"}, "description": "Assistance the venue is recorded as permitting. Unlisted assistance on a human-only venue holds."},
+        "allowed_operations": {"type": "array", "items": {"enum": ["draft", "edit", "package", "research", "submit"]}},
+        "deadline": {"type": "string", "description": "Offset-aware ISO 8601."},
+        "expires_at": {"type": "string", "description": "When this reading of the venue's policy must be re-checked. Offset-aware ISO 8601."},
+        "policy_source": {"type": "string"}
+      }
+    },
+    "contribution_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind"],
+        "properties": {
+          "kind": {"$ref": "#/$defs/contributionKind"},
+          "actor_declaration": {"type": "string"},
+          "recorded_at": {"type": "string"},
+          "source_digest": {"type": "string"},
+          "target_digest": {"type": "string"}
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "claim", "kind", "source_path", "exact_excerpt", "consent"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1, "description": "Unique within the dossier."},
+          "claim": {"type": "string"},
+          "kind": {"enum": ["external", "firsthand", "interpretation"]},
+          "source_path": {"type": "string"},
+          "exact_excerpt": {"type": "string", "minLength": 1},
+          "source_origin": {"$ref": "#/$defs/origin"},
+          "consent": {"const": true},
+          "sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "experience_state": {"enum": ["hypothetical", "inferred", "measured", "observed", "planned", "said_by_author", "sourced"]},
+          "support_status": {"enum": ["conflicted", "needs_source", "supported_by_reviewer", "unadjudicated"]}
+        }
+      }
+    },
+    "document_claim_anchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["exact_excerpt", "evidence_id"],
+        "properties": {
+          "exact_excerpt": {"type": "string", "minLength": 1},
+          "evidence_id": {"type": "string"},
+          "start": {"type": "integer", "minimum": 0, "description": "Required when the excerpt occurs more than once in the draft."}
+        }
+      }
+    },
+    "voice_samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "origin", "consent"],
+        "properties": {
+          "path": {"type": "string"},
+          "origin": {"$ref": "#/$defs/origin"},
+          "consent": {"type": "boolean"},
+          "sha256": {"type": "string"},
+          "genre": {"type": "string"}
+        }
+      }
+    },
+    "review_decision": {
+      "type": "object",
+      "description": "Read only by `release`. A person's decision bound to the exact draft digest.",
+      "properties": {
+        "outcome": {"enum": ["approve", "reject"]},
+        "actor": {"type": "string"},
+        "actor_kind": {"const": "human"},
+        "target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "decided_at": {"type": "string"},
+        "authority": {
+          "type": "object",
+          "properties": {
+            "holder": {"type": "string"},
+            "scope": {"type": "array", "items": {"type": "string"}},
+            "venues": {"type": "array", "items": {"type": "string"}},
+            "expires_at": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "origin": {"enum": ["ai_assisted", "ai_generated", "human_authored"]},
+    "contributionKind": {"enum": ["ai_generated_prose", "ai_research", "ai_substantive_rewrite", "human_edit", "human_original", "mechanical_proofread"]}
+  }
+}

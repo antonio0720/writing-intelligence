@@ -120,6 +120,11 @@ class AuthorshipTests(unittest.TestCase):
         self.assert_hold(self.base, "DOCUMENT_EVIDENCE_NOT_FOUND")
 
     def test_self_declared_human_submission_stays_review_not_certified(self):
+        # Since the P0-08 repair a submission pins the draft and every source.
+        import hashlib
+        pin = hashlib.sha256(b"I built a miniature town.").hexdigest()
+        self.base["document"]["expected_sha256"] = pin
+        self.base["evidence"][0]["sha256"] = pin
         self.base["document"]["intended_use"] = "submission"
         self.base["contribution_log"] = [{"kind": "human_original"}]
         self.base["document_claim_anchors"] = [
