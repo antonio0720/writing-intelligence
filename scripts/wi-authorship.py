@@ -28,7 +28,9 @@ def safe_read(root, relative):
         raise ValueError("source path is missing")
     base = root.resolve()
     p = (base / relative).resolve()
-    if not p.is_relative_to(base):
+    try:
+        p.relative_to(base)
+    except ValueError:
         raise ValueError("source path escapes the dossier directory")
     data = p.read_bytes()
     if len(data) > MAX_BYTES:
