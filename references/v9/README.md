@@ -1,6 +1,8 @@
 # Writing Intelligence v9 — Authentic Voice & Authorship Provenance (PROPOSAL)
 
-**Status:** Experimental proposal, **not** the published v9 release. This branch does not change the v8 release, `SKILL.md`, or the canonical v4–v8 runtime. **Owner:** Antonio T. Smith Jr. / Density6 LLC. **Date:** 2026-10-27.
+**Status:** Experimental proposal, **not** the published v9 release. This branch does not change the v8 release, `SKILL.md`, or the canonical v4–v8 runtime. **Project author:** Antonio T. Smith Jr. — Density6 LLC. **Date:** 2026-10-27.
+
+**Full editorial protocol:** [`EDITORIAL_PROTOCOL.md`](EDITORIAL_PROTOCOL.md). **Wave states:** [`WAVES.yaml`](WAVES.yaml).
 
 ## Mission
 
@@ -23,7 +25,7 @@ The trigger was an AI-generated three-part essay about miniature worlds: the con
 
 ## Prototype included
 
-`scripts/wi-authorship.py audit --input dossier.json` reads a JSON dossier and local text sources. It checks exact source anchors, optional SHA-256, consent flags, firsthand-source eligibility, claimed document origin, and venue policy. It **does not rewrite** prose, rate it "human," perform detector evasion, or certify authorship. It never turns an AI draft into a human-authored document. `REVIEW` means a limited checklist passed; it is **not publication authorization**.
+`scripts/wi-authorship.py audit --input dossier.json` reads a JSON dossier and local text sources. It checks exact source anchors, optional SHA-256, consent flags, firsthand-source eligibility, claimed document origin, declared contribution history, draft passage-to-evidence links and venue policy. It **does not rewrite** prose, rate it "human," perform detector evasion, or certify authorship. It never turns an AI draft into a human-authored document. `REVIEW` means a limited checklist passed; it is **not publication authorization**.
 
 ### Dossier format
 
@@ -49,11 +51,15 @@ The trigger was an AI-generated three-part essay about miniature worlds: the con
       "sha256": null
     }
   ],
+  "contribution_log": [
+    {"kind": "ai_research"}
+  ],
+  "document_claim_anchors": [],
   "voice_samples": []
 }
 ```
 
-Paths resolve relative to the dossier directory. Sources are not sent to a service. The `origin` and `consent` entries are **self-declarations**, not facts independently verified by the tool. The checker returns HOLD for a human-only submission whose origin is not human-authored, and for missing/unanchored firsthand claims. It reports missing voice samples as a non-blocking advisory.
+Paths resolve relative to the dossier directory. Sources are not sent to a service. The `origin` and `consent` entries are **self-declarations**, not facts independently verified by the tool. The checker returns HOLD for a human-only submission whose origin is not human-authored or whose declared contribution history includes AI-generated or substantively AI-rewritten prose. Consequential submissions must carry a contribution history and exact draft passage-to-evidence links; missing/unanchored firsthand claims also HOLD. It reports missing voice samples as a non-blocking advisory. It **cannot prove** whether a self-declared human-only manuscript was actually written by a person.
 
 ## Planned architecture (no false shipped claims)
 
