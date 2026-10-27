@@ -86,6 +86,50 @@ class AuthorshipTests(unittest.TestCase):
         self.assertEqual("REVIEW", report["status"])
         self.assertIn("RESEARCH_ONLY", {f["code"] for f in report["findings"]})
 
+    def test_human_only_submission_needs_contribution_log(self):
+        self.base["document"]["intended_use"] = "submission"
+        self.assert_hold(self.base, "CONTRIBUTION_LOG_REQUIRED")
+
+    def test_human_only_submission_rejects_ai_prose_even_if_labeled_human(self):
+        self.base["document"]["intended_use"] = "submission"
+        self.base["contribution_log"] = [
+            {"kind": "human_original"},
+            {"kind": "ai_substantive_rewrite"}
+        ]
+        self.assert_hold(self.base, "SUBSTANTIVE_AI_CONTRIBUTION")
+
+    def test_submissions_need_document_claim_anchors(self):
+        self.base["document"]["intended_use"] = "submission"
+        self.base["contribution_log"] = [{"kind": "human_original"}]
+        self.assert_hold(self.base, "DOCUMENT_CLAIM_ANCHORS_REQUIRED")
+
+    def test_document_claim_anchor_must_match_actual_text(self):
+        self.base["document"]["intended_use"] = "submission"
+        self.base["contribution_log"] = [{"kind": "human_original"}]
+        self.base["document_claim_anchors"] = [
+            {"exact_excerpt": "This passage was never written.", "evidence_id": "e1"}
+        ]
+        self.assert_hold(self.base, "DOCUMENT_ANCHOR_MISSING")
+
+    def test_document_anchor_must_resolve_known_evidence(self):
+        self.base["document"]["intended_use"] = "submission"
+        self.base["contribution_log"] = [{"kind": "human_original"}]
+        self.base["document_claim_anchors"] = [
+            {"exact_excerpt": "I built a miniature town.", "evidence_id": "missing"}
+        ]
+        self.assert_hold(self.base, "DOCUMENT_EVIDENCE_NOT_FOUND")
+
+    def test_self_declared_human_submission_stays_review_not_certified(self):
+        self.base["document"]["intended_use"] = "submission"
+        self.base["contribution_log"] = [{"kind": "human_original"}]
+        self.base["document_claim_anchors"] = [
+            {"exact_excerpt": "I built a miniature town.", "evidence_id": "e1"}
+        ]
+        exit_code, report = self.run_case(self.base)
+        self.assertEqual(0, exit_code)
+        self.assertEqual("REVIEW", report["status"])
+        self.assertTrue(any("not independently" in s for s in report["limitations"]))
+
     def test_bad_schema_holds(self):
         self.base["schema"] = "made-up"
         self.assert_hold(self.base, "SCHEMA_INVALID")
