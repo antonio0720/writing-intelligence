@@ -1,0 +1,101 @@
+{
+  "checkpoint": "WI9-08",
+  "program": "WI9-AUTHORSHIP",
+  "owner": "Antonio T. Smith Jr.",
+  "status": "PASS",
+  "baseline_sha": "2b8d20fd5f6cf813623ea93dc5dec5e2b4ae6911",
+  "objective": "Make the v9 checks reachable from the program manifest, the canonical wi CLI and the REST runtime, all calling one implementation, and ship them in a self-verifying bundle",
+  "measured_at": "2026-10-27",
+  "measured_on": "df161b3b92c3b4aa23b8cbb42c6bfd26b2513709",
+  "environment": {
+    "python_local": "3.9.6",
+    "node_local": "v24.13.0",
+    "os": "Darwin 25.5.0",
+    "ci_python": [
+      "3.8",
+      "3.11",
+      "3.12",
+      "3.13"
+    ],
+    "ci_node": [
+      "20",
+      "22"
+    ]
+  },
+  "commands": [
+    "python3 scripts/check-manifest.py",
+    "python3 -m unittest discover -s tests/v9 -p 'test_*.py'",
+    "python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'",
+    "cd services/api && npm ci && npm run typecheck && npx vitest run",
+    "bash tests/v4/test_wi.sh; bash tests/v5/test_wi5.sh; bash tests/v6/test_wi6.sh; bash tests/v7/test_wi7.sh; bash scripts/test-v8.sh",
+    "bash scripts/build-skill.sh"
+  ],
+  "observed_result": {
+    "manifest": "plans/v9.manifest.yaml validates: 10 waves, 0 shipped, acyclic; newest manifest at core_version 8.0.0, so tests/v7 version alignment holds",
+    "tests_v9": "Ran 89 tests ... OK",
+    "tests_reference_kernel": "Ran 95 tests ... OK",
+    "api": "tsc --noEmit clean; vitest 7 files, 40 tests passed, 9 of them v9",
+    "v4_to_v8": "all exit 0; v8 integration 19 passed, 0 failed",
+    "wi_authorship": "exit codes pass through: 3 on HOLD, 0 on REVIEW; absent tools named, exit 2, no traceback",
+    "bundles": {
+      "writing-intelligence.skill": 195,
+      "writing-intelligence-craft.skill": 86,
+      "writing-intelligence-story.skill": 184,
+      "writing-intelligence-authorship.skill": 50,
+      "ceiling": 200,
+      "descriptions": {
+        "runtime": "989/1024",
+        "authorship": "928/1024"
+      }
+    }
+  },
+  "negative_controls": [
+    {
+      "id": "wrapper-swallows-verdict",
+      "expectation": "a wi authorship wrapper that returns 0 regardless turns tests/v9 red",
+      "observed": "FAILED (failures=2)"
+    },
+    {
+      "id": "upload-name-check-removed",
+      "expectation": "removing the file-name validation fails the traversal test",
+      "observed": "1 failed; with containment absent an upload escaped to the OS temp directory (x.txt), which was removed"
+    },
+    {
+      "id": "containment-alone",
+      "expectation": "with the name check removed, the resolved-path containment alone stops the escape",
+      "observed": "no file written outside the private directory"
+    },
+    {
+      "id": "manifest-parity-twin",
+      "expectation": "a drifted stage is detected",
+      "observed": "test_parity_detects_a_drifted_stage passes"
+    },
+    {
+      "id": "release-over-network",
+      "expectation": "POST /v9/authorship/release refuses",
+      "observed": "403 release_is_local"
+    }
+  ],
+  "independent_readback": {
+    "method": "GitHub Actions records for the pushed head, read through the GitHub API, separate from the local checkout",
+    "value": {
+      "head_sha": "df161b3b92c3b4aa23b8cbb42c6bfd26b2513709",
+      "ci": {
+        "run_id": 40612980598,
+        "conclusion": "success",
+        "jobs": "verifier py3.8/3.11/3.12/3.13, api node 20/22, bundle build and verify, docs links, plan manifest, schemas: all success"
+      },
+      "wi9_lane": {
+        "run_id": 40612980720,
+        "conclusion": "success"
+      }
+    }
+  },
+  "unknown": [
+    "the API container image (services/api/Dockerfile now installs python3) has not been built in CI or locally",
+    "no MCP server exists in this repository; the v9 MCP tools are specified contracts, as every WI MCP tool is",
+    "no owner approval, no human review, no consented corpus, no 60-case benchmark"
+  ],
+  "decision": "HOLD",
+  "release_authority": null
+}

@@ -107,8 +107,9 @@ waves:
   - id: WI9-08
     name: Canonical integration and regression
     status: in_progress
-    stage: PROTOTYPE
+    stage: VALIDATED
     depends_on: [WI9-01, WI9-06]
+    receipt: plans/receipts/WI9-08.json
     exit:
       - the v9 tools ship in a bundle that verifies itself when extracted
       - wi authorship runs the v9 checks from the canonical CLI
