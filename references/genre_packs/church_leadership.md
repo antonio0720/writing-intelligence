@@ -180,3 +180,13 @@ Produce communication that serves the local church — sermons, study guides, de
 - + `newsletter.md`: weekly devotional series
 - + `youtube_script.md`: sermon clips for digital
 - + `social_media.md`: church social presence
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** denominational newsletters, board packets and bulletins carry house rules about authorship and attribution. Where policy is unwritten, ask the editor; unknown means HOLD.
+- **Anchored sources:** attendance, giving, membership and budget figures need a dated ledger or report. Scripture citations need the exact passage and translation.
+- **Firsthand material:** the leader's own pastoral observations and decisions. Do not borrow a congregant's story or a counseling moment; private pastoral material needs consent and redaction before it appears.
+- **Disclosure:** congregations vary on whether AI help with announcements or letters should be named. Decide with the board and record it.
+- **Phrase matches that may be legitimate:** `generic_closure` (benedictions, "go in peace") and `empty_emphasis` ("truly", "deeply") are often liturgical and expected. `performed_candor` should still be checked: a confession the leader did not make is invented testimony.

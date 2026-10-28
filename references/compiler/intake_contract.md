@@ -172,3 +172,15 @@ A v3.0-conforming Intake Architect produces a contract that:
 - Specifies an `arena`
 
 If any of the above fails, Pass 0 has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — Pass 0
+
+Pass 0 is where v9 editorial pass 1 (claim and experience intake) begins, before any drafting.
+
+- **Venue contract first (WI9-G).** Record the outlet, audience, word limit, genre, publication rules and its AI-use policy. A `human_only` venue sets the arena so that only research briefs and interview prompts may be produced; no AI-written or AI-rewritten submission copy. This is a field of the contract, decided before `mode` is acted on.
+- **Experience intake.** For personal or first-person work, ask for the author's own WHO, WHAT, WHEN, WHERE, the artifact, the decision, the friction and the evidence that remains. Material must originate with the author. Record `experience_state` (performed, planned, hypothetical) so that a roadmap is never taken for a completed build.
+- **Authorship declaration.** Record a self-reported origin (`human_authored`, `ai_assisted`, `ai_generated`). It is a declaration, not a verified fact, and a voice match cannot change it.
+- **Ambiguity.** When the author supplied no particular case, say so and keep the output at the level of honest general reasoning. Do not complete the missing memory.
+- **Mode.** `certify` and `release`-like requests stay separate from editorial modes; a style score never answers them. Pass 0 does not yet emit these fields in the shipped schema; they are v9 proposal, tracked by WI9-01 and WI9-02.

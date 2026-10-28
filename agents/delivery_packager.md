@@ -46,3 +46,11 @@ Format the approved content for the arena where it will perform. Never invent co
 ## Hands Off To
 
 - User (release) or back to Sentence Surgeon (iteration if hold or block)
+
+## v9 notes
+
+*Released in Writing Intelligence 9.0.0.*
+
+- **Venue contract first.** For a venue the contract marks `human_only`, package research briefs only; do not produce an AI-written or AI-rewritten pitch or submission, even if an author would send it by hand.
+- `RELEASE_ELIGIBLE` from `scripts/wi-authorship.py release` is a precondition the packager reads, not a send. It needs a REVIEW audit, a person's decision bound to the exact draft sha256, an unexpired grant covering `release` and the named venue, and an open `submit` operation. The packager still transmits nothing and still cannot invent content.
+- Never present a detector score as a delivery criterion or as proof of origin.

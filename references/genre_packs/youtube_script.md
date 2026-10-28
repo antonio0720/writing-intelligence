@@ -146,3 +146,13 @@ Produce video scripts that hold retention through every drop point — 7-second 
 - + `sales.md`: VSL-style
 - + `church_leadership.md`: sermon clips
 - + `small_business_operator.md`: founder voice
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** YouTube and sponsors set rules on synthetic or altered content disclosure, monetization and paid promotion; these change. Check the platform's current written policy; unknown means HOLD.
+- **Anchored sources:** numbers, news claims, quotes and clips used on screen need a source span and, for media, a rights record.
+- **Firsthand material:** what the creator actually did, tested or saw on camera. A planned experiment is not a result; no invented "I tried this for 30 days".
+- **Disclosure:** the platform may ask for a label on realistic synthetic media, and sponsorships carry separate disclosure. Record the contribution log and keep upload a human decision.
+- **Phrase matches that may be legitimate:** `forced_audience_engagement` ("like and subscribe"), `staged_explanation` and `performed_candor` are native spoken-video conventions. Keep a hook or call to action the format uses; check it against delivery, since a line is judged aloud.

@@ -1,14 +1,97 @@
-# Writing Intelligence v8 — Cheatsheet
+# Writing Intelligence v9 — Cheatsheet
 
-One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
+One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · v9: [`references/v9/README.md`](references/v9/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
 
-**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v8.0.0
+**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v9.0.0
+
+---
+
+## v9 — authorship, meaning and venue checks
+
+9.0.0 is the release (2026-10-28); the WI9-07 benchmark and the WI9-09 independent review are still open. Nothing below changes a v4–v8 command. Detail: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md) · waves: [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml) · schema: [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
+
+| Command | Does | Exit |
+|---|---|---|
+| `python3 scripts/wi.py authorship <tool> ...` | every v9 tool through the canonical CLI (`audit release vault meaning ledger phrase-review voice voice-review voice-compare scan structure compose`); arguments and exit codes pass through | as below |
+| `wi authorship vault init\|add\|redact\|withdraw\|list\|check --root MY_VAULT ...` | **your own** firsthand material, private (0700, never inside a repository); `add --label observed\|said_by_author\|measured\|sourced\|inferred\|hypothetical\|planned --consent`; `check --claims claims.json` holds unsourced first-person claims | `0` done/REVIEW · `3` HOLD |
+| `wi authorship meaning diff --original MINE --candidate REVISED` | every material change in meaning (numbers, dates, plan→done, estimate→exact, negation, stance, cause, outcome, hedge, concession, chronology, quotation, dropped or new claims) | `0` none · `3` deltas |
+| `wi authorship meaning review ... --ledger L --authority-store S [--vault V --claims C]` | REVIEW only when you accepted every delta under a covering grant and every new first-person sentence is anchored in your vault | `0` REVIEW · `3` HOLD |
+| `wi authorship ledger record\|verify --ledger L --authority-store S ...` | your review decisions, recorded only under your own v6 grant (human, in scope); append-only, `--supersedes HASH` to change your mind | `0` · `3` HOLD |
+| `wi authorship phrase-review --input F --report R.json --ledger L --authority-store S` | phrase findings reviewed from your ledger; a typed reviewer name alone holds `REVIEWER_UNBOUND` | `0` REVIEW · `3` HOLD |
+| `wi authorship voice-compare --root MY_FOLDER --input voice.json --text DRAFT` | where a draft drifts from your own baseline; matching proves nothing about authorship | `0` |
+| `wi authorship structure --input FILE` | repeated openings, hollow contrasts, template paragraphs, three-item lists, restatement — questions with spans | `0` |
+| `wi authorship compose --input C.json --provider-cmd /ABS/PROGRAM [--key-env NAME] --consent-to-send` | your own model, after the venue and evidence gates; best result `DRAFT_REVIEW_REQUIRED`, `ai_generated`, never release | `0` draft · `3` HOLD |
+| `python3 scripts/wi.py authorship voice --root MY_FOLDER --input voice.json` | measure **your own** voice from your own samples, kept in your own private folder; no samples ship with v9 ([guide](references/v9/VOICE_BASELINE.md)) | `0` REVIEW · `3` HOLD |
+| `python3 scripts/wi.py authorship voice-review --root MY_FOLDER --input voice.json --decision approve\|reject [--note T]` | record your own decision about your own baseline, bound to those exact samples, in that folder | `0` approved · `3` rejected or HOLD |
+| `python3 scripts/wi-authorship.py audit --input dossier.json [--out R.json]` | limited checks on a self-reported dossier | `0` REVIEW · `3` HOLD |
+| `python3 scripts/wi-authorship.py release --input dossier.json --authority-store STORE [--out R.json]` | is a person's bound release decision on file? Transmits nothing | `0` RELEASE_ELIGIBLE · `3` HOLD |
+| `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE [--format text\|json] [--include-quotes]` | 334 editorial rules (321 literal, 13 regex, 11 categories); offsets, line/column, document and rule sha256; long files scanned in chunks (`complete`, `chunks`) | `0` ran |
+| `python3 prototypes/wi9/wi9_core.py preflight\|plan\|diagnose\|voice\|benchmark …` | reference kernel (`preflight` is the older specimen; `wi-authorship.py` wins on disagreement) | see its README |
+| `python3 prototypes/wi9/wi9_composition.py` | model-neutral composition contract; refuses `human_only` venues; best state `DRAFT_REVIEW_REQUIRED` | library |
+
+**What the three states mean**
+
+- **REVIEW** — the limited checks passed. It is *not* permission to send, *not* a claim of human authorship, and `release_authorized` stays `false`. A stderr notice says so.
+- **HOLD** — at least one check failed. Each finding carries a `code`, a `level` and a `target`. Fix the dossier or the draft, re-run.
+- **RELEASE_ELIGIBLE** — `release` only. Requires a REVIEW audit, a person's `review_decision` whose `target_sha256` is the exact draft digest, a v6 grant-store check that the person holds `release.approve` in scope `release_target:<venue>` (active at decision time and now, human subject — issue it with `python3 scripts/wi.py authority issue --capability release.approve --scope release_target --scope-value "<venue>" --subject "<name>"`), a venue contract listing `submit`, and an unpassed deadline. The dossier names the store (`"authority": {"store": "v6"}`); the operator names the store with `--authority-store`, which must be outside the dossier folder; a grant typed into the dossier holds `AUTHORITY_UNBOUND`. Nothing is sent.
+
+Every report says `declaration_status: self_reported`. Nothing here authenticates a writer or proves a source true.
+
+**Minimal dossier** (`wi9-authorship-2`; `-1` is still read). Synthetic. Paths resolve relative to the dossier's directory — no absolute paths, `..` or symlinks.
+
+```json
+{
+  "schema": "wi9-authorship-2",
+  "document": {"path": "draft.txt", "origin": "human_authored",
+               "venue_policy": "unrestricted", "intended_use": "internal_review"},
+  "contribution_log": [{"kind": "human_original", "actor_declaration": "the author",
+                        "recorded_at": "2026-03-03T09:00:00-05:00"}],
+  "evidence": [{"id": "e1", "claim": "The author rebuilt the shelf unit twice.",
+                "kind": "firsthand", "source_path": "notes/shelf.txt",
+                "exact_excerpt": "rebuilt the shelf unit twice before the legs sat flat",
+                "source_origin": "human_authored", "consent": true,
+                "experience_state": "said_by_author"}],
+  "document_claim_anchors": [{"exact_excerpt": "rebuilt the shelf unit twice before the legs sat flat",
+                              "evidence_id": "e1"}]
+}
+```
+
+Required: `schema`, `document` (`path`, `origin`, `venue_policy`, `intended_use`), `evidence` (`id`, `claim`, `kind`, `source_path`, `exact_excerpt`, `consent: true`). For a submission also pin `document.expected_sha256` (and each source's `sha256` in strict arenas: journalism, academic, legal, government) and add `venue_contract`. Enums: origin `human_authored | ai_assisted | ai_generated` · venue_policy `human_only | disclose_ai | unrestricted` · intended_use `internal_review | research_demo | submission` · evidence kind `firsthand | external | interpretation` · experience_state `said_by_author | observed | measured | sourced | inferred | planned | hypothetical` · support_status `unadjudicated | supported_by_reviewer | needs_source | conflicted` · contribution kind `human_original | human_edit | mechanical_proofread | ai_research | ai_generated_prose | ai_substantive_rewrite`.
+
+**HOLD codes you will meet most**
+
+| Code | Fix |
+|---|---|
+| `CLAIM_UNANCHORED` | a consequential claim in the draft overlaps no anchored span — add the source and anchor, or cut/soften the claim (a HOLD for a strict-arena submission; an advisory elsewhere) |
+| `FIRSTHAND_UNVERIFIED` | a firsthand item needs `source_origin: human_authored` — a model's text or a roadmap is not your experience |
+| `FIRSTHAND_NOT_PERFORMED` | `planned` / `hypothetical` cannot support "I did" — label the passage hypothetical or supply the real note |
+| `DOCUMENT_DIGEST_UNPINNED` / `_MISMATCH` | pin `expected_sha256` (submission); a mismatch means the bytes changed — re-review |
+| `ORIGIN_CONTRADICTS_LOG` | declared origin and contribution log disagree — correct whichever is false |
+| `HUMAN_ONLY_CONFLICT` / `SUBSTANTIVE_AI_CONTRIBUTION` / `ASSISTANCE_NOT_PERMITTED` | a human-only submission declares a non-human origin, AI prose, or assistance the venue contract does not list — it cannot be submitted |
+| `CONSENT_ABSENT` · `SOURCE_DIGEST_MISMATCH` · `EXCERPT_MISSING` | consent not recorded; source changed; quote is not verbatim in the source |
+| `DOCUMENT_ANCHOR_AMBIGUOUS` | the excerpt occurs twice in the draft — add `start` |
+| `SUPPORT_UNRESOLVED` | a reviewer marked evidence `needs_source` / `conflicted` (HOLD for a strict-arena submission) |
+| `DECISION_TARGET_STALE` · `AUTHORITY_UNBOUND` · `AUTHORITY_DENIED` · `AUTHORITY_EXPIRED` · `AUTHORITY_REVOKED` · `AUTHORITY_GRANT_SCOPE_EXCEEDED` · `SUBMIT_NOT_PERMITTED` | (release) decision names another digest; grant only declared in the dossier; no v6 grant, or expired, revoked, or for another venue; venue contract does not list `submit` |
+
+**Phrase scan.** A match is an editorial *question* — never proof of AI authorship, never an automatic rewrite. Dispositions in the review ledger: `retain_as_written` · `revise_for_clarity` · `needs_source` · `not_applicable`, each recorded under your own grant (`claim.accept.wording_only`). A valid review means *reviewed*, not approved.
+
+**Your private stores.** Voice samples, vault and ledger live in folders you choose outside any repository; v9 ships none and a test fails if one is committed. On Windows they refuse with `PLATFORM_UNSUPPORTED`.
+
+**Never do (v9)**
+
+- Never treat an AI-detector score as a target, a gate or a claim. Do not rewrite to move one.
+- Never invent a firsthand scene, a quote, a date or a statistic. Hypothetical stays labeled hypothetical; a roadmap is not a completed build.
+- Never add typos, odd sentence lengths or "human-looking" noise. Repair rhythm because the thought changes shape (`repair_rhythm`; log op `rhythm_repaired`, legacy `variance_injected` still readable).
+- Never ask for a pitch or reply for a **human-only** venue. Produce a research brief and interview prompts only; the person writes the submission.
+- Never read `REVIEW` or `RELEASE_ELIGIBLE` as "human wrote this". They check declarations.
+
+v9 wave states: WI9-00 VALIDATED (owner approval pending) · 01 PROTOTYPE · 02 PROTOTYPE · 03 PROTOTYPE · 04 PROTOTYPE · 05 IN_PROGRESS (05G not run) · 06 PROTOTYPE · 07 PLANNED (benchmark not run) · 08 VALIDATED · 09 IN_PROGRESS (released by the owner; independent review open).
 
 ---
 
 ## v8 in one line
 
-8.0.0 ships **Story Intelligence**: four offline fiction engines carrying 340 numbered requirements — fiction & thriller (FI-01–60), arc / want-need / ending (N061–120), the craft (C121–180), Japan Story OS (JP-181–340). **A structural pass is not a good novel**: every publication gate HOLDS (exit 3). Run `bash scripts/test-v8.sh`. Status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
+8.0.0 shipped **Story Intelligence**: four offline fiction engines carrying 340 numbered requirements — fiction & thriller (FI-01–60), arc / want-need / ending (N061–120), the craft (C121–180), Japan Story OS (JP-181–340). **A structural pass is not a good novel**: every publication gate HOLDS (exit 3). Run `bash scripts/test-v8.sh`. Status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
 ## v8 commands
 
@@ -65,7 +148,7 @@ Executable today: B, C, D, E, F, G (claim atoms), H, I, K, L (bundles), **M, N, 
 
 ## Install — one line per surface
 
-**Three bundles.** A bundle may hold at most 200 files. `writing-intelligence.skill` is the runtime (191 files — skill, doctrine, schemas, agents, `scripts/wi.py`, manifests and receipts, fixtures), `writing-intelligence-craft.skill` is the craft library (86 files — genre packs, voiceprints, anti-patterns, compiler references including v8's fiction references, diagnostics) and `writing-intelligence-story.skill` is v8 Story Intelligence (184 files — the four story engines, registers, schemas, suites). Install all three. A clone gets you everything at once.
+**Four bundles.** A bundle may hold at most 200 files. `writing-intelligence.skill` is the runtime (194 files — skill, doctrine, schemas, agents, `scripts/wi.py`, manifests and receipts, fixtures), `writing-intelligence-craft.skill` is the craft library (86 files — genre packs, voiceprints, anti-patterns, compiler references including v8's fiction references, diagnostics) and `writing-intelligence-story.skill` is v8 Story Intelligence (184 files — the four story engines, registers, schemas, suites). `writing-intelligence-authorship.skill` is the **v9 preview** (46 files — `wi-authorship.py`, `wi.py`, `schemas/v9`, `prototypes/wi9`, `references/v9`, `examples/v9`, `tests/v9`); it is not part of the 8.0.0 release and lives on the PR #8 branch until it merges. Install all four. A clone gets you everything at once.
 
 ```bash
 # Claude Code / terminal agent — user-scoped skill (everything, one clone)
@@ -80,6 +163,8 @@ curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main
 # ...then the craft and story bundles, uploaded the same way:
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+# the v9 authorship bundle:
+curl -LO https://github.com/antonio0720/writing-intelligence/releases/latest/download/writing-intelligence-authorship.skill
 # pinned versions with checksums: https://github.com/antonio0720/writing-intelligence/releases/latest
 
 # CLI only — the deterministic core, one file, no dependencies

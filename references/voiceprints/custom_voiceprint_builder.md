@@ -149,3 +149,31 @@ Once a custom voiceprint is built:
 3. Apply it in Pass 4 (Voice Restoration) after cleanup
 4. Use it as the calibration target in Pass 5 (Stress Test) — every sentence
    must be plausible as this author's work
+
+---
+
+## v9: Voice Is Evidence (WI9-B)
+
+In v9 a voiceprint is a measurement of a person's consented writing. It is not a costume and not a proof of who wrote a given text. The experimental reference kernel (`prototypes/wi9/wi9_core.py voice`, PR #8 proposal, not a release) enforces the minimums below; the withdrawal and vault steps are policy this file asks for, not features that exist yet (WI9-02 and WI9-03 are PLANNED and PROTOTYPE, and no consented author corpus has been collected).
+
+### Eligibility of a sample
+
+A sample counts only if all of these are true. The kernel records them per sample and returns HOLD for any that fails:
+
+- **Human-authored origin** (`origin: human_authored`), declared by the person. A paragraph a model wrote and the author lightly edited is not a voice sample, however it reads. This is a self-declaration; nothing authenticates it.
+- **Explicit consent** (`consent: true`) from the person whose voice it is, for this use. Writing found online, a colleague's emails or a deceased author's papers do not qualify by being available.
+- **A pinned sha256 digest** of the exact file, so a later edit to the sample is detected (`VOICE_DIGEST_MISMATCH`).
+- **At least 500 words** each, and **at least three distinct samples** per baseline. The requirement above is **per genre**: a baseline mixing, say, a eulogy and a grant narrative is refused (`VOICE_GENRE_MIX`). Build one voiceprint per genre, each with three or more samples of 500 or more words.
+
+One caution: choose samples that show how the author actually writes, including the plain and unfinished-feeling stretches. Selecting only the most polished pieces produces a profile of the editor, not the author.
+
+### What a voiceprint may and may not do
+
+- **Similarity is a diagnostic.** Closeness to the baseline means the draft resembles the samples. It does not mean the author wrote it, and distance does not mean someone else did. Use it to find where an edit drifted from the author's habits, then ask the author.
+- **No voice theft.** Do not build a voiceprint of a person who has not consented, and do not use any voiceprint to write something a venue requires the person to have written themselves. A human-only venue gets a research brief at most (principle WI9-G); the submission copy must be the person's own.
+- **A voice does not change the origin label.** `human_authored`, `ai_assisted` and `ai_generated` are separate declarations (WI9-F); text produced in the author's voice by a model stays AI-generated.
+- **Measure, then ask.** A voiceprint proposes edits that the author accepts or rejects; it does not authorize publication.
+
+### Withdrawal
+
+The author may withdraw consent at any time. On withdrawal: stop using the voiceprint, delete the derived profile and any copied sample text held outside the author's own files, and note the date in the voiceprint's header. Past drafts already delivered are not rewritten silently; list them so the author can decide. Because no vault exists yet, this is a manual obligation on whoever holds the files.

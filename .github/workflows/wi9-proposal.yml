@@ -1,0 +1,147 @@
+name: WI9 authorship (v9)
+
+on:
+  push:
+    branches:
+      - main
+      - proposal/v9-authentic-voice-provenance-20261027
+  pull_request:
+    paths:
+      - scripts/wi-authorship.py
+      - scripts/wi.py
+      - plans/v9.manifest.yaml
+      - scripts/check-manifest.py
+      - schemas/v9/**
+      - tests/v9/**
+      - references/v9/**
+      - references/anti_patterns/**
+      - references/diagnostics/**
+      - references/compiler/**
+      - prototypes/wi9/**
+      - SKILL.md
+      - .github/workflows/wi9-proposal.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.8", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Authorship checker, schema parity and meaning-led doctrine
+        run: python -m unittest discover -s tests/v9 -p 'test_*.py' -v
+      - name: Reference kernel (334 editorial rules, review ledger, composition contract)
+        run: python -m unittest discover -s prototypes/wi9/tests -p 'test_*.py' -v
+      - name: A disabled guard must turn the suite red
+        run: |
+          set -u
+          cp scripts/wi-authorship.py /tmp/wa.orig
+          mutate() {
+            python - "$1" "$2" <<'PY'
+          import sys
+          p = 'scripts/wi-authorship.py'
+          s = open(p).read()
+          assert sys.argv[1] in s, sys.argv[1]
+          open(p, 'w').write(s.replace(sys.argv[1], sys.argv[2], 1))
+          PY
+            if python -m unittest discover -s tests/v9 -p 'test_authorship*.py' >/dev/null 2>&1; then
+              echo "::error::mutation survived: $3"; cp /tmp/wa.orig scripts/wi-authorship.py; exit 1
+            fi
+            echo "caught: $3"
+            cp /tmp/wa.orig scripts/wi-authorship.py
+          }
+          mutate '"hold" if submission and strict else "advisory"' '"advisory"' "claim coverage hold"
+          mutate 'elif document_hash is not None and expected_doc != document_hash:' 'elif False:' "document digest compare"
+          mutate 'if origin == "human_authored" and kinds_seen & AI_PROSE:' 'if False:' "origin contradicts log"
+          mutate 'receipt = _v6_authorize(authority_store' 'receipt = {"subject_kind": "human"} or _v6_authorize(authority_store' "v6 grant store skipped"
+          mutate 'if binding.get("store") != "v6":' 'if False:' "declared grant accepted as authority"
+          mutate 'for label, when in [("now", now)] + ([("decided_at", decided)] if decided is not None else []):' 'for label, when in [("now", now)]:' "grant not checked at decision time"
+          mutate 'if root == inner or inner in root.parents:' 'if False:' "authority store inside the dossier accepted"
+          cmp scripts/wi-authorship.py /tmp/wa.orig
+      - name: Per-user stores, meaning diff and model connector - a disabled guard must turn the suite red
+        working-directory: prototypes/wi9
+        run: |
+          set -u
+          mutate() {
+            cp "$1" /tmp/mut.orig
+            python - "$1" "$2" "$3" <<'PY'
+          import sys
+          p, a, b = sys.argv[1:4]
+          s = open(p).read()
+          assert a in s, a
+          open(p, 'w').write(s.replace(a, b, 1))
+          PY
+            if python -m unittest discover -s tests -p "$4" >/dev/null 2>&1; then
+              echo "::error::mutation survived: $5"; cp /tmp/mut.orig "$1"; exit 1
+            fi
+            echo "caught: $5"
+            cp /tmp/mut.orig "$1"
+            cmp "$1" /tmp/mut.orig
+          }
+          mutate wi9_vault.py 'elif item["label"] == "planned":' 'elif False:' 'test_wi9_vault.py' "vault: plan accepted as a completed event"
+          mutate wi9_fs.py '    if inside_git_worktree(target):' '    if False:' 'test_wi9_vault.py' "vault: private material inside a repository"
+          mutate wi9_vault.py 'if item["state"] != "active" or item["consent"].get("withdrawn_at"):' 'if False:' 'test_wi9_vault.py' "vault: withdrawn material still supports a claim"
+          mutate wi9_ledger.py '        grant = check_grant(store, ledger, actor, capability, scope, [when])' '        grant = {"grant_id": None, "capability": capability, "scope": scope, "subject_kind": "human"}' 'test_wi9_ledger.py' "ledger: decision recorded without a grant"
+          mutate wi9_ledger.py '                        [entry["decided_at"], when_now])' '                        [entry["decided_at"]])' 'test_wi9_ledger.py' "ledger: grant not re-read now"
+          mutate wi9_phrase_review.py "        if bound is None or item.get('ledger_entry') not in bound:" "        if False:" 'test_wi9_*.py' "phrase review: typed reviewer name accepted"
+          mutate wi9_meaning.py '        if o["planned"] and not c["planned"]:' '        if False:' 'test_wi9_meaning.py' "meaning: plan written up as done"
+          mutate wi9_meaning.py '        if not wa.v6_capability_covers(entry["grant"]["capability"], delta["required_capability"]):' '        if False:' 'test_wi9_meaning.py' "meaning: weaker grant accepts a quantity change"
+          mutate wi9_meaning.py '        elif delta["requires_source"] and' '        elif False and' 'test_wi9_meaning.py' "meaning: new first-person fact without a source"
+          mutate wi9_hotphrases.py "        if part['truncated'] and hi - lo > MIN_CHUNK_CHARS:" "        if False:" 'test_wi9_chunked_scan.py' "scan: truncated chunk not rescanned"
+          mutate wi9_core.py '        if abs(profile[measure] - centre) > width:' '        if False:' 'test_wi9_voice_measures.py' "voice: drift never reported"
+          mutate wi9_provider.py '    if prepared.get("status") != "REQUEST_READY":' '    if False:' 'test_wi9_provider.py' "connector: model reached before the policy gate"
+          mutate wi9_provider.py '    env = {k: environ[k] for k in PASSTHROUGH_ENV if k in environ}' '    env = dict(environ)' 'test_wi9_provider.py' "connector: whole environment passed to the model"
+      - name: Never claim an unrun benchmark, an absent review or a detector guarantee
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          doc = Path('references/v9/README.md').read_text()
+          assert 'not a provenance record' in doc
+          assert 'no document may report their results before they exist' in doc
+          assert 'No target for AI detector score' in doc
+          waves = Path('references/v9/WAVES.yaml').read_text()
+          import re
+          for wave in ('WI9-07', 'WI9-09'):
+              row = re.search(r'  %s: \{.*' % wave, waves).group(0)
+              assert 'SHIPPED' not in row and 'VALIDATED' not in row, '%s may not read done before it happens' % wave
+          print('WI9 release guards present')
+          PY
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: v9 checks and the reference kernel on macOS
+        run: |
+          python -m unittest discover -s tests/v9 -p 'test_*.py'
+          python -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'
+
+  windows:
+    # Windows has no O_NOFOLLOW or dir_fd. The checker, the vault and the ledger
+    # must refuse by name there (PLATFORM_UNSUPPORTED) rather than fall back to an
+    # unsafe path walk; the pure text checks run as they do everywhere.
+    runs-on: windows-latest
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Documented refusal where POSIX file safety is absent
+        run: python -m unittest discover -s tests/v9 -p test_platform_refusal.py -v
+      - name: Pure text checks (structure, composition contract)
+        run: |
+          python -m unittest discover -s prototypes/wi9/tests -p test_wi9_structure.py -v
+          python -m unittest discover -s prototypes/wi9/tests -p test_wi9_composition.py -v

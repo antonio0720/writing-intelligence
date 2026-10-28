@@ -7,6 +7,10 @@ covenant, a brief.
 
 A manuscript, chapter or series bible filed here is a rendering, like any other delivery. If it went through the v8 engines, file the projection digest and the engine reports beside it, and record the gate state honestly: an engine `HOLD` at publication stays a `HOLD` in the record until a named editor and a reader study say otherwise.
 
+## A delivery records its own authorship honestly (v9)
+
+Under v9, a delivery also states how it came to exist: whether it was human-authored, AI-assisted or AI-generated; who reviewed the exact bytes; and what the venue's contract allowed. These are declarations — nothing here authenticates a writer — but a delivery that omits them cannot be checked against a human-only venue. See [`../examples/v9/README.md`](../examples/v9/README.md). A delivery never claims a detector result as evidence of authorship.
+
 ## What a delivery is under v6
 
 Before v6, a delivery was a document that was written and then checked. The

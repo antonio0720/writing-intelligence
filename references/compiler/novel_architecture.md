@@ -39,3 +39,11 @@ Suggested visual diagnostics: change points in choices, knowledge and relationsh
 ## Failure modes and their proof
 
 A novel may have excellent local prose and yet fail the central resolution test. The engine must report this as `editorial concern` with a cited opening/ending pair; it must not "repair" the issue by forcing a conventional three-act structure. Conversely, an experimental novel may intentionally deny closure. A documented authorial contract and human reader evidence can defend the exception; a model cannot silently recategorize it as success.
+
+---
+
+## v9 Meaning-First Order (proposed) — Novel architecture
+
+v9 leaves the FI-45 to FI-52 engine contract and its descriptive measurements unchanged. v9 adds no novel-level gate and no score.
+
+Where v9 touches it: structural measurements do not show that a novel is distinctive or that a given person wrote it. The editorial questions (what could only come from this writer, where the text repeats an idea, where it is needlessly symmetrical) are manual prompts for the author's own review, and the author decides what changes. Release stays a human decision.

@@ -1,0 +1,110 @@
+{
+  "checkpoint": "WI9-U1",
+  "program": "WI9-AUTHORSHIP",
+  "owner": "Antonio T. Smith Jr.",
+  "status": "PASS",
+  "baseline_sha": "9f1cc05d7c6199bbca8f55ae7660179f2aa59083",
+  "objective": "Give every writer, on their own machine, a private firsthand vault (WI9-02), a meaning diff with grant-bound decisions (WI9-04), structure checks (WI9-05C), deeper voice measures with a held-out check (WI9-05F), review decisions bound to the reviewer's own v6 grant, chunked scanning of long manuscripts, a gated bring-your-own-model connector, and CI on macOS and Windows",
+  "measured_at": "2026-10-28",
+  "measured_on": "72843cd",
+  "environment": {
+    "python_local": "3.9.6",
+    "os": "Darwin 25.5.0",
+    "ci": [
+      "ubuntu-22.04 py3.8",
+      "ubuntu py3.11",
+      "ubuntu py3.13",
+      "macos-latest py3.12",
+      "windows-latest py3.12"
+    ]
+  },
+  "commands": [
+    "python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'",
+    "python3 -m unittest discover -s tests/v9 -p 'test_*.py'",
+    "bash scripts/test-v9.sh",
+    "the per-writer mutation step in .github/workflows/wi9-proposal.yml (13 guards)"
+  ],
+  "observed_result": {
+    "tests_reference_kernel": "Ran 189 tests ... OK (vault 22, ledger 13, meaning 13 with 18 delta fixtures, structure 10, voice measures 11, chunked scan 5, provider 11, plus the existing kernel)",
+    "test_v9_sh": "every lane PASS, including platform refusal (4 tests)",
+    "local_mutations": "every guard disabled in turn turned its suite red; three first escaped (vault inside an existing repository, stability always passing, grant expiry since decision) and a case isolating each was added before the run was repeated",
+    "ci_readback": {
+      "WI9 authorship prototype (non-release)": {
+        "push": 40687529429,
+        "pull_request": 40687533374,
+        "jobs": {
+          "test (3.8)": "success",
+          "test (3.11)": "success",
+          "test (3.13)": "success",
+          "macos": "success",
+          "windows": "success"
+        }
+      },
+      "CI": {
+        "push": 40687529336,
+        "pull_request": 40687533340,
+        "jobs": "verifier py3.8/3.11/3.13/macos, api node 20/22, schemas, docs, plan: success; bundle: failure",
+        "bundle_failure": "expected and named: the committed bundles were stale because scripts/wi.py and prototypes/wi9 changed; bundles are rebuilt last, after the documentation, and the bundle job is re-read on that commit"
+      }
+    }
+  },
+  "negative_controls": [
+    {
+      "id": "vault-plan-as-done",
+      "expectation": "a planned item backing a first-person claim HOLDs PLANNED_AS_DONE",
+      "observed": "HOLD; disabling the branch fails the suite"
+    },
+    {
+      "id": "vault-inside-repository",
+      "expectation": "a vault created in, or later found in, a git working tree is refused",
+      "observed": "STORE_INSIDE_REPOSITORY both ways"
+    },
+    {
+      "id": "ledger-no-grant",
+      "expectation": "a typed name with no v6 grant cannot record a decision",
+      "observed": "AUTHORITY_DENIED; a service subject AUTHORITY_NOT_HUMAN; a store inside the ledger folder AUTHORITY_STORE_UNTRUSTED"
+    },
+    {
+      "id": "phrase-review-typed-name",
+      "expectation": "a typed reviewer name without a ledger entry holds",
+      "observed": "REVIEWER_UNBOUND:0"
+    },
+    {
+      "id": "meaning-weaker-grant",
+      "expectation": "a quantity change accepted under claim.accept.wording_only holds",
+      "observed": "DELTA_CAPABILITY_INSUFFICIENT"
+    },
+    {
+      "id": "meaning-unsourced-first-person",
+      "expectation": "an accepted new first-person sentence with no anchored vault claim holds",
+      "observed": "DELTA_NEEDS_SOURCE"
+    },
+    {
+      "id": "meaning-unchanged-twin",
+      "expectation": "each of 18 fixtures compared with itself reports no delta",
+      "observed": "0 deltas, REVIEW"
+    },
+    {
+      "id": "connector-human-only",
+      "expectation": "a human-only or unknown venue never reaches the model",
+      "observed": "HOLD; the model program's marker file was never written"
+    },
+    {
+      "id": "connector-key",
+      "expectation": "the key value never appears in the report and only the named variable reaches the program",
+      "observed": "absent from the report; HOME and other variables absent from the program's environment"
+    },
+    {
+      "id": "platform-refusal",
+      "expectation": "without O_NOFOLLOW the checker, vault and ledger refuse",
+      "observed": "PLATFORM_UNSUPPORTED on the Windows runner and with the flag removed on POSIX"
+    }
+  ],
+  "not_established": [
+    "No real writer's material, samples or decisions have been run through these tools; all fixtures are synthetic.",
+    "The meaning diff is lexical; it is not a semantic or entailment check.",
+    "The vault is not encrypted at rest.",
+    "No independent human review (WI9-09) and no blinded benchmark (WI9-07).",
+    "This receipt moves WI9-02 and WI9-04 to PROTOTYPE only; nothing ships and the version stays 8.0.0."
+  ]
+}

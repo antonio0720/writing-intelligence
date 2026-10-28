@@ -72,3 +72,9 @@ is confident but bounded — it claims what it can prove and names what it can't
 - "Since the beginning of time" or any variant of universal historical framing
 - Dictionary definitions as essay openers
 - Block quotes without analysis
+
+---
+
+## v9 Note: This Is a Register, Not a Person
+
+This file describes an academic register. It is not a measured voice of any author; for a specific author's voice use a per-genre baseline built from their own consented samples (`custom_voiceprint_builder.md`). Writing in this register does not make the text the user's own work, and many courses, journals and conferences are human-only or require disclosure of AI assistance. Check the venue or syllabus first (see `references/academic/academic_mode.md`). The register's rule "claims what it can prove" applies to citations: every source named must have been read and exist, and no quotation, page number or study may be supplied from memory.

@@ -50,3 +50,20 @@ Installer rejects all existing-file collisions; it does not modify upstream v7 f
 ## What is intentionally not being represented as shipped
 
 Automatic extraction of every scene from a full novel, AI-quality adjudication, token-consuming literary rewriting, reader recruitment, actual physical print/EPUB proof, canonical `wi.py` integration, native `.skill` bundle inclusion, live-repo v4–v7 regression, PR creation, merges or v8 release. Those depend on canonical authority and independent evidence rather than a polished ZIP file.
+
+---
+
+## v8 -> v9
+
+**Status:** 9.0.0 is the release (2026-10-28). `wi --version`, `SKILL.md`, the manifest and the changelog all say 9.0.0. Records: [`references/v9/README.md`](references/v9/README.md), [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml).
+
+- **Nothing breaks.** Every v4–v8 command, exit code, digest and bundle format behaves as before. v9 adds files; it removes none of your tooling.
+- **New, optional commands, all through `wi authorship`.** `audit` and `release` (REVIEW/RELEASE_ELIGIBLE exit 0, HOLD exit 3; sends nothing); `vault` for your own firsthand material; `meaning` to see every change a revision makes to what you meant; `ledger` and `phrase-review` for review decisions bound to your own v6 grant; `voice`, `voice-review` and `voice-compare` for your own voice; `scan` (chunked for long manuscripts) and `structure` for editorial questions; `compose` to call a model you choose, after the venue and evidence gates.
+- **Your material stays yours.** v9 ships no voice samples, notes or model. Vault, voice and ledger folders are yours, kept outside any repository; the tools refuse to create them inside one.
+- **One behaviour to know.** A phrase review whose decisions carry only a typed reviewer name now holds `REVIEWER_UNBOUND`; record decisions with `wi authorship ledger record` under your grant.
+- **One rename in craft doctrine.** The retired v8 length-quota rewrite operator is now `repair_rhythm`, and it no longer prescribes length quotas or detector-oriented edits. Log operation `rhythm_repaired` is emitted going forward; logs that contain the old `variance_injected` operation still validate and are never rewritten.
+- **Dossier schema.** `schemas/v9/authorship-dossier.schema.json` is `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read.
+- **Requirements added by v9.** POSIX file semantics (the checker, vault and ledger refuse with `PLATFORM_UNSUPPORTED` where `O_NOFOLLOW` is unavailable, e.g. Windows — tested on a Windows runner) and Python 3.8+. Paths in a dossier are relative to its directory.
+- **What to expect, and not.** Reports are `self_reported` declarations. Nothing authenticates a writer, and no benchmark or quality result exists yet (WI9-07 has not run).
+
+Verify on a checkout of the branch: `bash scripts/test-v9.sh` and `bash tests/v7/test_wi7.sh`.

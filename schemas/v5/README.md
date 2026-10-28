@@ -193,3 +193,9 @@ Every schema in this directory:
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC
+
+---
+
+## Later schemas
+
+*Released in Writing Intelligence 9.0.0.* These v5 state schemas are unchanged. The v9 authorship dossier lives in [`../v9/authorship-dossier.schema.json`](../v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `wi9-authorship-1` is still read). It describes a self-reported declaration checked by `scripts/wi-authorship.py`, not a v5 state object, and it carries no logical id or state digest.

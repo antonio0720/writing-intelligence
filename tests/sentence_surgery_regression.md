@@ -19,7 +19,7 @@ These cases stress-test the Sentence Surgeon (Pass 6). Each case has a known sen
 
 **Input**: "Most people don't realize this. The truth is simple. You need to change. Today is the day. Start now."
 
-**Expected detections**: LinkedIn cadence signature (5 short declaratives, same length, same opening pattern). Should inject variance.
+**Expected detections**: LinkedIn cadence signature (5 short declaratives, same length, same opening pattern). Should revise only where the thought changes shape (a turn, a consequence), not to vary lengths.
 
 ## Case SS-03 — Adverb Stack
 
@@ -49,7 +49,7 @@ These cases stress-test the Sentence Surgeon (Pass 6). Each case has a known sen
 
 **Input**: Source voice = sovereign_commander. Pass 6 stripped slop but introduced a flat, neutral register.
 
-**Expected transformations**: Restore avg sentence length variance, compression ratio, authority posture. Voice impact should net `increased_fidelity`.
+**Expected transformations**: Restore the author's own documented sentence-length profile, compression ratio and authority posture, measured from consented samples of that author and not from a target. Voice impact should net `increased_fidelity`.
 
 ## Case SS-08 — Rhetorical Question Earned vs. Unearned
 

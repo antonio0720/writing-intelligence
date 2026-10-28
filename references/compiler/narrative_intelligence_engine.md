@@ -138,3 +138,11 @@ The Narrative Architect emits a storyworld memory that:
 - Persists for future sessions
 
 If any of the above fails, the engine has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — Narrative intelligence
+
+v9 leaves the series audit, canon hierarchy and cross-format checks unchanged and adds no fiction gate.
+
+Where v9 touches it: cross-book voice fidelity scores are descriptive. They compare style to the author's own approved samples and are not evidence of authorship. Declared origin and contribution history travel with each format. Audit questions remain prompts for the author; release is a human decision.

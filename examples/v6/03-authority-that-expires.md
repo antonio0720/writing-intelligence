@@ -283,3 +283,7 @@ wi authority issue --subject REVIEWER --capability claim.accept.quantity_change 
 
 Next: [`04-a-capsule-a-stranger-verifies.md`](04-a-capsule-a-stranger-verifies.md) —
 handing the result to somebody outside the organization.
+
+## Connection to v9
+
+*Released in Writing Intelligence 9.0.0.* This is the model the v9 `release` grant follows. In `scripts/wi-authorship.py release`, the person who releases a package must hold this kind of v6 grant — capability `release.approve`, scope `release_target:<venue>` — and `release` checks it in the store twice: at the moment the person decided and now. Inside the window it succeeds; after `--expires` passes it holds with `AUTHORITY_EXPIRED`, with nobody revoking anything, and a revocation holds it with `AUTHORITY_REVOKED`. A grant typed into the dossier instead is refused as `AUTHORITY_UNBOUND`.

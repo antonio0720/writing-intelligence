@@ -32,17 +32,18 @@ Three cells deserve their own sentences.
 
 ---
 
-## What is inside the `.skill` bundles (v8: three of them)
+## What is inside the `.skill` bundles (four of them)
 
-Since v8 the payload ships as **three bundles**, each under the 200-file ceiling, each built and verified by `scripts/build-skill.sh`:
+The payload ships as **four bundles**, each under the 200-file ceiling, each built and verified by `scripts/build-skill.sh`:
 
 | Bundle | Files | Holds |
 |---|---|---|
-| `writing-intelligence.skill` | 191 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
+| `writing-intelligence.skill` | 197 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
 | `writing-intelligence-craft.skill` | 86 | The craft library — genre packs, voiceprints, anti- and positive patterns, diagnostics, the compiler references, including v8's fiction references and genre addenda |
 | `writing-intelligence-story.skill` | 184 | v8 Story Intelligence — the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, `references/v8`, `rules/`, `schemas/v8`, `policies/`, `tests/v8`, `tests/v8_arc`, `scripts/test-v8.sh` |
+| `writing-intelligence-authorship.skill` | 70 | **New in v9** — `scripts/wi-authorship.py`, `scripts/wi.py`, `schemas/v9`, `prototypes/wi9`, `references/v9`, `examples/v9`, `tests/v9`, `scripts/test-v9.sh` |
 
-Install all three on every surface that takes uploaded skills. The section below describes the original single-bundle layout and is kept for history; the table above is current.
+Install all four on every surface that takes uploaded skills. The section below describes the original single-bundle layout and is kept for history; the table above is current.
 
 
 A skill bundle may contain **at most 200 files**. Over that, the upload is
@@ -94,12 +95,14 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
 
 ## 2. Cowork and Claude.ai — the uploaded bundle
 
-1. Download **all three bundles**:
+1. Download **all three bundles**, and the v9 bundle if you want it:
 
    ```bash
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence.skill
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+   # the v9 authorship bundle:
+   curl -LO https://github.com/antonio0720/writing-intelligence/releases/latest/download/writing-intelligence-authorship.skill
    ```
 
    This tracks `main`, so it always matches these instructions. CI rebuilds the bundle on every push and fails if it does not byte-match the committed one, so this file cannot quietly go stale.
@@ -107,7 +110,7 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
    Want a pinned version? Take it from [Releases](https://github.com/antonio0720/writing-intelligence/releases), where each bundle ships with a `.sha256` beside it. Note that `releases/latest` resolves to the newest **published release** — if a version has landed on `main` and has not been released yet, `latest` is behind it.
 
 2. In Claude: **Settings → Capabilities → Skills → Upload skill** (labelled **Settings → Skills** in some versions).
-3. Select a downloaded `.skill` file. Repeat for each of the three; each appears as its own skill (`writing-intelligence`, `writing-intelligence-craft`, `writing-intelligence-story`).
+3. Select a downloaded `.skill` file. Repeat for each; each appears as its own skill (`writing-intelligence`, `writing-intelligence-craft`, `writing-intelligence-story`, and for the preview `writing-intelligence-authorship`).
 4. If a v7 copy is already installed, replace it: delete or disable the old skill of the same name, then upload the v8 file.
 
 **Verify what you downloaded** before uploading:
@@ -465,6 +468,35 @@ CI also checks that every relative link in this repository resolves (`python3 sc
 
 ---
 
+## Running the v9 tools
+
+**9.0.0 is the release.** Every install route above installs 9.0.0, including the authorship bundle. From a checkout you can also run the v9 tools directly with `python3 scripts/wi.py authorship <tool>`, standard library only, offline, Python 3.8 or newer, on macOS or Linux (Windows refuses with `PLATFORM_UNSUPPORTED`). See [`../references/v9/README.md`](../references/v9/README.md).
+
+```bash
+# 1. The authorship-claim declaration checker (not an authorship verifier)
+python3 scripts/wi-authorship.py audit   --input path/to/dossier.json   # REVIEW (exit 0) or HOLD (exit 3)
+python3 scripts/wi-authorship.py release --input path/to/dossier.json --authority-store ~/wi-authority   # RELEASE_ELIGIBLE (exit 0) or HOLD (exit 3); transmits nothing
+
+# 2. The reference kernel (editorial questions, not detection)
+python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format text
+python3 prototypes/wi9/wi9_core.py preflight --root prototypes/wi9/examples --input research_case.json
+
+# 3. The tests
+python3 -m unittest discover -s tests/v9 -p 'test_*.py'            # checker, schema parity, meaning-led doctrine
+python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py' # reference kernel
+bash tests/v7/test_wi7.sh                                           # version strings must still agree
+```
+
+Three things to know before you rely on any of it:
+
+- **`REVIEW` is not permission to send.** `audit` can never emit a release state; every report says `declaration_status: self_reported`, because nothing here authenticates a writer. `RELEASE_ELIGIBLE` is a separate subcommand with stricter inputs and still sends nothing.
+- **POSIX only.** The checker reads files component by component with `O_NOFOLLOW` under the dossier's directory. Where `dir_fd` and `O_NOFOLLOW` do not exist (Windows), it refuses to run rather than read less safely. Paths in a dossier resolve relative to the dossier, never absolute, never `..`, never through a symlink.
+- **Nothing is installed or sent.** No network, no service, no model. A source you list in a dossier is read from disk and hashed, not uploaded.
+
+The dossier format and its limits are in [`SCHEMA_AND_LIMITS.md`](SCHEMA_AND_LIMITS.md). How to read a `HOLD` is in [`OPERATOR_MANUAL.md`](OPERATOR_MANUAL.md).
+
+---
+
 ## Troubleshooting
 
 **The skill does not trigger in Claude Code.** Confirm `~/.claude/skills/writing-intelligence/SKILL.md` exists and its YAML frontmatter is intact — the `name` and `description` fields are what the loader reads. Restart after installing.
@@ -485,7 +517,7 @@ CI also checks that every relative link in this repository resolves (`python3 sc
 
 ## Getting help
 
-- **Bugs and detector benchmarks:** [Issues](https://github.com/antonio0720/writing-intelligence/issues) — templates exist for bug reports, new genre packs, new voiceprints, new anti-patterns and detector benchmarks.
+- **Bugs and editorial-quality reports:** [Issues](https://github.com/antonio0720/writing-intelligence/issues) — templates exist for bug reports, new genre packs, new voiceprints, new anti-patterns and editorial-quality reports. Detector scores are never a criterion.
 - **Proposing changes to doctrine:** [`../governance/RFC_PROCESS.md`](../governance/RFC_PROCESS.md). Changing what `verified`, `stale`, `BLOCK`, `permitted` or `source quarantine` *promises* requires an RFC and a benchmark case that fails before the change and passes after it.
 - **Contributing:** [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
 

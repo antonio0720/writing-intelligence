@@ -1,98 +1,17 @@
-# Strong Openings
 
-## What an Opening Must Do
-
-Earn the reader's next 30 seconds. Nothing else matters until this is achieved.
-A piece that opens weak may contain brilliance on page 3 that no one will see.
 
 ---
 
-## Opening Types That Work
+# v9: Openings and Endings From the Material
 
-### The Concrete Moment
-"On March 14, 2008, Bear Stearns had $18 billion in cash reserves. By March 16, it had $2 billion."
+**The opening examples above are synthetic pattern illustrations.** The figures, dates, and the Bear Stearns, courtroom and household-income lines were written to show a shape; they have not been checked and are not facts to reuse. A real Concrete Moment or Data Spike comes from a source the writer has read, cited.
 
-Why it works: Specific. Temporal. The gap between the numbers creates a question the reader must resolve.
+**Concrete before cadence (WI9-C).** Pick the opening that the material supports, not the one that sounds best. Ask: what actually happened, to whom, where, what was decided, what did it cost, what is uncertain? If the author supplied an event, open on it. If the best the sources give is a number, open on the number with its source. If the author gave nothing concrete, do not manufacture a scene to open on; ask for one, or open on the claim plainly. An opening that is vivid and invented is a defect in non-fiction. Fiction may invent inside its own world, and v9 does not change fiction gates.
 
-### The Counterintuitive Claim
-"The safest bridges are designed to move."
+**Authority Declaration.** "This policy will fail" is a claim that has to be carried by the body. If the piece cannot support it, soften the claim to what it can support rather than keeping the confidence and adding a flourish.
 
-Why it works: Violates expectation. The reader must continue to reconcile the contradiction.
+**Hypothetical openings.** The "Imagine a world where..." entry in the avoid list is about stalling, not about every hypothetical. A labeled hypothetical is legitimate when the piece is explicitly a thought experiment and says so; it must not be passed off as something that happened.
 
-### The Question That Bites
-"What happens to a country when its most educated citizens can't afford to have children?"
+**Endings and the catalog.** The Ending Types to Avoid overlap the catalog's `generic_closure` category ("only time will tell", "the possibilities are endless") and `empty_emphasis`. The experimental 334-rule catalog asks *what earned consequence or unresolved question should end the passage?* A match is an editorial question: a closing line that is the author's habitual sign-off, a quotation, or a liturgical formula is retained on purpose. Record the call in the review ledger (`prototypes/wi9/wi9_phrase_review.py`) with `retain_as_written` or `revise_for_clarity`.
 
-Why it works: The question names a real tension with real stakes. It's not rhetorical — the reader genuinely wonders.
-
-### The Authority Declaration
-"This policy will fail, and here's the structural reason no one is discussing."
-
-Why it works: Makes a falsifiable claim. The reader either agrees and wants confirmation or disagrees and wants to see the argument collapse.
-
-### The Scene Drop
-"The courtroom was empty except for the defendant, who was reading a cookbook."
-
-Why it works: Specific, visual, unexpected. The detail (cookbook) creates dissonance the reader wants resolved.
-
-### The Data Spike
-"Between 2019 and 2024, the median American household lost 23% of its purchasing power while the S&P 500 gained 87%."
-
-Why it works: The juxtaposition of two numbers tells a story. The gap is the argument.
-
----
-
-## Opening Types to Avoid
-
-- Dictionary definitions ("Webster's defines leadership as...")
-- Weather/season metaphors ("As the leaves turn...")
-- Throat-clearing ("It's often said that..." / "Throughout history...")
-- Hypothetical futures ("Imagine a world where...")
-- Self-referential meta ("In this essay, I will...")
-- Question that answers itself ("Who doesn't want success?")
-
----
-
-# Strong Endings
-
-## What an Ending Must Do
-
-Leave residue. The reader closes the tab or turns the page and something stays.
-The ending does not summarize. The reader just read the piece. The ending does
-one of these:
-
-### The Implication Extension
-Take the argument one step further than the body went. "If this is true, then..."
-followed by a consequence the reader hasn't considered.
-
-### The Challenge
-Issue a direct challenge to the reader or the field. Not inspirational ("let's
-all do better") but specific ("until the committee publishes the underlying data,
-every conclusion built on their report is provisional").
-
-### The Return
-Circle back to the opening image, moment, or question — but with the weight of
-everything the piece has established. The same detail now means something different.
-
-### The Image
-Land on a single, concrete image that crystallizes the argument. No explanation.
-The image does the work.
-
-### The Question Earned
-Ask a question that the piece has earned the right to ask. Not the opening
-question restated — a new question that only became visible through the argument.
-
-### The Quiet Close
-No drama. No punchline. Just the last necessary sentence, stated plainly, and
-silence after it.
-
----
-
-## Ending Types to Avoid
-
-- Summary ("In conclusion..." / "To sum up..." / "Ultimately...")
-- Manufactured profundity ("Perhaps the real X was the Y we Z along the way")
-- Call to vague action ("Let's all do better" / "The time for change is now")
-- Rhetorical question that assumes its own answer
-- Restatement of the thesis in different words
-- "Only time will tell"
-- "The future remains to be seen"
+**Sequences of answers.** When a piece has several parts (three answers to three questions), do not give each the same opening gesture and the same closing turn. Give each the shape its facts need; a short part may be one plain sentence.

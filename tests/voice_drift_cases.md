@@ -42,6 +42,42 @@ These cases stress-test the Voice Fingerprinter (Pass 7). Each case provides a b
 
 **Expected detection**: Delivery Packager flags each arena's drift. Successful runs preserve fingerprint within tolerance across all arenas.
 
+## v9 rules: consented samples 
+
+Drift is measured against a baseline. Under the v9 proposal a *personal* baseline is evidence only when it meets these rules; otherwise the case is not run against an individual author.
+
+## Case VOICE-DRIFT-06 — Baseline Without Consent
+
+**Baseline**: Samples from an author who has not consented to their use.
+
+**Expected**: no personal voiceprint is built. The run uses a stated genre voice instead and says so.
+
+## Case VOICE-DRIFT-07 — Baseline Too Thin
+
+**Baseline**: Two samples, or three samples under 500 words each.
+
+**Expected**: `VOICE_BASELINE_INSUFFICIENT` (advisory in the authorship checker). A personal voiceprint needs at least three consented, human-authored samples of at least 500 words, in the genre being drifted-tested. Short-sample statistics are not reported as a fingerprint.
+
+## Case VOICE-DRIFT-08 — Baseline Contains Assisted Text
+
+**Baseline**: A sample that was model-drafted and lightly edited, declared `human_authored`.
+
+**Expected**: the declaration is recorded as self-reported; it cannot be authenticated. The sample's presence cannot raise a finding about who wrote the new draft.
+
+## Case VOICE-DRIFT-09 — Style Match Cannot Change Origin
+
+**Baseline**: A strong, consented voiceprint.
+
+**Output**: An AI-generated draft revised until it matches the voiceprint closely.
+
+**Expected**: origin stays `ai_generated` or `ai_assisted`. A close match is not authorship; it does not clear a human-only venue. Drift magnitude can be reported; it cannot be offered as provenance.
+
+## Case VOICE-DRIFT-10 — The Author Reviews
+
+**Expected**: the voiceprint and each restoration are reviewed by the author; a measurement alone does not decide "that sounds like me".
+
+Per-genre note: samples in one genre are not a baseline for another. Statistics only; no authentication; no corpus of consented author samples exists yet, so none of VOICE-DRIFT-06 to 10 has been run against real data (WI9-03 is a prototype).
+
 ## Scoring
 
 Each case scored on:

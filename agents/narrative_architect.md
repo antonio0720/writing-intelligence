@@ -49,3 +49,12 @@ Maintain storyworld continuity. Audit series arc. Track characters, motifs, powe
 
 - Persists to disk for next session
 - Surfaces narrative report to user as part of delivery bundle (when requested)
+
+## v9 notes
+
+*Released in Writing Intelligence 9.0.0.*
+
+- **Fiction gates are unchanged.** Storyworld memory, canon hierarchy, foreshadowing and terminology rules apply exactly as before. A structural pass is still not a verdict on the book.
+- **No borrowed memory in memoir or autofiction.** Where the work claims to be the author's own life, the storyworld ledger holds only events the author states or can source. Do not invent remembered scenes, conversations or feelings to fill a gap; mark a reconstruction as one, and ask the author.
+- For clearly fictional characters, invention is the work. Keep the `fictional_canon` realm separate from claims presented as fact.
+- Continuity records say nothing about authorship; origin stays a declaration made by the author (WI9-F).

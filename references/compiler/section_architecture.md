@@ -96,3 +96,15 @@ Common effective sequences:
 
 The sequence should escalate. The reader should feel the argument building,
 not meandering.
+
+---
+
+## v9 Meaning-First Order (proposed) — Section architecture
+
+Section jobs map onto v9 editorial pass 2.
+
+- **Job from material.** A section's job (observation, mechanism, consequence, counterargument, qualification, turn, resolution) is set by what the sources support, not by a template.
+- **No symmetry.** Do not give sections equal length, parallel openings or matching closers unless the content is parallel.
+- **Removal.** A section with no downstream dependency or no new proposition is cut.
+- **Evidence.** Sections that assert firsthand experience cite its source.
+- **Fiction.** v9 leaves this fiction-relevant structure and scoring unchanged. Section scores are descriptive and do not certify distinct thought or authorship.

@@ -34,3 +34,25 @@ A reproducible counterexample in which a dangling ref passes validation, the sam
 Run v4–v7 shell suites **inside the real repository checkout** against an authorized v8 integration branch. Pin actual root and decision states, run `wi simulate` to identify changed dependent claims, submit required owner decisions, verify merge conflict preservation, run release obligations and verify the resulting proof capsule from a second environment. Any output requiring genuine reader impact needs source-linked reader research. A generated JSON file is neither an independent readback nor a publishing outcome.
 
 The supplied `plans/v8-arc.proposal.json` deliberately marks all upstream waves `planned`. Its local test receipt proves only what this extracted package executed. Never mark one of those waves `shipped` on the basis of local standalone checks.
+
+---
+
+## v9 lanes
+
+9.0.0 is published (2026-10-28). The v9 lanes run beside the v8 arc suite above and never stand in for it.
+
+| Lane | Command | What it covers |
+|---|---|---|
+| Authorship checker | `python3 -m unittest discover -s tests/v9 -p 'test_*.py'` | `audit` / `release` behavior, schema-to-checker vocabulary parity (`test_schema_parity.py`), and the meaning-led doctrine scan (`test_doctrine_meaning_led.py`) |
+| Reference kernel and per-writer tools | `python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'` | The 334-rule phrase scanner (single and chunked), the grant-bound review ledger, the firsthand vault, the meaning diff, structure checks, voice measures and held-out stability, the composition contract and the model connector, and the hardening cases |
+| Platform refusal | `python3 -m unittest discover -s tests/v9 -p 'test_platform_refusal.py'` | The checker, vault and ledger refuse with `PLATFORM_UNSUPPORTED` where `O_NOFOLLOW`/`dir_fd` are absent (real on Windows, simulated on POSIX) |
+| In-bundle runner | `bash scripts/test-v9.sh` | The lanes above, from the repository or the extracted authorship bundle; a lane that runs zero tests fails |
+| Existing floor | `bash tests/v7/test_wi7.sh` | Version strings in `scripts/wi.py`, `SKILL.md` and the manifests still agree; v9 must not move them |
+| Links | `python3 scripts/check-links.py` | Every relative link resolves |
+| Mutation steps | the two `a disabled guard must turn the suite red` steps in `.github/workflows/wi9-proposal.yml` | Disable seven checker guards and thirteen per-writer guards in turn (vault, ledger, phrase review, meaning, chunked scan, voice drift, model connector); the suite must go red each time or CI fails |
+
+The workflow runs on Python 3.8, 3.11 and 3.13 on Linux, the full v9 suite on macOS, and the platform refusal and pure text checks on Windows, and checks that `references/v9/README.md` still says it is a proposal and sets no detector-score target.
+
+**Receipts.** [`../plans/receipts/WI9-00.json`](../plans/receipts/WI9-00.json) records the baseline and defect audit (validated; owner approval pending). [`../plans/receipts/WI9-P0.json`](../plans/receipts/WI9-P0.json) records the P0 repairs. A receipt says what ran, not that a wave shipped.
+
+**What v9.0.0 requires and does not yet have.** A `9.0.0` tag needs WI9-09 (independent review and rollout) and the owner's approval. Neither has happened. The 60-case editorial benchmark (WI9-07), a real writer's run of the voice tools on their own samples, and an external review have not run, so no document may report v9 quality results.

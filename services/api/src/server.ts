@@ -12,6 +12,7 @@ import { voiceRouter } from "./routes/voice";
 import { repackageRouter } from "./routes/repackage";
 import { benchmarkRouter } from "./routes/benchmark";
 import { manifestRouter } from "./routes/manifest";
+import { v9Router } from "./routes/v9";
 
 export function createApp(): express.Express {
   const app = express();
@@ -44,6 +45,7 @@ export function createApp(): express.Express {
   app.use(repackageRouter);
   app.use(benchmarkRouter);
   app.use(manifestRouter);
+  app.use(v9Router);
 
   // 404 for anything unmatched.
   app.use((_req: Request, res: Response) => {

@@ -1,14 +1,14 @@
 ---
 name: writing-intelligence
-description: Writing Intelligence v8 — Story Intelligence on the Sovereign Meaning Runtime. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop), the v7 institutional program (claims anchored to exact source spans, branches, expiring grants, conflict-preserving merge, simulation, offline proof capsules) and, new in v8, 340 numbered fiction requirements as offline tools — a fiction and thriller audit (tension, rule cost, power limits, promise debt), arc, want/need and ending algebra, the craft of openings, fights, opposition, suspense and sequences, and a Japan Story OS for culturally careful worlds. A structural pass is never a good-novel verdict; publication gates HOLD for human and reader review. Use whenever the user wants to write, rewrite, edit, ghostwrite, audit, fact-check or verify prose — grants, legal, policy, novels, thrillers, manga, speeches. Trigger when unnamed — 'clean this up', 'make this sound like me', 'does my ending land', 'check my sources'.
+description: Writing Intelligence v9 — Authentic Voice & Authorship Provenance on the Sovereign Meaning Runtime. Keeps a writer's own experience, numbers, positions and voice through every edit — first-person claims checked against their private firsthand vault, a meaning diff that shows every change a revision makes to what they meant, review decisions bound to their own grant, voice measured from their own samples, and human-only venue rules enforced before anything is sent — never a detector-score target. Carries the governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop), claims anchored to exact source spans with branches, expiring grants, conflict-preserving merge and offline proof capsules, and v8's 340 fiction requirements (tension, arcs, endings, suspense, a Japan Story OS). Use whenever the user wants to write, rewrite, edit, ghostwrite, audit, fact-check or verify prose. Trigger when unnamed — 'clean this up', 'make this sound like me', 'did the edit change what I said', 'check my sources'.
 ---
 
-# Writing Intelligence v8 — Story Intelligence on the Sovereign Meaning Runtime
+# Writing Intelligence v9 — Authentic Voice & Authorship Provenance on the Sovereign Meaning Runtime
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 8.0.0
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines: fiction & thriller, arc & ending, the craft, Japan Story OS)**
+**Version:** 9.0.0
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines: fiction & thriller, arc & ending, the craft, Japan Story OS)** → **v9.0 (Authentic Voice & Authorship Provenance — firsthand vault, meaning diff, grant-bound review, per-writer voice)**
 
 ---
 
@@ -18,7 +18,7 @@ v8 is **Story Intelligence** — the fiction half of this system brought up to t
 
 **The v8 rule:** *a structural pass is not a good novel.* Mechanical consistency, interpretive signal, human editorial judgment and independent reader reception are four different states and are never coerced into one another. Every publication gate in v8 holds — **HOLD (exit 3)**, and the Japan Story OS preflight refuses with exit 2 — until a human editor and real readers have spoken, by design. A need is an interpretation attributed to a person, never a model's access to a character's soul; a cultural fact needs a scoped source, a fictional canon needs an author's adoption, and missing information stays missing.
 
-**What 8.0.0 ships, and what it does not.** Shipped, with receipts in `plans/receipts/WI8-R*.json`: the four engines installed additively (zero collisions, no v4–v7 file changed in behaviour), their own suites passing inside this repository, every v4–v7 regression unchanged, and a third installable bundle, `writing-intelligence-story`, that carries them. Planned, and said so: canonical integration into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review — waves FI8-03–06 and WI8-00–WI8-43 in `plans/v8.manifest.yaml`. Index: `references/v8/README.md`.
+**What 8.0.0 shipped (and 9.0.0 carries unchanged), and what it does not.** Shipped, with receipts in `plans/receipts/WI8-R*.json`: the four engines installed additively (zero collisions, no v4–v7 file changed in behaviour), their own suites passing inside this repository, every v4–v7 regression unchanged, and a third installable bundle, `writing-intelligence-story`, that carries them. Planned, and said so: canonical integration into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review — waves FI8-03–06 and WI8-00–WI8-43 in `plans/v8.manifest.yaml`. Index: `references/v8/README.md`.
 
 ### v8 commands (run from the repository or the `writing-intelligence-story` bundle)
 
@@ -34,6 +34,24 @@ python3 extensions/wi8/japan04/cli/wi8_japan.py check project.json
 ```
 
 Exit codes across all four: `0` analysis ran or mechanical-only pass, `2` malformed input or structural block, `3` editorial or publication hold.
+
+---
+
+## v9 — authentic voice and authorship provenance
+
+9.0.0 is the release (program WI9-AUTHORSHIP). Report no benchmark or quality result for v9: the WI9-07 benchmark has not run and no independent review has happened. When a task touches **authorship, venue rules, evidence, voice or cadence**, apply these rules and use the v9 tools:
+
+- **Source before style.** Author notes, transcripts and drafts come first. Never write an "I did / I saw" scene the author has not supplied; a hypothetical stays labeled hypothetical, and a roadmap is not a completed build.
+- **Venue contract first.** Read the venue's rule before drafting. For a **human-only** venue, produce research briefs and interview prompts only — no AI-written or AI-rewritten pitch, reply or essay for submission, even if the person will press send.
+- **Evidence by anchor.** Check a draft's consequential claims with `python3 scripts/wi-authorship.py audit --input dossier.json` (REVIEW exit 0 / HOLD exit 3) and a person's release decision with `… release …` (RELEASE_ELIGIBLE / HOLD). Both check **self-reported declarations**; neither authenticates a writer, proves a source true, or sends anything. REVIEW is never permission to send.
+- **Firsthand material comes from the writer's own vault.** Before writing any first-person sentence, check it against the writer's private vault (`wi authorship vault check --root <their vault> --claims claims.json`). A `planned`, `hypothetical` or `inferred` item, or a model-written one, never supports "I did"; a quote needs a verbatim record. If nothing anchors it, ask the writer or leave it out.
+- **Meaning is the writer's.** After any revision, run `wi authorship meaning diff --original <theirs> --candidate <yours>` and show the writer every delta (numbers, dates, plan→done, estimate→exact, negation, stance, cause, outcome, hedge, concession, chronology, quotation, dropped or new claims). Never present a revision as faithful while a delta is undecided; only the writer accepts or rejects, under their own grant.
+- **Voice is evidence.** A voice baseline comes from the writer's own samples (3+, 500+ words each, per genre) in their own private folder, reviewed by that writer (`voice`, `voice-review`); `voice-compare` shows drift. No corpus ships with v9. Resemblance to a voice never changes a declared origin and never proves authorship.
+- **Cadence follows thought.** Repair rhythm (`repair_rhythm`) because the thought changes shape, never to move an AI-detector number. Detector scores are never a target, a gate or a claim; no typos, quotas or "human-looking" noise.
+- **Phrase and shape findings are questions.** `wi authorship scan` (334 rules, long files in chunks) and `wi authorship structure` (repeated openings, hollow contrasts, template paragraphs) flag editorial questions; the writer decides, recorded in their own grant-bound ledger (`wi authorship ledger`, `phrase-review`). A match is never proof of AI authorship and never triggers an automatic rewrite.
+- **A model is the writer's choice, after the gates.** `wi authorship compose` reaches a model only after the venue policy and evidence checks, and only the program and key variable the writer names. Its best result is a draft that needs the writer's review; it is `ai_generated` and never release.
+
+Index: `references/v9/README.md` · defects: `references/v9/defects.md` · waves: `references/v9/WAVES.yaml` · dossier contract: `schemas/v9/authorship-dossier.schema.json`.
 
 ---
 
@@ -248,6 +266,7 @@ The v5 layer remains authoritative for its own subject matter: [`references/v5/`
 The refusals are load-bearing, not decorative. Full reasoning in [`references/v6/NON_GOALS.md`](references/v6/NON_GOALS.md).
 
 - **Detector evasion.** Anti-slop is a craft objective — prose that does not pattern-match to machine writing because it is genuinely better built. It is not a laundering service.
+- **Passing off or fabricated experience (v9).** No invented firsthand scene, no submission-ready prose for a human-only venue, no randomly planted imperfections, no detector score as a target. The authorship checker tests declarations only.
 - **Source generation.** It will never construct a citation. If a claim needs support and none exists in the supplied material, the output is `needs_source`. Inventing a plausible reference is the single most damaging thing this system could do.
 - **Truth verification.** It verifies support within the sources supplied. It cannot tell you the source is right.
 - **Absolute quality scores.** Scores are relative to a stated profile, arena and mission. There is no universal writing number, and there is no overall health gauge.
@@ -260,10 +279,10 @@ The refusals are load-bearing, not decorative. Full reasoning in [`references/v6
 
 ## The companion packs
 
-**Three bundles in v8.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library below, which now also carries the v8 fiction compiler references and genre addenda), and `writing-intelligence-story` (the four v8 story engines, their rules, schemas and suites). Install all three; each stands alone, and each is under the 200-file ceiling.
+**Four bundles in v9.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library, including the v8 fiction compiler references and genre addenda), `writing-intelligence-story` (the four v8 story engines) and `writing-intelligence-authorship` (the v9 authorship, vault, meaning, voice and review tools). Install all four; they are one system in four artifacts.
 
 
-The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern detectors, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.
+The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern diagnostics, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.
 
 Install both. If only this one is present, the craft doctrine summarized below still governs; the genre packs are then reference material one `git clone` away rather than in context.
 
@@ -330,10 +349,10 @@ Every piece of writing processed by v3.0 runs through eleven sequential passes. 
 | 3 | Diagnostic Scan | Identify residue, gaps, drift, slop, weak claims | `DiagnosticReportV3` |
 | 4 | Architecture Compile | Build section, paragraph, scene, or argument structure | `ArchitecturePlanV3` |
 | 5 | Evidence & Epistemic Ledger | Classify claims, sources, inferences, recommendations | `EpistemicLedgerV3` |
-| 6 | Sentence Surgery | Remove slop, inject variance, sharpen language | `SentenceSurgeryLogV3` |
+| 6 | Sentence Surgery | Remove slop, repair rhythm where meaning requires it, sharpen language | `SentenceSurgeryLogV3` |
 | 7 | Voice Restoration | Restore author fingerprint and voice integrity | `VoiceMatchReportV3` |
 | 8 | Genre & Arena Alignment | Fit output to channel, profession, platform, reader | `ArenaAlignmentV3` |
-| 9 | Adversarial Stress Battery | Attack the draft as reader, editor, skeptic, detector | `StressBatteryV3` |
+| 9 | Adversarial Stress Battery | Attack the draft as reader, editor, skeptic, author | `StressBatteryV3` |
 | 10 | Score & Delivery Packaging | Produce final draft, scorecard, notes, formats | `DeliveryBundleV3` |
 | 11 | Memory & Benchmark Update | Save learnings and regression data | `MemoryBenchmarkUpdateV3` |
 
@@ -375,8 +394,8 @@ Read `references/anti_patterns/phrases.md`, `structures.md`, `cadence.md`, `fake
 - Argument gaps (unsupported claims, missing premises)
 - Evidence gaps (assertions without backing)
 - Tone drift (sections that shift register without cause)
-- Perplexity flatness (vocabulary predictability across paragraphs)
-- Burstiness deficit (lack of sentence-length variance)
+- Predictable filler (runs of sentences that assert nothing a reader could check or use)
+- Undifferentiated rhythm (every sentence doing the same job at the same weight — a reading problem, never an authorship signal or a detector target)
 
 ### 2.6 Pass 4 — Architecture Compile
 
@@ -388,11 +407,11 @@ Read `references/compiler/epistemic_ledger.md`. Classify each major sentence as 
 
 ### 2.8 Pass 6 — Sentence Surgery
 
-Read `references/compiler/prose_compiler_v3.md`. Apply hard bans, soft bans, earned exceptions. Inject variance. Compress without loss. Track every transformation in `SentenceSurgeryLogV3`. Every cut, strengthening, and preservation is recorded.
+Read `references/compiler/prose_compiler_v3.md`. Apply hard bans, soft bans, earned exceptions. Repair rhythm where meaning requires it — never to hit a length quota or move a detector score (v9). Compress without loss. Track every transformation in `SentenceSurgeryLogV3`. Every cut, strengthening, and preservation is recorded.
 
 ### 2.9 Pass 7 — Voice Restoration
 
-Read `references/voiceprints/voice_fingerprint_engine.md` + the applicable voiceprint. Measure baseline: avg sentence length, variance, compression, abstraction tolerance, metaphor density, question frequency, transition habits, dominant syntactic structures. Detect drift. Restore fingerprint. Emit `VoiceMatchReportV3` showing whether fidelity increased or decreased.
+Read `references/voiceprints/voice_fingerprint_engine.md` + the applicable voiceprint. Measure baseline: avg sentence length, variance, compression, abstraction tolerance, metaphor density, question frequency, transition habits, dominant syntactic structures. Detect drift. Restore fingerprint. A fingerprint comes from consented, human-authored samples; resemblance never changes a declared origin (v9). Emit `VoiceMatchReportV3` showing whether fidelity increased or decreased.
 
 ### 2.10 Pass 8 — Genre & Arena Alignment
 
@@ -402,17 +421,17 @@ Read `references/compiler/arena_delivery.md` + each active pack from `references
 
 Interrogate:
 1. What would a skeptical, smart reader attack first?
-2. What sentence could appear in any AI output?
+2. What sentence could appear in any document on this topic, by anyone?
 3. What could be cut without losing meaning?
 4. What line actually lands?
 5. Does the opening earn the next 30 seconds?
 6. Does the closing leave residue?
-7. Is there a single sentence a human would never write this way?
+7. Is there a sentence this author would never write this way?
 8. (Narrative) Would a reader turn the page?
 9. (Narrative) Does the final image burn?
 10. (Dialogue) Can you tell who's speaking with names removed?
 11. (High-stakes) What is the worst-faith reading of the strongest claim?
-12. (Detector) Could a detector flag any passage on cadence alone?
+12. (Author) Is there a passage where rhythm hides which sentence carries the point, or a claim the author would not recognize as theirs?
 
 Emit `StressBatteryV3`.
 
@@ -473,7 +492,7 @@ v3.0 preserves and extends the seven v2.0 rubrics, then adds a v3-grade composit
 **Automatic Fail Conditions (score capped at 65 regardless of other marks):**
 
 - 3+ hard-ban phrases detected
-- Perplexity flatness across 5+ consecutive sentences
+- Predictable filler across 5+ consecutive sentences (nothing a reader could check or use)
 - Zero domain-specific vocabulary in 500+ words
 - Argument contains unsupported universal claim
 - Fabricated citation, statistic, or quote
@@ -497,7 +516,7 @@ v3.0 decomposes the kernel into a coordinated multi-agent writing board. Each ag
 | 7 | Sentence Surgeon | Repair prose without flattening voice | Rewrite log |
 | 8 | Dialogue Commander | Fix conversation, subtext, tension | Dialogue stress report |
 | 9 | Narrative Architect | Audit storyworld, chapter, arc, series | Narrative report |
-| 10 | Stress Tester | Adversarial battery: reader / editor / skeptic / detector | Stress battery |
+| 10 | Stress Tester | Adversarial battery: reader / editor / skeptic / author | Stress battery |
 | 11 | Scorekeeper | Score all applicable rubrics | Scorecard |
 | 12 | Delivery Packager | Format final assets to arena spec | Delivery bundle |
 
@@ -608,7 +627,7 @@ Preserved from v2.0 (19) + 5 new in v3.0:
 | `make_executable` | Convert insight into action steps |
 | `genre_transfer(from, to)` | Rewrite in target genre, preserve content |
 | `audience_shift(from, to)` | Adjust register for different reader |
-| `inject_variance` | Add sentence-length and vocabulary unpredictability |
+| `repair_rhythm` | Reshape sentences so rhythm follows meaning (replaces the retired v8 length-quota operator; no length quotas or detector targets) |
 | `kill_padding` | Remove every sentence not advancing the argument |
 | `strengthen_closing` | Rewrite final paragraph for maximum residue |
 | `scene_audit` | Run chapter construction checklist |

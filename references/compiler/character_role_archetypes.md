@@ -423,3 +423,11 @@ For any chapter, answer:
 5. Is there at least one role revelation during the chapter? → If not, the chapter may lack a turn.
 6. Which character generates the most tension? → That character should have the most page time during the pressure peak.
 7. Which character's fate carries the most emotional weight? → That character needs at least one humanizing moment before their fate arrives.
+
+---
+
+## v9 Meaning-First Order (proposed) — Character roles
+
+v9 leaves the twelve structural roles and the role audit unchanged. v9 adds nothing to this fiction file.
+
+Where v9 touches it: role assignment is a craft diagnostic. It does not measure originality and does not establish authorship. Any editing based on it is a proposal for the author to accept or reject.

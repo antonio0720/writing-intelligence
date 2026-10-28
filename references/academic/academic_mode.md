@@ -4,7 +4,7 @@
 
 This module extends the writing compiler for college and scholarly contexts.
 It adds discipline-specific reasoning, rubric compliance, citation intelligence,
-authorship provenance, and anti-hallucination rules.
+authorship provenance, and anti-hallucination rules. Under v9 it also yields to the institution's integrity policy: see "v9: Academic Integrity" at the end of this file.
 
 ---
 
@@ -117,7 +117,7 @@ Violation of any rule above is an automatic fail condition.
 
 ## Authorship Proof Layer
 
-For contexts where AI-detection or authorship verification matters:
+For contexts where a course, journal or institution asks how the work was produced, keep an honest record of the work as it actually happened. This layer documents a person's real process; it does not manufacture a history. A log written after the fact to look like drafting, or a revision trail produced by a model, is a false record.
 
 ### Draft Provenance
 Maintain a log: outline → rough draft → revision 1 → revision 2 → final.
@@ -153,8 +153,7 @@ Ground the paper in the specific class context:
 - Frame the argument within the course's intellectual trajectory
 - Acknowledge the specific lens the course applies (Marxist, feminist, empiricist, etc.)
 
-This is the single strongest signal that the work emerged from a real educational
-context and not from a prompt.
+This is not a way to appear original. It is the ordinary discipline of a student who attended the class: the course vocabulary, assigned readings and debates are what the argument is actually about. Do not insert them from a syllabus the student has not engaged with; a reference to a lecture the student did not hear is an invented memory.
 
 ---
 
@@ -191,7 +190,27 @@ Run these passes in order:
 2. **Evidence pass**: Is every claim supported? Every source real?
 3. **Structure pass**: Do sections build? Is the thesis in the right place?
 4. **Paragraph pass**: Does every paragraph have a job and perform it?
-5. **Voice pass**: Does this sound like a student in this class wrote it?
+5. **Voice pass**: Does this reflect how this student writes and thinks? (Compared with the student's own consented samples, never as proof of authorship.)
 6. **Citation pass**: Format correct? Coverage complete? Paraphrase distance sufficient?
 7. **Compression pass**: Can any paragraph lose 20% without damage?
-8. **Final polish pass**: Anti-slop check. Variance injection. Opening and closing audit.
+8. **Final polish pass**: Anti-slop check. Rhythm repaired from meaning, not from quotas. Opening and closing audit.
+
+---
+
+## v9: Academic Integrity
+
+The policy of the course, journal or institution comes first (principle WI9-G). Everything above is subordinate to it.
+
+**1. Read the policy before drafting.** Identify which of three situations applies, and record it: the assignment or venue is **human-only** (no AI drafting, rewriting or paraphrasing of submitted text); it allows AI **with disclosure** (state what was used for, in the form the venue asks); or it is **unrestricted** for this use. If the policy is unknown or ambiguous, ask the instructor or editor. Do not guess in the permissive direction.
+
+**2. Human-only means the student's own sentences.** In a human-only context the system may explain a concept, find the questions a rubric asks, check that a student's own citations are formatted correctly, and quiz the student; it must not write or rewrite the submitted prose. "Writing in the student's voice" does not change who wrote it. Passing a draft through a rewriting step to hide its origin is a misrepresentation.
+
+**3. Disclosure is specific.** Where disclosure is allowed or required, name the tool, the task (for example "suggested a clearer topic sentence in paragraph 3; the student rewrote it") and the extent. A contribution log distinguishes mechanical proofreading, a suggested edit, an authored revision and substantive generation (principle WI9-I). The authorship dossier checker (`scripts/wi-authorship.py`, experimental) can record this; it is a declaration checker, every report states `declaration_status: self_reported`, and it cannot verify that a student wrote anything.
+
+**4. No invented citations.** The Anti-Hallucination Rules above are absolute and sharpened here: every source named has been read and exists; every quotation is copied from the source with its location; "as cited in" is used for a secondary source; if a source cannot be found, the claim is cut or marked `needs_source`, never given a plausible reference. In the dossier model, each consequential claim must overlap an anchored evidence span, and a source whose bytes have changed since it was pinned is stale.
+
+**5. Authorship statements.** An "I wrote this" or "no AI was used" statement is the student's own declaration and is made by the student. The system does not make it for them, and a clean phrase-catalog scan or a low detector reading is not evidence for it. Detector readings are noisy, are not a record of authorship, and are not used as a target.
+
+**6. When not to fix.** A phrase-catalog hit in an academic draft is an editorial question. "A growing body of research suggests ..." stays when the next sentences name the studies (`generic_claim` asks whether a source, date or sample can be identified). "It should be noted that the sample excludes participants under 18" is a limitation, not padding. A direct quotation is left exactly as the source has it even when it contains a flagged phrase. Record the call with `retain_as_written`, `revise_for_clarity`, `needs_source` or `not_applicable` in the review ledger (`prototypes/wi9/wi9_phrase_review.py`).
+
+**7. Fiction and creative writing courses.** v9 does not change fiction gates. The venue rule in point 2 still applies to a creative-writing assignment's integrity policy.

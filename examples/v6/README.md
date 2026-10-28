@@ -67,3 +67,7 @@ Doctrine behind each one: [`COUNTERFACTUAL_SIMULATION`](../../references/v6/COUN
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC
+
+## Connection to v9
+
+*Released in Writing Intelligence 9.0.0.* The four walkthroughs above were recorded against `wi 6.0.0` and are unchanged. v9 reuses their patterns for authorship work: [`01`](01-simulate-before-you-edit.md) is the habit behind proposals that show their semantic delta before an edit; [`02`](02-the-merge-that-refused.md) is the model for conflicting authorship declarations across a merge (preserve both, never blend); [`03`](03-authority-that-expires.md) is the model the v9 `release` grant follows (a window that ends on its own); [`04`](04-a-capsule-a-stranger-verifies.md) is the model for receipts a third party can recompute. The v9 tools are different in one respect: `scripts/wi-authorship.py` checks a **self-reported declaration** and does not authenticate a writer. See [`../../references/v9/README.md`](../../references/v9/README.md).

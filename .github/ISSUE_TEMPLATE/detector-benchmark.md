@@ -1,37 +1,45 @@
 ---
-name: Detector Benchmark Result
-about: Share results from running compiler output through AI detectors
-title: "[BENCHMARK] "
-labels: benchmark, data
+name: Editorial Quality Report
+about: Report how a rewrite served (or failed) the author's meaning, evidence and voice
+title: "[QUALITY] "
+labels: benchmark, quality
 assignees: ''
 ---
 
-## Detector(s) tested
-Which detector(s) did you use? (Turnitin, GPTZero, Originality.ai, Copyleaks, ZeroGPT, Sapling, other)
+<!--
+Writing Intelligence does not target, gate on, or claim AI-detector scores.
+This template replaced the v8 "Detector Benchmark Result" template. If you ran
+a detector anyway, you may note the raw result under "External observations";
+it will not be treated as a pass, a fail, or evidence of who wrote the text.
+-->
 
 ## What you tested
 - Input type: (academic essay, blog post, strategy memo, fiction, etc.)
 - Word count:
-- Voice used:
+- Voiceprint used (built from consented, human-authored samples?):
 - Genre pack used:
 - Full pipeline or specific passes:
+- Writing Intelligence version / commit:
 
-## Results
+## Meaning and evidence
+- Did the rewrite keep the author's thesis and positions? (yes / no — where not?)
+- Did it add any fact, number, scene or quote the sources did not contain? Paste each.
+- Did it promote anything planned or hypothetical to completed?
+- Which claims were left unanchored or marked `[needs source]`?
 
-| Detector | Classification | Score/Confidence | Pass/Fail |
-|---|---|---|---|
-| | | | |
+## Reader experience
+- Where does a reader lose the thread, or fail to find the point?
+- Which hot-phrase or cadence findings were useful, and which were false positives? (rule id + why)
 
-## Flagged passages (if any)
-If any detector flagged specific passages, paste them here and describe what was flagged.
+## Voice
+- Would the author recognize this as theirs? What felt wrong?
+- If a personal voiceprint was used: were the samples consented, human-authored, 3 or more, 500+ words each, in this genre?
 
-## What fixed it (if applicable)
-If you re-ran after fixes, what did you change and what were the new results?
+## v9 only
+If you ran `scripts/wi-authorship.py`: subcommand, exit code, HOLD code(s) and dossier schema version (`wi9-authorship-1` / `-2`). The v9 editorial benchmark (WI9-07) has not run; this report is anecdotal input, not a measurement.
 
-## Statistical profile (if available)
-- Sentence-length std dev:
-- Vocabulary stats:
-- Any cadence patterns detected:
+## External observations (optional, never a criterion)
+Any detector or third-party tool output, recorded as-is with tool and date.
 
 ## Notes
-Anything else useful — platform version, date tested, unusual observations.
+Anything else useful.

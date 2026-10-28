@@ -148,3 +148,13 @@ Produce listing copy, investor memos, buyer education, neighborhood briefs, and 
 - + `social_media.md`: cross-channel
 - + `small_business_operator.md`: solo agent brand
 - + `legal_positioning.md`: disclosures
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** MLS rules, brokerage policy, fair-housing law and advertising regulations govern listing copy, and some boards or brokerages restrict AI-written descriptions or require review. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** square footage, taxes, lot size, year built, comparable sales and HOA terms need the listing record, public record or appraisal with date. Do not state features the property does not have.
+- **Firsthand material:** the agent's actual showing, inspection or neighborhood knowledge. A planned renovation or permit is described as planned.
+- **Disclosure:** the licensed agent or broker is responsible for the text. Record the contribution log, and let a person check fair-housing language before release.
+- **Phrase matches that may be legitimate:** `marketing_abstraction` ("charming", "move-in ready", "dream home") is conventional listing diction and may be accurate. Check it against facts, and drop terms that imply a protected class.

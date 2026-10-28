@@ -125,3 +125,13 @@ Don't:
 - Failure to disclose alternative embodiments (limits claim interpretation)
 - Method claims with no clear order of operations
 - System claims with no clear interconnections between components
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** patent offices set rules on inventorship, duty of candor, signatures and AI-generated material. Only a named human can be an inventor under the rules of many jurisdictions. Check the current written rules; unknown means HOLD.
+- **Anchored sources:** prior art, embodiment support and every claim term must trace to an exact passage in the specification or reference. Do not assert a reduction to practice that the record does not show.
+- **Firsthand material:** the inventor's own conception, notebooks, drawings and test records. A proposed embodiment is described as proposed; a designed or prototyped item is not an implemented or measured one.
+- **Disclosure:** the signing attorney or applicant certifies the filing; record the contribution log. Patent claim language is also on the owner's Irreversibility Perimeter in this project, so no automated release applies here.
+- **Phrase matches that may be legitimate:** `qualifier_padding` ("substantially", "approximately", "at least one") is working claim vocabulary with defined meaning, not filler. Question a term only against the specification.

@@ -124,6 +124,19 @@ because they fail with different messages.
       shown failing with the implementation disabled**. A guard that has only ever passed has
       not been shown to work
 
+### v9 — released in 9.0.0
+
+9.0.0 is the published version (2026-10-28, the owner's decision). The items below apply to any change to v9; the benchmark and independent-review items are still open after the release and must stay marked open.
+
+- [ ] **[ci]** `python3 -m unittest discover -s tests/v9 -p 'test_*.py'` and `python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'` pass on Python 3.8, 3.11 and 3.13
+- [ ] **[ci]** The mutation step in `.github/workflows/wi9-proposal.yml` caught all four guards it disables, and left `scripts/wi-authorship.py` byte-identical afterwards
+- [ ] **[release]** `bash tests/v7/test_wi7.sh` passes. No version string was changed on the v9 branch (`wi.py --version`, `SKILL.md`, `plans/*.manifest.yaml`)
+- [ ] **[manual]** Receipts [`plans/receipts/WI9-00.json`](../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../plans/receipts/WI9-P0.json) exist and match the code they describe; any new repair adds a receipt, not an edit to an old one
+- [ ] **[manual]** `references/v9/WAVES.yaml` states each wave's real state. No wave reads shipped before it is
+- [ ] **[manual]** No document reports v9 benchmark results, quality scores or editor validation. WI9-07 has not run
+- [ ] **[manual]** **WI9-09 complete** — independent review of the artifacts, negative controls, external review
+- [x] **[manual]** **Owner approval recorded** for the `9.0.0` release (Antonio T. Smith Jr., 2026-10-28)
+
 ### v6 state and digests
 
 These are the items this release cycle added, and four of the five are enforced by nobody.

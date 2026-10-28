@@ -87,3 +87,13 @@ Different agencies have different cultures:
 - **GAO/IG**: Findings-based. Criteria → Condition → Cause → Effect → Recommendation.
 
 Adjust voice and structure to the target agency.
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** agencies and legislatures govern AI use, records retention and classification handling. Check the current written policy; unknown means HOLD. Never put controlled or non-public material into an outside tool.
+- **Anchored sources:** statutes, regulations, appropriations figures, program data and prior decisions need citations to the exact provision or table and its date. A memory of a rule is not the rule.
+- **Firsthand material:** staff analysis, site visits, interviews and operational data the author holds. Pending or proposed policy is described as proposed.
+- **Disclosure:** some agencies require declaring AI assistance in briefings; others restrict it. Record the contribution log and let the accountable official decide.
+- **Phrase matches that may be legitimate:** `qualifier_padding` ("appears to", "subject to") often marks genuine legal or evidentiary caution, and `generic_closure` ("recommend approval") is the expected decision line. Keep them where accuracy demands.

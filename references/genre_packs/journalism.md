@@ -138,3 +138,14 @@ Produce reported, evidence-disciplined narrative nonfiction — feature articles
 - + `medical_writing.md`: health reporting
 - + `legal_positioning.md`: court reporting
 - + `cinematic_narration.md`: longform narrative nonfiction
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** many outlets, and many reporters answering source requests, accept only human-written pitches and answers, and some bar AI assistance in submissions entirely. Where that applies, a research brief (background, interview questions, an issue map) is allowed; an AI-written pitch, source reply or draft is not, even if the person clicks Send. Check the venue's current written policy; unknown means HOLD.
+- **Exact quote anchoring:** every quotation must match its recording, transcript or document span character for character, with speaker, date and context. Never paraphrase inside quotation marks, and never create a quote a source did not give.
+- **Planned vs completed work:** report what a source or the author has done as done only with a dated record. A prototype, proposal or roadmap is described as such.
+- **Firsthand material:** the reporter's own interviews, documents, observation and notes. A hypothetical scenario stays labeled hypothetical, and the author supplies any "I saw" scene.
+- **Disclosure:** outlet policies on AI in reporting and on source disclosure differ; record the contribution log.
+- **Phrase matches that may be legitimate:** `performed_candor` and `generic_claim` often appear inside quoted sources, where the reporter must keep the words as spoken. In the reporter's own prose, a match is an editorial question about specificity, never proof of origin.

@@ -12,6 +12,34 @@ The disciplines below still hold. For fiction, v8 adds four engines (see [`../re
 
 Pattern: *author brief → projection → validate → audit / evaluate / classify → editorial conversation → revised projection → as-of / impact → gate (HOLD) → human editor → reader study.*
 
+## v9 — operating `audit`, `release`, the per-writer tools and the review ledger
+
+9.0.0 is the release. These are the operating rules for the v9 tools, all reachable as `wi authorship <tool>`. Reference: [`../references/v9/README.md`](../references/v9/README.md).
+
+1. **Gather the sources first, then the draft.** A dossier names the draft (with a pinned `expected_sha256`), the evidence spans that support it, the contribution log (who or what wrote which part), the declared origin and the venue contract. Source before style: nothing here helps you invent an experience the sources do not contain.
+2. **Run `audit`; read the whole report.** `REVIEW` (exit 0) means the limited checks passed and a person still has to decide. `HOLD` (exit 3) means stop. `audit` never authorizes release and every report carries `declaration_status: self_reported`.
+3. **Read the HOLD code, then fix the cause, never the check.** The codes you will meet most:
+
+| Reading | What it means | What to do |
+|---|---|---|
+| Unanchored consequential claim (claim coverage) | The v4 classifier found a claim in the draft that no anchored evidence span overlaps | Add the source span, soften the claim, or cut it. One anchor does not carry three claims |
+| `ORIGIN_CONTRADICTS_LOG` | Declared `human_authored`, but the contribution log shows AI prose | Correct the declaration or the log to what happened |
+| Planned or hypothetical `experience_state` backing a firsthand claim | A firsthand "I did" rests on something that was only planned or imagined | Keep it labeled hypothetical, or replace it with a confirmed experience |
+| `needs_source` or `conflicted` support | A reviewer recorded the evidence does not support the claim | Resolve it; a submission holds until you do |
+| Draft digest mismatch / ambiguous anchor | The draft changed after it was pinned, or an excerpt appears twice and needs `start` | Re-pin the digest after review; add `start` |
+| Human-only venue with unlisted assistance | The venue contract does not list the help recorded in the log | Remove the AI-written or AI-rewritten package; research briefs may be prepared separately |
+
+4. **Treat a resolved anchor as presence, not truth.** `ANCHOR_RESOLVED` means the exact excerpt exists at that place. Whether it supports the claim is `support_status`, recorded by a reviewer.
+5. **Run `release` only after a person has decided.** It needs a REVIEW audit, a `review_decision` bound to the exact draft sha256, a v6 grant (`wi.py authority issue --capability release.approve --scope release_target --scope-value "<venue>"`) held by that person and active both when they decided and now, a venue contract listing `submit`, and an unpassed deadline. A grant written only into the dossier holds with `AUTHORITY_UNBOUND`. You — the operator, not the dossier — name the store: `--authority-store <dir>`, a v6 workspace outside the dossier folder. A store inside the dossier folder holds (`AUTHORITY_STORE_UNTRUSTED`), because whoever wrote the dossier could have written a grant to themselves into it; a dossier that tries to choose the store holds (`AUTHORITY_STORE_FROM_DOSSIER`); the store is opened read-only and never created. `RELEASE_ELIGIBLE` transmits nothing; you still send it, by hand.
+6. **Use the phrase scan as an editor's question list.** `wi9_hotphrases.py scan` reports where a pattern appears (code-point offsets, line and column, document and rule digests). A match asks "does this sentence carry the author's thought?" It is never proof that anyone or anything wrote the passage, and never an automatic rewrite.
+7. **Record each decision in the review ledger, under the reviewer's own grant.** `wi authorship ledger record --ledger <their folder> --authority-store <store> --actor <them> --kind phrase|meaning ...` writes a decision only after the v6 store shows that person holds the capability as a human: issue `claim.accept.wording_only` for phrase decisions, `claim.accept` for meaning decisions, and `claim.accept.quantity_change` (or `claim.accept`, which covers it) where numbers change. The ledger is append-only; a change of mind is a new entry with `--supersedes`. `wi authorship phrase-review --ledger ... --authority-store ...` then binds each disposition to the exact document and rule digests. A typed reviewer name without a ledger entry holds `REVIEWER_UNBOUND`. A valid review means *reviewed*, never publication-approved; a grant shows who was authorized, not who typed.
+8. **Every writer keeps their own material.** The vault (`wi authorship vault`), voice samples and ledger live in folders the writer chooses, outside any repository; the tools refuse to create or open them inside a git working tree, and nothing ships a corpus. As an operator you never collect another person's notes or samples into a shared folder or a commit.
+9. **Run `meaning diff` after every revision and hand the deltas to the writer.** Each delta is a question only the writer can answer. Do not accept deltas on their behalf; `meaning review` reaches REVIEW only on their grant-bound decisions, and a new first-person sentence also needs an anchored claim in their vault.
+10. **A model is the writer's choice and comes after the gates.** `wi authorship compose --provider-cmd <their program> --key-env <NAME> --consent-to-send` never reaches a model for a human-only or unknown venue or unconsented evidence. Keys are named, never typed into arguments or files. The draft is `ai_generated` and needs the writer's review.
+11. **Never optimize to a detector.** Do not insert typos, shuffle sentence lengths or paraphrase to move a vendor score. If a detector result bothers you, ask the editorial question it points at and answer it from your sources and your thinking. The rhythm operator is `repair_rhythm`, applied because the thought changes shape.
+
+What v9 cannot do, so you do not ask it to: it cannot prove a person wrote a manuscript; it cannot decide a claim is true; it does not understand meaning (the diff is lexical); it has not been benchmarked against editors (WI9-07 has not run); no real writer has yet run the voice tools on their own samples; and on Windows it refuses rather than runs.
+
 ## The Operator's Discipline
 
 1. **Always declare the intake contract.** Don't trust auto-detection on important work.

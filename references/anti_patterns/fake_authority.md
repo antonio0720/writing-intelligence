@@ -126,9 +126,41 @@ jargon was a shield.
 "In my experience..." / "Having worked in this field for X years..."
 
 Experience is context, not evidence. Twenty years of doing something wrong
-doesn't make it right. And AI models generating "In my experience" is
-particularly hollow.
+doesn't make it right. And "In my experience" written for someone who has
+no such experience is not hollow, it is false: a model, a ghostwriter without
+the client's notes, or a template can produce the sentence, but only the person
+can supply the event behind it.
 
 Fix: State the observation. Provide supporting evidence. If personal
 experience is genuinely relevant, give a specific example with details
 that prove you were actually there.
+
+---
+
+## v9: Source Before Style, and the Catalog Cross-Reference
+
+Fake authority is a **source** problem before it is a wording problem. Rewriting "Experts agree" into a more elegant sentence fixes nothing if there is no expert behind it. v9 therefore treats these patterns as questions about evidence.
+
+**Catalog categories.** The 334-rule editorial catalog (`prototypes/wi9/rules/v9_hotphrases.json`) puts "studies show", "research shows", "experts agree", "it is widely known" under `generic_claim`, with the question *can you identify an actual source, date, sample or bounded observation?* A hit is an editorial question. It is not evidence of how the passage was produced, and it never triggers an automatic rewrite.
+
+| Pattern in this file | v9 handling |
+|---|---|
+| Unnamed Expert, False Consensus | `generic_claim`. Answer with a source the author actually holds, or mark the claim `needs_source`. Do not invent a study or an expert to fill the gap. |
+| Quantitative Bluff, Certainty Escalator | Supply the number from a source or lower the claim. In an authorship dossier the claim-coverage check requires an anchored evidence span under each consequential claim. |
+| Experience Claim | A first-person "I saw / I measured / I decided" needs an author-supplied event. A planned, hypothetical or modelled scene cannot support it (`experience_state`, principle WI9-E). |
+| Authority Borrow, Historical Invoke | Verify the quotation and the event. Never supply a plausible attribution from memory. |
+| Authority Stack, Framework Drop | Credentials and frameworks are context. They do not count as support for the specific claim. |
+
+### When not to fix
+
+Leave the wording, or add the source and keep the wording, when:
+
+- **The citation follows.** "Research shows that sleep loss impairs recall [source]" in a literature review is a summary with its anchor in the next clause. (Synthetic example; the bracket stands for a real citation the author must supply.)
+- **It is a quoted maxim or a source's own words.** A profile that quotes a coach saying "everybody knows you can't coach speed" reports her claim as hers; the sentence is attributed, not asserted.
+- **The consensus is documented.** "It is widely accepted that ..." is acceptable when the next sentence names the standard-setting body and the document.
+- **The credentials are the subject.** In a biography or speaker introduction, listing titles is the content.
+- **Firsthand experience is real and supplied.** "In my fourth year running the intake desk I saw ..." is the opposite of this pattern, if the author supplied it and can answer questions about it.
+
+### Recording a keep/revise decision
+
+Record the call in the phrase review ledger (`prototypes/wi9/wi9_phrase_review.py`): `retain_as_written` for a legitimate use with the reason, `needs_source` when the author has to find or confirm a source, `revise_for_clarity` when the support exists and the sentence hides it. The ledger binds each decision to the exact document and rule-pack digests, so a later edit makes it stale and forces a fresh look. The reviewer identity is self-declared; the ledger proves a decision was recorded, not that the claim is true.

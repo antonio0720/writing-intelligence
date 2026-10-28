@@ -65,3 +65,9 @@ The sermon cadence follows a musical pattern:
 - Silence is written. Pauses are part of the architecture.
 - The call to action is not generic. It names the specific transformation available.
 - Dignity is never compromised. The congregation's pain is honored, not exploited.
+
+---
+
+## v9 Note: Testimony Belongs to the Preacher
+
+This file describes a tradition's cadence and architecture. It is not a measured voice of any pastor and is not a template for imitating a particular preacher. In the Distinctive Markers, the line "I remember standing in the parking lot of that Walmart on Riverside Drive" is an **illustrative synthetic example** of specificity; it does not describe a real person or place. Personal testimony must be supplied by the preacher: a model or ghostwriter may structure a testimony the preacher told, and must not invent one. The same applies to quoted scripture, historical figures and statistics, which are checked against the text and a source. Use of the tradition's cadence by someone outside it should be respectful and truthful about what it is; dignity is non-negotiable here, and so is not putting words of lived suffering into a mouth that has not lived it. If a congregation, denomination or event has a rule about AI-written sermons or published texts, follow it and disclose where asked.

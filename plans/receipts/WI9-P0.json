@@ -1,0 +1,136 @@
+{
+  "checkpoint": "WI9-P0",
+  "program": "WI9-AUTHORSHIP",
+  "owner": "Antonio T. Smith Jr.",
+  "status": "PASS",
+  "baseline_sha": "80e7aef88441c2f2e9eb5734b43b601924592dac",
+  "objective": "Repair P0-01..P0-12 in references/v9/defects.md, port the reference kernel to prototypes/wi9, and prove each guard can fail",
+  "measured_at": "2026-10-27",
+  "measured_on": "working tree of the commit that adds this receipt, on top of baseline_sha; the commit SHA is the one that contains this file",
+  "environment": {
+    "python": [
+      "3.9.6",
+      "3.11.14",
+      "3.12.13",
+      "3.14.6"
+    ],
+    "os": "Darwin 25.5.0",
+    "ci_matrix_declared": [
+      "3.8",
+      "3.11",
+      "3.13"
+    ],
+    "ci_matrix_observed": [
+      "3.8",
+      "3.11",
+      "3.13"
+    ]
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests/v9 -p 'test_*.py'",
+    "python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'",
+    "bash tests/v4/test_wi.sh",
+    "bash tests/v5/test_wi5.sh",
+    "bash tests/v6/test_wi6.sh",
+    "bash tests/v7/test_wi7.sh",
+    "bash scripts/test-v8.sh",
+    "python3 scripts/check-manifest.py",
+    "python3 scripts/check-links.py",
+    "bash scripts/build-skill.sh",
+    "bash scripts/build-skill.sh --check"
+  ],
+  "observed_result": {
+    "tests_v9": "Ran 59 tests ... OK on 3.9.6; checker, parity and kernel suites also OK on 3.11.14, 3.12.13, 3.14.6",
+    "tests_reference_kernel": "Ran 84 tests ... OK (81 delivered + 3 for D-15)",
+    "v4": "exit 0",
+    "v5": "exit 0",
+    "v6": "exit 0",
+    "v7": "exit 0",
+    "v8": "v8 integration: 19 passed, 0 failed",
+    "check_manifest": "exit 0",
+    "check_links": "exit 0 once this receipt exists (it was the only broken link before it was written)",
+    "bundles": {
+      "writing-intelligence.skill": 193,
+      "writing-intelligence-craft.skill": 86,
+      "writing-intelligence-story.skill": 184,
+      "ceiling": 200
+    },
+    "prototype_files_changed_from_zip": [
+      "README.md",
+      "wi9_phrase_review.py",
+      "tests/test_wi9_phrase_review.py"
+    ]
+  },
+  "negative_controls": [
+    {
+      "id": "mutation-coverage-hold",
+      "expectation": "disabling the claim-coverage hold turns tests/v9 red",
+      "observed": "FAILED (failures=1)"
+    },
+    {
+      "id": "mutation-document-digest",
+      "expectation": "disabling the pinned-digest compare turns tests/v9 red",
+      "observed": "FAILED (failures=1)"
+    },
+    {
+      "id": "mutation-origin-contradiction",
+      "expectation": "disabling ORIGIN_CONTRADICTS_LOG turns tests/v9 red",
+      "observed": "FAILED (failures=1)"
+    },
+    {
+      "id": "mutation-root-check",
+      "expectation": "disabling the root type check turns tests/v9 red",
+      "observed": "FAILED (failures=1)"
+    },
+    {
+      "id": "mutation-nofollow",
+      "expectation": "removing O_NOFOLLOW on the file open turns tests/v9 red",
+      "observed": "FAILED (failures=1)"
+    },
+    {
+      "id": "mutation-grant-expiry",
+      "expectation": "disabling the grant expiry check turns tests/v9 red",
+      "observed": "first run SURVIVED (caught by a second branch); case added isolating it; re-run FAILED (failures=1)"
+    },
+    {
+      "id": "planted-doctrine-instruction",
+      "expectation": "planting a detector-oriented instruction in a scanned doctrine file fails test_doctrine_meaning_led",
+      "observed": "failed when planted, passed when removed"
+    },
+    {
+      "id": "schema-parity-twin",
+      "expectation": "a vocabulary with an extra member is detected",
+      "observed": "test_parity_check_can_fail passes"
+    }
+  ],
+  "independent_readback": {
+    "method": "GitHub Actions records for a pushed head that contains this receipt, read through the GitHub API, separate from the local checkout",
+    "value": {
+      "head_sha": "048a34311dbc5e8926153521359e412883ae747d",
+      "wi9_lane": {
+        "run_id": 40605547405,
+        "event": "push",
+        "conclusion": "success",
+        "jobs": {
+          "3.8": "success",
+          "3.11": "success",
+          "3.13": "success"
+        },
+        "covers": "tests/v9, prototypes/wi9/tests, and the CI mutation step proving disabled guards turn the suite red"
+      },
+      "ci": {
+        "run_id": 40605547419,
+        "event": "push",
+        "conclusion": "success",
+        "covers": "v4-v8 verifiers, schemas, docs links, manifest, bundle staleness"
+      }
+    }
+  },
+  "unknown": [
+    "an automated independent security review ran (references/v9/defects.md R-01..R-15, all repaired); no consented author corpus, no 60-case benchmark, no human review",
+    "claim discovery is bounded by the v4 classifier; entailment is not checked",
+    "Python 3.8 ran in CI only, not locally"
+  ],
+  "decision": "HOLD",
+  "release_authority": null
+}

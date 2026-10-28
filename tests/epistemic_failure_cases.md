@@ -108,6 +108,58 @@ These cases stress-test the Evidence Prosecutor (Pass 5). Each case contains a k
 
 **Required action**: `delivery_block: true`; piece cannot ship as written.
 
+## v9 cases 
+
+These extend the set with failures about *whose experience a sentence claims* and *whether a source entails it*. The inputs are synthetic.
+
+## Case EPI-11 — Planned Promoted to Completed
+
+**Input**: "We built a solar-powered community model and measured a 30% drop in energy use." Source: a roadmap line, *"Next year we plan to build a solar-powered community model."*
+
+**Expected detections**:
+- `experience_state: planned` cannot support a firsthand claim
+- `class: observed_fact` (claimed) with no observation behind it; the figure has no source at all
+
+**Required action**: HOLD in a strict arena (`wi-authorship.py audit`). Restate as a plan ("we plan to build…"), or supply the build record and the measurement. A roadmap is not a completed build and a designed thing is not a measured one.
+
+## Case EPI-12 — Borrowed Memory
+
+**Input**: "I spent a summer in my grandfather's workshop learning to solder." The author's notes contain no such memory; the line appears only in a model-written draft.
+
+**Expected detections**:
+- First-person experience with no anchored firsthand source
+- `experience_state: hypothetical` if it came from an illustrative scenario
+
+**Required action**: remove, or mark as a labeled hypothetical, or ask the author whether it is true. Never keep it because it makes the passage warmer. A fabricated admission is not a repair.
+
+## Case EPI-13 — Anchor Without Entailment
+
+**Input**: Draft says *"The club's membership doubled in 2023."* The anchored note reads *"The club met on Tuesdays in 2023."*
+
+**Expected detections**:
+- The excerpt resolves (`ANCHOR_RESOLVED`) but nothing in it supports "doubled"; the checker reports support as `unadjudicated`, not supported
+- Semantic entailment is not implemented; a reviewer must record `support_status`
+
+**Required action**: a reviewer sets `support_status: needs_source` (HOLD for strict submissions) or supplies a source that actually contains the claim. An exact quote is a text anchor, not truth.
+
+## Case EPI-14 — Unanchored Claim Beside an Anchored One
+
+**Input**: A three-sentence draft where the dossier anchors only the first.
+
+**Expected detections**: `CLAIM_UNANCHORED` for each uncovered claim the v4 classifier finds.
+
+**Required action**: source or cut each; see `examples/v9/02-claim-coverage.md`.
+
+## Case EPI-15 — Detector Result Offered as Evidence
+
+**Input**: "A detector rated this 0% AI, so it is human-written."
+
+**Expected detections**: a detector percentage is not provenance; origin remains whatever the contribution log declares.
+
+**Required action**: ignore the number for every decision. If recorded at all it is an external observation (tool, version, date, raw output) and changes no finding.
+
+The authorship checker's tests cover the underlying checks (experience state, claim coverage, support status, anchors); these exact inputs are written as cases for reviewers and have not all been run as automated fixtures. EPI-15 is a doctrine rule that `tests/v9/test_doctrine_meaning_led.py` helps keep from returning. They have no required recall target: no benchmark has run.
+
 ## Scoring
 
 Each case scored on:

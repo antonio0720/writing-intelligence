@@ -104,3 +104,13 @@ Sentence lengths follow this arc:
 - Scripture quoted but never engaged with (decoration, not grounding)
 - Illustration that serves the preacher's ego, not the congregation's need
 - Closing with "Let us pray" after a generic conclusion
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** a congregation or tradition sets its own expectations about who writes and delivers a sermon, and some hold that the preacher's own words are part of the calling. Where no written policy exists, ask the leadership; unknown means HOLD.
+- **Anchored sources:** scripture needs the exact passage and translation; quoted authors, historical claims and statistics need a source span.
+- **Firsthand material:** the preacher's own study, pastoral experience and testimony. Do not borrow a story told as the preacher's own, or a congregant's confidence without consent. A hypothetical illustration is spoken as one ("imagine...").
+- **Disclosure:** whether to name AI help is a matter for the preacher and congregation; record the contribution log.
+- **Phrase matches that may be legitimate:** `generic_closure` and `empty_emphasis` ("brothers and sisters", "truly", "amen") are liturgical and rhetorical devices in spoken worship. `performed_candor` still deserves honesty: a confession must be the preacher's.

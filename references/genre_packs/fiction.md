@@ -383,3 +383,14 @@ For fiction at chapter scale, also apply:
 A chapter may score well on prose (fiction scorecard) but poorly on architecture
 (chapter construction). Both scorecards matter. A beautiful chapter that goes
 nowhere is still a failure.
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Gates unchanged:** v9 does not alter the fiction gates, the want/need tests or the v8 audits. This section adds only provenance and venue notes.
+- **Venue:** magazines, contests, imprints and platforms set their own AI rules, and some bar AI-written text entirely. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** fiction needs no source anchors for invention. Research facts used for realism (a trade, a place, a procedure) do.
+- **Firsthand material:** for autofiction or memoir-adjacent work, no borrowed memory: an event presented as the author's own must be the author's own. A model's invented childhood scene must not be offered as lived.
+- **Disclosure:** follows the venue and the contribution log.
+- **Phrase matches that may be legitimate:** in dialogue a match is character voice. In narration, `empty_metaphor` and `staged_explanation` deserve a look, but a narrator may be florid on purpose. Ask whether the choice belongs to the narrator.

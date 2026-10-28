@@ -36,3 +36,12 @@ Map `canon.*` and `StoryworldMemoryV3` to IR IDs without retyping source truth. 
 `SKILL.md` reports two `.skill` bundles due to a 200-file cap. New files **must not silently be stuffed into the wrong bundle or exceed the cap**. Inspect and update `scripts/build-skill.sh` and both delivery manifests, including reachability of rule docs and runtime files. The package does not claim bundle acceptance.
 
 The v7 manifest is a different program: do not mark its waves shipped on the strength of v8 fiction tests. For a formal v8 release, create a new authoritative program manifest and receipt format compatible with `scripts/check-manifest.py`, with actual console output, negative controls and remote readback. The included `plans/v8-fiction.proposal.json` is an explicit proposal, not a substitute for a WI release receipt.
+
+## v9 preview: integration notes
+
+*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.*
+
+- v9 is additive on the same mainline. It adds `scripts/wi-authorship.py`, `schemas/v9/`, `references/v9/` and `prototypes/wi9/`; it removes nothing from the install list above and does not change the v7 CLI, or the fiction sidecar. The 200-file bundle ceiling still applies; re-check the file count before building any bundle that includes v9 files.
+- Add the v9 checks to the verification list for a clone that carries them: `python3 -m unittest discover -s tests/v9 -p 'test_*.py'` alongside `tests/v7/test_wi7.sh`.
+- A fiction sidecar result does not feed the authorship checker, and the checker does not feed fiction gates. They are separate questions: whether the story holds, and what the author declares about who wrote it.
+- The published release is v8.0.0. Do not mark any v9 wave shipped on the strength of fiction tests; wave states live in `references/v9/WAVES.yaml`.

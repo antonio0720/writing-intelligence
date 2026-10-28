@@ -62,14 +62,22 @@ Allowed when they serve a real function:
 
 ---
 
-## Variance Injection Rules
+## Rhythm From Meaning
 
-- No three consecutive sentences within ±5 words of each other in length
-- No two consecutive paragraphs with the same opening syntactic structure
-- Vocabulary must include at least 2 domain-specific or uncommon words per 300 words
-- Transition variety: no single transition word/phrase used more than twice per 1000 words
-- At least one sentence per 500 words must be ≤ 6 words
-- At least one sentence per 500 words must be ≥ 30 words
+These replace the retired v8 length and vocabulary quotas, which aimed at detector
+statistics. There are no length, vocabulary or transition quotas.
+
+- When several consecutive sentences do the same job at the same weight, find
+  the one that carries the point and let the others support, qualify or go.
+- Length changes where the thought changes shape — a turn, a concession, a
+  consequence, a step in a mechanism — and nowhere else.
+- Use the subject's own exact terms where it has them; never add rare or
+  "surprising" words to meet a count, and never swap synonyms for a term that
+  names the same thing.
+- A transition earns its place by stating a real logical relation (because,
+  although, unless). Remove transitions that announce rather than connect.
+- Leave a sentence alone when it already carries its meaning well.
+- Never target, predict or report an AI-detector score as a reason for a change.
 
 ---
 
@@ -79,7 +87,8 @@ Allowed when they serve a real function:
 |---|---|
 | `hard_ban_removed` | Removed a phrase from the hard-ban list |
 | `soft_ban_removed` | Removed a soft-ban phrase (with earned-exception override possible) |
-| `variance_injected` | Modified sentence length / structure to break repetition |
+| `rhythm_repaired` | Reshaped sentences so rhythm follows meaning (point, support, turn) |
+| `variance_injected` | **Legacy v8 name.** Accepted when reading old logs; never emitted by v9 |
 | `compression` | Removed words without losing meaning |
 | `specificity_added` | Replaced abstraction with concrete actor / number / example |
 | `abstract_to_scene` | Converted conceptual passage into grounded narrative |
@@ -159,3 +168,16 @@ The Sentence Surgeon emits a rewrite log that:
 - Leaves zero unaddressed hard-ban hits
 
 If any of the above fails, Pass 6 has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — This pass (Sentence Surgeon)
+
+("v9 editorial pass N" names the passes of `references/v9/ENGINEERING_HANDOFF.md` §25, distinct from the numbered compiler passes.) This pass is v9 editorial passes 4 to 8 in miniature, and it runs only after claim integrity.
+
+- **Order.** Do not rewrite a paragraph whose claims have not cleared the Epistemic Ledger (v9 editorial pass 5). Polishing an unsupported first-person claim hides it; it does not fix it.
+- **Edit classes.** Every log entry also declares what kind of change it was: mechanical proofreading, suggested edit, authored revision or substantive generation (v9 principle I). `hard_ban_removed` and `compression` are normally mechanical or suggested; `specificity_added` and `abstract_to_scene` change meaning and need a source card, never invention.
+- **Rhythm.** `rhythm_repaired` is logged only with the meaning reason (the thought changed shape, a transition stated no relation). The legacy `variance_injected` name stays readable in old logs and is never emitted. Do not insert typos, fragments or "imperfections" the author did not write.
+- **Phrase lint as questions.** A hit from the 334-rule catalog (`prototypes/wi9/wi9_hotphrases.py`) is an editorial question: what does this sentence claim, and what evidence would make it stronger? It is not proof of anything about who wrote the text and never triggers an automatic rewrite. A kept phrase is logged `preserved` with its reason.
+- **Voice and decision.** `voice_restored` is judged against consented human-origin samples (three or more per genre, 500+ words each), and a negative `voice_fidelity_delta` goes to the author, not to a model, to resolve. Semantic edits (anything beyond copyedit) wait for the author's accept or reject.
+- **Not a release.** A clean rewrite log, zero hard-ban hits and an editorial score are separate from the release gate (v9 editorial pass 9). No detector score is a reason for, or evidence about, any change.

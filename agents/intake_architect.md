@@ -40,3 +40,13 @@ Translate any user request — clean or chaotic — into a governed task object.
 
 - Genre Marshal (Pass 1)
 - Corpus Auditor (Pass 2)
+
+## v9 notes
+
+*Released in Writing Intelligence 9.0.0.*
+
+- **Venue contract and claim/experience intake come first.** Before any drafting, record the venue (or `none`), its rule class (`unrestricted`, `disclose_ai` or `human_only`), the assistance it lists and whether `submit` is open and the deadline. A `human_only` venue means the run produces research briefs only, never an AI-written or AI-rewritten pitch (WI9-G).
+- **Capture claims and experiences as the author states them.** For each consequential claim the author wants made, record where it comes from and its `experience_state` (`observed`, `said_by_author`, `sourced` or `measured` can back a firsthand claim; `inferred`, `hypothetical` and `planned` cannot). A planned or hypothetical item is never taken in as a firsthand "I did" (WI9-E).
+- **Declare origin at intake.** Ask whether the piece is `human_authored`, `ai_assisted` or `ai_generated`, and what assistance occurred. Take the answer as a self-reported declaration; do not infer it from style (WI9-F).
+- Add to `ambiguity_flags` when the venue rules, the origin or the list of experiences the author can stand behind is missing. Batch these into the one clarification message.
+- Intake cannot prove who wrote anything. It records the declaration that `scripts/wi-authorship.py` later checks.

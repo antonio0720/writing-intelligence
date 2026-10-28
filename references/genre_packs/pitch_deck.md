@@ -89,3 +89,13 @@ One memorable line or data point that crystallizes why this matters.
 - "Disruptive" / "Revolutionary" / "Game-changing" anywhere in the deck
 - More than 15 slides
 - Slides with >50 words of body text
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** accelerators, funds and demo days publish submission formats, and some address AI-generated applications or require founder certification. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** market size, traction, revenue, customer counts and competitor claims need a dated source or internal record. Mark any projection as a projection.
+- **Firsthand material:** the founders' own customer conversations, pilots and metrics. A roadmap is not a shipped product, and a letter of intent is not revenue.
+- **Disclosure:** investors may ask who wrote the materials; the founder answers truthfully and records the contribution log. Investor-facing claims are the founder's responsibility.
+- **Phrase matches that may be legitimate:** `marketing_abstraction` ("platform", "scalable", "disrupt") and `domainless_solutionism` are heavy in this genre and are sometimes the category's real terms. The editorial question is whether a number, customer or mechanism sits next to each one.

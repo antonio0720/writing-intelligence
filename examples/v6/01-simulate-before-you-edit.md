@@ -372,3 +372,7 @@ wi commit -m "MESSAGE" --actor YOU
 
 Next: [`02-the-merge-that-refused.md`](02-the-merge-that-refused.md) — what happens
 when two people run this sequence at the same time and disagree.
+
+## Connection to v9
+
+*Released in Writing Intelligence 9.0.0.* Simulating before you edit is the pattern v9 wants around proposals that touch what a document claims. When an assisted rewrite would change a number, a date or a firsthand statement, the useful question is the one this example asks: what does that change cost, before it exists? In v9 terms, a proposal should show its semantic delta (which claims move, which anchored spans no longer overlap them) so that `scripts/wi-authorship.py audit` claim coverage is not discovered as a failure afterwards. v9 does not add a simulation command; this describes how to use the existing one. Nothing in the transcripts above was re-recorded for v9.

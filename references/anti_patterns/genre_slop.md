@@ -149,3 +149,44 @@ Detection: 3+ clichés per 1000 words = fiction slop.
 - "Valued at $X" for something never sold at that price
 
 Detection: Manufactured urgency + vague proof + adjective stacking = sales slop.
+
+---
+
+## v9: Genre Slop Is a Venue and Source Question
+
+The detection thresholds above ("3+ in a paper", "5+ buzzwords per page") are editing heuristics for a reviewer's attention, not tests of how a text was produced. v9 adds two things: a cross-reference to the editorial phrase catalog and a venue check, because what counts as slop depends on the genre the venue expects.
+
+**Catalog categories.** The experimental 334-rule catalog (`prototypes/wi9/rules/v9_hotphrases.json`) has no genre field; it asks genre-independent questions. Use it as follows.
+
+| Genre section | Catalog categories that overlap |
+|---|---|
+| Business / Corporate | `marketing_abstraction`, `domainless_solutionism` (who does what, under which conditions, with what observable result?) |
+| Tech Blog | `staged_explanation` ("let's dive in", "let's unpack"), `forced_audience_engagement` |
+| Self-Help / Motivational, Sales Copy | `performed_candor`, `forced_audience_engagement`, `generic_claim`, `domainless_solutionism` |
+| Political / Op-Ed | `generic_claim`, `generic_closure`, `overused_rhetorical_structure` |
+| Sermon / Spiritual | `generic_closure`, `empty_metaphor`; see also the sermon voiceprint |
+| Academic | `generic_claim`, `qualifier_padding`, `staged_explanation` |
+| Fiction | none; fiction slop is a craft judgment and the fiction gates are unchanged by v9 |
+
+A match is an editorial question with legitimate counterexamples. It is not proof about origin and does not call for an automatic rewrite.
+
+### When not to fix
+
+Per genre, one legitimate counterexample (all **synthetic**, written for this page):
+
+- **Academic.** "A growing body of research suggests ..." is fine when the next sentence lists the studies and the paragraph then argues from them; it fails only when nothing follows. Block quotes are ordinary in textual analysis when the analysis that follows is longer.
+- **Business.** "Customer-centric" inside a quoted company value statement in an audit is evidence of what the company said.
+- **Tech.** "As you can see" in a documentation page with a screenshot directly above is accurate.
+- **Self-help.** A fixed morning-routine list is the subject matter of a book about routines.
+- **Political.** "Now more than ever" in a verbatim speech excerpt belongs to the speaker.
+- **Sermon.** "God has a plan" inside a pastor's own sermon, tied to a named text and a named congregation event, is pastoral speech, not filler; the slop is the version that engages with no text and no person.
+- **Sales.** "Limited time offer" with a printed, verifiable end date is a statement of fact.
+- **Fiction.** A cliché in a character's mouth may be the characterization.
+
+### Venue contract first
+
+Before cleaning slop out of a pitch, byline or submission, read the venue's rules (principle WI9-G). A human-only venue (a source-quote request, a journalism pitch, a contest) forbids AI-written or AI-rewritten submission copy no matter how clean the result is; the system may help build a research brief, but the submitting text must be the person's own. Cleaning a draft does not change who wrote it.
+
+### Recording a keep/revise decision
+
+For any phrase flagged in a genre section, record the call in the review ledger (`prototypes/wi9/wi9_phrase_review.py`) with one of `retain_as_written`, `revise_for_clarity`, `needs_source` or `not_applicable`, a rationale, a reviewer and an offset-aware time. Decisions are bound to the exact document and rule-pack digests and go stale when the draft changes.

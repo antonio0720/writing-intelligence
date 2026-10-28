@@ -61,3 +61,13 @@ the student's own thinking visible and checkable.
 - Citations clustered in one section, absent in others
 - Block quotes without preceding introduction or following analysis
 - "Since the dawn of time" or any universal historical framing
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** journals, theses and course work set their own rules on AI assistance, disclosure and data statements. Read the current written policy; a missing policy is HOLD, not permission.
+- **Anchored sources:** every cited finding, effect size, quotation and page reference needs an exact span from the source actually read. A claim remembered from a model is not a citation.
+- **Firsthand material:** the author's own data, protocol, lab or field notes, and coding decisions. Planned or hypothetical analyses stay in the future tense and cannot support a "we found" sentence.
+- **Disclosure:** commonly required for any generated text or analysis, and sometimes barred for authorship of the manuscript itself. Record the contribution log truthfully.
+- **Phrase matches that may be legitimate:** `qualifier_padding` ("it appears that", "may suggest") is often honest calibration of evidence; `staged_explanation` ("this paper argues") is a genre convention. Keep them where the evidence is genuinely uncertain.

@@ -144,3 +144,14 @@ The Structure Engineer produces a graph that:
 - Survives the orphan check, unsupported-claim check, dead-scene check, repeated-beat check, plant-and-payoff balance check
 
 If any of the above fails, Pass 4 has not completed.
+
+---
+
+## v9 Meaning-First Order (proposed) — Pass 4
+
+The graph is where v9 editorial passes 2 and 3 (thought topology, argument or scene order) live.
+
+- **Thought topology.** Give each node a semantic job (observation, mechanism, consequence, counterargument, qualification, turn, resolution) and record the author's real thesis, the decision rule, a disconfirming observation, the strongest competing explanation and the cost of being wrong. A node whose proposition adds no new distinction, action, evidence, contradiction or consequence is compressed or cut (E03).
+- **Shape follows the material.** Do not build a three-part structure because the request has three questions, and do not give sibling nodes equal weight or matching transitions. A section with no downstream dependency is removed.
+- **Evidence on nodes.** Each claim node carries evidence IDs and its `experience_state`; a paragraph without them is flagged for intake, not decorated.
+- **Not a score.** Graph diagnostics describe structure. They never certify distinct thought, authorship or readiness to publish. The graph feeds claim integrity (v9 editorial pass 5) and release stays a separate gate.

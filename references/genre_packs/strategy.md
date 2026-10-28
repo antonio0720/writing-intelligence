@@ -37,3 +37,13 @@ Recommended sequence:
 - Situation section that is narrative instead of data
 - Competitive analysis that is vague instead of specific
 - "Alignment" used as a verb
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** an internal strategy document is bound by company confidentiality and data-handling policy. Board, investor and regulator versions have their own rules. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** market data, competitor facts, financials and customer evidence need dated sources or internal records. A scenario is labeled a scenario, and a forecast a forecast.
+- **Firsthand material:** the organization's own results and decisions. A roadmap or plan is not a completed initiative; designed, prototyped, implemented and measured stay distinct.
+- **Disclosure:** the accountable executive owns the position. Record the contribution log and the named human who approves.
+- **Phrase matches that may be legitimate:** `domainless_solutionism` and `marketing_abstraction` ("leverage", "synergy", "ecosystem") are common in this genre. Question each only if no actor, resource or decision follows it.

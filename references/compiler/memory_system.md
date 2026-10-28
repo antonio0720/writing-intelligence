@@ -212,3 +212,16 @@ If a session starts and the PMF is missing or incomplete:
 - **Scorecard**: Score each section independently AND score cross-section consistency.
 - **Style transfer**: If a project requires genre changes between sections (e.g., a novel with epistolary chapters), the PMF tracks which genre pack governs which section.
 - **Anti-patterns**: All anti-pattern checks apply per-section. The PMF adds cross-section checks that individual-section analysis can't catch.
+
+---
+
+## v9 Meaning-First Order (proposed) — Multi-session memory
+
+Session memory is a source-custody question under v9.
+
+- **What may be stored.** Author-supplied notes, interview statements and approved decisions may be remembered with their source and date. A model's own prior output is `generated_idea` and is not remembered as an author observation (E02).
+- **Voice samples.** Store only consented samples, with consent and redaction state, per author and per genre; one author's vault and voice profile must never serve another's work.
+- **Session start.** Reload claim state, `experience_state` and the human-only venue flag before drafting, so a roadmap is not later taken for a completed build.
+- **Session end.** Log which edits the author accepted or rejected and which retained phrases were kept and why.
+- **Recovery.** Rebuild from author-supplied sources, not from the model's summary.
+- **Status.** The firsthand material vault is WI9-02 (PLANNED); only the `experience_state` typing exists now.

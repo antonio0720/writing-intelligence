@@ -23,6 +23,12 @@ COPY services/api/src ./src
 COPY agents /app/agents
 COPY schemas /app/schemas
 
+# v9 preview routes run the Python tools rather than re-implementing them.
+RUN apt-get update && apt-get install -y --no-install-recommends python3 \
+    && rm -rf /var/lib/apt/lists/*
+COPY scripts/wi.py scripts/wi-authorship.py /app/scripts/
+COPY prototypes/wi9 /app/prototypes/wi9
+
 EXPOSE 4090
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \

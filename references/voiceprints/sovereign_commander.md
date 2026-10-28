@@ -67,3 +67,9 @@ a conclusion, or a piece of evidence. Nothing decorative survives.
 - Extended metaphors
 - Anecdotes without clear argumentative purpose
 - Self-reference ("As I mentioned," "I believe")
+
+---
+
+## v9 Note: Authority Has To Be Earned in the Sentence
+
+"Cold authority" is a posture and every command in it is a claim. A directive that asserts a fact ("The market will consolidate by Q3") needs the evidence under it, or it is the Authority Borrow pattern with a firmer jaw (see `references/anti_patterns/fake_authority.md`). Keep recommendations separate from findings, and mark what is unknown instead of commanding over it. The register bans self-reference, so first-person experience claims are out by construction; do not smuggle them back as "Years of operating teaches that ...". This is a register, not an author's measured voice, and it does not make a document eligible for a human-only venue.

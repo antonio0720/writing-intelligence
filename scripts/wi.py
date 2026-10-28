@@ -63,7 +63,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-VERSION = "8.0.0"
+VERSION = "9.0.0"
 
 # --------------------------------------------------------------------------
 # Text normalization. Offsets are Unicode code point indices over NFC text.
@@ -162,19 +162,24 @@ def sentences(text):
     out, buf = [], []
     # Common abbreviations that should not end a sentence in Latin scripts.
     abbrev = re.compile(r"(?:^|\s)(?:[A-Z][a-z]{0,3}|e\.g|i\.e|vs|cf|et al|Dr|Mr|Mrs|Ms|Prof|Fig|No|pp)\.$")
+    # The longest token plus its dot is six characters, so once the buffer is
+    # longer than eight only its tail can match, and only after whitespace.
+    # Testing the tail keeps the split linear: joining the whole buffer at
+    # every terminator made a long run of "a." quadratic (v9 review, D-18).
+    abbrev_tail = re.compile(r"\s(?:[A-Z][a-z]{0,3}|e\.g|i\.e|vs|cf|et al|Dr|Mr|Mrs|Ms|Prof|Fig|No|pp)\.$")
     i = 0
     while i < len(text):
         ch = text[i]
         buf.append(ch)
         if ch in _TERMINATORS:
             nxt = text[i + 1] if i + 1 < len(text) else " "
-            cur = "".join(buf)
             # Decimal numbers: 3.5 — not a boundary.
             if ch == "." and i + 1 < len(text) and text[i + 1].isdigit() \
                and i > 0 and text[i - 1].isdigit():
                 i += 1
                 continue
-            if ch == "." and abbrev.search(cur):
+            if ch == "." and (abbrev.search("".join(buf)) if len(buf) <= 8
+                              else abbrev_tail.search("".join(buf[-8:]))):
                 i += 1
                 continue
             if nxt.isspace() or nxt in "\u201d\"')]" or ord(ch) > 0x3000:
@@ -6076,6 +6081,50 @@ def cmd_why(args):
     return 0
 
 
+
+# --------------------------------------------------------------------------
+# v9 preview: authorship-claim checks, delegated to their own scripts.
+# --------------------------------------------------------------------------
+
+V9_AUTHORSHIP_TOOLS = {
+    "audit": ("scripts", "wi-authorship.py"),
+    "release": ("scripts", "wi-authorship.py"),
+    "scan": ("prototypes/wi9", "wi9_hotphrases.py"),
+    "voice": ("prototypes/wi9", "wi9_core.py"),
+    "voice-review": ("prototypes/wi9", "wi9_core.py"),
+    "voice-compare": ("prototypes/wi9", "wi9_core.py"),
+    "vault": ("prototypes/wi9", "wi9_vault.py"),
+    "ledger": ("prototypes/wi9", "wi9_ledger.py"),
+    "phrase-review": ("prototypes/wi9", "wi9_phrase_review.py"),
+    "meaning": ("prototypes/wi9", "wi9_meaning.py"),
+    "structure": ("prototypes/wi9", "wi9_structure.py"),
+    "compose": ("prototypes/wi9", "wi9_provider.py"),
+}
+
+# Tools with their own subcommands (`wi authorship vault add ...`): the action
+# names the tool and the next word is passed through as its subcommand.
+V9_AUTHORSHIP_GROUPS = {"vault", "ledger", "phrase-review", "meaning", "structure", "compose"}
+
+
+def cmd_authorship(args):
+    """Run a v9 preview check through the canonical CLI.
+
+    The checks live in scripts/wi-authorship.py and prototypes/wi9 so there is
+    one implementation; this subcommand finds them beside this file and passes
+    arguments and exit codes through unchanged (audit and release: 0 or 3).
+    The runtime bundle does not carry them; the authorship bundle does.
+    """
+    folder, name = V9_AUTHORSHIP_TOOLS[args.action]
+    script = Path(__file__).resolve().parent.parent / folder / name
+    if not script.is_file():
+        raise WIError("WI_INPUT_INVALID",
+                      "the v9 %s tool is not in this installation" % args.action,
+                      ["install the writing-intelligence-authorship bundle, or run from the repository"],
+                      {"expected": str(Path(folder) / name)})
+    import subprocess
+    argv = ([] if args.action in V9_AUTHORSHIP_GROUPS else [args.action]) + list(args.rest)
+    return subprocess.call([sys.executable, str(script)] + argv)
+
 def main(argv=None):
     p = argparse.ArgumentParser(
         prog="wi",
@@ -6355,6 +6404,13 @@ def main(argv=None):
     sp.add_argument("--branch")
     sp.add_argument("--json", action="store_true")
     sp.set_defaults(func=cmd_why)
+
+    sp = sub.add_parser("authorship",
+                        help="v9: authorship audit and release, vault, meaning diff, review ledger, voice, phrase and structure checks, model connector")
+    sp.add_argument("action", choices=sorted(V9_AUTHORSHIP_TOOLS))
+    sp.add_argument("rest", nargs=argparse.REMAINDER,
+                    help="passed unchanged to the v9 tool, e.g. --input dossier.json")
+    sp.set_defaults(func=cmd_authorship)
 
     args = p.parse_args(argv)
     try:

@@ -6,7 +6,7 @@
 
 ## Job
 
-Repair prose sentence-by-sentence while preserving authorial voice. Log every transformation. Implement softening / qualification decisions from Pass 5. Inject variance.
+Repair prose sentence-by-sentence while preserving authorial voice. Log every transformation. Implement softening / qualification decisions from Pass 5. Repair rhythm where it hides meaning (`repair_rhythm`).
 
 ## Inputs
 
@@ -24,7 +24,7 @@ Repair prose sentence-by-sentence while preserving authorial voice. Log every tr
 ## Behavior
 
 1. Apply hard bans, soft bans, earned exceptions.
-2. Run the variance injection rules (sentence-length variance, transition variety, vocabulary tier).
+2. Apply the rhythm-from-meaning rules (`references/compiler/prose_compiler_v3.md`): repair runs where every sentence does the same job, without length quotas, synonym swaps or detector targets.
 3. Implement epistemic ledger decisions (soften universals, qualify inflated verbs, attach citations).
 4. Compress per Pass 0 contract.
 5. Log every cut, strengthening, preservation with rationale and voice impact.
@@ -40,3 +40,11 @@ Repair prose sentence-by-sentence while preserving authorial voice. Log every tr
 
 - Voice Fingerprinter (Pass 7)
 - Stress Tester (Pass 9)
+
+## v9 notes
+
+*Released in Writing Intelligence 9.0.0.*
+
+- The operator is `repair_rhythm`, logged as `rhythm_repaired` (the legacy `variance_injected` is still readable and never emitted). Cadence is repaired because the thought changes shape, never to move a detector score or meet a length count.
+- Where the editorial phrase scan raised a question, the surgeon acts only on the author's recorded disposition in the review ledger (`retain_as_written`, `revise_for_clarity`, `needs_source`, `not_applicable`). A match is never a reason to rewrite on its own, and no rewrite adds a first-person experience the sources do not contain.
+- Every change declares its kind in the log (mechanical proofreading, suggested edit, authored revision or substantive generation), so the transformation is traceable (WI9-I).

@@ -25,3 +25,13 @@ Two readers is a *minimum editorial policy default*, not a statistical sample th
 `mechanical integrity` (no malformed source/edition) → `developmental audit` (structural issues evaluated) → `independent reader evidence` (experienced effect) → `human release authorization` (editor/publisher decides). The first three constrain the last; none logically imply bestseller status, award, licensing or revenue.
 
 A reader report about a sample, mock or synthetic case is fixture evidence only. A model can assist in form design and analysis; it must not invent respondents or simulate them and then label the result an independent study.
+
+---
+
+## v9 Meaning-First Order (proposed) — Reader experience
+
+v9 leaves this fiction reader-study contract unchanged.
+
+What v9 does not add: any new fiction gate, any reader-experience scoring or any claim that a study has been run. The existing statement stands: observation is independent human work.
+
+What carries over: a study that checks an editor's or reader's view of specificity and usefulness is a human reading, and it is the form the WI9-07 blind editorial benchmark takes. That benchmark is PLANNED and not executed. A human reader's view, not a detector score, is the only comparison v9 accepts.

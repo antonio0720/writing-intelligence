@@ -103,7 +103,7 @@ reform can fix without addressing revenue allocation."
 ## strip_corporate
 
 Remove institutional voice patterns. Replace passive, hedged, committee-written
-prose with direct, human-sounding sentences.
+prose with direct, plain sentences that name who does what.
 
 Indicators of corporate voice:
 - Passive constructions hiding accountability
@@ -205,18 +205,25 @@ chemistry that drives motivation literally stops working at normal levels."
 
 ---
 
-## inject_variance
+## repair_rhythm
 
-Add sentence-length and vocabulary unpredictability. This is the anti-detector
-operator. It specifically targets the statistical signatures that AI detectors use.
+Repair rhythm that hides meaning. (Replaces the retired v8 length-quota operator, which
+prescribed length quotas and synonym swaps aimed at detector statistics. That
+operator is retired: Writing Intelligence never edits toward a detector score.)
 
 Method:
-1. Identify any span of 3+ sentences within ±5 words of each other → break the pattern
-2. Insert one sentence ≤6 words per 500 words
-3. Insert one sentence ≥30 words per 500 words
-4. Replace any word used 3+ times in 500 words with a synonym or restructure
-5. Vary paragraph opening syntax — no two consecutive paragraphs start the same way
-6. Introduce one uncommon but precise word per 300 words
+1. Find a flat run — sentences of the same length and shape doing the same job.
+   Ask which sentence carries the point and which support, qualify or repeat it.
+2. Cut the restatement. Merge sentences that say one thing twice.
+3. Let the point be short if it is buried; let the mechanism, evidence or
+   concession take the length it needs. Length changes because the thought
+   changes shape, never to meet a count.
+4. Where a word repeats, ask whether it names the same thing each time. If it
+   does, keep it — consistent terms are clearer than synonyms. If it is filler,
+   remove it. Never swap in a synonym to lower a repetition count.
+5. Open each paragraph on what it is about, not on a habitual frame.
+6. Leave sentences alone that already carry their meaning well. Do not add a
+   fact, scene or quote the source does not contain; mark [needs source].
 
 ---
 

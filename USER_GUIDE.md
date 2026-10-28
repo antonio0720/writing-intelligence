@@ -1,14 +1,145 @@
-# Writing Intelligence v8 — User Guide
+# Writing Intelligence v9 — User Guide
 
-The day-to-day manual for the Sovereign Meaning Runtime.
+The day-to-day manual for the Sovereign Meaning Runtime, the v8 Story Intelligence engines and the v9 authorship tools. The current release is 9.0.0.
 
-**Laws:** [`references/v6/CONSTITUTION.md`](references/v6/CONSTITUTION.md) · **v5 laws, still binding:** [`references/v5/CONSTITUTION.md`](references/v5/CONSTITUTION.md) · **One page:** [`CHEATSHEET.md`](CHEATSHEET.md) · **Install:** [`docs/INSTALL.md`](docs/INSTALL.md) · **Craft kernel, unchanged:** [`SKILL.md`](SKILL.md) · **v8 Story Intelligence:** [`references/v8/README.md`](references/v8/README.md)
+**Laws:** [`references/v6/CONSTITUTION.md`](references/v6/CONSTITUTION.md) · **v5 laws, still binding:** [`references/v5/CONSTITUTION.md`](references/v5/CONSTITUTION.md) · **One page:** [`CHEATSHEET.md`](CHEATSHEET.md) · **Install:** [`docs/INSTALL.md`](docs/INSTALL.md) · **Craft kernel, unchanged:** [`SKILL.md`](SKILL.md) · **v8 Story Intelligence:** [`references/v8/README.md`](references/v8/README.md) · **v9 preview:** [`references/v9/README.md`](references/v9/README.md)
 
 Free. Open source. MIT. Forever.
 
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com).
 
 ---
+
+## What changed for you in v9
+
+9.0.0 is the release (2026-10-28). Overview: [`references/v9/README.md`](references/v9/README.md).
+
+- **Nothing you already run changed.** Every v4–v8 command, exit code and digest is the same. The v9 tools are new and optional, and all of them are reachable as `wi authorship <tool>`.
+- **Everything is yours and stays on your machine.** v9 ships no voice samples, no notes and no model. You build your own voice baseline from your own writing, keep your firsthand material in your own private vault, and record decisions under your own grant. Nothing is uploaded or committed, and the private stores refuse to live inside a git repository.
+- **New in v9:** a private firsthand vault (`vault`), a meaning diff that lists every change a revision makes to what you meant (`meaning`), review decisions bound to your v6 grant (`ledger`, `phrase-review`), deeper voice measures with a held-out check and `voice-compare`, shape checks (`structure`), long manuscripts scanned in chunks, and a bring-your-own-model connector (`compose`) whose best result is a draft you must review.
+- **They check declarations and meaning, not people.** Nothing here can tell who wrote a passage. `REVIEW` means the limited checks passed; it is not permission to send.
+- **One doctrine repair you may notice:** the craft library no longer asks for sentence-length quotas, synonym swaps or "unpredictability". The retired v8 length-quota operator is now `repair_rhythm`. Old logs with `variance_injected` still validate.
+- **Not run yet:** a real writer's run of the voice tools on their own samples (WI9-03), the 60-case editorial benchmark (WI9-07) and an independent review (WI9-09). See [`ROADMAP.md`](ROADMAP.md).
+
+## Authorship and venue checks (v9)
+
+A walkthrough with synthetic material. Use your own notes; the point of every step is that the draft says only what you can point to.
+
+### 1. Prepare a dossier from your own notes
+
+Put the draft, your source notes and a `dossier.json` in one folder. Paths in the dossier are relative to that folder (no absolute paths, `..` or symlinks).
+
+1. **Write down what you actually did or saw**, in your own words, in a notes file. A memory of a build, an interview transcript, a log, a photo caption. This is the material the draft will be anchored to. If you have none for a claim, the claim has no support — cut it, soften it, or label it hypothetical.
+2. **Declare the draft.** `origin` is `human_authored`, `ai_assisted` or `ai_generated` — the truth, not the one the venue prefers. `venue_policy` is `human_only`, `disclose_ai` or `unrestricted`. `intended_use` is `internal_review`, `research_demo` or `submission`.
+3. **Log contributions** (`contribution_log`): what was your original writing (`human_original`), what you edited (`human_edit`), what a tool only proofread (`mechanical_proofread`), what a model researched (`ai_research`) or wrote (`ai_generated_prose`, `ai_substantive_rewrite`). If the log and `origin` disagree, the checker holds.
+4. **Add evidence**: for each consequential claim, an `id`, the `claim`, its `kind` (`firsthand`, `external`, `interpretation`), the `source_path`, an `exact_excerpt` copied verbatim from that source, and `consent: true`. For a firsthand item set `source_origin: human_authored` and an honest `experience_state` (`said_by_author`, `observed`, `measured` — not `planned` or `hypothetical`).
+5. **Anchor the draft**: under `document_claim_anchors`, point each claim sentence's exact excerpt at an evidence id. If the same excerpt occurs twice in the draft, add `start`.
+6. **For a submission**, also pin the exact bytes you reviewed: `document.expected_sha256` (`shasum -a 256 draft.txt`), and in strict arenas (journalism, academic, legal, government) each source's `sha256`.
+
+A complete minimal dossier is in [`CHEATSHEET.md`](CHEATSHEET.md#v9--authorship-meaning-and-venue-checks); the schema is [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
+
+### 2. Run the audit
+
+```bash
+python3 scripts/wi-authorship.py audit --input dossier/dossier.json --out audit.json
+```
+
+It prints `REVIEW` (exit 0) or `HOLD` (exit 3), with a stderr reminder that REVIEW is not permission to send. Every report says `declaration_status: self_reported`.
+
+### 3. Read claim coverage
+
+`claim_coverage` lists each consequential claim the v4 classifier found in your draft, with its character range, class, and whether it overlaps an anchored span. `anchored: true` means a source span was found — `support: anchor_resolved_unadjudicated` means the excerpt exists in the source; it does **not** mean the source is true or that it entails the claim. A reviewer can record `support_status` (`supported_by_reviewer`, `needs_source`, `conflicted`). For a strict-arena submission an unanchored claim is a `HOLD`; elsewhere it is reported as an advisory, and still worth fixing. Sentences the classifier calls rhetoric are not checked.
+
+### 4. Fix HOLD codes
+
+| Code | What it means | What to do |
+|---|---|---|
+| `CLAIM_UNANCHORED` | a consequential claim has no source span | add a note and anchor, or cut or soften the sentence |
+| `FIRSTHAND_UNVERIFIED` | firsthand evidence not marked `source_origin: human_authored` | supply your own note; a model's text or a roadmap is not your experience |
+| `FIRSTHAND_NOT_PERFORMED` | `planned`/`hypothetical` backing an "I did" claim | label the passage hypothetical, or wait until it happened and record it |
+| `EXCERPT_MISSING` | the quote is not verbatim in the source | copy it exactly |
+| `DOCUMENT_ANCHOR_AMBIGUOUS` / `_OFFSET_MISMATCH` | excerpt occurs twice, or `start` is wrong | add or correct `start` |
+| `DOCUMENT_DIGEST_UNPINNED` / `_MISMATCH` | submission without a pinned digest, or the draft changed | pin it; if it changed, re-review the new bytes |
+| `SOURCE_DIGEST_UNPINNED` / `_MISMATCH` | strict arena source not pinned, or changed | pin it or re-check the source |
+| `CONSENT_ABSENT` | no explicit consent on an evidence item | record consent only if it was given |
+| `ORIGIN_CONTRADICTS_LOG` | declared origin and contribution log disagree | correct the false one |
+| `HUMAN_ONLY_CONFLICT`, `SUBSTANTIVE_AI_CONTRIBUTION`, `ASSISTANCE_NOT_PERMITTED` | a human-only submission declares non-human origin, AI prose, or assistance the venue does not list | it cannot be submitted. Use the material as research and write the piece yourself |
+| `SUPPORT_UNRESOLVED` | reviewer marked evidence `needs_source` or `conflicted` | resolve the source, then update the status |
+| `DOSSIER_INVALID`, `SCHEMA_INVALID`, `ROOT_NOT_OBJECT`, `DOCUMENT_NOT_READABLE` | the dossier or a path could not be read safely | fix the JSON and paths; the reader refuses symlinks and escapes |
+
+A human-only venue is a hard stop for AI-written or AI-rewritten submissions, even if you press send yourself and even if a detector says 0%. What the tools may do there is gather sources and draft interview questions for *you* to use.
+
+### 5. Review phrase findings with the ledger
+
+The scanner flags phrases that often signal templated writing. A match is a question, not a verdict.
+
+```bash
+wi authorship scan --input draft.txt > scan.json
+wi authorship ledger record --ledger ~/wi9-private/ledger --authority-store ~/wi-authority \
+  --actor you --kind phrase --target "$(shasum -a 256 draft.txt | cut -c1-64)" \
+  --item "empty_emphasis_001@0:12" --decision retain_as_written \
+  --rationale "The late payment in the same sentence is the specific."
+wi authorship phrase-review --input draft.txt --report scan.json \
+  --ledger ~/wi9-private/ledger --authority-store ~/wi-authority
+```
+
+For each finding you record a disposition — `retain_as_written`, `revise_for_clarity`, `needs_source` or `not_applicable` — with a rationale. The item is the finding's `rule_id@start:end`. A decision is written to your ledger only after your v6 grant store shows you hold `claim.accept.wording_only` (or a capability covering it) as a human; the ledger refuses a store kept inside the ledger folder. To change your mind, record a new decision with `--supersedes <entry hash>`; the earlier one stays on record. A typed reviewer name on its own now holds `REVIEWER_UNBOUND`. The review binds to the exact document and rule-pack digests, so editing the draft invalidates it. Revise because the *thought* is vague or unsupported, not to remove a phrase. Quotes and code are masked by default; add `--include-quotes` to scan them. A manuscript longer than one scan's cap is scanned in chunks with whole-document offsets; if a pathological stretch still hits the cap, the report says `complete: false` and names the range.
+
+### 6. When release applies
+
+Only for a `submission` to a named venue. `release` additionally needs your `review_decision` (`outcome: approve`, `actor_kind: human`, `target_sha256` equal to the draft's digest, `decided_at`) with `authority: {"store": "v6"}`, and the operator passes `--authority-store <a v6 workspace outside the dossier folder>` — the v6 grant store (`scripts/wi.py authority`) must show the deciding person holds `release.approve` in scope `release_target:<venue>`, active both when they decided and now; a grant written only into the dossier holds with `AUTHORITY_UNBOUND`; and a `venue_contract` that names the venue, lists `submit` in `allowed_operations`, and has no passed `deadline`.
+
+```bash
+python3 scripts/wi-authorship.py release --input dossier/dossier.json --authority-store ~/wi-authority
+```
+
+`RELEASE_ELIGIBLE` (exit 0) means those declarations are on file and consistent. It transmits nothing, and it does not prove you wrote the piece. If you edit the draft afterwards the decision goes stale (`DECISION_TARGET_STALE`). Authority comes from the v6 grant store, not from the dossier: a grant revoked or expired since you decided holds the release.
+
+### 7. Keep your firsthand material in your own vault
+
+A first-person sentence ("I rebuilt the roof", "we measured 312 visitors") should rest on something you recorded. The vault is a private folder for that material, on your machine, outside any repository.
+
+```bash
+wi authorship vault init  --root ~/wi9-private/vault --project harbour-essay
+wi authorship vault add   --root ~/wi9-private/vault --file notes/2026-03-02.txt --id n1 \
+  --label observed --kind note --valid-at 2026-03-02 --consent
+wi authorship vault check --root ~/wi9-private/vault --claims claims.json
+```
+
+Label each item honestly: `observed`, `said_by_author`, `measured` or `sourced` can support a claim that something happened; `planned`, `hypothetical` and `inferred` cannot. Mark a transcript `--verbatim` only if it is unedited, because only a verbatim record can back a direct quotation. `claims.json` (`wi9.vault-claims/1`) names your project and lists claims, each with `evidence: [{item, excerpt}]`. `check` holds a first-person claim with no source (`CLAIM_NEEDS_SOURCE`), a plan written up as done (`PLANNED_AS_DONE`), a model-written anecdote (`EVIDENCE_MODEL_GENERATED`), an edited transcript used as a quote (`QUOTE_NOT_VERBATIM`), two dated accounts that disagree (`CONFLICTING_ACCOUNTS`), and claims from another project (`VAULT_PROJECT_MISMATCH`). `redact --id --start --end --reason` and `withdraw --id` delete the earlier bytes; `list` shows labels and digests, never text.
+
+### 8. Check that a revision still says what you meant
+
+```bash
+wi authorship meaning diff --original mine.txt --candidate revised.txt      # exit 3 if anything changed
+wi authorship meaning review --original mine.txt --candidate revised.txt \
+  --ledger ~/wi9-private/ledger --authority-store ~/wi-authority \
+  --vault ~/wi9-private/vault --claims claims.json
+```
+
+`diff` lists each material change as a delta with a question: a number or date changed, a plan reads as done, an estimate reads as exact, a negation flipped, your opinion reversed, a cause added, removed or changed, an outcome invented, a hedge or concession dropped, before became after, a quotation altered, a sentence of yours dropped, a new first-person or factual sentence added. Decide each one in your ledger with `--kind meaning --target <pair_sha256> --item <delta id> --decision accept|reject`; a changed quantity needs `claim.accept.quantity_change`. `review` reaches REVIEW only when you accepted every delta and every new first-person sentence matches an anchored claim in your vault. The comparison is lexical: it catches where meaning most often moves, and a paraphrase that changes meaning without touching a number, negation, stance, cause, hedge or quotation can still slip past it.
+
+### 9. Measure your own voice
+
+Follow [`references/v9/VOICE_BASELINE.md`](references/v9/VOICE_BASELINE.md): three or more of your own pieces of 500+ words, one genre, in a private folder with a `voice.json`. `wi authorship voice` measures them, including how you argue (qualifiers, disagreement, examples, reasons, concessions) and a held-out check that names any measure your own samples do not agree on. `voice-review` records your approval or rejection, bound to the exact samples. `voice-compare --text draft.txt` shows where a draft drifts from you. Matching your baseline proves nothing about who wrote a text.
+
+### 10. Ask about shape
+
+`wi authorship structure --input draft.txt` asks about repeated sentence openings, contrasts whose two sides are both abstractions, paragraphs poured into one mould, three-item lists on every page, and restated sentences. A contrast with a real number, date or place in it is left alone. Nothing is rewritten.
+
+### 11. Use your own model, if you want one
+
+```bash
+export MY_MODEL_KEY=...        # your key, in your environment, never in a file you commit
+wi authorship compose --input compose.json --provider-cmd /abs/path/to/your-model-program \
+  --key-env MY_MODEL_KEY --consent-to-send
+```
+
+Your program reads one JSON request on stdin and writes one `wi9.candidate/1` JSON on stdout. The venue policy and your evidence are checked first, so a human-only or unknown venue never reaches the model; your program runs with no shell, a deadline, an output cap and only the key variable you named. The best result is `DRAFT_REVIEW_REQUIRED`, marked `ai_generated`; `release_authorized` is always false. Then run step 8 against your own text.
+
+### What v9 does not do
+
+It does not authenticate a writer, verify that a source is true, judge entailment, understand meaning (the diff is lexical), run a detector, rewrite your prose, or encrypt your vault. On Windows it refuses by name (`PLATFORM_UNSUPPORTED`) because the safe file reader needs POSIX `O_NOFOLLOW`. The benchmark that would measure whether any of this helps writers and editors (WI9-07) has not run, and no independent person has reviewed it yet (WI9-09).
 
 ## What changed for you in v8
 

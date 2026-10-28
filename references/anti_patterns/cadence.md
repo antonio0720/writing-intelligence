@@ -1,8 +1,11 @@
 # Cadence Signatures
 
-Cadence is the rhythmic fingerprint of a writer. AI has identifiable cadence
-patterns. Detecting and breaking them is one of the highest-leverage moves for
-producing genuinely human-sounding output.
+Cadence is the rhythmic fingerprint of a writer. Templated prose — from a
+model, a style guide or a tired human — falls into identifiable cadence
+patterns, and a reader feels them before they can name them. The repair is
+never to disguise the pattern. It is to find what the passage is actually
+saying and let that decide the shape of each sentence. A phrase or rhythm match
+is an editorial question, never evidence of who wrote the text.
 
 ---
 
@@ -80,16 +83,18 @@ Signature:
 Trigger: 3+ sentences with word count within ±4 of each other AND matching
 syntactic structure.
 
-This is THE statistical signature that AI detectors catch. Breaking it requires
-deliberate variance injection.
+Why it matters to a reader: three sentences of the same length and shape
+usually mean three items of the same weight were listed rather than one idea
+developed. The rhythm is a symptom; the cause is the missing thought.
 
-Fix:
-- After any sentence of 15-20 words, the next must be ≤10 or ≥25.
-- Vary syntactic structure: inversion, fragment, compound, complex, question.
-- Insert a short punch sentence. Then a long winding one with subordinate clauses
-  and a parenthetical observation embedded in the middle, the kind of sentence a
-  human writer produces when they're thinking through an idea and not editing yet.
-  Then four words. See?
+Fix (meaning first, no length quota):
+- Ask what the three sentences are doing. If one is the claim and two are
+  support, the claim may deserve a short sentence and the support a longer one
+  that shows the mechanism.
+- If one sentence is filler, delete it. If two say the same thing, merge them.
+- Let length change where the thought changes shape: a turn, a concession, a
+  consequence, a quoted fact. Never alternate lengths to hit a pattern, and
+  never change a sentence that is already carrying its meaning well.
 
 ---
 
@@ -162,4 +167,5 @@ Never summarize. The reader just read the piece.
 
 Flag any passage that matches 3+ characteristics of any single cadence
 signature above. One match is noise. Two is suspicious. Three is a pattern
-that will trigger both human editors and AI detectors.
+a careful reader will notice. Report it with the span and the question it
+raises; the author decides whether the pattern is doing work.

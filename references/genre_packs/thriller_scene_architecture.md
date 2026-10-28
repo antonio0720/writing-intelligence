@@ -310,3 +310,14 @@ compress or cut. The scene must keep moving.
 | Psychological warfare | 8 | Dialogue operates on 2+ layers throughout pressure phase? |
 | Civilian/emotional cost | 7 | The human toll extends beyond combatants? |
 | Atmosphere arc | 8 | Environment changes across all phases? |
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Gates unchanged:** v9 does not alter the thriller scene gates or the v8 audits. This section adds provenance and venue notes only.
+- **Venue:** publishers, contests and platforms set their own AI rules. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** invented plot needs no anchors. Procedural detail (forensics, weapons, law, tradecraft) used for realism should rest on sources the author read.
+- **Firsthand material:** no borrowed memory if the book is marketed on the author's real career, such as a former officer or investigator. A claimed professional experience must be the author's own.
+- **Disclosure:** follows the venue and the contribution log.
+- **Phrase matches that may be legitimate:** in dialogue a match is character voice, and thriller narration uses clipped, emphatic lines (`empty_emphasis`, short staged beats) on purpose. A match is a question about the scene's pressure, not a defect.

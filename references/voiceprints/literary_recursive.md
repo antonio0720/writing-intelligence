@@ -61,3 +61,9 @@ and juxtaposition, not through declaration.
 - Dialogue is compressed — characters say less than they mean, and the gap is where the story lives
 - Endings circle back to an opening image, now transformed by everything between
 - The narrator sometimes withholds interpretation, trusting the reader to complete the circuit
+
+---
+
+## v9 Note: Fiction Is Unchanged
+
+v9 does not alter the fiction gates, and this register is a craft instrument for fiction and literary nonfiction. Two points still apply. A voice is built from an author's own consented samples and is not a licence to write in the manner of a named living author as if they wrote it. And in literary nonfiction (memoir, essay) the recursive, withholding technique must not be used to blur what happened: a flashback, composite scene or reconstructed dialogue is labeled as such when the venue or genre expects it. Where the piece is submitted to a human-only magazine or contest, the prose has to be the author's own.

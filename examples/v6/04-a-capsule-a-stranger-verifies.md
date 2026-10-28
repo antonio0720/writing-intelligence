@@ -296,3 +296,7 @@ python3 wi.py capsule verify claim.wic
 whether the digests match.**
 
 Back to the [index](README.md).
+
+## Connection to v9
+
+*Released in Writing Intelligence 9.0.0.* A capsule a stranger can verify offline is the idea behind v9 receipts: a draft pinned by `expected_sha256`, sources pinned by digest, and a report anyone can recompute from the dossier. The v9 report is not a capsule and does not prove what a capsule proves. It records a **self-reported declaration** and its limited checks; it does not authenticate a writer, and it has no signature or closure root. WI9-08 (integration) is the planned step that would connect the two, and it has not been built.

@@ -67,11 +67,11 @@ Fix: Introduce at least one zoom-in per 500 words: a specific moment, a named de
 
 Pattern: Consecutive sentences within ±5 words of each other in length, across 4+ sentences.
 
-Why it flags: This is the single strongest statistical signal for AI generation. Human sentence lengths have high variance (standard deviation typically 8-15 words). LLM output clusters around a mean with low variance (standard deviation typically 3-6 words).
+Why it matters: a run of same-length sentences usually means every sentence is doing the same job — stating, at the same altitude, with the same weight. The reader loses the cue for what is central and what is support. The uniformity is a symptom of undifferentiated thinking, not a fingerprint of who wrote it; it proves nothing about authorship.
 
-Detection: Count words per sentence in any paragraph. If the standard deviation is below 5 across 5+ sentences, flag it.
+Detection (diagnostic, not a gate): count words per sentence across a paragraph. A flat run of 5+ sentences is worth an editorial look. Report the span; do not score the author on a length statistic.
 
-Fix: Deliberately vary. Follow a 22-word sentence with a 7-word one. Then 31. Then 11. Then 45. Then 5. The pattern should look random — because human writing IS random at this level.
+Fix: Find the sentence that carries the point and the ones that support or qualify it. Shorten the point if it is buried; let the mechanism or the evidence take the room it needs; cut the sentence that restates. Length should change because the thought changes shape — never to hit a target distribution, and never by injecting randomness.
 
 ---
 
@@ -83,10 +83,10 @@ Why it flags: This is the five-paragraph essay structure applied fractally. Real
 
 Detection: Map paragraph lengths across a document. If they cluster within ±1 sentence of each other, flag it. Also check whether every paragraph opens with the same syntactic structure.
 
-Fix:
-- Include at least one 1-sentence paragraph per 800 words
-- Include at least one 6+ sentence paragraph per 1000 words
-- Vary opening structures: start with a quote, a question, a scene detail, a number, a contrast, a concession — not always a topic sentence
+Fix (no paragraph quotas):
+- Give each paragraph one job and let the job set its length: a single fact that turns the argument can stand alone; a mechanism that needs steps can run long.
+- Merge paragraphs that do the same job; split one that does two.
+- Open on what the paragraph is actually about — the quote, the detail, the number or the concession that carries it — rather than a topic sentence by habit. Do not vary openings for their own sake.
 
 ---
 

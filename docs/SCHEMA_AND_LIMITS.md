@@ -24,3 +24,38 @@ This system does not use a single weighted sum of `want`, `need`, `arc`, `reader
 ## Contract evolution
 
 Backward-compatible additions require a new `schema` version whenever semantics change, even if field names remain the same. On admission to main, native v6 canonical representations must own identity, time, authority and hashes; this sidecar must be safely discardable and reproducible from that source.
+
+---
+
+## v9: the authorship dossier and its limits
+
+Everything below belongs to v9 (PR #8), not to the v8.0.0 release, and is checked by `scripts/wi-authorship.py`.
+
+**Schema.** [`../schemas/v9/authorship-dossier.schema.json`](../schemas/v9/authorship-dossier.schema.json) — current version `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read. It describes the draft and its pinned `expected_sha256`, evidence spans (unique ids, exact excerpt, optional `start`, pinned source digest, typed `experience_state`, reviewer-recorded `support_status`), the contribution log, the declared origin, the venue contract and, for `release`, the person's `review_decision` and authority grant. `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
+
+**Limits the checker enforces.**
+
+| Limit | Value |
+|---|---|
+| Draft or source file | 5 MB; size is taken from the open descriptor and at most limit + 1 bytes are read |
+| Dossier file | 2 MB |
+| JSON nesting depth | 32 |
+| List and object sizes | bounded |
+| Paths | relative to the dossier directory; absolute paths, `..`, NUL bytes and symlinked files, directories or dossiers are refused |
+| Platform | POSIX only — component-by-component `os.open` with `dir_fd` and `O_NOFOLLOW`; where those do not exist the tool fails closed instead of reading less safely |
+
+**Phrase scanner limits** (`prototypes/wi9/wi9_hotphrases.py`, the 334-rule reference catalog): a single scan takes at most 500,000 characters of input and 500 reported hits per run. When either bound is reached on a single scan the report sets a `truncated` flag; a truncated report is a partial list, not a clean bill. The CLI therefore scans a longer file, or one that reaches the cap, with `scan_document` in chunks (up to 20,000,000 characters), and only a pathological chunk is left incomplete, named in `incomplete_ranges` with `complete: false`. Quotes, URLs, code spans and fences are masked unless `--include-quotes`; the masking is heuristic.
+
+**Per-writer record formats and limits** (all under `prototypes/wi9/`, POSIX only, refused inside a git working tree):
+
+| Record | Schema | Limits |
+|---|---|---|
+| Vault manifest and claims | `wi9.vault/1`, `wi9.vault-claims/1` → report `wi9.vault-check/1` | items 5 MB each, 5,000 items, 5,000 claims; folder 0700, files 0600; event log of digests only |
+| Review ledger | `wi9.review-ledger/1` (one JSON entry per line, hash-chained) | 20 MB ledger; rationale ≥ 12 characters; capability per kind (`claim.accept.wording_only` for phrase, `claim.accept` or narrower for meaning) |
+| Meaning diff | `wi9.meaning-diff/1`, `wi9.thought-inventory/1` | 500,000 characters per text, 5,000 sentences |
+| Structure | `wi9.structure.report/1` | 500,000 characters; at most 200 findings per check |
+| Voice | `wi9.voice-review/1`; profiles with `held_out_stability` | 3+ samples of 500+ words, one genre, at most 200 per baseline |
+| Model connector | `wi9.provider-run/1` | request 400,000 characters, output 2 MB, deadline ≤ 900 s, absolute program path, environment limited to `PATH`, `LANG`, `LC_ALL`, `TMPDIR`, `SYSTEMROOT` and the one named key variable |
+| Chunked scan | `wi9.hotphrases.report/1` with `chunks`, `complete`, `incomplete_ranges` | 20,000,000 characters; 100,000-character chunks halved down to 2,000 when a chunk reaches the cap |
+
+**What the dossier cannot establish.** Authorship is self-declared and every report says `declaration_status: self_reported`. An exact excerpt is a text anchor, not truth or entailment. Claim discovery depends on the v4 classifier, so a sentence it calls rhetoric is not checked. Python `re` has no timeout, so only reviewed local rule packs are accepted. See the open list in [`../references/v9/defects.md`](../references/v9/defects.md).

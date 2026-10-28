@@ -89,3 +89,9 @@ Every schema document in this directory:
 ## Author
 
 Antonio T. Smith Jr. / Density6 LLC
+
+---
+
+## Later schemas
+
+*Released in Writing Intelligence 9.0.0.* The v6 definition libraries are unchanged and no v6 digest moves. The v9 authorship dossier schema is a single standalone document, [`../v9/authorship-dossier.schema.json`](../v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `-1` is still read). It is not a `$defs` library and is not part of the v6 graph. Its `review_decision.authority` names a v6 workspace, and `release` asks that store's grants (`release.approve`, scope kind `release_target`) instead of reading a grant from the dossier.

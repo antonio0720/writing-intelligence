@@ -45,3 +45,9 @@ Opinions are labeled as opinions. Unknowns are named.
 - Narrative without data
 - Data without interpretation
 - Projections presented as facts
+
+---
+
+## v9 Note: Every Figure Needs a Home
+
+In this voice a number without a source is the main defect. Under v9, each metric, comparable and projection in a deck or memo should map to an anchored evidence span or be labeled as an assumption; the authorship dossier's claim-coverage check treats an unanchored consequential claim as uncovered. Keep the epistemic states separate in the sentence itself: planned, prototyped, measured and released are different facts, and a pipeline or roadmap is not revenue. Name the date of each measurement. If a figure is a model output or an estimate, say so; if a competitor's number is inferred, mark it inferred. This voice is a register and does not stand in for the founder's consented writing when a specific person's voice is required. Whether an AI-assisted document may go to a given investor or a regulated filing depends on that venue's rules, which are checked before drafting.

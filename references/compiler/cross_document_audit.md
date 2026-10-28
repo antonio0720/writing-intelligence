@@ -189,3 +189,16 @@ cited in later papers.
 - Pairs with `continuity.md` for within-document checks
 - Results feed into `auto_diagnostic_report.md` as a supplementary section
 - Terminology conflicts feed into the Project Memory File's terminology lock
+
+---
+
+## v9 Meaning-First Order (proposed) — Cross-document audit
+
+Across a body of work, v9 adds consistency of claim state and authorship record.
+
+- **Claim state.** A first-person event stated in one document must have the same `experience_state` and evidence in every document that repeats it. An anecdote that is planned in one place and performed in another is a finding.
+- **Hypothetical drift.** Detect a hypothetical scenario in one piece that has turned into an apparent lived case in a later piece.
+- **Contribution record.** Contribution logs and declared origin should agree across documents and venues; a human-only submission cannot reuse text whose log lists generation the venue does not allow.
+- **Voice.** Cross-document voice comparison is for the author's review, against consented samples. Differences are editorial questions, not evidence about authorship.
+- **Repetition.** Repeated reframings and identical ideas across a series are reported as questions about distinctiveness.
+- **Limit.** The audit reports; it does not decide release.

@@ -42,3 +42,9 @@ respect your intelligence" through what it chooses NOT to explain.
 - Over-explaining basics the audience already knows
 - Performative casualness (trying too hard: "yo, so like, here's the deal...")
 - Emoji or internet slang in written prose
+
+---
+
+## v9 Note: Plainness Cannot Be Faked
+
+The register is conversational because the writer is. It cannot be bought with inserted slang, dropped punctuation or staged typos, and v9 forbids adding any of these to look less polished. The catalog categories most likely to fire in casual copy, `performed_candor` ("honestly", "let's be honest", "real talk") and `forced_audience_engagement`, are editorial questions: does the phrase reflect the actual speaker? Keep it when the author says it this way (check against their consented samples) and cut it when it only announces openness. A casual voice is no exemption from the facts: "I tried it for a month" requires that the author did.

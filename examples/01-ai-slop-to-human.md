@@ -1,13 +1,15 @@
-# Example 1: AI Slop → Human Prose
+# Example 1: Generic Draft → Specific Writing From the Author's Own Material
 
-**Transformation**: Generic AI output → Specific, voiced, human-sounding writing
+**Transformation**: Generic, interchangeable prose → specific prose that says only what the author's own notes support
 **Passes used**: Full pipeline (all 6 passes)
 **Voice**: casual sharp
-**Score delta**: 31 → 87
+**Illustrative rubric score**: 31 → 87 (a teaching judgment by the maintainers, not a measured result)
+
+> **This example is synthetic.** The author, the shop, the dates and every figure on the source card below were invented for this page. None of it is a claim about a real company, study or person. v9 revises this example: the v8 version rewrote the generic paragraphs by adding real-sounding companies, dates and events that no source supplied, and its title promised to make machine text "human". Editing cannot change who wrote a draft, and a rewrite may add only what the author supplies. Authorship stays whatever it was; see [`v9/`](v9/README.md) for how a draft's origin is declared and checked.
 
 ---
 
-## Before (Score: 31/100)
+## Before (illustrative score: 31/100)
 
 In today's rapidly evolving digital landscape, artificial intelligence has emerged as a transformative force that is reshaping industries across the globe. From healthcare to finance, AI is revolutionizing the way we work, live, and interact with the world around us. However, this technological revolution also brings with it a host of challenges and ethical considerations that we must carefully navigate.
 
@@ -15,33 +17,43 @@ It's worth noting that the impact of AI extends far beyond mere automation. At i
 
 Furthermore, the democratization of AI tools has created new opportunities for businesses of all sizes. Small companies can now leverage cutting-edge technology that was previously only available to large enterprises. This paradigm shift is creating a more level playing field, though it also raises important questions about data privacy and algorithmic bias.
 
-### Violations Found
-- Hard-ban phrases: "In today's rapidly evolving," "It's worth noting," "At its core," "paradigm shift," "leverage," "democratization"
-- Cadence: LLM list rhythm (all sentences 18-22 words, identical S-V-O structure)
-- Sentence-length std dev: 2.8 (target: ≥8)
-- Zero specific claims — no names, numbers, dates, or examples
-- Every paragraph opens with a generalization
-- Closing is a vague gesture at "important questions"
+### Problems found (reader's view)
+- Stock phrases that fit any topic: "In today's rapidly evolving," "It's worth noting," "At its core," "paradigm shift," "leverage," "democratization"
+- No actor, no place, no date, no decision: nothing a reader could check, use or argue with
+- Every paragraph opens with a generalization and the claims stay at one altitude
+- Several sentences state the same point ("AI is changing things") in different words
+- The closing gestures at "important questions" without asking one
+
+None of these is evidence about who or what produced the paragraph. They are reasons the paragraph does not yet say anything.
 
 ---
 
-## After (Score: 87/100)
+## Source card (synthetic — what the author supplied)
 
-OpenAI laid off its entire safety team in May 2024. Not downsized. Dissolved. The people whose job it was to make sure the technology didn't cause harm were removed by the company building the technology most likely to cause harm. That fact alone should end the "AI companies will regulate themselves" argument. It didn't.
+*Notes from the owner of a small print shop (invented):*
+- *In March we started using a paid ad-targeting tool at $50 a month, in place of buying a flyer run.*
+- *Our customer list now lives in the tool's dashboard. I have not read its data terms.*
+- *Our two largest competitors were already using the same kind of tool.*
+- *I do not know whether it brings in more customers than the flyers did. Three months of sales are not in yet.*
 
-Six months later, the same company released a model that could generate a human-sounding voice from a 15-second sample. No consent architecture. No opt-out mechanism. The product shipped because the market rewarded speed and the regulatory vacuum allowed it.
+## After (illustrative score: 87/100)
 
-The small-business story is real but more complicated than the brochure version. A bakery in Waco, Texas can now run targeted ads using the same machine learning stack that Coca-Cola uses. That access costs $50/month instead of $500,000/year. The trade: every customer interaction feeds a data pipeline the bakery owner doesn't control, can't audit, and agreed to in paragraph 47 of a terms-of-service document nobody reads. Cheap tools aren't free tools. The currency is just different.
+In March I paid $50 a month for an ad-targeting tool and stopped buying flyer runs. It was easy to say yes to: our two biggest competitors were already using the same kind of thing.
 
-### What Changed
-- Opening: specific event, named company, specific date, specific action
-- Sentence lengths: 6, 3, 26, 5, 24, 13, 29, 18, 25, 7, 5 (std dev: 9.1)
-- Zero hard-ban phrases
-- Three named entities (OpenAI, Waco Texas, Coca-Cola)
-- Specific numbers ($50/month, $500,000/year, 15-second, paragraph 47)
-- Closing sentence: 5 words. Lands.
-- Voice: casual sharp — conversational, opinionated, respects the reader
+The part I did not think through is where our customer list went. It lives in the tool's dashboard now, and I have not read its data terms. Whether the terms let the vendor use that list for anything else: [needs source]. I am paying for a convenience and I do not yet know the price.
+
+I also cannot tell you the tool is working. Three months of sales are not in. The flyers were a known cost with a known, modest result; this one is a small cost with an unknown one.
+
+### What changed
+- **Source first.** Each fact in the "After" is on the source card. The card's open question (does it bring in more customers?) was left open instead of resolved by a confident sentence.
+- **Concrete before cadence.** The actor (the owner), the decision (swap flyers for the tool), the friction (unread data terms) and the uncertainty (no sales result yet) replaced the abstractions. The sentences follow that thinking. Nothing was lengthened, shortened or split to hit a pattern.
+- **Gaps marked, not filled.** What the terms allow is `[needs source]`. A rewrite that sounded more authoritative by guessing would break v4 Law C.
+- **Nothing borrowed.** No named company, event or statistic outside the card was added. The v8 version did add them; that was the defect.
+- **No detector involved.** No score from any detector was read, targeted or used as a pass condition. A detector percentage is not evidence of who wrote a passage.
+
+### What this example does not show
+It does not show a draft becoming "human". If a model produced the Before text, the After is still an edit of that material by whoever made it, and any venue that requires human-written work decides on its own contract. The author's own account — what they did, what they know and what they do not — is what made the After specific; editing could only point at the gaps.
 
 ---
 
-*Try it yourself: paste the "Before" text into Claude with Writing Intelligence installed and ask it to rewrite.*
+*Try it yourself: write your own three or four facts about a decision you actually made, paste them with the "Before" text, and ask for a rewrite that uses only those facts and marks what it still needs.*

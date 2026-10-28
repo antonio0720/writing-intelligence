@@ -31,5 +31,8 @@ What are the most common mistakes writers make in this genre? (List at least 5)
 ## Example (optional)
 If you have a before/after example or a gold-standard sample, include it here.
 
+## v9 notes (optional)
+Does this genre have venue rules about who may write or assist (for example a human-only submission desk)? Name them, with where they are published, so the pack can warn instead of drafting.
+
 ## Sources / references
 What did you draw from to build this pack? (Style guides, editorial standards, professional experience)

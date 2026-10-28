@@ -503,3 +503,13 @@ shifts beneath them.
 | Foreshadowing / callbacks | 6 | Dialogue plants that pay off? |
 | Silence / interruption craft | 6 | Silence carries weight? Interruptions serve 3+ functions? |
 | Memorability | 6 | Any line a reader would quote or remember? |
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** dialogue sits inside whatever the host work is (novel, screenplay, game script, nonfiction scene). The host venue's rules govern, not this pack. Check the current written policy; unknown means HOLD.
+- **Anchored sources:** in fiction, no source anchoring applies. In nonfiction, quoted speech needs a recording, transcript or contemporaneous note; reconstructed dialogue must be labeled as reconstructed.
+- **Firsthand material:** for memoir or autofiction, no borrowed memory: a remembered exchange must be the author's own, not a model's invention. Overheard speech is the author's to use only as they actually heard it.
+- **Disclosure:** follows the host venue. Fiction gates are unchanged by v9.
+- **Phrase matches that may be legitimate:** inside quotation marks a hot-phrase match is usually character voice, since people say "honestly" and "to be fair" and trail off with clichés. The scanner skips quoted text unless `--include-quotes` is set; keep that default. Review only when the same tic spreads across every speaker, because that suggests one voice.

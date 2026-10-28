@@ -6,13 +6,14 @@
 3. Earned Exceptions
 4. Inflated Verbs
 5. Filler Hedges
-6. AI Signature Transitions
+6. Stock Transitions
+7. v9 Catalog Cross-Reference, Counterexamples and the Review Ledger
 
 ---
 
 ## 1. Hard Bans
 
-These phrases appear almost exclusively in LLM output. Remove on sight. No exceptions.
+These phrases announce, pad or perform instead of saying something. Revise them on sight in the author's own prose, because each one delays the claim. They are not proof of who wrote a passage: people have always written them. The exceptions are quoted speech, titles, and an author's established idiom (see section 7).
 
 ### Setup / Throat-Clearing
 - "Here's the thing"
@@ -207,9 +208,9 @@ Remove unless they reflect genuine epistemic uncertainty:
 
 ---
 
-## 6. AI Signature Transitions
+## 6. Stock Transitions
 
-These transition patterns are statistically overrepresented in LLM output. Vary or replace:
+These transitions are stock moves that announce a relationship instead of showing it. Replace one when the logic it names is not actually there, or when it is the third in a page:
 
 - "Moreover" (once per 1000 words max)
 - "Furthermore" (once per 1000 words max)
@@ -226,3 +227,45 @@ Preferred alternatives: structural contrast, juxtaposition, temporal markers,
 causal connectors, or simply starting the new paragraph with its own claim.
 The strongest transition is no transition — just a paragraph that earns its
 adjacency to the previous one.
+
+---
+
+## 7. v9 Catalog Cross-Reference, Counterexamples and the Review Ledger
+
+The v9 reference kernel keeps a **334-rule editorial catalog** (321 literal, 13 regex, 11 categories) in `prototypes/wi9/rules/v9_hotphrases.json`, scanned by `prototypes/wi9/wi9_hotphrases.py`. It is experimental: v9 is released (9.0.0). This file's lists are the older hand-written ones; where the two overlap, the catalog carries the question and this file carries the craft advice.
+
+**A match is an editorial question, never a verdict.** It does not say who wrote the passage, does not prove anything about origin, and never triggers an automatic rewrite. Every rule asks the author or editor a question; the answer may be "this is fine as written."
+
+| Section of this file | Catalog category | Question the catalog asks |
+|---|---|---|
+| Buzzword compounds, inflated verbs, temporal clichés | `marketing_abstraction`, `domainless_solutionism` | Which concrete action or measurable change is claimed? Who does what, under which conditions, with what observable result? |
+| Setup / throat-clearing, stock transitions | `staged_explanation` | Does this transition help the reader follow evidence, or only announce the structure? |
+| Pseudo-depth, punctuation as mic | `empty_emphasis` | What decision, consequence or observation makes this important? |
+| "It's not just X, it's Y", "less about X, more about Y" | `overused_rhetorical_structure` (regex rules) | Do both sides name meaningfully different facts? A pattern match alone never justifies a rewrite. |
+| Filler hedges | `qualifier_padding` | Is the uncertainty genuine and scoped, or padding? |
+| "Let's be honest", "Here's the thing" | `performed_candor`, `empty_emphasis` | Does the phrase reflect the actual speaker, or perform candor? |
+| Manufactured drama ("Think about it", "Let that sink in") | `forced_audience_engagement` | Is direct address useful for this audience and genre? |
+| Manufactured quotables, closing flourishes | `generic_closure`, `empty_metaphor` | What earned consequence or open question should end the passage? Does the metaphor clarify a mechanism better than direct language? |
+
+### When not to fix
+
+A catalog hit is left alone, or a source is added instead of a rewrite, in these cases. The examples are **synthetic**, built for this page, not quotations from real documents.
+
+- **Quoted or transcribed speech** (`staged_explanation`, `performed_candor`). A reporter quoting a source who said "Let's be honest, we missed the date" preserves what was said. Changing a quotation to fix a phrase falsifies the record.
+- **Domain use** (`marketing_abstraction`). "Move the needle" inside a clinical-trial endpoint description may be a literal label from the protocol; check the protocol before touching it.
+- **Genre convention** (`forced_audience_engagement`). A classroom handout that says "Ask yourself which assumption you tested first" is doing instruction; direct address is the genre.
+- **Earned emphasis** (`empty_emphasis`). "This matters because the dosage changed from 5 mg to 50 mg" has a stated consequence; the phrase is attached to a fact.
+- **Scoped uncertainty** (`qualifier_padding`). "It should be noted that the sample excludes under-18 participants" is a limitation, not padding.
+- **Structure with two real sides** (`overused_rhetorical_structure`). "The policy was not just delayed but reversed" is correct when delayed and reversed are different events.
+- **Idiom the author uses on purpose** (`generic_closure`). A speaker whose ending line is her signature sign-off keeps it; a voice sample (voiceprints) can show that it recurs across her consented writing.
+
+### Recording a keep/revise decision
+
+Use the review ledger, `prototypes/wi9/wi9_phrase_review.py`, so the decision is bound to the exact text and rule pack rather than remembered:
+
+1. Scan: `python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format json > report.json`. The report carries the document and rule-pack sha256 digests and each hit's offsets.
+2. Write a `wi9.editorial.review/1` decisions file: the same `document_sha256` and `rules_sha256`, and one entry per hit with `rule_id`, `start`, `end`, `excerpt`, a `status`, a `rationale` of at least twelve characters, a `reviewer` and an offset-aware `reviewed_at`.
+3. `status` is one of `retain_as_written` (a legitimate use, say why), `revise_for_clarity` (the thought is sound; the wording hides it), `needs_source` (the claim is unsupported; add a source or cut it) or `not_applicable` (the match is outside the rule's meaning).
+4. Run `python3 prototypes/wi9/wi9_phrase_review.py --input draft.txt --report report.json --decisions decisions.json`. It returns `REVIEW` or `HOLD` (stale document or rules, unknown span, duplicate, missing rationale). It always reports `release_authorized: false`.
+
+Any edit to the draft changes its digest and makes the old decisions stale; re-scan. The reviewer name is declared, not authenticated, and a reviewed phrase is not proof of origin or of source truth. Editing a phrase to change a scanner's output, rather than to say the thing better, is outside this system's purpose.

@@ -31,3 +31,11 @@ The proposed upgrade is subordinate to upstream law C (never report work not don
 ## Privacy
 
 Reader responses should be pseudonymized and contain only consented observations. Do not include raw identifiable reports, private emails, rights-protected passages or confidential manuscript excerpts in public CI artifacts. Public benchmark fixtures herein are synthetic **examples** and do not claim they were written or approved by actual beta readers.
+
+## v9 preview: release and trust boundaries
+
+*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.*
+
+v9 adds one boundary to the list above: a **declaration** is not authentication. `scripts/wi-authorship.py` reports `declaration_status: self_reported` and reads only bounded, symlink-free files under the dossier directory; it sends nothing. `RELEASE_ELIGIBLE` is a gate on a package, never a transmission, and it requires a person's decision bound to the exact draft digest and an unexpired grant. The checker cannot prove a self-declared human-only manuscript was written by a person.
+
+Untrusted-input handling is unchanged: dossier text, manuscripts and phrase-scan inputs are data, never instructions. A detector score is not a trust signal in this model and is not used as a gate (WI9-H). Release remains on HOLD until WI9-09 (independent review and the owner's decision), and v8.0.0 stays the published version.

@@ -106,3 +106,14 @@ After completing each section:
 - Run contradiction check against previous sections
 - Verify terminology consistency
 - Score voice continuity
+
+---
+
+## v9 Meaning-First Order (proposed) — Continuity
+
+For nonfiction and brand work, continuity includes the status of claims.
+
+- **Dimension to add.** Track each recurring first-person claim, its evidence and its `experience_state` so later sessions do not promote a planned item to a completed one.
+- **Voice reference.** The reference voice comes from the author's consented human-origin samples, reviewed and approved by the author.
+- **Hypotheticals.** Labeled hypotheticals stay labeled across sessions.
+- **Fiction.** v9 leaves fiction continuity checks as they are; the fiction gates here are unchanged. The shipped continuity checks are not authorship evidence.

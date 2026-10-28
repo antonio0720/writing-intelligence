@@ -4,7 +4,9 @@
 **Passes used**: Full pipeline
 **Voice**: literary recursive
 **Genre**: fiction
-**Score delta**: 34 → 92
+**Illustrative rubric score**: 34 → 92 (a teaching judgment, not a measured result)
+
+> **Synthetic.** This is fiction written for the page. In real use the faucet, the tape and the measuring cup are the story author's choices, drawn from the world they have built; the editor's job is to ask for them and to preserve them across revisions, not to supply them on the author's behalf.
 
 ---
 
@@ -17,7 +19,7 @@ Sarah walked into the room and felt a wave of emotion wash over her. The room wa
 - "bittersweet moment" — labels the scene instead of creating it
 - "She thought about" — narrator tells us she's thinking instead of showing what she thinks
 - "felt a tear roll down her cheek" — the most cliché physical emotion marker in fiction
-- Every sentence is 8-14 words (std dev: 2.1 — completely flat)
+- Sentences are all about the same length and weight, so no beat stands out (descriptive, not a target)
 - Every sentence starts with "She" or "The" or "It" — zero structural variety
 - No specific sensory detail that makes THIS room different from any room
 - No subtext — everything is stated directly
@@ -43,8 +45,7 @@ The movers were coming at noon.
 - Subtext: "Her mother would cook... refusing to close the blinds" tells us the mother is gone without stating it
 - "Weighed nothing. Weighed everything." — earned, not manufactured
 - "The movers were coming at noon." — single-sentence final paragraph. The fact does the work.
-- Sentence lengths: 5, 24, 18, 13, 4, 27, 9, 2, 7, 19, 22, 8, 5, 21, 4, 4, 6 (std dev: 8.7)
-- Three sentences under 6 words. Rhythm breathes.
+- Sentence length now follows the beats: short where the image lands ("Dust on dust."), longer where a memory unfolds. Descriptive only — no length pattern was targeted
 
 ---
 

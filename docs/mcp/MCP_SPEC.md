@@ -4,6 +4,8 @@
 
 This document specifies a Model Context Protocol server surface for Writing Intelligence v3.0. Clients (Claude Desktop, Claude Code, custom agents) consume the tools to embed v3.0 capability in their workflows.
 
+> **v9 note.** Released in 9.0.0. Two v9 tools are specified below (`wi9_authorship_audit`, `wi9_hotphrase_scan`); like every tool here they are a contract for an MCP adapter, and their behaviour is implemented and tested in the REST runtime's v9 endpoints. There is deliberately no release tool. Not served, on purpose: the per-writer tools (`vault`, `ledger`, `meaning review`, `voice`, `voice-review`, `voice-compare`, `compose`) read and write a writer's private folders and grants on their own machine, so they run only through the local CLI (`wi authorship ...`). See [`../../references/v9/README.md`](../../references/v9/README.md).
+
 ## Server Name
 
 `writing-intelligence`
@@ -151,6 +153,24 @@ List all available genre packs.
 List all available voiceprints.
 
 **Output**: array of `{voice_id, title, summary}`.
+
+### `wi9_authorship_audit` *(v9)*
+
+Check an authorship and evidence dossier. A declaration checker: it never authenticates a writer.
+
+**Input**: `{ "dossier": <wi9-authorship-2 object>, "files": { "relative/path.txt": "UTF-8 text" } }`
+
+**Output**: `{ "exit_code": 0 | 3, "report": <wi9-authorship-audit-2>, "release_authorized": false }`. Same contract as `POST /v9/authorship/audit`. A client MUST present `REVIEW` as "limited checks passed", never as permission to send or publish.
+
+### `wi9_hotphrase_scan` *(v9)*
+
+Editorial phrase questions from the 334-rule catalog.
+
+**Input**: `{ "text": "string", "include_quotes": false }`
+
+**Output**: `{ "exit_code": 0, "report": <wi9.hotphrases.report/1> }`. Same contract as `POST /v9/hotphrases/scan`. A client MUST NOT describe a match as evidence of AI authorship or rewrite text automatically.
+
+There is no `wi9_authorship_release` tool: release authority is read from a v6 grant store the operator names locally, and an agent is not the operator.
 
 ## Resources
 

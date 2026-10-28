@@ -6,44 +6,57 @@ Calibration-grade samples for every genre and voice in the compiler. Each
 sample demonstrates what a 90+ score looks like in its genre. Use these
 as target examples when the compiler is generating or evaluating output.
 
+**Every figure, name and quotation in these samples is synthetic** unless a
+sample's source card says otherwise. They illustrate craft; they are not facts
+and must never be copied into a real document. A real output carrying any of
+them without an anchored source would HOLD under v4 Law C. Where a sample cites
+a source, it cites a numbered source card (S1, S2 …) that stands for material
+the author supplied — never a real author, agency or study the example invents.
+"Sentence lengths" lines are descriptive: the lengths follow the content and are
+never a target to reproduce.
+
 ---
 
 ## Academic Essay (Score: 92)
 
 Voice: academic_rigorous | Genre: academic | Audience: professor
 
+Source cards (synthetic, supplied by the author for this sample): S1 union density
+series for both countries; S2 a first-contract refusal study; S3 a private-sector
+organizing-rate study. No real publication is cited.
+
 "The standard explanation for declining union membership — that globalization
 and automation made collective bargaining obsolete — treats the outcome as
 inevitable. It wasn't. Canada experienced the same economic pressures between
 1970 and 2020 and maintained union density above 30%, while the U.S. figure
-dropped from 27% to 10.3% (Bureau of Labor Statistics, 2023). The divergence
+dropped from 27% to 10.3% (source card S1). The divergence
 points to institutional design, not economic determinism.
 
 Specifically, three legislative differences explain most of the gap. Card-check
 certification, which Canada retained and the U.S. effectively eliminated after
 Taft-Hartley, reduced the employer's ability to delay and discourage organizing
 campaigns. First-contract arbitration, available in most Canadian provinces,
-prevented the pattern — documented by Bronfenbrenner (2009) in 42% of
-successful U.S. certification elections — where employers simply refused to
+prevented the pattern — documented in 42% of
+successful U.S. certification elections (source card S2) — where employers simply refused to
 negotiate a first contract until the union dissolved. And sectoral bargaining
 provisions in Quebec and British Columbia established wage floors that
 individual-firm bargaining in the U.S. could not sustain against competitive
 pressure.
 
-None of this means the Canadian model is without problems. Doorey (2017)
-has shown that even with stronger legal protections, Canadian organizing rates
+None of this means the Canadian model is without problems. The study in
+source card S3 shows that even with stronger legal protections, Canadian organizing rates
 in the private sector have declined since 2000, suggesting that legal
 infrastructure is necessary but not sufficient. The question is whether
 institutional design creates the conditions for collective action or merely
 fails to prevent its erosion."
 
 Why this scores 92:
-- Named sources with dates
+- Every figure traced to a source card the author supplied (S1–S3)
 - Specific data (30%, 10.3%, 42%)
 - Counterargument engaged honestly
 - Three-mechanism explanation (not vague)
 - Conclusion extends beyond the evidence
-- Sentence lengths: 21, 3, 29, 27, 38, 31, 25, 16, 33
+- Sentence lengths (descriptive, not a target): 21, 3, 29, 27, 38, 31, 25, 16, 33
 
 ---
 
@@ -78,7 +91,7 @@ Why this scores 94:
 - Risk quantified in both directions
 - Decision point is specific with deadline
 - Zero buzzwords
-- Sentence lengths: 5, 8, 12, 15, 18, 21, 8, 29, 19, 16, 11
+- Sentence lengths (descriptive, not a target): 5, 8, 12, 15, 18, 21, 8, 29, 19, 16, 11
 
 ---
 
@@ -117,7 +130,7 @@ Why this scores 93:
 - Specific sensory details (ceramic bowl from Oaxaca, clock time, dishwasher silence)
 - Dialogue carries subtext (what's NOT said matters more)
 - No dialogue adverbs. No emotion-naming.
-- Sentence lengths: 6, 32, 3, 8, 22, 30, 5, 3, 28, 6, 11, 32, 24, 14, 7, 23
+- Sentence lengths (descriptive, not a target): 6, 32, 3, 8, 22, 30, 5, 3, 28, 6, 11, 32, 24, 14, 7, 23
 
 ---
 
@@ -160,7 +173,7 @@ Why this scores 91:
 - Cadence builds: conversational → scriptural → prophetic → intimate
 - Anaphora ("God doesn't need you...") at climax
 - Congregation directly addressed and respected
-- Sentence lengths vary dramatically: 7, 38, 7, 8, 5, 24, 14, 6, 22, 9, 31, 15, 6, 7, 8, 13, 25, 14
+- Sentence lengths (descriptive, not a target): 7, 38, 7, 8, 5, 24, 14, 6, 22, 9, 31, 15, 6, 7, 8, 13, 25, 14
 
 ---
 
@@ -234,10 +247,14 @@ Why this scores 91:
 
 Voice: investor_precision (adapted) | Genre: government_brief | Audience: agency director
 
+Synthetic throughout: the department, program, statute, policy number, counties and
+enforcement matter below are invented teaching fixtures. A real brief cites the real
+statute and names real places only from a source card the author supplied.
+
 "SUBJECT: Decision Required — FY2026 Water Infrastructure Grant Allocation
 
-ISSUE: The Department must allocate $47.3M in remaining FY2026 DWSRF funds
-by September 30 or forfeit the balance under 42 U.S.C. § 300j-12(a)(4).
+ISSUE: The Department must allocate $47.3M in remaining FY2026 program funds
+by September 30 or forfeit the balance under [statute citation — needs source].
 
 BACKGROUND: 14 eligible applications remain in review. Three exceed $10M and
 require Assistant Secretary concurrence per Departmental Policy 430.1. Current
@@ -250,7 +267,7 @@ Option A — Prioritize by population served. Process the 8 applications
 covering the largest populations first. Allocates $38.1M. Remaining $9.2M
 and 6 applications forfeit or carry to FY2027 under the extension provision.
 Risk: Two small-system applications with acute contamination issues
-(Denton County, TX; Lowndes County, AL) would not be processed.
+(County A; County B — synthetic) would not be processed.
 
 Option B — Prioritize by health risk severity. Process the 3 acute
 contamination cases first, then fill remaining capacity by population.
@@ -260,9 +277,9 @@ tighter. Requires overtime authorization for the review team.
 RECOMMENDATION: Option B. The $3.5M additional allocation and coverage of
 acute contamination cases outweigh the overtime cost (estimated $34,000).
 The two contamination cases involve documented health impacts currently
-under EPA enforcement action.
+under an open enforcement action (synthetic).
 
-COORDINATION: OCSPP concurs. OW concurs. Budget Office has confirmed
+COORDINATION: Office 1 concurs. Office 2 concurs. Budget Office has confirmed
 overtime authority exists under current CR.
 
 DECISION NEEDED BY: August 15, 2026."
@@ -325,7 +342,7 @@ Why this scores 94:
 - Zero adverbs on dialogue tags. "Said" only once. Most attribution through action beats
 - Silence deployed: "Her fingers stopped. One beat. Two."
 - The button: the clock he'd never noticed. New awareness of time pressure.
-- Sentence lengths: 4, 10, 9, 6, 5, 13, 8, 28, 14, 9, 4, 4, 6, 16, 5, 4, 1, 19, 7, 11, 16
+- Sentence lengths (descriptive, not a target): 4, 10, 9, 6, 5, 13, 8, 28, 14, 9, 4, 4, 6, 16, 5, 4, 1, 19, 7, 11, 16
 
 ---
 
@@ -409,7 +426,7 @@ Why this scores 92:
 - Foreshadowing: the bartender's call, the gray suit's coffee, the unmapped door — three plants for later payoff
 - Pacing: ambient normalcy (entering, sitting) → first friction (he's late / he's here) → sustained pressure (the smiling man) → the scene is held at pressure peak. The button: "Not yet." Two words. The compression is maximum.
 - Silence: "In a room this quiet, the sound was a sentence."
-- Sentence lengths: 4, 20, 17, 8, 5, 12, 21, 31, 6, 3, 6, 20, 15, 3, 3, 11, 6, 12, 7, 4, 13, 16, 10, 5, 3, 9, 6, 8, 9, 29, 20, 7, 11, 8, 7, 33, 14, 2
+- Sentence lengths (descriptive, not a target): 4, 20, 17, 8, 5, 12, 21, 31, 6, 3, 6, 20, 15, 3, 3, 11, 6, 12, 7, 4, 13, 16, 10, 5, 3, 9, 6, 8, 9, 29, 20, 7, 11, 8, 7, 33, 14, 2
 
 ---
 

@@ -1,4 +1,4 @@
-# Writing Intelligence v8
+# Writing Intelligence v9 — Authentic Voice & Authorship Provenance
 
 [![Release](https://img.shields.io/github/v/release/antonio0720/writing-intelligence?label=release&color=0b7285)](https://github.com/antonio0720/writing-intelligence/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0b7285)](LICENSE)
@@ -12,9 +12,46 @@ This one does all four, offline, with no model running, and can prove it to some
 
 **Free. Open source. MIT. No account, no server, no API key, no telemetry. Forever.**
 
+*Release status: **9.0.0 is the release** (2026-10-28). Every tool below runs offline on your own machine; install the four bundles from the [latest release](https://github.com/antonio0720/writing-intelligence/releases/latest). Still open, and stated rather than hidden: real writers' samples run through the voice tools, the 60-case blinded benchmark (WI9-07) and an independent review by someone who did not build v9 (WI9-09). v8's Story Intelligence (below) ships unchanged inside 9.0.0.*
+
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com)
 
-[**What v8 is**](#what-v8-is-in-one-paragraph) · [**See it work**](#see-it-work) · [**60-second tour**](#the-60-second-tour) · [**Install**](#install) · [**The eighteen laws**](#the-eighteen-laws) · [**What runs and what does not**](#what-runs-and-what-does-not) · [**What it refuses to do**](#what-it-refuses-to-do)
+[**What v9 adds**](#what-v9-adds) · [**What v8 is**](#what-v8-is-in-one-paragraph) · [**See it work**](#see-it-work) · [**60-second tour**](#the-60-second-tour) · [**Install**](#install) · [**The eighteen laws**](#the-eighteen-laws) · [**What runs and what does not**](#what-runs-and-what-does-not) · [**What it refuses to do**](#what-it-refuses-to-do)
+
+---
+
+## What v9 adds
+
+**What v9 is for.** Every writer keeps what is actually theirs — their experience, their positions, their numbers, their voice — through every edit, and a venue's authorship rules are enforced before anything is sent. v9 never invents a first-person scene, never adds noise to look human, and never treats an AI-detector score as a target, a gate or a claim. It is program WI9-AUTHORSHIP (owner Antonio T. Smith Jr.), released as **9.0.0** on 2026-10-28. Nothing in v4–v8 changed behaviour.
+
+**Everything here is for every writer, on their own machine.** v9 ships no voice corpus, no firsthand material and no model. Each person builds their own baseline from their own samples, keeps their own notes in their own private vault, and records their own decisions under their own grant. A test fails if any of that is ever committed.
+
+| Tool (`wi authorship …`) | What it does for you |
+|---|---|
+| `audit`, `release` | Checks a submission's self-declared origin, consent and contribution history against each other and the venue; holds a human-only submission that declares AI prose; requires every consequential claim to rest on an exact span of a pinned source. `release` additionally needs a person's decision bound to the exact draft and that person's v6 grant from a store the operator names. `REVIEW` is never permission to send; `RELEASE_ELIGIBLE` is never proof of authorship; nothing is transmitted. |
+| `vault` | Your private firsthand material: notes, transcripts, dated drafts, interviews, each labelled `observed`, `said_by_author`, `measured`, `sourced`, `inferred`, `hypothetical` or `planned`, with consent. Redact or withdraw at any time; the bytes are deleted. `check` holds any first-person claim with no anchored source, and refuses a plan written up as done or a model-written anecdote. |
+| `meaning` | Compares your text with a revision and lists every material change in meaning for you to accept or reject: a changed number or date, a plan described as done, an estimate turned exact, a reversed opinion, a moved or invented cause or outcome, a dropped hedge or concession, an altered quotation, a new first-person sentence. Nothing reaches REVIEW until you decided every one. |
+| `ledger`, `phrase-review` | Your review decisions, recorded only under your own v6 grant and never overwritten; a later decision supersedes an earlier one in the open. A typed reviewer name on its own holds. |
+| `voice`, `voice-review`, `voice-compare` | Your voice measured from at least three of your own 500-word samples: sentence length, vocabulary, first person, and how you argue (qualifiers, disagreement, examples, reasons, concessions). A held-out check names any measure your own samples do not agree on. `voice-compare` shows where a draft drifts from you — and says plainly that matching proves nothing about who wrote it. |
+| `scan`, `structure` | 334 editorial phrase rules and five shape checks (repeated openings, hollow contrasts, template paragraphs, three-item lists, restatement), each an editorial question with an exact span. Long manuscripts are scanned in chunks, not cut off. |
+| `compose` | Bring your own model. Venue policy and evidence run first, so a human-only venue never reaches a model; your program gets only the key variable you name; the best result is a draft that needs your review, marked `ai_generated`. |
+
+```bash
+python3 scripts/wi.py authorship audit   --input dossier.json                      # REVIEW (0) or HOLD (3)
+python3 scripts/wi.py authorship release --input dossier.json --authority-store ~/wi-authority
+python3 scripts/wi.py authorship vault init  --root ~/wi9-private/vault --project my-essay
+python3 scripts/wi.py authorship vault check --root ~/wi9-private/vault --claims claims.json
+python3 scripts/wi.py authorship meaning diff --original mine.txt --candidate revised.txt
+python3 scripts/wi.py authorship voice --root ~/wi9-private/voice/essay --input voice.json
+python3 scripts/wi.py authorship scan --input draft.txt --format text
+bash scripts/test-v9.sh                                                             # the v9 regression
+```
+
+**Where the waves stand** ([`WAVES.yaml`](references/v9/WAVES.yaml), the status source is [`plans/v9.manifest.yaml`](plans/v9.manifest.yaml)): WI9-00 baseline VALIDATED · WI9-01 authorship contract PROTOTYPE · WI9-02 firsthand vault PROTOTYPE · WI9-03 voice baseline PROTOTYPE · WI9-04 meaning fidelity PROTOTYPE · WI9-05 craft repair IN_PROGRESS (05G reader trial not run) · WI9-06 human-only venue hold PROTOTYPE · WI9-07 blinded editorial benchmark PLANNED — **not executed** · WI9-08 canonical integration VALIDATED · WI9-09 IN_PROGRESS (9.0.0 released by the owner; independent review open). Released in 9.0.0; each wave keeps its own acceptance stage, and a stage moves only on a PASS receipt with a CI readback ([`plans/receipts/`](plans/receipts/)). Full detail: [`references/v9/README.md`](references/v9/README.md) · walkthrough: [`USER_GUIDE.md`](USER_GUIDE.md#authorship-and-venue-checks-v9) · defects: [`references/v9/defects.md`](references/v9/defects.md).
+
+**What v9 does not do.** It cannot authenticate who wrote a passage or show that a source is true; an exact excerpt is a text anchor, not entailment, and a v6 grant shows who was authorized, not who typed a decision. The meaning diff is lexical, not semantic. It reports no quality scores or benchmark results — none exist yet. It has run on no real writer's samples and had no independent human review yet. It needs POSIX file safety: on Windows it refuses by name. The vault is not encrypted at rest.
+
+**AI-detector scores are never a target, a gate or a claim.** An external detector result may be archived as an observation and nothing more.
 
 ---
 
@@ -32,7 +69,7 @@ python3 extensions/wi8/craft03/scripts/wi-craft.py evaluate --input scene.json
 python3 extensions/wi8/japan04/cli/wi8_japan.py check project.json
 ```
 
-**8.0.0 ships the four engines as offline tools, with receipts; it does not ship their canonical integration.** Merging them into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review are waves FI8-03–06 and WI8-00–WI8-43, all planned. Index: [`references/v8/README.md`](references/v8/README.md) · status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml) · release notes: [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md)
+**8.0.0 shipped the four engines as offline tools, with receipts (9.0.0 carries them unchanged); it does not ship their canonical integration.** Merging them into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review are waves FI8-03–06 and WI8-00–WI8-43, all planned. Index: [`references/v8/README.md`](references/v8/README.md) · status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml) · release notes: [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md)
 
 ---
 
@@ -54,7 +91,7 @@ v3 governs *how well* the writing is built. v4 governs *what may be claimed abou
 
 Seven identifications. Each has a mechanism behind it and a failure code when it is absent.
 
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines)**
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program) → v8.0 (Story Intelligence — 340 fiction requirements across four offline engines) → **v9.0 (Authentic Voice & Authorship Provenance — firsthand vault, meaning diff, grant-bound review, per-writer voice)**
 
 ---
 
@@ -367,23 +404,24 @@ Each v6 law takes an earlier one further rather than replacing it. **M** rests o
 
 ## Install
 
-**Three bundles. Install all three.**
+**Four bundles. Install all four.**
 
-A skill bundle may hold at most 200 files. A bundle over that ceiling does not degrade — it does not load, which would make every install instruction on this page false. At v6 the payload split into the runtime and the craft library; v8's four story engines are ~180 files on their own, so they ship as a third bundle under the same ceiling and the same checks:
+A skill bundle may hold at most 200 files. A bundle over that ceiling does not degrade — it does not load, which would make every install instruction on this page false. At v6 the payload split into the runtime and the craft library; v8's four story engines are ~180 files on their own, so they ship as a third bundle under the same ceiling and the same checks; the v9 tools did not fit the runtime's last six files, so they ship as a fourth:
 
 | Bundle | Files | Contains |
 |---|---|---|
-| **`writing-intelligence.skill`** | 191 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
-| **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern detectors, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
+| **`writing-intelligence.skill`** | 197 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
+| **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern diagnostics, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
 | **`writing-intelligence-story.skill`** | 184 | **New in v8.** Story Intelligence: the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, their 340-requirement registers, schemas and suites, and `scripts/test-v8.sh` |
+| **`writing-intelligence-authorship.skill`** | 70 | **New in v9.** `scripts/wi-authorship.py` (audit, release), `scripts/wi.py` (its claim classifier and v6 grant store), `schemas/v9`, the `prototypes/wi9` kernel and per-writer tools (vault, meaning diff, ledger, voice, structure, chunked scan, model connector) with 334 phrase rules, `references/v9`, `examples/v9`, `tests/v9` and `scripts/test-v9.sh`, which runs inside the extracted bundle |
 
-The runtime now holds 191 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in three artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate for all three and prints the arithmetic, so it cannot regress into an upload nobody can install. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate and prints the arithmetic, so it cannot regress into an upload nobody can install.
+The runtime now holds 194 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in four artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling and the 1024-character skill description limit as build gates for all four and prints the arithmetic, so it cannot regress into an upload nobody can install.
 
 If only the runtime is present, the craft doctrine summarized in [`SKILL.md`](SKILL.md) still governs and the genre packs are one `git clone` away — degraded, and honestly degraded, rather than broken.
 
 ### Claude Code or any terminal agent — as a skill *(recommended)*
 
-One clone gets you all three bundles' contents, the CLI and the v8 engines.
+One clone gets you all four bundles' contents, the CLI, the v8 engines and the v9 tools.
 
 ```bash
 git clone https://github.com/antonio0720/writing-intelligence \
@@ -407,6 +445,8 @@ Do the same for the other two — both are committed at the repository root, bes
 ```bash
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+# the v9 authorship bundle:
+curl -LO https://github.com/antonio0720/writing-intelligence/releases/latest/download/writing-intelligence-authorship.skill
 ```
 
 Pinned versions of all three, with checksums, are on [**Releases**](https://github.com/antonio0720/writing-intelligence/releases/latest).
@@ -446,6 +486,8 @@ Law C — *never report work not done* — applies to this project's claims abou
 
 **Executable today, offline, with no model:** the whole v4 floor (`preserve` · `scan-sources` · `extract-claims` · `verify` · `gate`); the whole v5 graph (`init` · `ingest` · `atomize` · `anchor` · `graph` · `impact` · `diff` · `test` · `explain` · `bundle` · `verify-release` · `doctor`); and the sixteen v6 commands (`canon` · `branch` · `propose` · `proposals` · `simulate` · `decide` · `commit` · `log` · `merge` · `conflicts` · `authority` · `obligations` · `as-of` · `constraints` · `capsule` · `why`).
 
+**Executable in v9, offline, with no model:** `wi authorship audit · release · vault · meaning · ledger · phrase-review · voice · voice-review · voice-compare · scan · structure · compose`, implemented once in `scripts/wi-authorship.py` and `prototypes/wi9/`. They check declarations, hold unsourced first-person claims and silent meaning changes, and flag editorial questions; they do not authenticate a writer, verify sources, rewrite prose or run a detector. `compose` calls only a model program you name. The 60-case benchmark (WI9-07) has not run.
+
 **Executable in v8, offline, with no model:** `scripts/wi-fiction.py` (`validate` · `audit` · `gate` · `text-signals` · `explain-rule` · `catalog`), `scripts/wi-arc.py` (`validate` · `evaluate` · `gate` · `as-of` · `impact` · `diff` · `classify` · `rules`), `extensions/wi8/craft03/scripts/wi-craft.py` (`evaluate` · `validate` · `as-of` · `gate` · `rules` · `schema`) and `extensions/wi8/japan04/cli/wi8_japan.py` (`check` · `preflight` · `init` · `draft-save` · `draft-read` · `draft-propose` · `draft-decide` · `draft-history` · `publish-preview` · `migration-preview` · `studio` · `untrusted-scan`). They read a typed JSON projection of a story; **they do not read a whole manuscript, judge literary quality, recruit readers, or certify cultural accuracy** — those are planned waves in [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
 **Specified, normatively described, and not executable anywhere:**
@@ -470,6 +512,7 @@ Law C — *never report work not done* — applies to this project's claims abou
 The refusals are load-bearing, not decorative. Full reasoning in [`references/v6/NON_GOALS.md`](references/v6/NON_GOALS.md).
 
 - **Detector evasion.** Anti-slop is a craft objective — prose that does not pattern-match to machine writing because it is genuinely better built. It is not a laundering service.
+- **Passing off AI prose as a person's, or writing for a human-only venue (v9).** The authorship checker holds a human-only submission that declares AI prose or unlisted assistance; it never invents a firsthand scene, never adds noise to look human, and never treats a detector score as a target. For a human-only venue the permitted output is a research brief.
 - **Source generation.** It will never construct a citation. If a claim needs support and none exists, the output is `needs_source`. Inventing a plausible reference is the single most damaging thing this system could do, and the anchor model exists so it cannot happen quietly.
 - **Truth verification.** It verifies support within the sources you supplied. It cannot tell you the source is right, and it says so the first time it says anything.
 - **A universal truth score.** There is no number that stands in for the counts, and no overall health gauge. A dashboard is where a system with four honest reliability types quietly grows a fifth one called *overall*.
@@ -551,6 +594,11 @@ extensions/wi8/japan04/   v8 Japan Story OS (JP-181..JP-340)
 rules/                    v8 requirement registers
 schemas/v8/               v8 projection, findings, gate and report schemas
 packs/story/              The story bundle's SKILL.md
+references/v9/            v9: README, defect register, WAVES.yaml, editorial protocol, benchmark design, handoff
+scripts/wi-authorship.py  v9: authorship-claim declaration checker (audit, release)
+schemas/v9/               v9: authorship-dossier schema (wi9-authorship-2)
+prototypes/wi9/           v9: firsthand vault, meaning diff, review ledger, voice, structure, chunked scan, model connector
+tests/v9/                 v9: authorship, schema-parity, doctrine and platform-refusal tests
 references/v7/            The Institutional Intelligence program and RFC-0001
 references/v6/            The sovereign meaning runtime (24 documents)
   CONSTITUTION              The eighteen laws, the twelve runtime layers, the failure codes
@@ -607,8 +655,10 @@ services/api/             REST reference runtime for the v3 craft kernel
 | [`USER_GUIDE.md`](USER_GUIDE.md) | Working with the system day to day |
 | [`CHEATSHEET.md`](CHEATSHEET.md) | One page, every command, mode, status and error code |
 | [`docs/INSTALL.md`](docs/INSTALL.md) | Every surface and what each can actually do |
+| [`references/v9/README.md`](references/v9/README.md) | v9 — authorship, firsthand vault, meaning diff, voice, defect register, wave states |
 | [`references/v8/README.md`](references/v8/README.md) | Index of v8 Story Intelligence — the four parts, reading order, status |
-| [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md) | What 8.0.0 ships and what it does not |
+| [`release/RELEASE_NOTES_v9.0.0.md`](release/RELEASE_NOTES_v9.0.0.md) | What 9.0.0 ships and what it does not claim |
+| [`release/RELEASE_NOTES_v8.0.0.md`](release/RELEASE_NOTES_v8.0.0.md) | What 8.0.0 shipped and what it did not |
 | [`references/v7/README.md`](references/v7/README.md) | The v7 Institutional Intelligence program |
 | [`references/v6/README.md`](references/v6/README.md) | Index of the v6 doctrine, and the order to read it in |
 | [`references/v6/MIGRATION_V5_TO_V6.md`](references/v6/MIGRATION_V5_TO_V6.md) | Upgrading from v5 |
@@ -649,3 +699,5 @@ Two companion files sit beside the licence and neither of them narrows it. [`NOT
 ---
 
 *v1.0 proved AI-sounding prose can be defeated by compilation instead of cosmetic cleanup. v2.0 proved fiction can be engineered as a living architecture. v3.0 proved authorship can be governed without being flattened. v4.0 proved it can be held accountable. v5.0 proved it can be inspected by someone who has no reason to trust you. **v6.0 proves it can be changed — by several people, across time, under authority — without anybody losing track of what is still true.***
+
+*v9 is working to show that a writer can keep what is theirs — experience, numbers, positions and voice — through every edit, without anyone pretending a machine wrote like a person. Until real writers, a blinded benchmark and an independent reviewer have tested that, the release says so plainly.*

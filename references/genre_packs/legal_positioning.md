@@ -61,3 +61,13 @@
 - Ambiguous pronoun references (fatal in contracts)
 - Using "feel" or "believe" where "contend" or "assert" is appropriate
 - Mixing advocacy and analysis in the same section
+
+## v9: authorship, sources and venue
+
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
+
+- **Venue:** courts, bar rules and clients may require disclosure, certification of citations, or bar AI use in filings. Check the current written rules for the court and jurisdiction; unknown means HOLD.
+- **Anchored sources:** every case, statute, quotation and record cite needs the exact span in the authority actually read and checked. A model-supplied citation is unverified until a person confirms it exists and says what is claimed.
+- **Firsthand material:** the client's facts as the client and the file state them. Do not supply facts that the record does not contain; describe a theory as a theory.
+- **Disclosure:** a lawyer's signature certifies the text. Record the contribution log; the signing attorney makes the release decision, and no tool does.
+- **Phrase matches that may be legitimate:** `qualifier_padding` ("arguably", "to the extent that") and `staged_explanation` ("it is well settled") are working legal diction. Keep a hedge that is a calibrated position; question one that is only habit.
