@@ -410,10 +410,10 @@ A skill bundle may hold at most 200 files. A bundle over that ceiling does not d
 
 | Bundle | Files | Contains |
 |---|---|---|
-| **`writing-intelligence.skill`** | 194 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
+| **`writing-intelligence.skill`** | 197 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
 | **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern diagnostics, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
 | **`writing-intelligence-story.skill`** | 184 | **New in v8.** Story Intelligence: the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, their 340-requirement registers, schemas and suites, and `scripts/test-v8.sh` |
-| **`writing-intelligence-authorship.skill`** | 46 | **v9 preview, not released.** `scripts/wi-authorship.py` (audit, release), `scripts/wi.py` (its claim classifier and v6 grant store), `schemas/v9`, the `prototypes/wi9` reference kernel and 334 phrase rules, `references/v9`, `examples/v9`, `tests/v9` and `scripts/test-v9.sh`, which runs inside the extracted bundle |
+| **`writing-intelligence-authorship.skill`** | 70 | **v9 preview, not released.** `scripts/wi-authorship.py` (audit, release), `scripts/wi.py` (its claim classifier and v6 grant store), `schemas/v9`, the `prototypes/wi9` kernel and per-writer tools (vault, meaning diff, ledger, voice, structure, chunked scan, model connector) with 334 phrase rules, `references/v9`, `examples/v9`, `tests/v9` and `scripts/test-v9.sh`, which runs inside the extracted bundle |
 
 The runtime now holds 194 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in four artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling and the 1024-character skill description limit as build gates for all four and prints the arithmetic, so it cannot regress into an upload nobody can install.
 

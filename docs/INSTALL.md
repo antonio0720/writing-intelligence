@@ -38,10 +38,10 @@ Since v8 the payload ships as **three bundles**, plus a fourth for the v9 previe
 
 | Bundle | Files | Holds |
 |---|---|---|
-| `writing-intelligence.skill` | 194 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
+| `writing-intelligence.skill` | 197 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
 | `writing-intelligence-craft.skill` | 86 | The craft library — genre packs, voiceprints, anti- and positive patterns, diagnostics, the compiler references, including v8's fiction references and genre addenda |
 | `writing-intelligence-story.skill` | 184 | v8 Story Intelligence — the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, `references/v8`, `rules/`, `schemas/v8`, `policies/`, `tests/v8`, `tests/v8_arc`, `scripts/test-v8.sh` |
-| `writing-intelligence-authorship.skill` | 46 | **v9 preview, not released** — `scripts/wi-authorship.py`, `scripts/wi.py`, `schemas/v9`, `prototypes/wi9`, `references/v9`, `examples/v9`, `tests/v9`, `scripts/test-v9.sh` |
+| `writing-intelligence-authorship.skill` | 70 | **v9 preview, not released** — `scripts/wi-authorship.py`, `scripts/wi.py`, `schemas/v9`, `prototypes/wi9`, `references/v9`, `examples/v9`, `tests/v9`, `scripts/test-v9.sh` |
 
 Install all four on every surface that takes uploaded skills (the fourth only if you want the v9 preview). The section below describes the original single-bundle layout and is kept for history; the table above is current.
 
