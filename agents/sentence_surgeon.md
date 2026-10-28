@@ -41,9 +41,9 @@ Repair prose sentence-by-sentence while preserving authorial voice. Log every tr
 - Voice Fingerprinter (Pass 7)
 - Stress Tester (Pass 9)
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.*
+*Released in Writing Intelligence 9.0.0.*
 
 - The operator is `repair_rhythm`, logged as `rhythm_repaired` (the legacy `variance_injected` is still readable and never emitted). Cadence is repaired because the thought changes shape, never to move a detector score or meet a length count.
 - Where the editorial phrase scan raised a question, the surgeon acts only on the author's recorded disposition in the review ledger (`retain_as_written`, `revise_for_clarity`, `needs_source`, `not_applicable`). A match is never a reason to rewrite on its own, and no rewrite adds a first-person experience the sources do not contain.

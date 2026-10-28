@@ -1,6 +1,6 @@
 # Migrating v3 → v4
 
-> **v9 note:** this guide is historical and unchanged. For the current upgrade path, including the v8 -> v9 preview (proposed, not released), see the v8 -> v9 section of [`UPGRADE_README.md`](../UPGRADE_README.md).
+> **v9 note:** this guide is historical and unchanged. For the current upgrade path, including v8 -> v9, see the v8 -> v9 section of [`UPGRADE_README.md`](../UPGRADE_README.md).
 
 **Short version: nothing breaks.** v4 is additive. The eleven passes, twelve engines, twelve agents, twenty-seven genre packs, voiceprints, schemas and anti-slop doctrine are unchanged. Every v3 workflow still runs and produces the same artifacts.
 

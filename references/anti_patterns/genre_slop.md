@@ -156,7 +156,7 @@ Detection: Manufactured urgency + vague proof + adjective stacking = sales slop.
 
 The detection thresholds above ("3+ in a paper", "5+ buzzwords per page") are editing heuristics for a reviewer's attention, not tests of how a text was produced. v9 adds two things: a cross-reference to the editorial phrase catalog and a venue check, because what counts as slop depends on the genre the venue expects.
 
-**Catalog categories.** The experimental 334-rule catalog (`prototypes/wi9/rules/v9_hotphrases.json`, a proposal on PR #8, not a release) has no genre field; it asks genre-independent questions. Use it as follows.
+**Catalog categories.** The experimental 334-rule catalog (`prototypes/wi9/rules/v9_hotphrases.json`) has no genre field; it asks genre-independent questions. Use it as follows.
 
 | Genre section | Catalog categories that overlap |
 |---|---|

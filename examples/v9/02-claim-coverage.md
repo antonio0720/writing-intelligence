@@ -1,6 +1,6 @@
 # v9 Example 2: One Anchor Does Not Carry Three Claims
 
-**Synthetic.** The author, the notes, the draft and the "statistics" below were invented for this page and make no claim about any real hobby, club or year. v9 is a proposal (PR #8), not a release.
+**Synthetic.** The author, the notes, the draft and the "statistics" below were invented for this page and make no claim about any real hobby, club or year. Released in Writing Intelligence 9.0.0.
 
 ## Situation
 

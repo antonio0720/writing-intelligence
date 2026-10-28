@@ -125,7 +125,7 @@ Equidistance is not wisdom — it's avoidance.
 
 Fake depth is what remains when a paragraph has no proposition of its own. The v9 test (WI9-D, protocol gate E03) is a **thought inventory**: name the proposition, then ask whether it contains a new distinction, action, piece of evidence, contradiction or consequence. If it does not, compress or cut; elegant restatement is not an improvement.
 
-**Catalog categories.** The experimental 334-rule catalog (`prototypes/wi9/rules/v9_hotphrases.json`; PR #8 proposal, not a release) touches these patterns in four places. A hit is an editorial question, with legitimate counterexamples, and never proof of how the text was made.
+**Catalog categories.** The experimental 334-rule catalog (`prototypes/wi9/rules/v9_hotphrases.json`) touches these patterns in four places. A hit is an editorial question, with legitimate counterexamples, and never proof of how the text was made.
 
 | Pattern in this file | Catalog category and question |
 |---|---|

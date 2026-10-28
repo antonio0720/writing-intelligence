@@ -1,6 +1,6 @@
 # v9 Example 1: A Human-Only Venue Holds an Assisted Draft
 
-**Synthetic.** Every name, venue and sentence below was invented for this page. v9 is a proposal (PR #8), not a release.
+**Synthetic.** Every name, venue and sentence below was invented for this page. Released in Writing Intelligence 9.0.0.
 
 ## Situation
 

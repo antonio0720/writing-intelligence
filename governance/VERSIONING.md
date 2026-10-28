@@ -193,16 +193,16 @@ Stated as a versioning constraint:
 
 ---
 
-## v9 (preview) — how it will be versioned
+## v9 — how it is versioned
 
-v8.0.0 is the published release. v9 is a **preview** on PR #8 and nothing on that branch changes a version string: `scripts/wi.py --version`, the `SKILL.md` stamp and `plans/*.manifest.yaml` all still say v8, and `tests/v7` checks that they agree. A `9.0.0` tag needs WI9-09 (independent review) and the owner's approval; neither has happened.
+9.0.0 is the published release (2026-10-28). `scripts/wi.py --version`, the `SKILL.md` stamp, the pack stamps and `plans/v9.manifest.yaml` all say 9.0.0, and `tests/v7` checks that they agree. The owner released 9.0.0 before the WI9-07 benchmark and the WI9-09 independent review; both remain open and are stated as open.
 
 Decisions already made, so they are not re-argued in review:
 
-- **The v9 manifest is `plans/v9.manifest.yaml` (added in WI9-08).** It is the newest manifest, so it carries `core_version: 8.0.0` — the core v9 still runs on — and `version_target: 9.0.0`; tests/v7's version-alignment rule holds. No v9 wave is `shipped`. `references/v9/WAVES.yaml` repeats each wave's stage for readers, and `tests/v9/test_manifest_parity.py` fails if the two disagree. All four numbers (CLI, SKILL.md, manifest, CHANGELOG) move to 9.0.0 together in the WI9-09 release commit.
+- **The v9 manifest is `plans/v9.manifest.yaml`.** It is the newest manifest and carries `core_version: 9.0.0`; tests/v7's version-alignment rule holds. Each wave keeps its own acceptance stage; `references/v9/WAVES.yaml` repeats it for readers, and `tests/v9/test_manifest_parity.py` fails if the two disagree. A wave is marked `shipped` only with a PASS receipt for that wave.
 - **The authorship dossier has its own schema version.** `schemas/v9/authorship-dossier.schema.json` is `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read. A change that alters what an existing dossier means needs a new schema version, and `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
 - **Legacy log values stay readable.** The rewrite log op `variance_injected` is still read and never emitted; v9 emits `rhythm_repaired`. Reading an old value is a compatibility surface — removing it would be a MAJOR change.
-- **v9 does not touch digest preimages.** Nothing in the preview changes a v5 or v6 digest, graph root or capsule closure root. A v9 change that did would follow [digest stability](#digest-stability-is-a-compatibility-surface) like any other.
+- **v9 does not touch digest preimages.** Nothing in v9 changes a v5 or v6 digest, graph root or capsule closure root. A v9 change that did would follow [digest stability](#digest-stability-is-a-compatibility-surface) like any other.
 - **Expectation, not a decision.** The doctrine change (the rhythm operator rename and the retirement of detector benchmarking as a method) and a new CLI make a MAJOR bump the likely reading under the rules above. The owner decides at WI9-09.
 
 ## Pre-Release
@@ -220,7 +220,7 @@ use, because a pre-release artifact is still an artifact somebody may verify a y
 
 ## Skill Bundle Version Alignment
 
-The payload ships as three bundles (two before v8), plus a fourth for the v9 preview, all versioned with the repository:
+The payload ships as three bundles (two before v8), plus a fourth for v9, all versioned with the repository:
 
 - `writing-intelligence.skill` — the runtime
 - `writing-intelligence-craft.skill` — the craft library
@@ -247,7 +247,7 @@ Three schema families ship, each under its own namespace:
 | v5 state | `schemas/v5/` | 15 | `SCHEMA_VERSION = 5.0.0` |
 | v6 runtime | `schemas/v6/` | 20 | `V6_SCHEMA_VERSION = 6.0` |
 
-A fourth namespace, `schemas/v9/`, holds the preview authorship dossier schema (`wi9-authorship-2`). It is not part of the v8 release and is covered under [v9 (preview)](#v9-preview--how-it-will-be-versioned).
+A fourth namespace, `schemas/v9/`, holds the v9 authorship dossier schema (`wi9-authorship-2`). It is covered under [v9](#v9--how-it-is-versioned).
 
 Schema consumers MUST check version compatibility:
 

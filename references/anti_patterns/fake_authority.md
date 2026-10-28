@@ -141,7 +141,7 @@ that prove you were actually there.
 
 Fake authority is a **source** problem before it is a wording problem. Rewriting "Experts agree" into a more elegant sentence fixes nothing if there is no expert behind it. v9 therefore treats these patterns as questions about evidence.
 
-**Catalog categories.** The 334-rule editorial catalog (`prototypes/wi9/rules/v9_hotphrases.json`, experimental, proposed on PR #8) puts "studies show", "research shows", "experts agree", "it is widely known" under `generic_claim`, with the question *can you identify an actual source, date, sample or bounded observation?* A hit is an editorial question. It is not evidence of how the passage was produced, and it never triggers an automatic rewrite.
+**Catalog categories.** The 334-rule editorial catalog (`prototypes/wi9/rules/v9_hotphrases.json`) puts "studies show", "research shows", "experts agree", "it is widely known" under `generic_claim`, with the question *can you identify an actual source, date, sample or bounded observation?* A hit is an editorial question. It is not evidence of how the passage was produced, and it never triggers an automatic rewrite.
 
 | Pattern in this file | v9 handling |
 |---|---|

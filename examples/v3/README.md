@@ -25,4 +25,4 @@ Antonio T. Smith Jr. / Density6 LLC
 
 ## Note for v9
 
-*Preview (PR #8); proposed, not a release.* These ten examples are v3.0 demonstrations and stay as recorded. Under v9 a few of them need a caveat when you reuse them: in the voice-restoration and resume examples, do not tune the output toward any detector score or invent first-person detail the sources do not contain; for the cross-arena repackage, check the target venue's authorship rule before packaging (a `human_only` venue gets research briefs only). Context: [`../../references/v9/README.md`](../../references/v9/README.md).
+*Released in Writing Intelligence 9.0.0.* These ten examples are v3.0 demonstrations and stay as recorded. Under v9 a few of them need a caveat when you reuse them: in the voice-restoration and resume examples, do not tune the output toward any detector score or invent first-person detail the sources do not contain; for the cross-arena repackage, check the target venue's authorship rule before packaging (a `human_only` venue gets research briefs only). Context: [`../../references/v9/README.md`](../../references/v9/README.md).

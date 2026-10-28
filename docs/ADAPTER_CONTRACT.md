@@ -59,9 +59,9 @@ V6 Canonical meaning graph (authoritative)
 
 The adapter is **not implemented** in this ZIP. The fixture input is not proof of a real main-branch graph. No network, telemetry, writer action, GitHub mutation, manuscript import, external model inference, or deployment is performed by `scripts/wi-arc.py`.
 
-## v9 preview: an adapter never turns a verdict into a send
+## v9: an adapter never turns a verdict into a send
 
-*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.*
+*Released in Writing Intelligence 9.0.0.*
 
 The adapter described above is a read-only export boundary, and v9 adds a second rule for any adapter, connector or integration that sits between Writing Intelligence and a venue, CMS, email system or submission portal.
 

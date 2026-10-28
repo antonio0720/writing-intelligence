@@ -42,11 +42,11 @@ Read `01` first. Simulation is the command that changes how the work feels.
 
 ---
 
-## v9 examples (proposal preview)
+## v9 examples
 
 - [`v9/README.md`](v9/README.md) — two synthetic walkthroughs of `scripts/wi-authorship.py`, with real recorded output: [a human-only venue holds an assisted draft](v9/01-human-only-venue-hold.md), and [one anchor does not carry three claims](v9/02-claim-coverage.md).
 
-v9 is a proposal on PR #8, not a release. These examples show declarations being checked for consistency; they do not show authorship being verified, and no detector is used. The "scores" in examples 1–4 are illustrative maintainer judgments, not measured results.
+v9 is released (9.0.0). These examples show declarations being checked for consistency; they do not show authorship being verified, and no detector is used. The "scores" in examples 1–4 are illustrative maintainer judgments, not measured results.
 
 ---
 

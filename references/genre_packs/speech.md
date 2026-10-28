@@ -53,7 +53,7 @@ The last line is the most important line. It's what the audience carries home.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** event organizers, employers and some competitions or school contests publish rules about who writes a speech; some require the speaker's own words. Check the current written policy; unknown means HOLD.
 - **Anchored sources:** facts, quotations, statistics and historical claims need a source span; spoken audiences cannot check, so accuracy matters more, not less.

@@ -26,7 +26,7 @@ Three ways a certification scheme becomes that, and the safeguard taken here:
 | Aggregate score hides a hole | A candidate averages 87 while fabricating one number | Runtime checks are pass / fail / `--`, never summed. `wi constraints` emits no aggregate score and neither does this. |
 | Certificate drifts from the tool | Tiers name capabilities the CLI never had | Every command, flag, capability string and error code named in these files was read out of `scripts/wi.py` or `tests/v6/test_wi6.sh` before it was written down. |
 
-**v9 preview note.** Certification never certifies authorship either. The v9 checker records a *declaration* of who wrote a piece; a candidate can show re-derivable artifacts (a dossier that reaches `REVIEW`, a `HOLD` they can explain, a review ledger bound to exact digests) but no tier says a person wrote a given manuscript. The optional v9 competencies are listed in [`operator_levels.md`](operator_levels.md) and are unscored preview lines until WI9-09.
+**v9 note.** Certification never certifies authorship either. The v9 checker records a *declaration* of who wrote a piece; a candidate can show re-derivable artifacts (a dossier that reaches `REVIEW`, a `HOLD` they can explain, a review ledger bound to exact digests) but no tier says a person wrote a given manuscript. The optional v9 competencies are listed in [`operator_levels.md`](operator_levels.md) and are unscored preview lines until WI9-09.
 
 ## The four tiers
 

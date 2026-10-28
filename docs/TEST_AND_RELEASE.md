@@ -37,9 +37,9 @@ The supplied `plans/v8-arc.proposal.json` deliberately marks all upstream waves 
 
 ---
 
-## v9 preview lanes (not a release)
+## v9 lanes
 
-v8.0.0 is published. v9 is a preview on PR #8 and is **PROPOSED, release on HOLD until WI9-09**. Its lanes are separate from the v8 arc suite above and never stand in for it.
+9.0.0 is published (2026-10-28). The v9 lanes run beside the v8 arc suite above and never stand in for it.
 
 | Lane | Command | What it covers |
 |---|---|---|

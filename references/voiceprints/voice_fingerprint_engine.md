@@ -97,7 +97,7 @@ If any of the above fails, Pass 7 has not completed.
 
 ## v9: What a Fingerprint Is Allowed to Claim (WI9-B)
 
-The fingerprint is a statistical description of consented samples. The v9 reference kernel (`prototypes/wi9/wi9_core.py voice`; experimental, PR #8 proposal) implements a simpler form than the `VoiceFingerprintV3` above: mean sentence length, its spread, type-token ratio and first-person rate, over eligible samples only. The full 16-metric profile in this file is the v3 design; do not describe it as validated.
+The fingerprint is a statistical description of consented samples. The v9 reference kernel (`prototypes/wi9/wi9_core.py voice`; released in 9.0.0 proposal) implements a simpler form than the `VoiceFingerprintV3` above: mean sentence length, its spread, type-token ratio and first-person rate, over eligible samples only. The full 16-metric profile in this file is the v3 design; do not describe it as validated.
 
 - **Baseline eligibility.** Three or more distinct samples, 500 or more words each, in **one genre**, each declared `human_authored`, consented, and pinned by sha256. Mixed-genre input is refused rather than averaged. Duplicate samples are refused. The earlier phrase "the author writing at their best" is amended to "the author writing in the target genre as they really write."
 - **Drift detection measures change, not origin.** A draft that drifts from the baseline may have been edited by someone else, written on a bad day, or written for a different reader. The drift report asks the author; it does not accuse. Neither a close match nor a far one is evidence of who produced the text.

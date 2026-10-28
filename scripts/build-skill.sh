@@ -8,7 +8,7 @@
 #   writing-intelligence.skill               copy at repo root, for direct download
 #   dist/writing-intelligence-craft.skill    the craft library bundle
 #   dist/writing-intelligence-story.skill    the v8 Story Intelligence bundle
-#   dist/writing-intelligence-authorship.skill the v9 preview authorship bundle
+#   dist/writing-intelligence-authorship.skill the v9 authorship bundle
 #
 # The build is reproducible: file order is sorted and every mtime is normalized,
 # so the same tree produces the same bytes and the published checksum means
@@ -139,7 +139,7 @@ STORY_PAYLOAD=(
   extensions/wi8/japan04
 )
 
-# The fourth bundle: Authorship (v9 preview).
+# The fourth bundle: Authorship (v9).
 #
 # The v9 authorship checker, its schema, the reference kernel and their suites
 # are ~45 files. The runtime had six files of headroom, so they ship as their
@@ -563,7 +563,7 @@ rm -rf "$SSTAGE" "$SVERIFY"
 echo "    story bundle verified"
 
 # --------------------------------------------------------------------------
-# The authorship bundle (v9 preview). Same ceiling, same frontmatter rules,
+# The authorship bundle (v9). Same ceiling, same frontmatter rules,
 # and scripts/test-v9.sh must pass inside the extracted artifact.
 # --------------------------------------------------------------------------
 echo "==> Authorship bundle"
@@ -702,8 +702,7 @@ echo
 echo "Built $NAME.skill        — $FILES files, $SIZE bytes."
 echo "Built $CRAFT_NAME.skill — $CFILES files, $CSIZE bytes."
 echo "Built $STORY_NAME.skill — $SFILES files, $SSIZE bytes."
-echo "Built $AUTH_NAME.skill — $AFILES files, $ASIZE bytes (v9 preview)."
+echo "Built $AUTH_NAME.skill — $AFILES files, $ASIZE bytes (v9)."
 echo
-echo "Install all four. They are one system in four artifacts; the authorship"
-echo "bundle is the v9 preview and is not part of the 8.0.0 release."
+echo "Install all four. They are one system in four artifacts."
 echo "Upload path: Claude → Settings → Capabilities → Skills → Upload skill"

@@ -232,7 +232,7 @@ adjacency to the previous one.
 
 ## 7. v9 Catalog Cross-Reference, Counterexamples and the Review Ledger
 
-The v9 reference kernel keeps a **334-rule editorial catalog** (321 literal, 13 regex, 11 categories) in `prototypes/wi9/rules/v9_hotphrases.json`, scanned by `prototypes/wi9/wi9_hotphrases.py`. It is experimental: v9 is a proposal on PR #8, not a release. This file's lists are the older hand-written ones; where the two overlap, the catalog carries the question and this file carries the craft advice.
+The v9 reference kernel keeps a **334-rule editorial catalog** (321 literal, 13 regex, 11 categories) in `prototypes/wi9/rules/v9_hotphrases.json`, scanned by `prototypes/wi9/wi9_hotphrases.py`. It is experimental: v9 is released (9.0.0). This file's lists are the older hand-written ones; where the two overlap, the catalog carries the question and this file carries the craft advice.
 
 **A match is an editorial question, never a verdict.** It does not say who wrote the passage, does not prove anything about origin, and never triggers an automatic rewrite. Every rule asks the author or editor a question; the answer may be "this is fine as written."
 

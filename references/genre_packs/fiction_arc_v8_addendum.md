@@ -12,7 +12,7 @@ No universal screenplay page count, exact midpoint timestamp, beat-percentage sc
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Gates unchanged:** v9 does not alter the arc, want/need or ending tests above. This section adds provenance and venue notes only.
 - **Venue:** where a work is submitted, check the current written AI policy; unknown means HOLD.

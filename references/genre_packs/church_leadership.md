@@ -183,7 +183,7 @@ Produce communication that serves the local church — sermons, study guides, de
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** denominational newsletters, board packets and bulletins carry house rules about authorship and attribution. Where policy is unwritten, ask the editor; unknown means HOLD.
 - **Anchored sources:** attendance, giving, membership and budget figures need a dated ledger or report. Scripture citations need the exact passage and translation.

@@ -102,7 +102,7 @@ Always state the evidence level supporting each claim.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** journals, health systems and regulators set rules on AI assistance, patient privacy and authorship criteria. Check the current written policy; unknown means HOLD. Never include identifiable patient data in an outside tool.
 - **Anchored sources:** doses, outcomes, effect sizes, guideline recommendations and contraindications need an exact span from the source read, with date and edition. A remembered clinical fact is not a citation.

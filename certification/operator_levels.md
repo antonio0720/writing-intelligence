@@ -124,9 +124,9 @@ This is a limit, not a feature, and it is stated in `README.md` under "What cert
 
 ---
 
-## v9 preview competencies (optional, unscored)
+## v9 competencies (optional, unscored)
 
-*Preview (PR #8); v9 is not released and no tier requires these lines yet. They use the same marks, `ok`, `FAIL` and `--`, and a `--` is not a pass. They become tier lines only if the owner adopts them at WI9-09.*
+*Released in 9.0.0; no tier requires these lines yet. They use the same marks, `ok`, `FAIL` and `--`, and a `--` is not a pass. They become tier lines only if the owner adopts them.*
 
 | # | Check | Artifact the reviewer opens | `ok` when |
 |---|---|---|---|

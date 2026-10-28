@@ -4,7 +4,7 @@
 
 This document specifies a REST API surface that any Writing Intelligence v3.0 conformant implementation can expose. v3.0 ships the doctrine; v3.1 ships the reference implementation.
 
-> **v9 preview note.** v9 is a preview, not a release. Two v9 checks are served (see *v9 preview endpoints* below); they run the same Python tools as the CLI and never authorize anything. `release` is **not** served: it reads authority from a v6 grant store the operator names on their own machine. Not served, on purpose: the per-writer tools (`vault`, `ledger`, `meaning review`, `voice`, `voice-review`, `voice-compare`, `compose`) read and write a writer's private folders and grants on their own machine, so they run only through the local CLI (`wi authorship ...`). See [`../../references/v9/README.md`](../../references/v9/README.md).
+> **v9 note.** Released in 9.0.0. Two v9 checks are served (see *v9 endpoints* below); they run the same Python tools as the CLI and never authorize anything. `release` is **not** served: it reads authority from a v6 grant store the operator names on their own machine. Not served, on purpose: the per-writer tools (`vault`, `ledger`, `meaning review`, `voice`, `voice-review`, `voice-compare`, `compose`) read and write a writer's private folders and grants on their own machine, so they run only through the local CLI (`wi authorship ...`). See [`../../references/v9/README.md`](../../references/v9/README.md).
 
 ## Base URL
 
@@ -160,7 +160,7 @@ Return a specific schema.
 
 **Response (200)**: the JSON Schema document.
 
-### v9 preview endpoints
+### v9 endpoints
 
 Implemented in `services/api/src/routes/v9.ts` and tested in `services/api/tests/v9.test.ts`. Each runs the one Python implementation (`scripts/wi-authorship.py`, `prototypes/wi9/wi9_hotphrases.py`) with `python3 -I` inside a private temporary directory that is removed afterwards, with a time limit (`WI_V9_TIMEOUT_MS`, default 30 s). HTTP 200 means the check ran; the answer is `report.status`. `release_authorized` is always `false`. Responses: `400` invalid or oversized input (200,000-character limit), `401` no token, `503` Python unavailable, `504` time limit exceeded.
 

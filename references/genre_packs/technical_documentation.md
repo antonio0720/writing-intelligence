@@ -155,7 +155,7 @@ Produce developer-facing documentation a competent engineer can follow without a
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** vendor docs, open-source projects and standards bodies often have contribution and licensing rules, and some projects restrict AI-generated contributions or require disclosure. Check the current written policy; unknown means HOLD.
 - **Anchored sources:** versions, flags, commands, API behavior and limits need the source code, spec or a run the author actually did. State the version tested.

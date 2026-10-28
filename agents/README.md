@@ -6,7 +6,7 @@ Writing Intelligence decomposes the 11-pass kernel into a coordinated multi-agen
 
 **v8:** on fiction, the Narrative Architect, Structure Engineer, Dialogue Commander and Stress Tester can hand a typed story projection to the v8 engines (`scripts/wi-fiction.py`, `scripts/wi-arc.py`, `extensions/wi8/craft03/scripts/wi-craft.py`, `extensions/wi8/japan04/cli/wi8_japan.py`) and cite their findings by requirement ID. The engines report; the agents and the author decide. No agent may present an engine pass as a verdict on the book.
 
-**v9 preview (PR #8, not a release):** see [What changed per agent under v9](#what-changed-per-agent-under-v9) below. No agent gains authority to publish, and none may present a detector score as a target, a gate or proof of origin.
+**v9 (released in 9.0.0):** see [What changed per agent under v9](#what-changed-per-agent-under-v9) below. No agent gains authority to publish, and none may present a detector score as a target, a gate or proof of origin.
 
 ---
 
@@ -81,7 +81,7 @@ A reference implementation will ship in v3.1 (`docs/api/API_SPEC.md`).
 
 ## What changed per agent under v9
 
-*Preview on PR #8; not a release. The roster, passes, artifacts and conflict rules above are unchanged.*
+*Released in Writing Intelligence 9.0.0. The roster, passes, artifacts and conflict rules above are unchanged.*
 
 | Agent | What v9 adds | Where it is written |
 |---|---|---|

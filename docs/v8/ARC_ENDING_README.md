@@ -59,8 +59,8 @@ This is a *projection evaluator* — a read-only experiment over records exporte
 
 Owner-supplied concept notes inspired the design. They discuss K. M. Weiland and several copyrighted films as *interpretive examples*. These are acknowledged in `provenance/ATTRIBUTION.json`; no screenplay dialogue or protected passages were copied into code or fixtures. For distribution with the MIT repository, counsel or the owner should validate which newly authored files to license and the original notes' permitted scope. The bundle does not relabel third-party craft concepts as proprietary discoveries.
 
-## v9 preview: relation to arc and ending work
+## v9: relation to arc and ending work
 
-*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.*
+*Released in Writing Intelligence 9.0.0.*
 
 Arc, want/need and ending intelligence are unchanged by v9; `scripts/wi-arc.py` and its gates are untouched. Two points carry over. A want or need is still an authored interpretation attributed to a person, and v9's rule that no assistance invents an author's memory (WI9-E) applies when the work is memoir: do not supply a "need" or a remembered turning point the author did not state. And an arc audit says nothing about who wrote the book; origin is a declaration checked by `scripts/wi-authorship.py`.

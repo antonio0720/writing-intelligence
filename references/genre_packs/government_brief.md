@@ -90,7 +90,7 @@ Adjust voice and structure to the target agency.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** agencies and legislatures govern AI use, records retention and classification handling. Check the current written policy; unknown means HOLD. Never put controlled or non-public material into an outside tool.
 - **Anchored sources:** statutes, regulations, appropriations figures, program data and prior decisions need citations to the exact provision or table and its date. A memory of a rule is not the rule.

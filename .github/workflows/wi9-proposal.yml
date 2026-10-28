@@ -1,8 +1,9 @@
-name: WI9 authorship prototype (non-release)
+name: WI9 authorship (v9)
 
 on:
   push:
     branches:
+      - main
       - proposal/v9-authentic-voice-provenance-20261027
   pull_request:
     paths:
@@ -99,17 +100,20 @@ jobs:
           mutate wi9_core.py '        if abs(profile[measure] - centre) > width:' '        if False:' 'test_wi9_voice_measures.py' "voice: drift never reported"
           mutate wi9_provider.py '    if prepared.get("status") != "REQUEST_READY":' '    if False:' 'test_wi9_provider.py' "connector: model reached before the policy gate"
           mutate wi9_provider.py '    env = {k: environ[k] for k in PASSTHROUGH_ENV if k in environ}' '    env = dict(environ)' 'test_wi9_provider.py' "connector: whole environment passed to the model"
-      - name: Never claim a release or detector guarantee
+      - name: Never claim an unrun benchmark, an absent review or a detector guarantee
         run: |
           python - <<'PY'
           from pathlib import Path
           doc = Path('references/v9/README.md').read_text()
           assert 'not a provenance record' in doc
-          assert 'PROPOSAL ONLY' in doc
+          assert 'no document may report their results before they exist' in doc
           assert 'No target for AI detector score' in doc
           waves = Path('references/v9/WAVES.yaml').read_text()
-          assert 'SHIPPED}' not in waves and 'status: SHIPPED' not in waves, 'no v9 wave may read SHIPPED'
-          print('WI9 proposal guards present')
+          import re
+          for wave in ('WI9-07', 'WI9-09'):
+              row = re.search(r'  %s: \{.*' % wave, waves).group(0)
+              assert 'SHIPPED' not in row and 'VALIDATED' not in row, '%s may not read done before it happens' % wave
+          print('WI9 release guards present')
           PY
 
   macos:

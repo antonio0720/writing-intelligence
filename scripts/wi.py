@@ -63,7 +63,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-VERSION = "8.0.0"
+VERSION = "9.0.0"
 
 # --------------------------------------------------------------------------
 # Text normalization. Offsets are Unicode code point indices over NFC text.
@@ -6406,7 +6406,7 @@ def main(argv=None):
     sp.set_defaults(func=cmd_why)
 
     sp = sub.add_parser("authorship",
-                        help="v9 preview: authorship audit and release, phrase scan, voice, private vault")
+                        help="v9: authorship audit and release, vault, meaning diff, review ledger, voice, phrase and structure checks, model connector")
     sp.add_argument("action", choices=sorted(V9_AUTHORSHIP_TOOLS))
     sp.add_argument("rest", nargs=argparse.REMAINDER,
                     help="passed unchanged to the v9 tool, e.g. --input dossier.json")

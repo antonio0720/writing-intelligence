@@ -41,9 +41,9 @@ Build the explicit graph of nodes and edges for the work. Detect orphan nodes, u
 - Sentence Surgeon (Pass 6)
 - Dialogue Commander (if narrative)
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.*
+*Released in Writing Intelligence 9.0.0.*
 
 - **Fiction gates are unchanged.** For scene and chapter graphs the graph diagnostics, plant/payoff rules and v8 engine hand-offs behave as before. v9 adds nothing that loosens them.
 - In argument and essay graphs, each claim node should name its support: an anchored author source, an experience the author observed or stated, or an external citation. A node resting on a hypothetical example stays marked hypothetical (WI9-E). Do not evenly balance sections for symmetry; structure follows the thought.

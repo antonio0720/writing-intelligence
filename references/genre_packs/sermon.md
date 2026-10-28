@@ -107,7 +107,7 @@ Sentence lengths follow this arc:
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** a congregation or tradition sets its own expectations about who writes and delivers a sermon, and some hold that the preacher's own words are part of the calling. Where no written policy exists, ask the leadership; unknown means HOLD.
 - **Anchored sources:** scripture needs the exact passage and translation; quoted authors, historical claims and statistics need a source span.

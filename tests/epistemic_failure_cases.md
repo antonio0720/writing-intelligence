@@ -108,7 +108,7 @@ These cases stress-test the Evidence Prosecutor (Pass 5). Each case contains a k
 
 **Required action**: `delivery_block: true`; piece cannot ship as written.
 
-## v9 preview cases (proposal — PR #8)
+## v9 cases 
 
 These extend the set with failures about *whose experience a sentence claims* and *whether a source entails it*. The inputs are synthetic.
 

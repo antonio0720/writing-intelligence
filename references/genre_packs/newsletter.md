@@ -151,7 +151,7 @@ Produce email newsletters readers actually open — recurring sections, voice co
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** the platform or publisher (and any sponsor or syndication partner) may set AI-use and disclosure rules. A personal newsletter is governed by the author's own promise to readers. Check the current written terms; unknown means HOLD.
 - **Anchored sources:** statistics, quotes, links and attributed claims need a source span. Name where a number came from.

@@ -4,7 +4,7 @@
 
 This module extends the writing compiler for college and scholarly contexts.
 It adds discipline-specific reasoning, rubric compliance, citation intelligence,
-authorship provenance, and anti-hallucination rules. Under v9 (a proposal on PR #8, not a release) it also yields to the institution's integrity policy: see "v9: Academic Integrity" at the end of this file.
+authorship provenance, and anti-hallucination rules. Under v9 it also yields to the institution's integrity policy: see "v9: Academic Integrity" at the end of this file.
 
 ---
 

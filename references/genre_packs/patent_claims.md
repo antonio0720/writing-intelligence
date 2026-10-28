@@ -128,7 +128,7 @@ Don't:
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** patent offices set rules on inventorship, duty of candor, signatures and AI-generated material. Only a named human can be an inventor under the rules of many jurisdictions. Check the current written rules; unknown means HOLD.
 - **Anchored sources:** prior art, embodiment support and every claim term must trace to an exact passage in the specification or reference. Do not assert a reduction to practice that the record does not show.

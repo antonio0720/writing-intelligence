@@ -145,9 +145,9 @@ Follow the agent spec format in `agents/*.md`. Each agent must declare:
 
 Antonio T. Smith Jr. / Density6 LLC
 
-## v9 preview: building on the authorship tools
+## v9: building on the authorship tools
 
-*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.* The v3.0 material above is unchanged; this section covers integrating the two v9 tools you can run today. Reference: [`../references/v9/README.md`](../references/v9/README.md).
+*Released in Writing Intelligence 9.0.0.* The v3.0 material above is unchanged; this section covers integrating the two v9 tools you can run today. Reference: [`../references/v9/README.md`](../references/v9/README.md).
 
 ### `scripts/wi-authorship.py` exit codes
 

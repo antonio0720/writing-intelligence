@@ -69,4 +69,4 @@ Every one works on the writer's own material on their own machine and is reachab
 | `wi9_hotphrases.py` | `scan` | `scan_document`: chunked scanning to 20 million characters with whole-document offsets |
 | `wi9_provider.py` | `compose` | bring-your-own-model connector, gated by `wi9_composition.py`; best result `DRAFT_REVIEW_REQUIRED` |
 
-Use `python3 -m unittest discover -s tests -p 'test_*.py' -q` for the local unit tests (**189** at 2026-10-28; 84 at the ZIP plus D-15). They are synthetic-fixture tests, not a blinded writing-quality study and not evidence of any writer's experience. The complete engineering handoff is [`references/v9/ENGINEERING_HANDOFF.md`](../../references/v9/ENGINEERING_HANDOFF.md).
+Use `python3 -m unittest discover -s tests -p 'test_*.py' -q` for the local unit tests (**190** at 2026-10-28; 84 at the ZIP plus D-15). They are synthetic-fixture tests, not a blinded writing-quality study and not evidence of any writer's experience. The complete engineering handoff is [`references/v9/ENGINEERING_HANDOFF.md`](../../references/v9/ENGINEERING_HANDOFF.md).

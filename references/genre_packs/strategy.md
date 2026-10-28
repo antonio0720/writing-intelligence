@@ -40,7 +40,7 @@ Recommended sequence:
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** an internal strategy document is bound by company confidentiality and data-handling policy. Board, investor and regulator versions have their own rules. Check the current written policy; unknown means HOLD.
 - **Anchored sources:** market data, competitor facts, financials and customer evidence need dated sources or internal records. A scenario is labeled a scenario, and a forecast a forecast.

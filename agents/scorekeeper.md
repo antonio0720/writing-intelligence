@@ -51,9 +51,9 @@ A scorecard with:
 
 - Delivery Packager (Pass 10)
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.*
+*Released in Writing Intelligence 9.0.0.*
 
 - **A score is an editorial instrument.** No scorecard, composite or rubric result authorizes release, submission or a claim of human authorship. Release is a separate, scoped human decision (`scripts/wi-authorship.py release`, which needs a person's decision bound to the exact draft digest).
 - **Detector scores are never a score input.** Do not add, weight or report a vendor "AI percentage" as a rubric or as a cap, and do not treat one as an authorship fraction (WI9-H). If an author supplies one, record vendor, version and date as an optional diagnostic and leave the composite unchanged.

@@ -53,9 +53,9 @@ Automatic extraction of every scene from a full novel, AI-quality adjudication, 
 
 ---
 
-## v8 -> v9 preview
+## v8 -> v9
 
-**Status:** v9 is a **preview** on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8) — proposed, not released. 8.0.0 is the published release, version strings are unchanged, and the release is on HOLD until WI9-09. Records: [`references/v9/README.md`](references/v9/README.md), [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml).
+**Status:** 9.0.0 is the release (2026-10-28). `wi --version`, `SKILL.md`, the manifest and the changelog all say 9.0.0. Records: [`references/v9/README.md`](references/v9/README.md), [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml).
 
 - **Nothing breaks.** Every v4–v8 command, exit code, digest and bundle format behaves as before. v9 adds files; it removes none of your tooling.
 - **New, optional commands, all through `wi authorship`.** `audit` and `release` (REVIEW/RELEASE_ELIGIBLE exit 0, HOLD exit 3; sends nothing); `vault` for your own firsthand material; `meaning` to see every change a revision makes to what you meant; `ledger` and `phrase-review` for review decisions bound to your own v6 grant; `voice`, `voice-review` and `voice-compare` for your own voice; `scan` (chunked for long manuscripts) and `structure` for editorial questions; `compose` to call a model you choose, after the venue and evidence gates.

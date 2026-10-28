@@ -386,7 +386,7 @@ nowhere is still a failure.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Gates unchanged:** v9 does not alter the fiction gates, the want/need tests or the v8 audits. This section adds only provenance and venue notes.
 - **Venue:** magazines, contests, imprints and platforms set their own AI rules, and some bar AI-written text entirely. Check the current written policy; unknown means HOLD.

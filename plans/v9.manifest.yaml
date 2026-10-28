@@ -1,25 +1,26 @@
-# v9.manifest.yaml — Writing Intelligence v9 preview, WI9-AUTHORSHIP.
+# v9.manifest.yaml — Writing Intelligence v9, WI9-AUTHORSHIP. Released as 9.0.0.
 #
 # Owner: Antonio T. Smith Jr. The one status source for v9. It does not replace
 # plans/v6, v7 or v8; each stays authoritative for its own waves.
 #
-# core_version is the core this program currently runs on, which is still
-# 8.0.0: tests/v7 requires the newest manifest, SKILL.md and `wi --version` to
-# name one number, and v9 has not been released. It moves to 9.0.0 only in the
-# WI9-09 release commit, together with the CLI, SKILL.md and CHANGELOG.
+# core_version is the released core: 9.0.0, released by the owner on
+# 2026-10-28. tests/v7 requires the newest manifest, SKILL.md and `wi --version`
+# to name one number.
 #
 # `status` uses the checker's vocabulary (shipped / in_progress / planned).
-# `stage` carries the finer v9 state (PLANNED, IN_PROGRESS, PROTOTYPE,
-# VALIDATED); references/v9/WAVES.yaml repeats it for readers and
-# tests/v9/test_manifest_parity.py fails if the two disagree. No v9 wave is
-# shipped, and none may be until its receipt reads PASS, its dependencies are
-# shipped and the owner has approved the release.
+# `stage` carries the finer v9 acceptance state (PLANNED, IN_PROGRESS,
+# PROTOTYPE, VALIDATED); references/v9/WAVES.yaml repeats it for readers and
+# tests/v9/test_manifest_parity.py fails if the two disagree. A tool can ship in
+# the 9.0.0 release while its wave is still PROTOTYPE: a wave is `shipped` only
+# when its receipt reads PASS, its dependencies are shipped and its own exit
+# conditions are met. WI9-07 (blinded benchmark) and the independent review in
+# WI9-09 are open and are not claimed.
 
 schema: wi.build-manifest/v1
 program: writing-intelligence-v9-authorship
 program_id: WI9-AUTHORSHIP
 horizon: 2027-06
-core_version: 8.0.0
+core_version: 9.0.0
 version_target: 9.0.0
 baseline_sha: 80e7aef88441c2f2e9eb5734b43b601924592dac
 receipts_required: true
@@ -122,8 +123,8 @@ waves:
 
   - id: WI9-09
     name: Independent release and governance
-    status: planned
-    stage: PLANNED
+    status: in_progress
+    stage: IN_PROGRESS
     depends_on: [WI9-07, WI9-08]
     exit:
       - a person who did not build v9 reviews the code, receipts and program

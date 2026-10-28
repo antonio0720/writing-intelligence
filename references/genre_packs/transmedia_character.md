@@ -372,7 +372,7 @@ Prioritize based on production cost vs. audience impact:
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Gates unchanged:** v9 does not alter the character-deepening gates. This section adds provenance and venue notes only.
 - **Venue:** games, shows, comics and licensed franchises carry contract and bible rules, often with IP ownership and AI clauses. Check the current written terms; unknown means HOLD.

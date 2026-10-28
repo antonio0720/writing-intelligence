@@ -141,7 +141,7 @@ Produce reported, evidence-disciplined narrative nonfiction — feature articles
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** many outlets, and many reporters answering source requests, accept only human-written pitches and answers, and some bar AI assistance in submissions entirely. Where that applies, a research brief (background, interview questions, an issue map) is allowed; an AI-written pitch, source reply or draft is not, even if the person clicks Send. Check the venue's current written policy; unknown means HOLD.
 - **Exact quote anchoring:** every quotation must match its recording, transcript or document span character for character, with speaker, date and context. Never paraphrase inside quotation marks, and never create a quote a source did not give.

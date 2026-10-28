@@ -42,9 +42,9 @@ Choose the active stack of genre packs for this task. Assign one `primary`, zero
 - Delivery Packager (Pass 8/10)
 - Scorekeeper (Pass 10)
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.*
+*Released in Writing Intelligence 9.0.0.*
 
 - **The venue rule outranks the genre pack.** If the venue contract limits assistance or marks a venue `human_only`, that rule wins over any pack's structure, weighting or delivery format. Log it as a collision resolution with the venue contract as the rationale, never as a silent override.
 - Genre choice does not change authorship declarations. A pack can shape structure and register; it cannot turn an `ai_assisted` piece into a `human_authored` one.

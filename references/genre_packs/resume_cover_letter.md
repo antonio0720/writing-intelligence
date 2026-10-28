@@ -138,7 +138,7 @@ Each bullet:
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** employers and applicant systems vary: some forbid AI-written applications, some allow editing help, and some require an applicant attestation. Check the current written application terms; unknown means HOLD.
 - **Anchored sources:** titles, dates, employers, degrees, certifications and metrics need documents the applicant can produce (offer letters, records, reviews). Do not invent a metric to sound stronger.

@@ -22,9 +22,9 @@ The earlier independent ZIP owns B001–B060 implementation, so this package's r
 
 ---
 
-## v9 preview crosswalk
+## v9 crosswalk
 
-The table above is the v8 fiction merge plan. This one maps the v9 waves (PR #8, preview, release on HOLD until WI9-09) to the files that own them today. Wave states are from [`../references/v9/WAVES.yaml`](../references/v9/WAVES.yaml); a state here is not a claim that the wave is released.
+The table above is the v8 fiction merge plan. This one maps the v9 waves (released in 9.0.0; WI9-07 and the WI9-09 independent review still open) to the files that own them today. Wave states are from [`../references/v9/WAVES.yaml`](../references/v9/WAVES.yaml); a stage here is that wave's acceptance state, which can trail the release.
 
 | Wave | State | Owner / files today |
 |---|---|---|

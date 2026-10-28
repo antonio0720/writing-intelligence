@@ -64,7 +64,7 @@
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** courts, bar rules and clients may require disclosure, certification of citations, or bar AI use in filings. Check the current written rules for the court and jurisdiction; unknown means HOLD.
 - **Anchored sources:** every case, statute, quotation and record cite needs the exact span in the authority actually read and checked. A model-supplied citation is unverified until a person confirms it exists and says what is claimed.

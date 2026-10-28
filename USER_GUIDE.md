@@ -1,6 +1,6 @@
-# Writing Intelligence v9 (preview) — User Guide
+# Writing Intelligence v9 — User Guide
 
-The day-to-day manual for the Sovereign Meaning Runtime, the v8 Story Intelligence engines and the v9 preview's authorship tools. The published release is 8.0.0; v9 is the preview line on PR #8.
+The day-to-day manual for the Sovereign Meaning Runtime, the v8 Story Intelligence engines and the v9 authorship tools. The current release is 9.0.0.
 
 **Laws:** [`references/v6/CONSTITUTION.md`](references/v6/CONSTITUTION.md) · **v5 laws, still binding:** [`references/v5/CONSTITUTION.md`](references/v5/CONSTITUTION.md) · **One page:** [`CHEATSHEET.md`](CHEATSHEET.md) · **Install:** [`docs/INSTALL.md`](docs/INSTALL.md) · **Craft kernel, unchanged:** [`SKILL.md`](SKILL.md) · **v8 Story Intelligence:** [`references/v8/README.md`](references/v8/README.md) · **v9 preview:** [`references/v9/README.md`](references/v9/README.md)
 
@@ -10,18 +10,18 @@ Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO,
 
 ---
 
-## What changed for you in v9 (preview — not released)
+## What changed for you in v9
 
-8.0.0 is the release; v9 is the current preview line, open as [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8), and its release is on HOLD until WI9-09. Overview: [`references/v9/README.md`](references/v9/README.md).
+9.0.0 is the release (2026-10-28). Overview: [`references/v9/README.md`](references/v9/README.md).
 
 - **Nothing you already run changed.** Every v4–v8 command, exit code and digest is the same. The v9 tools are new and optional, and all of them are reachable as `wi authorship <tool>`.
 - **Everything is yours and stays on your machine.** v9 ships no voice samples, no notes and no model. You build your own voice baseline from your own writing, keep your firsthand material in your own private vault, and record decisions under your own grant. Nothing is uploaded or committed, and the private stores refuse to live inside a git repository.
-- **New in this preview:** a private firsthand vault (`vault`), a meaning diff that lists every change a revision makes to what you meant (`meaning`), review decisions bound to your v6 grant (`ledger`, `phrase-review`), deeper voice measures with a held-out check and `voice-compare`, shape checks (`structure`), long manuscripts scanned in chunks, and a bring-your-own-model connector (`compose`) whose best result is a draft you must review.
+- **New in v9:** a private firsthand vault (`vault`), a meaning diff that lists every change a revision makes to what you meant (`meaning`), review decisions bound to your v6 grant (`ledger`, `phrase-review`), deeper voice measures with a held-out check and `voice-compare`, shape checks (`structure`), long manuscripts scanned in chunks, and a bring-your-own-model connector (`compose`) whose best result is a draft you must review.
 - **They check declarations and meaning, not people.** Nothing here can tell who wrote a passage. `REVIEW` means the limited checks passed; it is not permission to send.
 - **One doctrine repair you may notice:** the craft library no longer asks for sentence-length quotas, synonym swaps or "unpredictability". The retired v8 length-quota operator is now `repair_rhythm`. Old logs with `variance_injected` still validate.
 - **Not run yet:** a real writer's run of the voice tools on their own samples (WI9-03), the 60-case editorial benchmark (WI9-07) and an independent review (WI9-09). See [`ROADMAP.md`](ROADMAP.md).
 
-## Authorship and venue checks (v9 preview)
+## Authorship and venue checks (v9)
 
 A walkthrough with synthetic material. Use your own notes; the point of every step is that the draft says only what you can point to.
 
@@ -36,7 +36,7 @@ Put the draft, your source notes and a `dossier.json` in one folder. Paths in th
 5. **Anchor the draft**: under `document_claim_anchors`, point each claim sentence's exact excerpt at an evidence id. If the same excerpt occurs twice in the draft, add `start`.
 6. **For a submission**, also pin the exact bytes you reviewed: `document.expected_sha256` (`shasum -a 256 draft.txt`), and in strict arenas (journalism, academic, legal, government) each source's `sha256`.
 
-A complete minimal dossier is in [`CHEATSHEET.md`](CHEATSHEET.md#v9-preview--authorship-and-venue-checks-proposed-not-released); the schema is [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
+A complete minimal dossier is in [`CHEATSHEET.md`](CHEATSHEET.md#v9--authorship-meaning-and-venue-checks); the schema is [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
 
 ### 2. Run the audit
 

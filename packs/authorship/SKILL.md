@@ -1,13 +1,13 @@
 ---
 name: writing-intelligence-authorship
-description: Writing Intelligence v9 preview (not released) — authorship, sources, meaning and venue rules for writing under a person's name. Ties every consequential claim to an exact span of the writer's own sources and checks first-person claims against their private firsthand vault; lists every change a revision makes to what they meant (numbers, dates, plans called done, reversed opinions) for them to accept or reject under their own grant; measures their own voice from their own samples; asks editorial questions about phrases and shape; refuses AI prose for human-only venues; reads release authority from the v6 grant store. Load alongside writing-intelligence when a piece goes out under a person's name, a venue restricts AI help, or first-person experience must be sourced. It never certifies who wrote anything, never targets an AI-detector score, and never sends. Trigger when unnamed — 'can I send this pitch', 'did the edit change what I said', 'check my sources'.
+description: Writing Intelligence v9 — authorship, sources, meaning and venue rules for writing under a person's name. Ties every consequential claim to an exact span of the writer's own sources and checks first-person claims against their private firsthand vault; lists every change a revision makes to what they meant (numbers, dates, plans called done, reversed opinions) for them to accept or reject under their own grant; measures their own voice from their own samples; asks editorial questions about phrases and shape; refuses AI prose for human-only venues; reads release authority from the v6 grant store. Load alongside writing-intelligence when a piece goes out under a person's name, a venue restricts AI help, or first-person experience must be sourced. It never certifies who wrote anything, never targets an AI-detector score, and never sends. Trigger when unnamed — 'can I send this pitch', 'did the edit change what I said', 'check my sources'.
 ---
 
-# Writing Intelligence — Authorship (v9 preview)
+# Writing Intelligence — Authorship (v9)
 
-**Project owner:** Antonio T. Smith Jr. — Density6 LLC. **Status:** proposed on PR #8, not released; 8.0.0 is the release. Wave states: `references/v9/WAVES.yaml`.
+**Project owner:** Antonio T. Smith Jr. — Density6 LLC. **Version:** 9.0.0. Wave states: `references/v9/WAVES.yaml`.
 
-This bundle carries the v9 preview tools. It ships separately for the reason the story bundle does: a skill bundle may hold at most 200 files and the runtime had six files of headroom. Every tool runs on the writer's own material on their own machine; the bundle carries no voice samples, notes or model. Install it alongside `writing-intelligence`, `writing-intelligence-craft` and `writing-intelligence-story`.
+This bundle carries the v9 tools. It ships separately for the reason the story bundle does: a skill bundle may hold at most 200 files and the runtime had six files of headroom. Every tool runs on the writer's own material on their own machine; the bundle carries no voice samples, notes or model. Install it alongside `writing-intelligence`, `writing-intelligence-craft` and `writing-intelligence-story`.
 
 ## What it is for
 

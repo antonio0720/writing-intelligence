@@ -124,9 +124,9 @@ because they fail with different messages.
       shown failing with the implementation disabled**. A guard that has only ever passed has
       not been shown to work
 
-### v9 preview (PR #8) — not a release
+### v9 — released in 9.0.0
 
-v8.0.0 is the published version; v9 is proposed and its release is on HOLD until WI9-09. The items below apply to any change on the v9 branch, and the last two are the reason `9.0.0` cannot be tagged today.
+9.0.0 is the published version (2026-10-28, the owner's decision). The items below apply to any change to v9; the benchmark and independent-review items are still open after the release and must stay marked open.
 
 - [ ] **[ci]** `python3 -m unittest discover -s tests/v9 -p 'test_*.py'` and `python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'` pass on Python 3.8, 3.11 and 3.13
 - [ ] **[ci]** The mutation step in `.github/workflows/wi9-proposal.yml` caught all four guards it disables, and left `scripts/wi-authorship.py` byte-identical afterwards
@@ -135,7 +135,7 @@ v8.0.0 is the published version; v9 is proposed and its release is on HOLD until
 - [ ] **[manual]** `references/v9/WAVES.yaml` states each wave's real state. No wave reads shipped before it is
 - [ ] **[manual]** No document reports v9 benchmark results, quality scores or editor validation. WI9-07 has not run
 - [ ] **[manual]** **WI9-09 complete** — independent review of the artifacts, negative controls, external review
-- [ ] **[manual]** **Owner approval recorded** for a `9.0.0` release. Without WI9-09 and this approval, v9 stays a preview
+- [x] **[manual]** **Owner approval recorded** for the `9.0.0` release (Antonio T. Smith Jr., 2026-10-28)
 
 ### v6 state and digests
 

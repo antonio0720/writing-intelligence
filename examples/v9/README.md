@@ -1,6 +1,6 @@
-# v9 Examples — Authorship Provenance and Meaning (preview, not released)
+# v9 Examples — Authorship Provenance and Meaning
 
-**Status:** v9 is a proposal on PR #8, not a release; v8.0.0 is the published version. The worked examples exercise `scripts/wi-authorship.py`, an authorship-claim **declaration checker**. It tests whether declarations are complete and consistent. It does not verify who wrote anything.
+**Status:** released in 9.0.0. The worked examples exercise `scripts/wi-authorship.py`, an authorship-claim **declaration checker**, and `wi authorship meaning`. They test whether declarations are complete and consistent and whether a revision changed what the writer meant. They do not verify who wrote anything.
 
 **Everything here is synthetic.** The author, the "Synthetic Reporter Desk" venue, the notes and the drafts were written for this teaching page. No real person, publication, study or statistic appears. The terminal output was produced by running the commands below against the files in this folder on 2026-10-27; the document digests are a record of those files and you will get the same values only if the files are unchanged.
 

@@ -167,7 +167,7 @@ Produce copy for the operator at the kitchen table — the solopreneur, the loca
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** the channels the owner writes for (website, directories, marketplaces, local press, suppliers) each have terms, and licensed trades have advertising rules. Check the current written terms; unknown means HOLD.
 - **Anchored sources:** prices, hours, licenses, warranties, service areas and customer counts need the owner's record. Reviews and testimonials need the customer's permission.

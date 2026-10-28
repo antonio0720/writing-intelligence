@@ -2,7 +2,7 @@
 
 Two copies of one fact drift silently. This fails the moment a wave's stage
 differs between them, a wave exists in one and not the other, or the manifest
-claims a shipped wave while v9 is unreleased.
+claims the benchmark or the independent review shipped before they happened.
 """
 import importlib.util
 from pathlib import Path
@@ -40,10 +40,12 @@ class ManifestParity(unittest.TestCase):
                 self.assertEqual(stage, self.waves[wid].get("stage"))
                 self.assertEqual(STAGE_TO_STATUS[stage], self.waves[wid].get("status"))
 
-    def test_nothing_ships_before_release(self):
-        self.assertEqual("8.0.0", self.top.get("core_version"))
+    def test_released_core_and_open_waves_stay_open(self):
+        self.assertEqual("9.0.0", self.top.get("core_version"))
         self.assertEqual("9.0.0", self.top.get("version_target"))
-        self.assertFalse([w for w in self.waves.values() if w.get("status") == "shipped"])
+        # The release does not turn an unrun benchmark or an absent review into a pass.
+        self.assertEqual("planned", self.waves["WI9-07"].get("status"))
+        self.assertNotEqual("shipped", self.waves["WI9-09"].get("status"))
 
     def test_parity_detects_a_drifted_stage(self):
         readable = waves_yaml()

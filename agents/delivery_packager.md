@@ -47,9 +47,9 @@ Format the approved content for the arena where it will perform. Never invent co
 
 - User (release) or back to Sentence Surgeon (iteration if hold or block)
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.*
+*Released in Writing Intelligence 9.0.0.*
 
 - **Venue contract first.** For a venue the contract marks `human_only`, package research briefs only; do not produce an AI-written or AI-rewritten pitch or submission, even if an author would send it by hand.
 - `RELEASE_ELIGIBLE` from `scripts/wi-authorship.py release` is a precondition the packager reads, not a send. It needs a REVIEW audit, a person's decision bound to the exact draft sha256, an unexpired grant covering `release` and the named venue, and an open `submit` operation. The packager still transmits nothing and still cannot invent content.

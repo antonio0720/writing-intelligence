@@ -84,7 +84,7 @@ into the white space between scenes.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** broadcast, streamer, festival and commissioned-documentary contracts usually state what may be generated and what must be credited. Check the current written terms; unknown means HOLD.
 - **Anchored sources:** narration that states a fact about a person, date or event needs an exact source span, as any documentary script does. Archive clips and interview transcripts are the anchors.

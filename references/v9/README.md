@@ -1,6 +1,6 @@
-# Writing Intelligence v9 — Authentic Voice & Authorship Provenance (PROPOSAL)
+# Writing Intelligence v9 — Authentic Voice & Authorship Provenance
 
-**Status:** Experimental proposal, **not** the published v9 release. This branch does not change the v8 release, `SKILL.md`, or the canonical v4–v8 runtime. **Project author:** Antonio T. Smith Jr. — Density6 LLC. **Date:** 2026-10-27.
+**Status:** released in **9.0.0** on 2026-10-28 by the owner. Each wave keeps its own acceptance stage below; the blinded benchmark (WI9-07) and an independent review (WI9-09) have not happened and are not claimed. **Project author:** Antonio T. Smith Jr. — Density6 LLC.
 
 **Full editorial protocol:** [`EDITORIAL_PROTOCOL.md`](EDITORIAL_PROTOCOL.md). **Blinded quality benchmark:** [`QUALITY_BENCHMARK.md`](QUALITY_BENCHMARK.md). **Wave states:** [`WAVES.yaml`](WAVES.yaml).
 
@@ -23,9 +23,9 @@ The trigger was an AI-generated three-part essay about miniature worlds: the con
 - **WI9-I TRACEABLE TRANSFORMATION:** Preserve source and every edit; declare whether a change is mechanical proofreading, suggested edit, authored revision or substantive generation.
 - **WI9-J REVIEW, DON'T AUTO-PUBLISH:** Source checks do not authenticate a person's identity or mental authorship. Release decisions remain scoped human judgments.
 
-## What exists on this branch
+## What ships in 9.0.0
 
-All of it is experimental and reviewable; none of it is a release. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md). What only the owner can supply — the 60-case benchmark material and reviewers, an independent human reviewer — and the exact commands that run on it: [`OWNER_INTAKE.md`](OWNER_INTAKE.md). Voice samples are not one of them: every writer measures their own voice on their own machine ([`VOICE_BASELINE.md`](VOICE_BASELINE.md)), and none ships with v9.
+Everything below is in the 9.0.0 release. Each wave keeps the acceptance stage its receipts support. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md). What only the owner can supply — the 60-case benchmark material and reviewers, an independent human reviewer — and the exact commands that run on it: [`OWNER_INTAKE.md`](OWNER_INTAKE.md). Voice samples are not one of them: every writer measures their own voice on their own machine ([`VOICE_BASELINE.md`](VOICE_BASELINE.md)), and none ships with v9.
 
 ### `scripts/wi-authorship.py` — authorship-claim declaration checker
 
@@ -72,7 +72,7 @@ The owner's reference kernel, ported unchanged except where a defect was repaire
 | WI9-06 | Human-only venue gate | Enforce research-only vs pitch modes and author declaration, refusal negative tests | PROTOTYPE — `release` gate added |
 | WI9-07 | Editorial benchmark | Author-rated fidelity, originality of observation, evidence accuracy, editor-rated usefulness | PLANNED — NOT EXECUTED |
 | WI9-08 | Integration | Additive integration into `wi.py`, CLI docs, schema, regression and versioned release | VALIDATED — receipt `WI9-08` (CI run 40612980598); plans/v9.manifest.yaml, `wi authorship {audit,release,scan}`, REST `POST /v9/authorship/audit` and `/v9/hotphrases/scan` (release refused, 403), MCP tool contracts, the fourth bundle, release bound to the operator's v6 store; open: the API container image is not built in CI, no MCP server exists in this repository (as for every WI MCP tool), and a WI9-08 receipt with a CI readback |
-| WI9-09 | Independent review & rollout | Artifact verification, negative controls, external review, owner's release decision | PLANNED — release HOLD |
+| WI9-09 | Independent review & rollout | Artifact verification, negative controls, external review, owner's release decision | IN_PROGRESS — the owner released 9.0.0 on 2026-10-28; the independent review is still open |
 
 ### Measurement, not mythology
 
@@ -98,4 +98,4 @@ The author confirmed experience building, collecting and designing physical mini
 
 ## Decision
 
-**PROPOSAL ONLY.** Prototype tests are separate from author ownership, editor signoff, ethical eligibility, or a version-9 release. Review the PR, check the independent tests and accept/reject each program wave explicitly.
+**Released in 9.0.0, with its open items named.** Prototype tests are separate from author ownership, editor signoff, ethical eligibility or reader judgment. The owner released 9.0.0 on 2026-10-28; the blinded benchmark (WI9-07) and an independent review (WI9-09) remain open, and no document may report their results before they exist.

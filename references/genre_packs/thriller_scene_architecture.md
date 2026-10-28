@@ -313,7 +313,7 @@ compress or cut. The scene must keep moving.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Gates unchanged:** v9 does not alter the thriller scene gates or the v8 audits. This section adds provenance and venue notes only.
 - **Venue:** publishers, contests and platforms set their own AI rules. Check the current written policy; unknown means HOLD.

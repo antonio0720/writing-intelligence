@@ -1,13 +1,13 @@
 ---
 name: writing-intelligence-story
-description: Story Intelligence for Writing Intelligence v8 — four offline fiction engines carrying 340 numbered requirements. Fiction and thriller audit (tension, rule integrity, power limits and cost, promise debt). Arc, want/need and ending intelligence (two-clock character state, the sweet, semi-sweet, bittersweet and bitter ending algebra, arc kept separate from ending). The craft of openings, fights, opposition, suspense and sequences. A Japan Story OS for culturally careful worlds, folklore variants, names and a private author vault. Each engine is stdlib Python, read-only and deterministic, and never certifies a good novel; publication gates HOLD until an editor and real readers have spoken. Load alongside writing-intelligence for novels, thrillers, mysteries, fantasy, manga, screenplays and series. Trigger when unnamed — 'does my ending land', 'is the villain too smart', 'why is this scene flat', 'does this magic cost enough', 'is this accurate to Japan'.
+description: Story Intelligence for Writing Intelligence v9 — the four offline fiction engines introduced in v8, carrying 340 numbered requirements. Fiction and thriller audit (tension, rule integrity, power limits and cost, promise debt). Arc, want/need and ending intelligence (two-clock character state, the sweet, semi-sweet, bittersweet and bitter ending algebra, arc kept separate from ending). The craft of openings, fights, opposition, suspense and sequences. A Japan Story OS for culturally careful worlds, folklore variants, names and a private author vault. Each engine is stdlib Python, read-only and deterministic, and never certifies a good novel; publication gates HOLD until an editor and real readers have spoken. Load alongside writing-intelligence for novels, thrillers, mysteries, fantasy, manga, screenplays and series. Trigger when unnamed — 'does my ending land', 'is the villain too smart', 'why is this scene flat', 'does this magic cost enough', 'is this accurate to Japan'.
 ---
 
-# Writing Intelligence v8 — Story Intelligence
+# Writing Intelligence v9 — Story Intelligence
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 8.0.0
+**Version:** 9.0.0
 **Companion to:** `writing-intelligence` (the Sovereign Meaning Runtime) and `writing-intelligence-craft` (the craft library)
 
 ---
@@ -63,9 +63,9 @@ Exit codes, all four engines: `0` analysis ran or mechanical-only pass · `2` ma
 - **Respect the genre.** A flat protagonist, an open ending, a quiet climax and a story with no Japanese folklore at all are valid inputs, not failures.
 - **For Japan-set work**, separate `external_fact` (needs a scoped source), `fictional_canon` (needs the author's adoption) and `interpretation` (cannot be machine-certified). Do not infer a unique reading of a name from its kanji. Ainu, Ryukyuan and living religious traditions need the right kind of source before publication.
 
-## v9 preview — authorship and firsthand material (proposed, not released)
+## v9 — authorship and firsthand material
 
-8.0.0 is the release; v9 is a preview on PR #8. For fiction and memoir-adjacent work: the author's lived experience is evidence they supply, never something to invent for them — do not write a "true" scene, a confession or a source the author has not provided, and keep hypotheticals labeled. Origin (`human_authored`, `ai_assisted`, `ai_generated`) is the author's honest declaration; a story that passes a v8 structural gate says nothing about who wrote it, and a convincing voice does not change it. For a venue that requires a human author, provide analysis and questions, not the submission itself. The declaration checker (`scripts/wi-authorship.py`) lives in the runtime repository, not in this bundle; it never authenticates a writer. No benchmark result exists for v9.
+9.0.0 is the release; these engines ship in it unchanged. For fiction and memoir-adjacent work: the author's lived experience is evidence they supply, never something to invent for them — do not write a "true" scene, a confession or a source the author has not provided, and keep hypotheticals labeled. Origin (`human_authored`, `ai_assisted`, `ai_generated`) is the author's honest declaration; a story that passes a v8 structural gate says nothing about who wrote it, and a convincing voice does not change it. For a venue that requires a human author, provide analysis and questions, not the submission itself. The declaration checker (`scripts/wi-authorship.py`) lives in the runtime repository, not in this bundle; it never authenticates a writer. No benchmark result exists for v9.
 
 ## What does not run
 

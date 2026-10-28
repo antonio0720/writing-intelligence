@@ -38,9 +38,9 @@ Run `python3 scripts/install_arc_additive.py --target /path/to/writing-intellige
 - A unified B/N quality diagnostic and reader study.
 - Production and release acceptance with receipts.
 
-## v9 preview: contribution logs and authorship declarations across a merge
+## v9: contribution logs and authorship declarations across a merge
 
-*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.* The two-ZIP reconciliation above concerns the v8 packages. v9 adds a smaller rule about what a merge of work containing authorship dossiers may and may not do.
+*Released in Writing Intelligence 9.0.0.* The two-ZIP reconciliation above concerns the v8 packages. v9 adds a smaller rule about what a merge of work containing authorship dossiers may and may not do.
 
 - **A merge never reconciles declarations by averaging or choosing.** If two branches declare different `origin` values, different contribution logs, or different venue contracts for the same draft, that is a conflict between declarations. Preserve both and stop for a person, as the v6 merge protocol does for meaning (`examples/v6/02-the-merge-that-refused.md`). Do not write a blended `origin`.
 - **Contribution logs are append-only history.** Merge them as a union of entries with their kinds intact (`human_original`, `human_edit`, `ai_research`, `ai_generated_prose`, `ai_substantive_rewrite`, `mechanical_proofread`). Dropping an AI entry to satisfy a `human_only` venue is a falsified record, not a merge.

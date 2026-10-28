@@ -35,7 +35,7 @@ it will not be treated as a pass, a fail, or evidence of who wrote the text.
 - Would the author recognize this as theirs? What felt wrong?
 - If a personal voiceprint was used: were the samples consented, human-authored, 3 or more, 500+ words each, in this genre?
 
-## v9 preview only
+## v9 only
 If you ran `scripts/wi-authorship.py`: subcommand, exit code, HOLD code(s) and dossier schema version (`wi9-authorship-1` / `-2`). The v9 editorial benchmark (WI9-07) has not run; this report is anecdotal input, not a measurement.
 
 ## External observations (optional, never a criterion)

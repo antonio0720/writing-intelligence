@@ -176,8 +176,8 @@ This is a limit and it is stated in `README.md` under "What certification cannot
 
 ---
 
-## v9 preview exercise (optional)
+## v9 exercise (optional)
 
-*Preview (PR #8). Not required by any tier until the owner adopts it at WI9-09. Use only synthetic material; the reviewer must label it synthetic.*
+*Released in 9.0.0. Not required by any tier until the owner adopts it. Use only synthetic material; the reviewer must label it synthetic.*
 
 **Exercise 4 — Read an authorship HOLD.** Give the candidate a synthetic dossier that `scripts/wi-authorship.py audit` holds (for example a first-person claim backed only by a hypothetical item, or a draft edited after its digest was pinned). The candidate states the HOLD code, the input that caused it and the smallest honest correction. The reviewer re-runs `audit` on the corrected dossier. `ok` when it reaches `REVIEW` for a reason the candidate can explain and the candidate says `REVIEW` is not permission to send. `FAIL` if the candidate edits the checker, widens an anchor to swallow a claim, or relabels a hypothetical as confirmed. Exit codes: `REVIEW` 0, `HOLD` 3.

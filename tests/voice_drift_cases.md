@@ -42,7 +42,7 @@ These cases stress-test the Voice Fingerprinter (Pass 7). Each case provides a b
 
 **Expected detection**: Delivery Packager flags each arena's drift. Successful runs preserve fingerprint within tolerance across all arenas.
 
-## v9 preview rules: consented samples (proposal — PR #8)
+## v9 rules: consented samples 
 
 Drift is measured against a baseline. Under the v9 proposal a *personal* baseline is evidence only when it meets these rules; otherwise the case is not run against an individual author.
 

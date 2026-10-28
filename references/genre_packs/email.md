@@ -47,7 +47,7 @@
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** the recipient's organization and the sender's employer may restrict AI drafting, require disclosure, or prohibit sending confidential material to outside tools. Check the current written policy; unknown means HOLD.
 - **Anchored sources:** figures, dates, commitments and prior-thread quotations need a source span in the thread, contract or record. Do not invent a prior conversation ("as we discussed").

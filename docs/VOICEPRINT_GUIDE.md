@@ -92,9 +92,9 @@ In storyworld work, each character carries their own fingerprint. The Dialogue C
 
 Each character fingerprint must be distinguishable from every other character in the storyworld on at least 3 metrics. Two characters whose fingerprints converge are dialogue failures and must be redrawn.
 
-## v9 preview: voice is evidence of the author's habits, never of authorship
+## v9: voice is evidence of the author's habits, never of authorship
 
-*Preview (PR #8); the v8.0.0 guidance above is unchanged.* WI9-B treats an author's voice as something measured from the author's own consented writing and reviewed by that author. The voice-sample statistics in `prototypes/wi9/wi9_core.py voice` are the only voice code on the branch (state: prototype, WI9-03); there is no consented author corpus yet, so no voice model exists to ship.
+*Released in 9.0.0; the guidance above is unchanged.* WI9-B treats an author's voice as something measured from the author's own consented writing and reviewed by that author. `wi authorship voice`, `voice-review` and `voice-compare` (WI9-03, WI9-05F) do that on each writer's own samples, in their own private folder, with a held-out stability check. No corpus ships with v9 and no voice model exists: each writer's baseline is theirs alone.
 
 - **Consent first.** Use only samples the author has agreed to supply for this purpose. A sample without explicit consent is not a baseline; the v9 negative control for it is a HOLD.
 - **Enough, and of the right genre.** At least three samples of 500 or more words each, per genre. Voice in a grant narrative and voice in a conversational essay are different baselines; do not pool them to reach the count.

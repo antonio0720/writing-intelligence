@@ -132,6 +132,11 @@ class Provider(unittest.TestCase):
         self.assertIn("PROVIDER_FAILED", self.codes(self.run_it("fail")))
         self.assertIn("PROVIDER_OUTPUT_TOO_LARGE", self.codes(self.run_it("huge")))
 
+    def test_program_writes_land_in_a_scratch_folder_not_the_callers(self):
+        before = set(Path.cwd().iterdir())
+        self.run_it()
+        self.assertEqual(before, set(Path.cwd().iterdir()))
+
     def test_relative_provider_path_is_refused(self):
         out = run_provider(dossier(), "model.py", consent_to_send=True, environ=self.env)
         self.assertIn("PROVIDER_PATH_RELATIVE", self.codes(out))

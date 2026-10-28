@@ -173,7 +173,7 @@ If any of the above fails, Pass 6 has not completed.
 
 ## v9 Meaning-First Order (proposed) — This pass (Sentence Surgeon)
 
-(v9 is a proposed preview, not a release; "v9 editorial pass N" names the passes of `references/v9/ENGINEERING_HANDOFF.md` §25, distinct from the numbered compiler passes.) This pass is v9 editorial passes 4 to 8 in miniature, and it runs only after claim integrity.
+("v9 editorial pass N" names the passes of `references/v9/ENGINEERING_HANDOFF.md` §25, distinct from the numbered compiler passes.) This pass is v9 editorial passes 4 to 8 in miniature, and it runs only after claim integrity.
 
 - **Order.** Do not rewrite a paragraph whose claims have not cleared the Epistemic Ledger (v9 editorial pass 5). Polishing an unsupported first-person claim hides it; it does not fix it.
 - **Edit classes.** Every log entry also declares what kind of change it was: mechanical proofreading, suggested edit, authored revision or substantive generation (v9 principle I). `hard_ban_removed` and `compression` are normally mechanical or suggested; `specificity_added` and `abstract_to_scene` change meaning and need a source card, never invention.

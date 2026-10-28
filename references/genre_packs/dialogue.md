@@ -506,7 +506,7 @@ shifts beneath them.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** dialogue sits inside whatever the host work is (novel, screenplay, game script, nonfiction scene). The host venue's rules govern, not this pack. Check the current written policy; unknown means HOLD.
 - **Anchored sources:** in fiction, no source anchoring applies. In nonfiction, quoted speech needs a recording, transcript or contemporaneous note; reconstructed dialogue must be labeled as reconstructed.

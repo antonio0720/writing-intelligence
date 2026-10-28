@@ -177,7 +177,7 @@ Tweet 8: The close. CTA, link, or punchline.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** each platform, and any brand or sponsor, sets rules on AI-generated content, labeling, impersonation and paid-promotion disclosure, and these change often. Check the platform's current written policy; unknown means HOLD.
 - **Anchored sources:** statistics, quotes and news claims need a source span, and a screenshot or link is not a verified fact. Do not state a rumor as reported.

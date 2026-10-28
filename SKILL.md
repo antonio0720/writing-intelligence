@@ -1,14 +1,14 @@
 ---
 name: writing-intelligence
-description: Writing Intelligence v8 — Story Intelligence on the Sovereign Meaning Runtime. The governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop), the v7 institutional program (claims anchored to exact source spans, branches, expiring grants, conflict-preserving merge, simulation, offline proof capsules) and, new in v8, 340 numbered fiction requirements as offline tools — a fiction and thriller audit (tension, rule cost, power limits, promise debt), arc, want/need and ending algebra, the craft of openings, fights, opposition, suspense and sequences, and a Japan Story OS for culturally careful worlds. A structural pass is never a good-novel verdict; publication gates HOLD for human and reader review. Use whenever the user wants to write, rewrite, edit, ghostwrite, audit, fact-check or verify prose — grants, legal, policy, novels, thrillers, manga, speeches. Trigger when unnamed — 'clean this up', 'make this sound like me', 'does my ending land', 'check my sources'.
+description: Writing Intelligence v9 — Authentic Voice & Authorship Provenance on the Sovereign Meaning Runtime. Keeps a writer's own experience, numbers, positions and voice through every edit — first-person claims checked against their private firsthand vault, a meaning diff that shows every change a revision makes to what they meant, review decisions bound to their own grant, voice measured from their own samples, and human-only venue rules enforced before anything is sent — never a detector-score target. Carries the governed craft kernel (11 passes, 27 genre packs, voiceprints, anti-slop), claims anchored to exact source spans with branches, expiring grants, conflict-preserving merge and offline proof capsules, and v8's 340 fiction requirements (tension, arcs, endings, suspense, a Japan Story OS). Use whenever the user wants to write, rewrite, edit, ghostwrite, audit, fact-check or verify prose. Trigger when unnamed — 'clean this up', 'make this sound like me', 'did the edit change what I said', 'check my sources'.
 ---
 
-# Writing Intelligence v8 — Story Intelligence on the Sovereign Meaning Runtime
+# Writing Intelligence v9 — Authentic Voice & Authorship Provenance on the Sovereign Meaning Runtime
 
 **Author:** Antonio T. Smith Jr. — Founder & CEO, Density6 LLC
 **License:** MIT
-**Version:** 8.0.0
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines: fiction & thriller, arc & ending, the craft, Japan Story OS)**
+**Version:** 9.0.0
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer + deterministic verification) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program for consequential work) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines: fiction & thriller, arc & ending, the craft, Japan Story OS)** → **v9.0 (Authentic Voice & Authorship Provenance — firsthand vault, meaning diff, grant-bound review, per-writer voice)**
 
 ---
 
@@ -18,7 +18,7 @@ v8 is **Story Intelligence** — the fiction half of this system brought up to t
 
 **The v8 rule:** *a structural pass is not a good novel.* Mechanical consistency, interpretive signal, human editorial judgment and independent reader reception are four different states and are never coerced into one another. Every publication gate in v8 holds — **HOLD (exit 3)**, and the Japan Story OS preflight refuses with exit 2 — until a human editor and real readers have spoken, by design. A need is an interpretation attributed to a person, never a model's access to a character's soul; a cultural fact needs a scoped source, a fictional canon needs an author's adoption, and missing information stays missing.
 
-**What 8.0.0 ships, and what it does not.** Shipped, with receipts in `plans/receipts/WI8-R*.json`: the four engines installed additively (zero collisions, no v4–v7 file changed in behaviour), their own suites passing inside this repository, every v4–v7 regression unchanged, and a third installable bundle, `writing-intelligence-story`, that carries them. Planned, and said so: canonical integration into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review — waves FI8-03–06 and WI8-00–WI8-43 in `plans/v8.manifest.yaml`. Index: `references/v8/README.md`.
+**What 8.0.0 shipped (and 9.0.0 carries unchanged), and what it does not.** Shipped, with receipts in `plans/receipts/WI8-R*.json`: the four engines installed additively (zero collisions, no v4–v7 file changed in behaviour), their own suites passing inside this repository, every v4–v7 regression unchanged, and a third installable bundle, `writing-intelligence-story`, that carries them. Planned, and said so: canonical integration into `wi.py` and the v6 semantic graph, full-manuscript extraction, reader trials and cultural review — waves FI8-03–06 and WI8-00–WI8-43 in `plans/v8.manifest.yaml`. Index: `references/v8/README.md`.
 
 ### v8 commands (run from the repository or the `writing-intelligence-story` bundle)
 
@@ -37,9 +37,9 @@ Exit codes across all four: `0` analysis ran or mechanical-only pass, `2` malfor
 
 ---
 
-## v9 preview — the current preview line (proposed, not released)
+## v9 — authentic voice and authorship provenance
 
-8.0.0 is the release. v9 (program WI9-AUTHORSHIP, [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8)) is a preview and is on HOLD until WI9-09; do not describe it as shipped, and report no benchmark or quality result for it (the WI9-07 benchmark has not run). When a task touches **authorship, venue rules, evidence, voice or cadence**, apply these rules and use the v9 tools from the repository:
+9.0.0 is the release (program WI9-AUTHORSHIP). Report no benchmark or quality result for v9: the WI9-07 benchmark has not run and no independent review has happened. When a task touches **authorship, venue rules, evidence, voice or cadence**, apply these rules and use the v9 tools:
 
 - **Source before style.** Author notes, transcripts and drafts come first. Never write an "I did / I saw" scene the author has not supplied; a hypothetical stays labeled hypothetical, and a roadmap is not a completed build.
 - **Venue contract first.** Read the venue's rule before drafting. For a **human-only** venue, produce research briefs and interview prompts only — no AI-written or AI-rewritten pitch, reply or essay for submission, even if the person will press send.
@@ -266,7 +266,7 @@ The v5 layer remains authoritative for its own subject matter: [`references/v5/`
 The refusals are load-bearing, not decorative. Full reasoning in [`references/v6/NON_GOALS.md`](references/v6/NON_GOALS.md).
 
 - **Detector evasion.** Anti-slop is a craft objective — prose that does not pattern-match to machine writing because it is genuinely better built. It is not a laundering service.
-- **Passing off or fabricated experience (v9 preview).** No invented firsthand scene, no submission-ready prose for a human-only venue, no randomly planted imperfections, no detector score as a target. The authorship checker tests declarations only.
+- **Passing off or fabricated experience (v9).** No invented firsthand scene, no submission-ready prose for a human-only venue, no randomly planted imperfections, no detector score as a target. The authorship checker tests declarations only.
 - **Source generation.** It will never construct a citation. If a claim needs support and none exists in the supplied material, the output is `needs_source`. Inventing a plausible reference is the single most damaging thing this system could do.
 - **Truth verification.** It verifies support within the sources supplied. It cannot tell you the source is right.
 - **Absolute quality scores.** Scores are relative to a stated profile, arena and mission. There is no universal writing number, and there is no overall health gauge.
@@ -279,7 +279,7 @@ The refusals are load-bearing, not decorative. Full reasoning in [`references/v6
 
 ## The companion packs
 
-**Three bundles in v8.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library below, which now also carries the v8 fiction compiler references and genre addenda), and `writing-intelligence-story` (the four v8 story engines, their rules, schemas and suites). Install all three; each stands alone, and each is under the 200-file ceiling. A fourth, `writing-intelligence-authorship`, carries the v9 preview tools (not part of 8.0.0).
+**Four bundles in v9.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library, including the v8 fiction compiler references and genre addenda), `writing-intelligence-story` (the four v8 story engines) and `writing-intelligence-authorship` (the v9 authorship, vault, meaning, voice and review tools). Install all four; they are one system in four artifacts.
 
 
 The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern diagnostics, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.

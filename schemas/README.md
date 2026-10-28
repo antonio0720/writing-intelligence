@@ -1,6 +1,6 @@
 # Writing Intelligence — Machine-Readable Schemas
 
-There are two schema families in this repository, and they answer different questions (plus a v9 preview schema, below).
+There are two schema families in this repository, and they answer different questions (plus a v9 schema, below).
 
 | Family | Where | What it describes | Question it answers |
 |---|---|---|---|
@@ -11,7 +11,7 @@ The v5 family does not replace the v3 family and does not deprecate it. The elev
 
 Start with [`v5/README.md`](v5/README.md) for the two-identity model (logical id vs. state digest), the canonical hashing contract, which schemas are executable today, and how each v3 artifact becomes a view over the v5 graph.
 
-**v9 preview.** [`v9/`](v9/) holds one schema, `authorship-dossier.schema.json` (`wi9-authorship-2`; `wi9-authorship-1` still read), the input contract for the preview checker `scripts/wi-authorship.py`. It answers *what has the author declared about who wrote this, and which anchored evidence supports it?* and is not part of the v8.0.0 release. A dossier that validates is a **declaration**, not authentication of a writer; `tests/v9/test_schema_parity.py` keeps schema and checker on one vocabulary. Limits are in [`../docs/SCHEMA_AND_LIMITS.md`](../docs/SCHEMA_AND_LIMITS.md).
+**v9.** [`v9/`](v9/) holds one schema, `authorship-dossier.schema.json` (`wi9-authorship-2`; `wi9-authorship-1` still read), the input contract for `scripts/wi-authorship.py`. It answers *what has the author declared about who wrote this, and which anchored evidence supports it?* A dossier that validates is a **declaration**, not authentication of a writer; `tests/v9/test_schema_parity.py` keeps schema and checker on one vocabulary. The per-writer record formats (vault, ledger, meaning diff) and every limit are in [`../docs/SCHEMA_AND_LIMITS.md`](../docs/SCHEMA_AND_LIMITS.md).
 
 The rest of this document describes the v3 craft schemas.
 

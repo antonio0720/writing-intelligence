@@ -28,8 +28,8 @@ Be specific:
 ## Expected behavior
 What should the output have looked like or sounded like?
 
-## v9 preview only (skip for v4–v8 behavior)
-If the problem involves the v9 proposal on PR #8 (`scripts/wi-authorship.py` or `prototypes/wi9/`):
+## v9 only (skip for v4–v8 behavior)
+If the problem involves v9 (`scripts/wi-authorship.py` or `prototypes/wi9/`):
 - Subcommand and exit code: `audit` / `release` / other — exit 0 or 3?
 - HOLD code(s) in `findings[].code` (e.g. `CLAIM_UNANCHORED`, `HUMAN_ONLY_CONFLICT`), or the REVIEW / RELEASE_ELIGIBLE you did not expect:
 - Dossier schema version: `wi9-authorship-1` or `wi9-authorship-2`

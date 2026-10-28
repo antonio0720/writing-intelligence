@@ -148,7 +148,7 @@ Cases `GRANT-01` through `GRANT-05` in `benchmarks/cases/grant_narrative.md`.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** each funder's NOFO or RFP states eligibility, page limits and any AI-use or certification clause; some require certifying that the application is the applicant's own. Check the current written text; unknown means HOLD.
 - **Anchored sources:** needs statements, prior outcomes, budgets and cited statistics need a dated source span. A funder's priorities quoted from the solicitation must match the solicitation exactly.

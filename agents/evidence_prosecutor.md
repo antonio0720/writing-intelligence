@@ -43,9 +43,9 @@ Classify every major claim. Mark source status. Block fabrication. Surface unive
 - Sentence Surgeon (Pass 6) — to implement softening/qualification
 - Scorekeeper (Pass 10) — for the Epistemic Integrity score
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.* The authorship checker (`scripts/wi-authorship.py audit`) applies this agent's discipline to provenance:
+*Released in Writing Intelligence 9.0.0.* The authorship checker (`scripts/wi-authorship.py audit`) applies this agent's discipline to provenance:
 
 - **Claim coverage.** Every consequential claim the v4 classifier finds in the draft must overlap an anchored evidence span. One safe anchor does not carry three unsourced claims. Resolve each unmatched claim with cite, soften, qualify, remove or escalate.
 - **Presence is not support.** An anchor that resolves proves the excerpt exists there; `support_status` is a separate, reviewer-recorded judgment, and `needs_source` or `conflicted` holds a submission.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# test-v9.sh — the v9 preview regression, runnable from the repository and
+# test-v9.sh — the v9 regression, runnable from the repository and
 # from the extracted writing-intelligence-authorship bundle.
 #
 # Owner: Antonio T. Smith Jr. Stdlib only. Exits non-zero on any failure.
@@ -34,7 +34,7 @@ else
   echo "SKIP meaning-led doctrine — the craft library is not in this artifact; it runs in the repository"
 fi
 if [ "$fails" -ne 0 ]; then
-  echo "v9 preview regression: $fails failed"
+  echo "v9 regression: $fails failed"
   exit 1
 fi
-echo "v9 preview regression complete"
+echo "v9 regression complete"

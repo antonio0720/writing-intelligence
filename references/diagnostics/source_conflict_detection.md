@@ -73,7 +73,7 @@ Detection passes when:
 
 ## v9: Conflicts and the Authorship Dossier
 
-In v9 a detected conflict has a place to land. The authorship declaration checker (`scripts/wi-authorship.py`, on the PR #8 proposal; a declaration checker, not an authorship verifier) records each piece of evidence with a `support_status` of `supported_by_reviewer`, `needs_source`, `conflicted` or `unadjudicated`.
+In v9 a detected conflict has a place to land. The authorship declaration checker (`scripts/wi-authorship.py`; a declaration checker, not an authorship verifier) records each piece of evidence with a `support_status` of `supported_by_reviewer`, `needs_source`, `conflicted` or `unadjudicated`.
 
 | Conflict outcome here | `support_status` in the dossier |
 |---|---|

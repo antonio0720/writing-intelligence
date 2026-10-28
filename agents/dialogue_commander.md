@@ -50,9 +50,9 @@ Fix conversation, subtext, tension, attribution, and voice distinction in dialog
 - Voice Fingerprinter (per-character drift)
 - Scorekeeper (Pass 10)
 
-## v9 preview notes
+## v9 notes
 
-*Preview (PR #8); not a release.*
+*Released in Writing Intelligence 9.0.0.*
 
 - **Fiction gates are unchanged.** The dialogue v2.0 scorecard, the tension-element count and the attribution rules stand.
 - **A phrase match in dialogue is character voice, not a flag.** The editorial phrase scan (`prototypes/wi9/wi9_hotphrases.py`) leaves quoted speech out unless asked (`--include-quotes`) for this reason. A line a character would plausibly say stays as written unless the author decides otherwise; a match is a question for the author, never an automatic rewrite and never evidence of how the text was produced.

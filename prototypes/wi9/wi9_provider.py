@@ -32,6 +32,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -105,15 +106,21 @@ def run_provider(dossier, provider_cmd, provider_args=(), key_env=None, consent_
     trace = {"request_sha256": _sha(payload.encode("utf-8")), "provider_sha256": _sha(program.read_bytes()),
              "provider": program.name, "key_env": key_env, "source_cards": len(prepared["request"]["source_cards"])}
     started = time.monotonic()
+    # The program runs in an empty scratch folder, so nothing it writes lands
+    # beside the writer's own files.
+    scratch = tempfile.TemporaryDirectory(prefix="wi9-provider-")
     try:
         proc = subprocess.run([str(program)] + [str(a) for a in provider_args], input=payload.encode("utf-8"),
                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, timeout=timeout,
-                              shell=False, check=False)
+                              shell=False, check=False, cwd=scratch.name)
     except subprocess.TimeoutExpired:
+        scratch.cleanup()
         return _hold("PROVIDER_TIMEOUT", "the provider did not answer within %s seconds" % timeout,
                      provider_called=True, trace=trace)
     except OSError as exc:
+        scratch.cleanup()
         return _hold("PROVIDER_FAILED", "the provider could not start: %s" % exc.strerror, trace=trace)
+    scratch.cleanup()
     trace["seconds"] = round(time.monotonic() - started, 3)
     if proc.returncode != 0:
         return _hold("PROVIDER_FAILED", "the provider exited %d" % proc.returncode, provider_called=True,

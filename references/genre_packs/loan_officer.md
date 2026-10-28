@@ -157,7 +157,7 @@ Produce borrower-facing communication — pre-approval letters, rate-sheet expla
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** lenders operate under fair-lending, disclosure and recordkeeping rules, and an institution's compliance team may restrict AI drafting of borrower communications. Check the current written policy; unknown means HOLD. Keep borrower data out of outside tools unless policy allows.
 - **Anchored sources:** rates, terms, fees, eligibility and program rules need the current rate sheet or product guideline with its date. Do not state an approval, rate or timeline the file does not support.

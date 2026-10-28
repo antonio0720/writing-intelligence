@@ -298,6 +298,6 @@ Examples and screenplay page claims are transcribed as the user's notes' interpr
 
 **Status:** specification delivered as a proposal, not code, not verified reader outcome, and not a v8 release.
 
-## v9 preview note (added after the original specification)
+## v9 note (added after the original specification)
 
-*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.* The text above is the v8 proposal as delivered and is kept as history. v9 does not alter any of its 120 requirements or its caveats. For fiction, v9 changes no gate; it adds the no-borrowed-memory rule for memoir and autofiction, treats the phrase scanner as an editorial question (quoted dialogue is character voice), and keeps authorship a self-reported declaration. See `docs/FICTION_V8_ARCHITECTURE.md` (v9 section) and `references/v9/README.md`.
+*Released in Writing Intelligence 9.0.0.* The text above is the v8 proposal as delivered and is kept as history. v9 does not alter any of its 120 requirements or its caveats. For fiction, v9 changes no gate; it adds the no-borrowed-memory rule for memoir and autofiction, treats the phrase scanner as an editorial question (quoted dialogue is character voice), and keeps authorship a self-reported declaration. See `docs/FICTION_V8_ARCHITECTURE.md` (v9 section) and `references/v9/README.md`.

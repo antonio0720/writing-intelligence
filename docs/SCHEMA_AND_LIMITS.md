@@ -27,9 +27,9 @@ Backward-compatible additions require a new `schema` version whenever semantics 
 
 ---
 
-## v9 preview: the authorship dossier and its limits
+## v9: the authorship dossier and its limits
 
-Everything below belongs to the v9 preview (PR #8), not to the v8.0.0 release, and is checked by `scripts/wi-authorship.py`.
+Everything below belongs to v9 (PR #8), not to the v8.0.0 release, and is checked by `scripts/wi-authorship.py`.
 
 **Schema.** [`../schemas/v9/authorship-dossier.schema.json`](../schemas/v9/authorship-dossier.schema.json) — current version `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read. It describes the draft and its pinned `expected_sha256`, evidence spans (unique ids, exact excerpt, optional `start`, pinned source digest, typed `experience_state`, reviewer-recorded `support_status`), the contribution log, the declared origin, the venue contract and, for `release`, the person's `review_decision` and authority grant. `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
 

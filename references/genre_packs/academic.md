@@ -64,7 +64,7 @@ the student's own thinking visible and checkable.
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** journals, theses and course work set their own rules on AI assistance, disclosure and data statements. Read the current written policy; a missing policy is HOLD, not permission.
 - **Anchored sources:** every cited finding, effect size, quotation and page reference needs an exact span from the source actually read. A claim remembered from a model is not a citation.

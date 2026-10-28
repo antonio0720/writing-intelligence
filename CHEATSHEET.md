@@ -1,14 +1,14 @@
-# Writing Intelligence v9 (preview) — Cheatsheet
+# Writing Intelligence v9 — Cheatsheet
 
-One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · v9 preview: [`references/v9/README.md`](references/v9/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
+One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · v9: [`references/v9/README.md`](references/v9/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
 
-**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v8.0.0
+**Free. MIT. Forever.** — Antonio T. Smith Jr. / Density6 LLC · v9.0.0
 
 ---
 
-## v9 preview — authorship and venue checks (PROPOSED, not released)
+## v9 — authorship, meaning and venue checks
 
-8.0.0 is the release. v9 is the current preview line on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); the release is on HOLD until WI9-09. Nothing below changes a v4–v8 command. Detail: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md) · waves: [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml) · schema: [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
+9.0.0 is the release (2026-10-28); the WI9-07 benchmark and the WI9-09 independent review are still open. Nothing below changes a v4–v8 command. Detail: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md) · waves: [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml) · schema: [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
 
 | Command | Does | Exit |
 |---|---|---|
@@ -85,13 +85,13 @@ Required: `schema`, `document` (`path`, `origin`, `venue_policy`, `intended_use`
 - Never ask for a pitch or reply for a **human-only** venue. Produce a research brief and interview prompts only; the person writes the submission.
 - Never read `REVIEW` or `RELEASE_ELIGIBLE` as "human wrote this". They check declarations.
 
-v9 wave states: WI9-00 VALIDATED (owner approval pending) · 01 PROTOTYPE · 02 PROTOTYPE · 03 PROTOTYPE · 04 PROTOTYPE · 05 IN_PROGRESS (05G not run) · 06 PROTOTYPE · 07 PLANNED (benchmark not run) · 08 VALIDATED · 09 PLANNED. The version stays 8.0.0 until WI9-09.
+v9 wave states: WI9-00 VALIDATED (owner approval pending) · 01 PROTOTYPE · 02 PROTOTYPE · 03 PROTOTYPE · 04 PROTOTYPE · 05 IN_PROGRESS (05G not run) · 06 PROTOTYPE · 07 PLANNED (benchmark not run) · 08 VALIDATED · 09 IN_PROGRESS (released by the owner; independent review open).
 
 ---
 
 ## v8 in one line
 
-8.0.0 ships **Story Intelligence**: four offline fiction engines carrying 340 numbered requirements — fiction & thriller (FI-01–60), arc / want-need / ending (N061–120), the craft (C121–180), Japan Story OS (JP-181–340). **A structural pass is not a good novel**: every publication gate HOLDS (exit 3). Run `bash scripts/test-v8.sh`. Status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
+8.0.0 shipped **Story Intelligence**: four offline fiction engines carrying 340 numbered requirements — fiction & thriller (FI-01–60), arc / want-need / ending (N061–120), the craft (C121–180), Japan Story OS (JP-181–340). **A structural pass is not a good novel**: every publication gate HOLDS (exit 3). Run `bash scripts/test-v8.sh`. Status: [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
 ## v8 commands
 
@@ -163,8 +163,8 @@ curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main
 # ...then the craft and story bundles, uploaded the same way:
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
-# v9 preview, from the PR #8 branch until it merges:
-curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/proposal/v9-authentic-voice-provenance-20261027/writing-intelligence-authorship.skill
+# the v9 authorship bundle:
+curl -LO https://github.com/antonio0720/writing-intelligence/releases/latest/download/writing-intelligence-authorship.skill
 # pinned versions with checksums: https://github.com/antonio0720/writing-intelligence/releases/latest
 
 # CLI only — the deterministic core, one file, no dependencies

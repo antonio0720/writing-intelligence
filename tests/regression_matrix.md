@@ -57,7 +57,7 @@ This matrix tracks every place v3.0 has the potential to regress against v2.0. M
 | New genre packs without collision matrix update | PR template requires matrix update |
 | Schema changes without backwards compatibility | Maintainer review gate |
 
-## v9 Preview Lanes (PR #8 — proposal, not a release)
+## v9 Lanes (9.0.0)
 
 v9 adds experimental lanes beside the v4–v8 suites. They are separate from them, change no version string, and guard the v9 proposal only. Passing them does not validate a wave: wave states live in `references/v9/WAVES.yaml`, and WI9-07 (the 60-case editorial benchmark) has not run.
 

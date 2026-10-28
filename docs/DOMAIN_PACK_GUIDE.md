@@ -66,9 +66,9 @@ Every pack must include all 15 sections:
 
 Antonio T. Smith Jr. / Density6 LLC
 
-## v9 preview: venue, authorship and strict-arena statements
+## v9: venue, authorship and strict-arena statements
 
-*Preview (PR #8); proposed, not a release. v8.0.0 is the published version.* The 15-section schema above is unchanged. A new pack proposed during the v9 preview must also state, inside the sections it already has (for example "Required evidence", "Forbidden claims" and "Schema hooks"):
+*Released in Writing Intelligence 9.0.0.* The 15-section schema above is unchanged. A new pack proposed during v9 must also state, inside the sections it already has (for example "Required evidence", "Forbidden claims" and "Schema hooks"):
 
 - **Venue and authorship rules.** Which venues the domain publishes into, and each venue's class under the v9 contract (`unrestricted`, `disclose_ai` or `human_only`). For `human_only` venues, state that the pack produces research briefs only and never an AI-written or AI-rewritten pitch (WI9-G). The venue rule outranks the pack's structure and delivery format.
 - **Strict-arena status.** Say whether the domain is one of the strict arenas the authorship checker names (`journalism`, `academic`, `legal`, `government`) and, if so, what the stricter handling requires. If it is not, say so explicitly rather than leaving it implied.

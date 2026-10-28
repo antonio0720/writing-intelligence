@@ -12,9 +12,9 @@ The disciplines below still hold. For fiction, v8 adds four engines (see [`../re
 
 Pattern: *author brief → projection → validate → audit / evaluate / classify → editorial conversation → revised projection → as-of / impact → gate (HOLD) → human editor → reader study.*
 
-## v9 preview — operating `audit`, `release`, the per-writer tools and the review ledger
+## v9 — operating `audit`, `release`, the per-writer tools and the review ledger
 
-v9 is a **preview on PR #8**, not a release; v8.0.0 is the published version. These are the operating rules for the v9 tools you can run today, all reachable as `wi authorship <tool>`. Reference: [`../references/v9/README.md`](../references/v9/README.md).
+9.0.0 is the release. These are the operating rules for the v9 tools, all reachable as `wi authorship <tool>`. Reference: [`../references/v9/README.md`](../references/v9/README.md).
 
 1. **Gather the sources first, then the draft.** A dossier names the draft (with a pinned `expected_sha256`), the evidence spans that support it, the contribution log (who or what wrote which part), the declared origin and the venue contract. Source before style: nothing here helps you invent an experience the sources do not contain.
 2. **Run `audit`; read the whole report.** `REVIEW` (exit 0) means the limited checks passed and a person still has to decide. `HOLD` (exit 3) means stop. `audit` never authorizes release and every report carries `declaration_status: self_reported`.

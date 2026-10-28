@@ -151,7 +151,7 @@ Produce listing copy, investor memos, buyer education, neighborhood briefs, and 
 
 ## v9: authorship, sources and venue
 
-*Proposed v9 preview (PR #8), not a release. Venue rules: check the venue's current written policy; unknown means HOLD.*
+*Writing Intelligence 9.0.0. Venue rules: check the venue's current written policy; unknown means HOLD.*
 
 - **Venue:** MLS rules, brokerage policy, fair-housing law and advertising regulations govern listing copy, and some boards or brokerages restrict AI-written descriptions or require review. Check the current written policy; unknown means HOLD.
 - **Anchored sources:** square footage, taxes, lot size, year built, comparable sales and HOA terms need the listing record, public record or appraisal with date. Do not state features the property does not have.
