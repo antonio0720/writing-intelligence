@@ -265,8 +265,10 @@ def editorial_diagnostics(text):
         if len(set(counts)) <= 2:
             findings.append({"code": "PARAGRAPH_PATTERN", "question": "Do these paragraph lengths arise from the argument, or a template?"})
     from wi9_hotphrases import scan_text
+    from wi9_structure import analyze as structure_analyze
     hot_phrases = scan_text(text)
     return {"profile": profile_text(text), "findings": findings, "hot_phrases": hot_phrases,
+            "structure": structure_analyze(text),
             "scope": "editorial diagnostics, not authorship classification"}
 
 

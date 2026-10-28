@@ -6096,11 +6096,12 @@ V9_AUTHORSHIP_TOOLS = {
     "ledger": ("prototypes/wi9", "wi9_ledger.py"),
     "phrase-review": ("prototypes/wi9", "wi9_phrase_review.py"),
     "meaning": ("prototypes/wi9", "wi9_meaning.py"),
+    "structure": ("prototypes/wi9", "wi9_structure.py"),
 }
 
 # Tools with their own subcommands (`wi authorship vault add ...`): the action
 # names the tool and the next word is passed through as its subcommand.
-V9_AUTHORSHIP_GROUPS = {"vault", "ledger", "phrase-review", "meaning"}
+V9_AUTHORSHIP_GROUPS = {"vault", "ledger", "phrase-review", "meaning", "structure"}
 
 
 def cmd_authorship(args):
