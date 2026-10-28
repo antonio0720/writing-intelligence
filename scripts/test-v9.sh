@@ -26,6 +26,7 @@ run "schema parity" python3 -m unittest discover -s tests/v9 -p 'test_schema_par
 run "skill frontmatter limits" python3 -m unittest discover -s tests/v9 -p 'test_skill_frontmatter.py'
 run "wi authorship subcommand" python3 -m unittest discover -s tests/v9 -p 'test_wi_subcommand.py'
 run "no shipped voice corpus" python3 -m unittest discover -s tests/v9 -p 'test_no_shipped_voice_corpus.py'
+run "platform refusal without POSIX file safety" python3 -m unittest discover -s tests/v9 -p 'test_platform_refusal.py'
 run "reference kernel" python3 -m unittest discover -s prototypes/wi9/tests -p 'test_*.py'
 if [ -d references/anti_patterns ]; then
   run "meaning-led doctrine" python3 -m unittest discover -s tests/v9 -p 'test_doctrine_meaning_led.py'
