@@ -1,6 +1,8 @@
-# Writing Intelligence v6.0.0 — Benchmarks
+# Writing Intelligence v9 — Benchmarks
 
 Two classes of benchmark, measured two different ways, because they answer two different questions.
+
+**v9 (9.0.0) adds no benchmark result.** Its 60-case blinded editorial benchmark (WI9-07, specified in [`references/v9/QUALITY_BENCHMARK.md`](../references/v9/QUALITY_BENCHMARK.md)) has not run, so no v9 quality number exists anywhere in this repository. The v9 tools are proven by their negative-control and mutation tests (`bash scripts/test-v9.sh`), which are Class B. The suites below ship unchanged in 9.0.0.
 
 **v8 adds story cases** — `cases/fiction_v8_60.md` (the 60 fiction & thriller requirements), `cases/arc_v8_adversarial.md` with `arc_v8_vectors.json` (ending algebra and arc refusals), and the craft and Japan adversarial sets at `extensions/wi8/craft03/benchmarks/cases/CRAFT03_ADVERSARIAL.md` and `extensions/wi8/japan04/benchmarks/`. All of them are **Class B**: pass or fail on mechanical and refusal behaviour. None of them scores literary quality — v8's rule is that a structural pass is not a good novel, so story quality is never a Class A number produced by a tool. Run them with `bash scripts/test-v8.sh`.
 

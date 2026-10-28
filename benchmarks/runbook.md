@@ -2,6 +2,8 @@
 
 Two classes, two procedures. Run both. Report them separately.
 
+This runbook ships unchanged in 9.0.0. The v9 editorial benchmark (WI9-07) has its own protocol in [`references/v9/QUALITY_BENCHMARK.md`](../references/v9/QUALITY_BENCHMARK.md) and has not run; the v9 regression suite is `bash scripts/test-v9.sh`.
+
 There is no `wi benchmark` subcommand. The v3 runbook named one and marked it "reference implementation ships in v3.1"; it never shipped, and naming a command that does not exist is the failure mode this project exists to prevent. Every command below was read out of `scripts/wi.py` before it was written here.
 
 ## Class A — prose quality

@@ -1,6 +1,8 @@
 ---
 manifest_version: "6.0.0"
-release_target: "6.0.0"
+release_target: "9.0.0"
+# Unchanged suite since manifest format 6.0.0; shipped as-is in 9.0.0.
+# The v9 editorial benchmark (WI9-07) is not in this manifest and has not run.
 
 # Two classes, counted separately and never averaged together.
 #   class_a — prose quality, scored 0-100
