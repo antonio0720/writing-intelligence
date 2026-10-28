@@ -16,6 +16,9 @@ from pathlib import Path
 DEFAULT_PACK = Path(__file__).resolve().parent / 'rules' / 'v9_hotphrases.json'
 MAX_CHARS = 500_000
 MAX_HITS = 500
+MAX_DOCUMENT_CHARS = 20_000_000   # a long manuscript, scanned in chunks
+CHUNK_CHARS = 100_000
+MIN_CHUNK_CHARS = 2_000
 ONE_TO_ONE = str.maketrans({'\u2018': "'", '\u2019': "'", '\u2010': '-', '\u2011': '-', '\u2013': '-', '\u2014': '-', '\u00a0': ' '})
 
 
@@ -159,6 +162,89 @@ def scan_text(text, pack=DEFAULT_PACK, include_quoted=False, max_hits=MAX_HITS):
             'interpretation': 'Editorial review candidates. Phrase matches do not prove machine authorship and do not demand rewriting. No detector optimization.'}
 
 
+def _cut_points(text, mask, size):
+    """Chunk boundaries at paragraph breaks outside any masked span (code fences,
+    quotations), so a phrase or a fence is never split between two chunks."""
+    starts = [lo for lo, _ in mask]
+    cuts, pos = [0], 0
+    while len(text) - pos > size:
+        window_end = pos + size
+        cut = None
+        for sep in ('\n\n', '\n', ' '):
+            probe = text.rfind(sep, pos + size // 2, window_end)
+            while probe != -1 and _masked((probe, probe + len(sep)), mask, starts):
+                probe = text.rfind(sep, pos + size // 2, probe)
+            if probe != -1:
+                cut = probe + len(sep)
+                break
+        if cut is None:
+            # No safe break in the window: never cut inside a masked span (a code
+            # fence or quotation longer than the window); end the chunk after it.
+            cut = window_end
+            i = bisect.bisect_right(starts, window_end) - 1
+            if 0 <= i < len(mask) and mask[i][0] < window_end < mask[i][1]:
+                cut = mask[i][1]
+        if cut <= pos:
+            cut = window_end
+        cuts.append(cut)
+        pos = cut
+    cuts.append(len(text))
+    return cuts
+
+
+def scan_document(text, pack=DEFAULT_PACK, include_quoted=False, chunk_chars=CHUNK_CHARS):
+    """Scan a long manuscript in chunks with global offsets; never drops findings silently.
+
+    A chunk that reaches the per-scan cap is halved and rescanned. Only a chunk
+    still at the cap at MIN_CHUNK_CHARS (pathological repetition) is reported
+    as incomplete, by its exact range, and the report says `complete: false`.
+    """
+    if not isinstance(text, str):
+        raise TypeError('INPUT_NOT_TEXT')
+    if len(text) > MAX_DOCUMENT_CHARS:
+        raise ValueError('INPUT_EXCEEDS_%d_CHARS' % MAX_DOCUMENT_CHARS)
+    mask = excluded_intervals(text, include_quoted)
+    cuts = _cut_points(text, mask, chunk_chars)
+    pending = [(cuts[i], cuts[i + 1]) for i in range(len(cuts) - 1)]
+    newlines = [-1] + [m.start() for m in re.finditer('\n', text)]
+    findings, chunks, incomplete = [], [], []
+    rules = None
+    while pending:
+        lo, hi = pending.pop(0)
+        part = scan_text(text[lo:hi], pack=pack, include_quoted=include_quoted, max_hits=MAX_HITS)
+        rules = part['rule_count']
+        if part['truncated'] and hi - lo > MIN_CHUNK_CHARS:
+            sub = _cut_points(text[lo:hi], excluded_intervals(text[lo:hi], include_quoted), (hi - lo) // 2)
+            pending[0:0] = [(lo + sub[i], lo + sub[i + 1]) for i in range(len(sub) - 1)]
+            continue
+        if part['truncated']:
+            incomplete.append({'start': lo, 'end': hi})
+        chunks.append({'start': lo, 'end': hi, 'finding_count': part['finding_count'],
+                       'truncated': part['truncated']})
+        for f in part['findings']:
+            f = dict(f, start=f['start'] + lo, end=f['end'] + lo)
+            line = max(bisect.bisect_left(newlines, f['start']), 1)
+            f['line'], f['column'] = line, f['start'] - newlines[line - 1]
+            findings.append(f)
+    findings.sort(key=lambda x: (x['start'], x['end'], x['id']))
+    chunks.sort(key=lambda c: c['start'])
+    cats = Counter(f['category'] for f in findings)
+    repeated = Counter(f['id'] for f in findings)
+    words = re.findall(r"\b[\w'-]+\b", text, flags=re.UNICODE)
+    return {'schema': 'wi9.hotphrases.report/1', 'owner': 'Antonio T. Smith Jr.',
+            'document_sha256': hashlib.sha256(text.encode('utf-8')).hexdigest(),
+            'rules_sha256': hashlib.sha256(Path(pack).read_bytes()).hexdigest(),
+            'word_count': len(words), 'rule_count': rules if rules is not None else len(read_rules(pack)),
+            'finding_count': len(findings),
+            'density_per_1000_words': round(1000 * len(findings) / max(1, len(words)), 2),
+            'by_category': dict(sorted(cats.items())),
+            'repeated_rule_hits': {k: n for k, n in repeated.items() if n >= 2},
+            'findings': findings, 'chunks': chunks, 'complete': not incomplete,
+            'incomplete_ranges': incomplete, 'truncated': bool(incomplete),
+            'release_authorized': False,
+            'interpretation': 'Editorial review candidates. Phrase matches do not prove machine authorship and do not demand rewriting. No detector optimization.'}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -171,16 +257,25 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         path = Path(args.input)
-        if path.stat().st_size > MAX_CHARS * 4:
+        if path.stat().st_size > MAX_DOCUMENT_CHARS * 4:
             raise ValueError('INPUT_FILE_OVERSIZE')
-        result = scan_text(path.read_text(encoding='utf-8'), pack=args.rules,
-                           include_quoted=args.include_quotes, max_hits=args.max_hits)
+        text = path.read_text(encoding='utf-8')
+        result = None
+        if len(text) <= MAX_CHARS:
+            result = scan_text(text, pack=args.rules, include_quoted=args.include_quotes, max_hits=args.max_hits)
+        # A long manuscript, or a scan that reached the cap without the reader
+        # asking for one, is scanned in chunks rather than cut off.
+        if result is None or (result['truncated'] and args.max_hits == MAX_HITS):
+            result = scan_document(text, pack=args.rules, include_quoted=args.include_quotes)
     except (OSError, ValueError, UnicodeError, TypeError) as exc:
         print(json.dumps({'status':'HOLD','error':str(exc),'release_authorized':False}))
         return 3
     if args.format == 'text':
-        print('%d rules | %d findings | %.2f / 1000 words (editorial only)' % (
-            result['rule_count'], result['finding_count'], result['density_per_1000_words']))
+        print('%d rules | %d findings | %.2f / 1000 words (editorial only)%s' % (
+            result['rule_count'], result['finding_count'], result['density_per_1000_words'],
+            ' | %d chunks' % len(result['chunks']) if 'chunks' in result else ''))
+        if result.get('truncated'):
+            print('INCOMPLETE: the scan reached its cap; findings after the cap were not listed')
         for f in result['findings']:
             print('%d:%d %s %s [%s]' % (f['line'], f['column'], f['severity'], f['excerpt'], f['id']))
             print('  %s' % f['question'])

@@ -40,10 +40,11 @@ def _hexsha(value):
 def _recomputed(text, report, pack):
     """The report must be what the scanner says about this text and rule pack.
     A hand-edited report (findings removed, digests copied) is refused."""
-    from wi9_hotphrases import scan_text, DEFAULT_PACK
+    from wi9_hotphrases import scan_text, scan_document, DEFAULT_PACK
     pack = pack or DEFAULT_PACK
     for include_quoted in (False, True):
-        fresh = scan_text(text, pack=pack, include_quoted=include_quoted)
+        fresh = (scan_document(text, pack=pack, include_quoted=include_quoted) if 'chunks' in report
+                 else scan_text(text, pack=pack, include_quoted=include_quoted))
         if fresh['rules_sha256'] == report.get('rules_sha256') and fresh['findings'] == report.get('findings'):
             return True
     return False
