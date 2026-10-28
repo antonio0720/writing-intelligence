@@ -199,7 +199,7 @@ v8.0.0 is the published release. v9 is a **preview** on PR #8 and nothing on tha
 
 Decisions already made, so they are not re-argued in review:
 
-- **The v9 manifest stays out of `plans/` until WI9-08.** `scripts/check-manifest.py` reads the manifests in `plans/`; a v9 manifest placed there early would make planned waves look like release obligations. Until integration, wave state lives in `references/v9/WAVES.yaml`, and receipts live in `plans/receipts/`.
+- **The v9 manifest is `plans/v9.manifest.yaml` (added in WI9-08).** It is the newest manifest, so it carries `core_version: 8.0.0` — the core v9 still runs on — and `version_target: 9.0.0`; tests/v7's version-alignment rule holds. No v9 wave is `shipped`. `references/v9/WAVES.yaml` repeats each wave's stage for readers, and `tests/v9/test_manifest_parity.py` fails if the two disagree. All four numbers (CLI, SKILL.md, manifest, CHANGELOG) move to 9.0.0 together in the WI9-09 release commit.
 - **The authorship dossier has its own schema version.** `schemas/v9/authorship-dossier.schema.json` is `wi9-authorship-2`; `wi9-authorship-1` dossiers are still read. A change that alters what an existing dossier means needs a new schema version, and `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
 - **Legacy log values stay readable.** The rewrite log op `variance_injected` is still read and never emitted; v9 emits `rhythm_repaired`. Reading an old value is a compatibility surface — removing it would be a MAJOR change.
 - **v9 does not touch digest preimages.** Nothing in the preview changes a v5 or v6 digest, graph root or capsule closure root. A v9 change that did would follow [digest stability](#digest-stability-is-a-compatibility-surface) like any other.

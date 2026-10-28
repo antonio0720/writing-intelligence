@@ -8,6 +8,8 @@ on:
     paths:
       - scripts/wi-authorship.py
       - scripts/wi.py
+      - plans/v9.manifest.yaml
+      - scripts/check-manifest.py
       - schemas/v9/**
       - tests/v9/**
       - references/v9/**

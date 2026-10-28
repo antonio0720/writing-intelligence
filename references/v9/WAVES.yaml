@@ -2,8 +2,8 @@
 # Owner: Antonio T. Smith Jr. Status vocabulary:
 #   PLANNED -> IN_PROGRESS -> PROTOTYPE -> VALIDATED -> SHIPPED
 # SHIPPED requires a PASS receipt, owner approval and a release; none exists.
-# This file stays outside plans/ until WI9-08 so the v7 version-alignment
-# check and the manifest checker are not handed a premature v9 manifest.
+# The status source is plans/v9.manifest.yaml; this file repeats each wave's
+# stage for readers, and tests/v9/test_manifest_parity.py fails on any drift.
 program: WI9-AUTHORSHIP
 version_target: "9.0.0"
 release_status: PROPOSED
@@ -19,7 +19,7 @@ waves:
   WI9-05: {title: Meaning-first craft repair, status: IN_PROGRESS, open: "05A doctrine repair and 05B scanner done; 05C partial; 05F-05G not run"}
   WI9-06: {title: Human-only venue hold, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "real governed workflow not exercised"}
   WI9-07: {title: Blinded editorial evaluation, status: PLANNED, open: "aggregator exists in prototypes/wi9; NOT EXECUTED, no corpus"}
-  WI9-08: {title: Canonical integration and regression, status: IN_PROGRESS, open: "done: fourth bundle writing-intelligence-authorship (46 files, verified inside the extracted artifact), release bound to the v6 grant store; open: a wi.py subcommand, the v9 manifest in plans/, API and MCP exposure"}
+  WI9-08: {title: Canonical integration and regression, status: PROTOTYPE, open: "done: plans/v9.manifest.yaml, `wi authorship {audit,release,scan}`, REST `POST /v9/authorship/audit` and `/v9/hotphrases/scan` (release refused, 403), MCP tool contracts, the fourth bundle, release bound to the operator's v6 store; open: the API container image is not built in CI, no MCP server exists in this repository (as for every WI MCP tool), and a WI9-08 receipt with a CI readback"}
   WI9-09: {title: Independent release and governance, status: PLANNED, open: "release HOLD"}
 subwaves:
   WI9-05A: {title: Meaning-led doctrine and 334-rule catalog, status: PROTOTYPE}

@@ -4,7 +4,7 @@
 
 This document specifies a REST API surface that any Writing Intelligence v3.0 conformant implementation can expose. v3.0 ships the doctrine; v3.1 ships the reference implementation.
 
-> **v9 preview note.** The v9 authorship tools (`audit`, `release`) and the phrase scanner and review ledger are **CLI-only**. They are not exposed over this API and no endpoint here accepts or returns an authorship dossier. Exposure is planned under WI9-08 (integration) and does not exist; v9 itself is a preview, not a release. A service must not imply that any endpoint checks authorship, and the declaration-only `RELEASE_ELIGIBLE` state sends nothing. See [`../../references/v9/README.md`](../../references/v9/README.md).
+> **v9 preview note.** v9 is a preview, not a release. Two v9 checks are served (see *v9 preview endpoints* below); they run the same Python tools as the CLI and never authorize anything. `release` is **not** served: it reads authority from a v6 grant store the operator names on their own machine. See [`../../references/v9/README.md`](../../references/v9/README.md).
 
 ## Base URL
 
@@ -159,6 +159,31 @@ Return the agent manifest.
 Return a specific schema.
 
 **Response (200)**: the JSON Schema document.
+
+### v9 preview endpoints
+
+Implemented in `services/api/src/routes/v9.ts` and tested in `services/api/tests/v9.test.ts`. Each runs the one Python implementation (`scripts/wi-authorship.py`, `prototypes/wi9/wi9_hotphrases.py`) with `python3 -I` inside a private temporary directory that is removed afterwards, with a time limit (`WI_V9_TIMEOUT_MS`, default 30 s). HTTP 200 means the check ran; the answer is `report.status`. `release_authorized` is always `false`. Responses: `400` invalid or oversized input (200,000-character limit), `401` no token, `503` Python unavailable, `504` time limit exceeded.
+
+#### POST /v9/authorship/audit
+
+```json
+{ "dossier": { "schema": "wi9-authorship-2", "document": { "path": "draft.txt", "...": "..." } },
+  "files": { "draft.txt": "UTF-8 text", "notes.txt": "UTF-8 text" } }
+```
+
+`files` maps plain relative paths (no `..`, no absolute paths, no leading dot, at most 50) to their text; each is written into the private directory beside `dossier.json`, and every resolved path must stay inside it. Returns `{ "exit_code": 0 | 3, "report": <wi9-authorship-audit-2>, "release_authorized": false }`.
+
+#### POST /v9/hotphrases/scan
+
+```json
+{ "text": "UTF-8 text", "include_quotes": false }
+```
+
+Returns `{ "exit_code": 0, "report": <wi9.hotphrases.report/1> }`: editorial questions with offsets and document and rule digests. A match never claims AI authorship.
+
+#### POST /v9/authorship/release
+
+Always `403 release_is_local`. Run `wi authorship release --authority-store <dir>` on the operator's machine.
 
 ## Webhooks
 

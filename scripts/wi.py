@@ -6081,6 +6081,37 @@ def cmd_why(args):
     return 0
 
 
+
+# --------------------------------------------------------------------------
+# v9 preview: authorship-claim checks, delegated to their own scripts.
+# --------------------------------------------------------------------------
+
+V9_AUTHORSHIP_TOOLS = {
+    "audit": ("scripts", "wi-authorship.py"),
+    "release": ("scripts", "wi-authorship.py"),
+    "scan": ("prototypes/wi9", "wi9_hotphrases.py"),
+}
+
+
+def cmd_authorship(args):
+    """Run a v9 preview check through the canonical CLI.
+
+    The checks live in scripts/wi-authorship.py and prototypes/wi9 so there is
+    one implementation; this subcommand finds them beside this file and passes
+    arguments and exit codes through unchanged (audit and release: 0 or 3).
+    The runtime bundle does not carry them; the authorship bundle does.
+    """
+    folder, name = V9_AUTHORSHIP_TOOLS[args.action]
+    script = Path(__file__).resolve().parent.parent / folder / name
+    if not script.is_file():
+        raise WIError("WI_INPUT_INVALID",
+                      "the v9 %s tool is not in this installation" % args.action,
+                      ["install the writing-intelligence-authorship bundle, or run from the repository"],
+                      {"expected": str(Path(folder) / name)})
+    import subprocess
+    argv = [args.action] + list(args.rest)
+    return subprocess.call([sys.executable, str(script)] + argv)
+
 def main(argv=None):
     p = argparse.ArgumentParser(
         prog="wi",
@@ -6360,6 +6391,13 @@ def main(argv=None):
     sp.add_argument("--branch")
     sp.add_argument("--json", action="store_true")
     sp.set_defaults(func=cmd_why)
+
+    sp = sub.add_parser("authorship",
+                        help="v9 preview: authorship-claim audit, release check, phrase scan")
+    sp.add_argument("action", choices=sorted(V9_AUTHORSHIP_TOOLS))
+    sp.add_argument("rest", nargs=argparse.REMAINDER,
+                    help="passed unchanged to the v9 tool, e.g. --input dossier.json")
+    sp.set_defaults(func=cmd_authorship)
 
     args = p.parse_args(argv)
     try:

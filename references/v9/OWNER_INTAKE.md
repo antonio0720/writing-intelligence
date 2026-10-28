@@ -64,4 +64,4 @@ An automated security and correctness review of the v9 code was run from a fresh
 
 ## What is not waiting on the owner
 
-Everything else in [`WAVES.yaml`](WAVES.yaml) marked open is engineering work: a `wi.py` subcommand, the v9 manifest in `plans/`, API and MCP exposure, the private vault (WI9-02) and the thought-fidelity pass (WI9-04).
+Everything else in [`WAVES.yaml`](WAVES.yaml) marked open is engineering work: the private vault (WI9-02), the thought-fidelity pass (WI9-04), and the last WI9-08 items listed there.

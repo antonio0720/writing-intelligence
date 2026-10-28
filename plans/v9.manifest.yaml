@@ -1,0 +1,126 @@
+# v9.manifest.yaml — Writing Intelligence v9 preview, WI9-AUTHORSHIP.
+#
+# Owner: Antonio T. Smith Jr. The one status source for v9. It does not replace
+# plans/v6, v7 or v8; each stays authoritative for its own waves.
+#
+# core_version is the core this program currently runs on, which is still
+# 8.0.0: tests/v7 requires the newest manifest, SKILL.md and `wi --version` to
+# name one number, and v9 has not been released. It moves to 9.0.0 only in the
+# WI9-09 release commit, together with the CLI, SKILL.md and CHANGELOG.
+#
+# `status` uses the checker's vocabulary (shipped / in_progress / planned).
+# `stage` carries the finer v9 state (PLANNED, IN_PROGRESS, PROTOTYPE,
+# VALIDATED); references/v9/WAVES.yaml repeats it for readers and
+# tests/v9/test_manifest_parity.py fails if the two disagree. No v9 wave is
+# shipped, and none may be until its receipt reads PASS, its dependencies are
+# shipped and the owner has approved the release.
+
+schema: wi.build-manifest/v1
+program: writing-intelligence-v9-authorship
+program_id: WI9-AUTHORSHIP
+horizon: 2027-06
+core_version: 8.0.0
+version_target: 9.0.0
+baseline_sha: 80e7aef88441c2f2e9eb5734b43b601924592dac
+receipts_required: true
+
+waves:
+  - id: WI9-00
+    name: Baseline and evidence audit
+    status: in_progress
+    stage: VALIDATED
+    depends_on: []
+    receipt: plans/receipts/WI9-00.json
+    exit:
+      - v4 to v8 suites and the PR #8 prototype tests reproduce at the baseline SHA
+      - every P0 defect is registered against an exact code location
+      - the owner approves the baseline
+
+  - id: WI9-01
+    name: Authorship and venue contract
+    status: in_progress
+    stage: PROTOTYPE
+    depends_on: [WI9-00]
+    receipt: plans/receipts/WI9-P0.json
+    exit:
+      - the dossier schema and checker share one vocabulary, both directions
+      - every refusal has a negative control and survives the CI mutation step
+      - the owner accepts schemas/v9/authorship-dossier.schema.json
+
+  - id: WI9-02
+    name: Firsthand material vault
+    status: planned
+    stage: PLANNED
+    depends_on: [WI9-01]
+    exit:
+      - private opt-in source storage with consent, withdrawal and redaction
+      - every autobiographical claim in the test corpus has a source or HOLDs
+
+  - id: WI9-03
+    name: Measured author voice baseline
+    status: in_progress
+    stage: PROTOTYPE
+    depends_on: [WI9-01]
+    exit:
+      - at least three consented 500-word samples per genre measured
+      - the author approves the baseline for each genre
+      - no claim that voice similarity proves authorship
+
+  - id: WI9-04
+    name: Thought fidelity and semantic integrity
+    status: planned
+    stage: PLANNED
+    depends_on: [WI9-02]
+    exit:
+      - zero silent protected-meaning changes in the fixtures
+      - the author can accept or reject every material semantic delta
+
+  - id: WI9-05
+    name: Meaning-first craft repair
+    status: in_progress
+    stage: IN_PROGRESS
+    depends_on: [WI9-00]
+    exit:
+      - no doctrine instruction targets a detector score, guarded by tests/v9
+      - a blinded pilot prefers v9 with no loss of claim preservation
+
+  - id: WI9-06
+    name: Human-only venue hold
+    status: in_progress
+    stage: PROTOTYPE
+    depends_on: [WI9-01]
+    receipt: plans/receipts/WI9-P0.json
+    exit:
+      - every prohibited path is refused with a reason code
+      - release authority is read from the operator's v6 store, never the dossier
+      - a real governed workflow is exercised
+
+  - id: WI9-07
+    name: Blinded editorial evaluation
+    status: planned
+    stage: PLANNED
+    depends_on: [WI9-03, WI9-04, WI9-05, WI9-06]
+    exit:
+      - 60 consented cases rated blind by reviewers who did not build v9
+      - criteria fixed before any score is seen; failures reported
+
+  - id: WI9-08
+    name: Canonical integration and regression
+    status: in_progress
+    stage: PROTOTYPE
+    depends_on: [WI9-01, WI9-06]
+    exit:
+      - the v9 tools ship in a bundle that verifies itself when extracted
+      - wi authorship runs the v9 checks from the canonical CLI
+      - the REST runtime exposes audit and scan; release stays local to the operator
+      - v4 to v9 suites pass at one SHA on every supported Python
+
+  - id: WI9-09
+    name: Independent release and governance
+    status: planned
+    stage: PLANNED
+    depends_on: [WI9-07, WI9-08]
+    exit:
+      - a person who did not build v9 reviews the code, receipts and program
+      - the owner approves the release in writing
+      - CLI, SKILL.md, this manifest and CHANGELOG move to 9.0.0 together
