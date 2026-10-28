@@ -304,7 +304,7 @@ Every accepted contribution is acknowledged in `CHANGELOG.md`. Operators who con
 
 ## Contributing to v9 (authorship and venue checks — preview, not released)
 
-v9 is proposed on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); 8.0.0 is the release. Read [`references/v9/README.md`](references/v9/README.md), [`defects.md`](references/v9/defects.md) and [`WAVES.yaml`](references/v9/WAVES.yaml) first. The checker is `scripts/wi-authorship.py`; the reference kernel is `prototypes/wi9/`; the contract is `schemas/v9/authorship-dossier.schema.json`. Tests: `python3 -m unittest discover -s tests/v9 -p 'test_*.py'`, plus `bash tests/v7/test_wi7.sh` and `python3 scripts/check-links.py`.
+v9 is proposed on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); 8.0.0 is the release. Read [`references/v9/README.md`](references/v9/README.md), [`defects.md`](references/v9/defects.md) and [`WAVES.yaml`](references/v9/WAVES.yaml) first. The checker is `scripts/wi-authorship.py`; the reference kernel is `prototypes/wi9/`; the contract is `schemas/v9/authorship-dossier.schema.json`. Tests: `bash scripts/test-v9.sh` (or `python3 -m unittest discover -s tests/v9` and `-s prototypes/wi9/tests`), plus `bash tests/v7/test_wi7.sh` and `python3 scripts/check-links.py`.
 
 - **Every refusal gets a negative-control test.** A new HOLD code, venue rule or file-boundary check ships with a case that must be refused *and* a twin that must pass, so a check that refuses everything (or nothing) is caught. A guard that has only ever passed certifies nothing.
 - **Show the guard can fail.** Disable the check, watch the suite go red, restore it. If a mutation escapes, add the case that isolates it before you rely on the guard (the grant-expiry mutation in [`defects.md`](references/v9/defects.md) escaped once; a case was added). Record the mutation in the PR.
@@ -315,6 +315,10 @@ v9 is proposed on [PR #8](https://github.com/antonio0720/writing-intelligence/pu
 - **Declarations stay declarations.** Do not add a state named VERIFIED, "authenticated" or "human-certified". Reports keep `declaration_status: self_reported`.
 - **Keep the schema and the checker on one vocabulary.** `tests/v9/test_schema_parity.py` fails if they drift; change both in one PR. `wi9-authorship-1` dossiers must still be read, and old `variance_injected` log entries must still validate.
 - **Receipts, not narrative.** A wave moves state only with a receipt carrying the command, the result, a negative control and an independent readback. No PR marks a wave `SHIPPED` or changes a version string; that is WI9-09 and the owner's decision. Do not claim benchmark results, quality scores or editor validation — the WI9-07 benchmark has not run.
+- **Never commit anybody's material.** Voice samples, vault items, ledgers and review records belong to the writer and live in their own folders outside the repository; `tests/v9/test_no_shipped_voice_corpus.py` fails if a `voice.json`, `vault.json`, `ledger.jsonl` or `voice-review-*.json` is tracked. Fixtures are synthetic text written for the test.
+- **Decisions are bound to a grant.** A new review or acceptance path records through the ledger under the person's v6 grant; a typed name is never authority. Model output is data: it can never authorize, approve or declare authorship.
+- **Fail closed off POSIX.** New file-reading code goes through `prototypes/wi9/wi9_fs.py` or `safe_read`, refuses with `PLATFORM_UNSUPPORTED` where `O_NOFOLLOW`/`dir_fd` are absent, and is covered by `tests/v9/test_platform_refusal.py`.
+- **Add your mutation to CI.** A new guard gets a line in the mutation step of `.github/workflows/wi9-proposal.yml`, so the job fails if the guard can be disabled without the suite noticing.
 - **Do not edit** the historical v4–v8 law texts, `release/RELEASE_NOTES_v*.md`, or `PATENTS.md` as part of v9 work.
 
 ## License

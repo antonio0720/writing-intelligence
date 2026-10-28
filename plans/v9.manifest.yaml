@@ -49,8 +49,9 @@ waves:
 
   - id: WI9-02
     name: Firsthand material vault
-    status: planned
-    stage: PLANNED
+    status: in_progress
+    stage: PROTOTYPE
+    receipt: plans/receipts/WI9-U1.json
     depends_on: [WI9-01]
     exit:
       - private opt-in source storage with consent, withdrawal and redaction
@@ -70,8 +71,9 @@ waves:
 
   - id: WI9-04
     name: Thought fidelity and semantic integrity
-    status: planned
-    stage: PLANNED
+    status: in_progress
+    stage: PROTOTYPE
+    receipt: plans/receipts/WI9-U1.json
     depends_on: [WI9-02]
     exit:
       - zero silent protected-meaning changes in the fixtures

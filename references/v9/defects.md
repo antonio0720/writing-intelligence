@@ -66,10 +66,22 @@ A separate reviewer with no context from the build read the code and ran its own
 
 Not reproduced and left open: `decided_at` is self-declared, so "the grant was active when they decided" proves the declared time fell inside the window, not when the decision really happened.
 
+## Closed since the independent review (2026-10-28)
+
+| ID | Was open | Now | Guard |
+|---|---|---|---|
+| D-18 | A phrase decision carried a typed reviewer name anyone could type | Decisions come from the review ledger, recorded only under the reviewer's own v6 grant (human, in scope), re-read at decision time and now; a typed name alone holds `REVIEWER_UNBOUND` | `prototypes/wi9/tests/test_wi9_ledger.py`; CI mutation |
+| D-19 | A scan stopped at its 500th match, in rule order, so a long manuscript silently lost everything after the cap | Chunked scan to 20 million characters with global offsets; a capped chunk is halved and rescanned; only a pathological chunk is named incomplete | `test_wi9_chunked_scan.py`; CI mutation |
+| D-20 | Windows behaviour was assumed, not tested | The checker, vault and ledger refuse with `PLATFORM_UNSUPPORTED` where `O_NOFOLLOW`/`dir_fd` are absent; proven on a Windows runner and, on POSIX, by removing the flags | `tests/v9/test_platform_refusal.py`; CI `windows` job |
+| D-21 | Nothing caught a plan written up as done, a changed number or a reversed opinion between a writer's text and a revision | `wi authorship meaning` lists every such delta for the writer's grant-bound decision | `test_wi9_meaning.py` (18 fixtures, each with an unchanged twin); CI mutation |
+| D-22 | No private store for a writer's firsthand material; a first-person claim could rest on nothing | `wi authorship vault`, with consent, redaction, withdrawal and a claim check | `test_wi9_vault.py`; CI mutation |
+
 ## Open — not repaired, stated rather than hidden
 
-- Authorship remains self-declared by design. No tool here can authenticate a writer.
+- Authorship remains self-declared by design. No tool here can authenticate a writer, and a v6 grant shows who was authorized, not who typed a decision.
 - Claim discovery depends on the v4 classifier; sentences it calls rhetoric are not checked, and semantic entailment is not implemented.
-- No Windows file-safety strategy; the checkers refuse to run there.
+- The meaning diff is lexical. It finds the places meaning most often moves (numbers, dates, negation, stance and cause words, hedges, quotations, first person); a paraphrase that changes meaning without touching any of them can pass it.
+- The vault holds material in plain files under a 0700 folder; it is not encrypted at rest, and multi-user identity is out of scope.
+- Windows is refused, not supported.
 - The phrase scanner's Markdown masking is heuristic and Python `re` has no timeout; only reviewed local rule packs are accepted.
-- No consented author corpus, no 60-case benchmark, no external review: WI9-03, WI9-07 and WI9-09 have not run.
+- No real writer's samples, no 60-case benchmark, no external human review: WI9-03's real-writer run, WI9-07 and WI9-09 have not happened, and nothing here substitutes for them.

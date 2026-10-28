@@ -6,6 +6,8 @@
 **Scope:** Original v9 engineering handoff preserved below, expanded with a fully executable experimental local reference kernel, 334-rule editorial hot-phrase corpus, source-constrained composition interfaces, digest-bound review, 81 passing local tests, attack surfaces, implementation steps and release criteria.  
 **Releases:** v8 remains the published baseline; v9 prototype only. The local reference implementation is supplied separately in a ZIP and has **not** been pushed into PR #8.  
 
+> **Status update, 2026-10-28.** This handoff is preserved as written. Since it was written: the reference kernel is integrated into PR #8; P0-01–P0-12 and review findings R-01–R-15 are repaired; WI9-08 has a PASS receipt; and the per-writer tools it asks for are built as PROTOTYPE — the firsthand vault (WI9-02), the meaning diff (WI9-04), structure checks (WI9-05C), deeper voice measures with a held-out check (WI9-05F), review decisions bound to the reviewer's own v6 grant, chunked scanning, a bring-your-own-model connector and CI on macOS and Windows. Still open, and not to be met by code: real writers' samples, the 60-case blinded benchmark (WI9-07) and an independent review (WI9-09). Current status: [`README.md`](README.md), [`WAVES.yaml`](WAVES.yaml), [`defects.md`](defects.md).
+
 ---
 
 # WRITING INTELLIGENCE v9 — COMPLETE ENGINEERING HANDOFF

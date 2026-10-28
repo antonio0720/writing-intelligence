@@ -7,11 +7,21 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 ---
 
-## [Unreleased] — v9 proposal (PR #8), not released
+## [Unreleased] — v9 preview (PR #8), not released
 
-v8.0.0 remains the release. Nothing below changes a version string or ships in a tagged release; each item is PROTOTYPE or IN_PROGRESS in `references/v9/WAVES.yaml`.
+v9 is the current preview line; v8.0.0 remains the release, and the version moves to 9.0.0 only with WI9-09 (real writers' samples, the 60-case blinded benchmark, an independent review and the owner's decision). Nothing below changes a version string or ships in a tagged release; each item is PROTOTYPE or IN_PROGRESS in `references/v9/WAVES.yaml`.
 
 - **Voice baselines belong to each writer (WI9-03).** `wi authorship voice` measures a writer's own samples in their own private folder, and `wi authorship voice-review` records that writer's approve or reject decision there, bound to the exact samples and never overwritten. v9 ships no voice corpus and needs none from the owner; `tests/v9/test_no_shipped_voice_corpus.py` fails if one is committed. Guide: `references/v9/VOICE_BASELINE.md`.
+
+### Added — per-writer tools (2026-10-28)
+- **`wi authorship vault` (WI9-02)** — each writer's own firsthand material in a private 0700 folder, refused inside any git working tree: items carry consent and a knowledge label (`observed`, `said_by_author`, `measured`, `sourced`, `inferred`, `hypothetical`, `planned`); `redact` and `withdraw` delete the earlier bytes; a hash-chained event log records digests, never text; `check` holds first-person claims with no anchored source, plans written up as done, model-written anecdotes, edited transcripts used as quotes, conflicting dated accounts and claims from another project
+- **`wi authorship meaning` (WI9-04)** — a thought inventory and a sentence-by-sentence meaning diff that lists every material change between a writer's text and a revision (numbers, dates, plan→done, estimate→exact, negation, stance, cause, outcome, hedge, concession, chronology, quotation, dropped and new claims); `review` reaches REVIEW only when the writer accepted every delta under a grant whose capability covers it and every new first-person sentence is anchored in their vault
+- **`wi authorship ledger`** — review decisions recorded only under the reviewer's own v6 grant (human, in scope), append-only and hash-chained with explicit supersession, every grant re-read at decision time and now; `phrase-review` reads it and holds a typed reviewer name alone as `REVIEWER_UNBOUND`
+- **Deeper voice measures (WI9-05F)** — qualifiers, intensifiers, disagreement, concrete detail and argument strategy in every profile; a held-out stability check per measure; `wi authorship voice-compare`; near-copies of one passage refused as samples (`VOICE_SAMPLES_TOO_SIMILAR`)
+- **`wi authorship structure` (WI9-05C)** — repeated openings, hollow contrasts (left alone when either side is concrete), template paragraphs, three-item lists and restatement, each an editorial question with an exact span
+- **Chunked phrase scanning** — manuscripts up to 20 million characters scanned in chunks cut at paragraph breaks outside code and quotations, with whole-document offsets, instead of stopping at 500 findings
+- **`wi authorship compose`** — bring your own model: venue policy and evidence gates run before any model is reached; the writer's program runs with no shell, a deadline, an output cap and only the key variable they name; best result `DRAFT_REVIEW_REQUIRED`, `ai_generated`, `release_authorized: false`
+- **CI on macOS and Windows** — the v9 suite runs on macOS; on Windows the checker, vault and ledger are proven to refuse with `PLATFORM_UNSUPPORTED` (`tests/v9/test_platform_refusal.py`); a second mutation step disables thirteen of the new guards one at a time
 
 ### Added
 - **`scripts/wi-authorship.py release`** — checks a reviewed submission against a person's decision bound to the exact draft digest, an unexpired authority grant covering release and the named venue, and a venue contract recording submission as open. Returns `RELEASE_ELIGIBLE` or `HOLD`; transmits nothing

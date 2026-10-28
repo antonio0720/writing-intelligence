@@ -37,16 +37,19 @@ Exit codes across all four: `0` analysis ran or mechanical-only pass, `2` malfor
 
 ---
 
-## v9 preview (proposed, not released)
+## v9 preview — the current preview line (proposed, not released)
 
 8.0.0 is the release. v9 (program WI9-AUTHORSHIP, [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8)) is a preview and is on HOLD until WI9-09; do not describe it as shipped, and report no benchmark or quality result for it (the WI9-07 benchmark has not run). When a task touches **authorship, venue rules, evidence, voice or cadence**, apply these rules and use the v9 tools from the repository:
 
 - **Source before style.** Author notes, transcripts and drafts come first. Never write an "I did / I saw" scene the author has not supplied; a hypothetical stays labeled hypothetical, and a roadmap is not a completed build.
 - **Venue contract first.** Read the venue's rule before drafting. For a **human-only** venue, produce research briefs and interview prompts only — no AI-written or AI-rewritten pitch, reply or essay for submission, even if the person will press send.
 - **Evidence by anchor.** Check a draft's consequential claims with `python3 scripts/wi-authorship.py audit --input dossier.json` (REVIEW exit 0 / HOLD exit 3) and a person's release decision with `… release …` (RELEASE_ELIGIBLE / HOLD). Both check **self-reported declarations**; neither authenticates a writer, proves a source true, or sends anything. REVIEW is never permission to send.
-- **Voice is evidence.** A voiceprint comes from consented, human-authored samples (3+, 500+ words each, per genre), reviewed by the author. Resemblance to a voice never changes a declared origin.
+- **Firsthand material comes from the writer's own vault.** Before writing any first-person sentence, check it against the writer's private vault (`wi authorship vault check --root <their vault> --claims claims.json`). A `planned`, `hypothetical` or `inferred` item, or a model-written one, never supports "I did"; a quote needs a verbatim record. If nothing anchors it, ask the writer or leave it out.
+- **Meaning is the writer's.** After any revision, run `wi authorship meaning diff --original <theirs> --candidate <yours>` and show the writer every delta (numbers, dates, plan→done, estimate→exact, negation, stance, cause, outcome, hedge, concession, chronology, quotation, dropped or new claims). Never present a revision as faithful while a delta is undecided; only the writer accepts or rejects, under their own grant.
+- **Voice is evidence.** A voice baseline comes from the writer's own samples (3+, 500+ words each, per genre) in their own private folder, reviewed by that writer (`voice`, `voice-review`); `voice-compare` shows drift. No corpus ships with v9. Resemblance to a voice never changes a declared origin and never proves authorship.
 - **Cadence follows thought.** Repair rhythm (`repair_rhythm`) because the thought changes shape, never to move an AI-detector number. Detector scores are never a target, a gate or a claim; no typos, quotas or "human-looking" noise.
-- **Phrase findings are questions.** `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE` flags editorial questions (334 rules); the author decides, via the review ledger (`wi9_phrase_review.py`). A match is never proof of AI authorship and never triggers an automatic rewrite.
+- **Phrase and shape findings are questions.** `wi authorship scan` (334 rules, long files in chunks) and `wi authorship structure` (repeated openings, hollow contrasts, template paragraphs) flag editorial questions; the writer decides, recorded in their own grant-bound ledger (`wi authorship ledger`, `phrase-review`). A match is never proof of AI authorship and never triggers an automatic rewrite.
+- **A model is the writer's choice, after the gates.** `wi authorship compose` reaches a model only after the venue policy and evidence checks, and only the program and key variable the writer names. Its best result is a draft that needs the writer's review; it is `ai_generated` and never release.
 
 Index: `references/v9/README.md` · defects: `references/v9/defects.md` · waves: `references/v9/WAVES.yaml` · dossier contract: `schemas/v9/authorship-dossier.schema.json`.
 

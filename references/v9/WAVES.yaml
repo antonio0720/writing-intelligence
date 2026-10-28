@@ -13,10 +13,10 @@ note: "No wave is SHIPPED. VALIDATED means a PASS receipt exists; owner approval
 waves:
   WI9-00: {title: Baseline and evidence audit, status: VALIDATED, receipt: plans/receipts/WI9-00.json, open: "owner approval of the baseline"}
   WI9-01: {title: Authorship and venue contract, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "owner acceptance of schemas/v9/authorship-dossier.schema.json"}
-  WI9-02: {title: Firsthand material vault, status: PLANNED, open: "only experience_state typing exists; no private vault, redaction or consent withdrawal"}
-  WI9-03: {title: Measured author voice baseline, status: PROTOTYPE, open: "per-user voice and voice-review shipped in wi authorship; no corpus ships by design; not yet exercised by a real writer on their own samples"}
-  WI9-04: {title: Thought fidelity and semantic integrity, status: PLANNED, open: "thought inventory and semantic diff not built"}
-  WI9-05: {title: Meaning-first craft repair, status: IN_PROGRESS, open: "05A doctrine repair and 05B scanner done; 05C partial; 05F-05G not run"}
+  WI9-02: {title: Firsthand material vault, status: PROTOTYPE, receipt: plans/receipts/WI9-U1.json, open: "wi authorship vault built for every writer (consent, labels, redaction, withdrawal, claim check); no real writer's material has been run through it; not encrypted at rest"}
+  WI9-03: {title: Measured author voice baseline, status: PROTOTYPE, open: "per-user voice, voice-review and voice-compare with a held-out stability check; no corpus ships by design; not yet exercised by a real writer on their own samples"}
+  WI9-04: {title: Thought fidelity and semantic integrity, status: PROTOTYPE, receipt: plans/receipts/WI9-U1.json, open: "wi authorship meaning inventory, lexical diff and grant-bound review built; the diff is lexical, not semantic; fixtures are synthetic"}
+  WI9-05: {title: Meaning-first craft repair, status: IN_PROGRESS, open: "05A-05F built; 05G independent reader trial not run"}
   WI9-06: {title: Human-only venue hold, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "real governed workflow not exercised"}
   WI9-07: {title: Blinded editorial evaluation, status: PLANNED, open: "aggregator exists in prototypes/wi9; NOT EXECUTED, no corpus"}
   WI9-08: {title: Canonical integration and regression, status: VALIDATED, receipt: plans/receipts/WI9-08.json, open: "the API container image is not built in CI; no MCP server exists in this repository (as for every WI MCP tool); owner approval"}
@@ -24,8 +24,8 @@ waves:
 subwaves:
   WI9-05A: {title: Meaning-led doctrine and 334-rule catalog, status: PROTOTYPE}
   WI9-05B: {title: Portable editorial scan CLI with digests and offsets, status: PROTOTYPE}
-  WI9-05C: {title: Repetition and structural diagnostics, status: IN_PROGRESS}
-  WI9-05D: {title: Author false-positive judgments bound to digests, status: PROTOTYPE}
+  WI9-05C: {title: Repetition and structural diagnostics, status: PROTOTYPE, receipt: plans/receipts/WI9-U1.json}
+  WI9-05D: {title: Author judgments bound to digests and to the reviewer's v6 grant, status: PROTOTYPE, receipt: plans/receipts/WI9-U1.json}
   WI9-05E: {title: Source-based composition contract, status: PROTOTYPE}
-  WI9-05F: {title: Meaning, causality and voice evaluator, status: PLANNED}
+  WI9-05F: {title: Meaning, causality and voice evaluator, status: PROTOTYPE, receipt: plans/receipts/WI9-U1.json}
   WI9-05G: {title: Independent reader preference trial, status: PLANNED}

@@ -1,11 +1,12 @@
-# v9 Examples — Authorship Provenance (PROPOSED, preview)
+# v9 Examples — Authorship Provenance and Meaning (preview, not released)
 
-**Status:** v9 is a proposal on PR #8, not a release; v8.0.0 is the published version. These two worked examples exercise `scripts/wi-authorship.py`, an authorship-claim **declaration checker**. It tests whether declarations are complete and consistent. It does not verify who wrote anything.
+**Status:** v9 is a proposal on PR #8, not a release; v8.0.0 is the published version. The worked examples exercise `scripts/wi-authorship.py`, an authorship-claim **declaration checker**. It tests whether declarations are complete and consistent. It does not verify who wrote anything.
 
 **Everything here is synthetic.** The author, the "Synthetic Reporter Desk" venue, the notes and the drafts were written for this teaching page. No real person, publication, study or statistic appears. The terminal output was produced by running the commands below against the files in this folder on 2026-10-27; the document digests are a record of those files and you will get the same values only if the files are unchanged.
 
 - [`01-human-only-venue-hold.md`](01-human-only-venue-hold.md) — a venue that accepts only human-written pitches meets a draft whose own log says an assistant rewrote it. The checker holds (exit 3). Nothing is sent and nothing is rewritten.
 - [`02-claim-coverage.md`](02-claim-coverage.md) — a draft with one sourced sentence and two unsourced ones. One safe anchor does not carry the other two. Cutting them yields REVIEW (exit 0), which is still not permission to send.
+- [`03-meaning-diff.md`](03-meaning-diff.md) — a smoother revision that turns an estimate exact, a plan into a completed build and adds an outcome nobody stated. `wi authorship meaning diff` lists all six changes for the writer to decide (exit 3).
 
 Fixture files (each example folder is self-contained):
 
@@ -13,6 +14,7 @@ Fixture files (each example folder is self-contained):
 |---|---|
 | `venue-hold/` | `dossier.json`, `draft.txt`, `notes.txt` |
 | `claim-coverage/` | `dossier.json`, `draft.txt`, `notes.txt`, `dossier-cut.json`, `draft-cut.txt` |
+| `meaning/` | `original.txt`, `revised.txt` |
 
 ## What these examples do not show
 

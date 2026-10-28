@@ -4,7 +4,7 @@
 
 This document specifies a Model Context Protocol server surface for Writing Intelligence v3.0. Clients (Claude Desktop, Claude Code, custom agents) consume the tools to embed v3.0 capability in their workflows.
 
-> **v9 preview note.** v9 is a preview, not a release. Two v9 tools are specified below (`wi9_authorship_audit`, `wi9_hotphrase_scan`); like every tool here they are a contract for an MCP adapter, and their behaviour is implemented and tested in the REST runtime's v9 endpoints. There is deliberately no release tool. See [`../../references/v9/README.md`](../../references/v9/README.md).
+> **v9 preview note.** v9 is a preview, not a release. Two v9 tools are specified below (`wi9_authorship_audit`, `wi9_hotphrase_scan`); like every tool here they are a contract for an MCP adapter, and their behaviour is implemented and tested in the REST runtime's v9 endpoints. There is deliberately no release tool. Not served, on purpose: the per-writer tools (`vault`, `ledger`, `meaning review`, `voice`, `voice-review`, `voice-compare`, `compose`) read and write a writer's private folders and grants on their own machine, so they run only through the local CLI (`wi authorship ...`). See [`../../references/v9/README.md`](../../references/v9/README.md).
 
 ## Server Name
 

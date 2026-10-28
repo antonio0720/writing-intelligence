@@ -1,6 +1,6 @@
-# Writing Intelligence v8 — User Guide
+# Writing Intelligence v9 (preview) — User Guide
 
-The day-to-day manual for the Sovereign Meaning Runtime.
+The day-to-day manual for the Sovereign Meaning Runtime, the v8 Story Intelligence engines and the v9 preview's authorship tools. The published release is 8.0.0; v9 is the preview line on PR #8.
 
 **Laws:** [`references/v6/CONSTITUTION.md`](references/v6/CONSTITUTION.md) · **v5 laws, still binding:** [`references/v5/CONSTITUTION.md`](references/v5/CONSTITUTION.md) · **One page:** [`CHEATSHEET.md`](CHEATSHEET.md) · **Install:** [`docs/INSTALL.md`](docs/INSTALL.md) · **Craft kernel, unchanged:** [`SKILL.md`](SKILL.md) · **v8 Story Intelligence:** [`references/v8/README.md`](references/v8/README.md) · **v9 preview:** [`references/v9/README.md`](references/v9/README.md)
 
@@ -12,13 +12,14 @@ Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO,
 
 ## What changed for you in v9 (preview — not released)
 
-8.0.0 is the release; v9 is open as [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8) and its release is on HOLD until WI9-09. Overview: [`references/v9/README.md`](references/v9/README.md).
+8.0.0 is the release; v9 is the current preview line, open as [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8), and its release is on HOLD until WI9-09. Overview: [`references/v9/README.md`](references/v9/README.md).
 
-- **Nothing you already run changed.** Every v4–v8 command, exit code and digest is the same. The v9 tools are new, optional and separate files.
-- **Two new things you can run:** `scripts/wi-authorship.py` (`audit`, `release`) checks a dossier of *your own* declarations against your draft, your notes and a venue's rules; `prototypes/wi9/` holds an experimental phrase scanner with a review ledger.
-- **They check declarations, not people.** Nothing here can tell who wrote a passage. `REVIEW` means the limited checks passed; it is not permission to send.
+- **Nothing you already run changed.** Every v4–v8 command, exit code and digest is the same. The v9 tools are new and optional, and all of them are reachable as `wi authorship <tool>`.
+- **Everything is yours and stays on your machine.** v9 ships no voice samples, no notes and no model. You build your own voice baseline from your own writing, keep your firsthand material in your own private vault, and record decisions under your own grant. Nothing is uploaded or committed, and the private stores refuse to live inside a git repository.
+- **New in this preview:** a private firsthand vault (`vault`), a meaning diff that lists every change a revision makes to what you meant (`meaning`), review decisions bound to your v6 grant (`ledger`, `phrase-review`), deeper voice measures with a held-out check and `voice-compare`, shape checks (`structure`), long manuscripts scanned in chunks, and a bring-your-own-model connector (`compose`) whose best result is a draft you must review.
+- **They check declarations and meaning, not people.** Nothing here can tell who wrote a passage. `REVIEW` means the limited checks passed; it is not permission to send.
 - **One doctrine repair you may notice:** the craft library no longer asks for sentence-length quotas, synonym swaps or "unpredictability". The retired v8 length-quota operator is now `repair_rhythm`. Old logs with `variance_injected` still validate.
-- **Not run yet:** the 60-case editorial benchmark (WI9-07), a consented author voice corpus (WI9-03) and an external review (WI9-09). See [`ROADMAP.md`](ROADMAP.md).
+- **Not run yet:** a real writer's run of the voice tools on their own samples (WI9-03), the 60-case editorial benchmark (WI9-07) and an independent review (WI9-09). See [`ROADMAP.md`](ROADMAP.md).
 
 ## Authorship and venue checks (v9 preview)
 
@@ -73,11 +74,16 @@ A human-only venue is a hard stop for AI-written or AI-rewritten submissions, ev
 The scanner flags phrases that often signal templated writing. A match is a question, not a verdict.
 
 ```bash
-python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format json > scan.json
-python3 prototypes/wi9/wi9_phrase_review.py --input draft.txt --report scan.json --decisions decisions.json
+wi authorship scan --input draft.txt > scan.json
+wi authorship ledger record --ledger ~/wi9-private/ledger --authority-store ~/wi-authority \
+  --actor you --kind phrase --target "$(shasum -a 256 draft.txt | cut -c1-64)" \
+  --item "empty_emphasis_001@0:12" --decision retain_as_written \
+  --rationale "The late payment in the same sentence is the specific."
+wi authorship phrase-review --input draft.txt --report scan.json \
+  --ledger ~/wi9-private/ledger --authority-store ~/wi-authority
 ```
 
-For each finding you record a disposition — `retain_as_written`, `revise_for_clarity`, `needs_source` or `not_applicable` — with a rationale, your name and the review date (offset-aware ISO 8601, not in the future). The ledger binds to the exact document and rule-pack digests, so editing the draft invalidates it. Revise because the *thought* is vague or unsupported, not to remove a phrase. Quotes and code are masked by default; add `--include-quotes` to scan them.
+For each finding you record a disposition — `retain_as_written`, `revise_for_clarity`, `needs_source` or `not_applicable` — with a rationale. The item is the finding's `rule_id@start:end`. A decision is written to your ledger only after your v6 grant store shows you hold `claim.accept.wording_only` (or a capability covering it) as a human; the ledger refuses a store kept inside the ledger folder. To change your mind, record a new decision with `--supersedes <entry hash>`; the earlier one stays on record. A typed reviewer name on its own now holds `REVIEWER_UNBOUND`. The review binds to the exact document and rule-pack digests, so editing the draft invalidates it. Revise because the *thought* is vague or unsupported, not to remove a phrase. Quotes and code are masked by default; add `--include-quotes` to scan them. A manuscript longer than one scan's cap is scanned in chunks with whole-document offsets; if a pathological stretch still hits the cap, the report says `complete: false` and names the range.
 
 ### 6. When release applies
 
@@ -89,9 +95,51 @@ python3 scripts/wi-authorship.py release --input dossier/dossier.json --authorit
 
 `RELEASE_ELIGIBLE` (exit 0) means those declarations are on file and consistent. It transmits nothing, and it does not prove you wrote the piece. If you edit the draft afterwards the decision goes stale (`DECISION_TARGET_STALE`). Authority comes from the v6 grant store, not from the dossier: a grant revoked or expired since you decided holds the release.
 
+### 7. Keep your firsthand material in your own vault
+
+A first-person sentence ("I rebuilt the roof", "we measured 312 visitors") should rest on something you recorded. The vault is a private folder for that material, on your machine, outside any repository.
+
+```bash
+wi authorship vault init  --root ~/wi9-private/vault --project harbour-essay
+wi authorship vault add   --root ~/wi9-private/vault --file notes/2026-03-02.txt --id n1 \
+  --label observed --kind note --valid-at 2026-03-02 --consent
+wi authorship vault check --root ~/wi9-private/vault --claims claims.json
+```
+
+Label each item honestly: `observed`, `said_by_author`, `measured` or `sourced` can support a claim that something happened; `planned`, `hypothetical` and `inferred` cannot. Mark a transcript `--verbatim` only if it is unedited, because only a verbatim record can back a direct quotation. `claims.json` (`wi9.vault-claims/1`) names your project and lists claims, each with `evidence: [{item, excerpt}]`. `check` holds a first-person claim with no source (`CLAIM_NEEDS_SOURCE`), a plan written up as done (`PLANNED_AS_DONE`), a model-written anecdote (`EVIDENCE_MODEL_GENERATED`), an edited transcript used as a quote (`QUOTE_NOT_VERBATIM`), two dated accounts that disagree (`CONFLICTING_ACCOUNTS`), and claims from another project (`VAULT_PROJECT_MISMATCH`). `redact --id --start --end --reason` and `withdraw --id` delete the earlier bytes; `list` shows labels and digests, never text.
+
+### 8. Check that a revision still says what you meant
+
+```bash
+wi authorship meaning diff --original mine.txt --candidate revised.txt      # exit 3 if anything changed
+wi authorship meaning review --original mine.txt --candidate revised.txt \
+  --ledger ~/wi9-private/ledger --authority-store ~/wi-authority \
+  --vault ~/wi9-private/vault --claims claims.json
+```
+
+`diff` lists each material change as a delta with a question: a number or date changed, a plan reads as done, an estimate reads as exact, a negation flipped, your opinion reversed, a cause added, removed or changed, an outcome invented, a hedge or concession dropped, before became after, a quotation altered, a sentence of yours dropped, a new first-person or factual sentence added. Decide each one in your ledger with `--kind meaning --target <pair_sha256> --item <delta id> --decision accept|reject`; a changed quantity needs `claim.accept.quantity_change`. `review` reaches REVIEW only when you accepted every delta and every new first-person sentence matches an anchored claim in your vault. The comparison is lexical: it catches where meaning most often moves, and a paraphrase that changes meaning without touching a number, negation, stance, cause, hedge or quotation can still slip past it.
+
+### 9. Measure your own voice
+
+Follow [`references/v9/VOICE_BASELINE.md`](references/v9/VOICE_BASELINE.md): three or more of your own pieces of 500+ words, one genre, in a private folder with a `voice.json`. `wi authorship voice` measures them, including how you argue (qualifiers, disagreement, examples, reasons, concessions) and a held-out check that names any measure your own samples do not agree on. `voice-review` records your approval or rejection, bound to the exact samples. `voice-compare --text draft.txt` shows where a draft drifts from you. Matching your baseline proves nothing about who wrote a text.
+
+### 10. Ask about shape
+
+`wi authorship structure --input draft.txt` asks about repeated sentence openings, contrasts whose two sides are both abstractions, paragraphs poured into one mould, three-item lists on every page, and restated sentences. A contrast with a real number, date or place in it is left alone. Nothing is rewritten.
+
+### 11. Use your own model, if you want one
+
+```bash
+export MY_MODEL_KEY=...        # your key, in your environment, never in a file you commit
+wi authorship compose --input compose.json --provider-cmd /abs/path/to/your-model-program \
+  --key-env MY_MODEL_KEY --consent-to-send
+```
+
+Your program reads one JSON request on stdin and writes one `wi9.candidate/1` JSON on stdout. The venue policy and your evidence are checked first, so a human-only or unknown venue never reaches the model; your program runs with no shell, a deadline, an output cap and only the key variable you named. The best result is `DRAFT_REVIEW_REQUIRED`, marked `ai_generated`; `release_authorized` is always false. Then run step 8 against your own text.
+
 ### What v9 does not do
 
-It does not authenticate a writer, verify that a source is true, judge entailment, run a detector, rewrite your prose, or work on Windows (the file reader fails closed without POSIX `O_NOFOLLOW`). The benchmark that would measure whether any of this helps editors (WI9-07) has not run.
+It does not authenticate a writer, verify that a source is true, judge entailment, understand meaning (the diff is lexical), run a detector, rewrite your prose, or encrypt your vault. On Windows it refuses by name (`PLATFORM_UNSUPPORTED`) because the safe file reader needs POSIX `O_NOFOLLOW`. The benchmark that would measure whether any of this helps writers and editors (WI9-07) has not run, and no independent person has reviewed it yet (WI9-09).
 
 ## What changed for you in v8
 

@@ -1,4 +1,4 @@
-# Writing Intelligence v8
+# Writing Intelligence v9 — Authentic Voice & Authorship Provenance (preview)
 
 [![Release](https://img.shields.io/github/v/release/antonio0720/writing-intelligence?label=release&color=0b7285)](https://github.com/antonio0720/writing-intelligence/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0b7285)](LICENSE)
@@ -12,7 +12,7 @@ This one does all four, offline, with no model running, and can prove it to some
 
 **Free. Open source. MIT. No account, no server, no API key, no telemetry. Forever.**
 
-*Release status: **8.0.0** is the published release. A **v9 preview** (authorship and venue checks) is proposed on PR #8 and is not released — see [below](#writing-intelligence-v9--preview-on-pr-8-not-released).*
+*Release status: **v9 is the current preview line** (draft [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8)): every tool below runs today, offline, on your own machine. **The published release is still 8.0.0** and the version number does not move to 9.0.0 until real writers' samples, the 60-case blinded benchmark and an independent review exist — see [where v9 stands](#writing-intelligence-v9--preview-on-pr-8-not-released). v8's Story Intelligence (below) is unchanged.*
 
 Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO, [Density6 LLC](https://densitysix.com)
 
@@ -22,27 +22,34 @@ Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO,
 
 ## Writing Intelligence v9 — preview on PR #8, not released
 
-**8.0.0 is the release.** v9 (program WI9-AUTHORSHIP, owner Antonio T. Smith Jr.) is open as draft [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8). It is **proposed, not shipped**, and the release is on HOLD until the final wave (WI9-09: independent review and the owner's release decision). Nothing in v4–v8 changed behaviour. Its aim: keep the author's real experience, positions, voice and evidence intact, and enforce a venue's authorship rules — without fabricated anecdotes and without detector evasion.
+**What v9 is for.** Every writer keeps what is actually theirs — their experience, their positions, their numbers, their voice — through every edit, and a venue's authorship rules are enforced before anything is sent. v9 never invents a first-person scene, never adds noise to look human, and never treats an AI-detector score as a target, a gate or a claim. It is program WI9-AUTHORSHIP (owner Antonio T. Smith Jr.), open as draft [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8). **Proposed, not shipped**: the release stays on HOLD until WI9-09, an independent review and the owner's decision. Nothing in v4–v8 changed behaviour.
 
-**What exists on the branch** (all of it experimental and reviewable):
+**Everything here is for every writer, on their own machine.** v9 ships no voice corpus, no firsthand material and no model. Each person builds their own baseline from their own samples, keeps their own notes in their own private vault, and records their own decisions under their own grant. A test fails if any of that is ever committed.
 
-| Piece | What it is | Where |
-|---|---|---|
-| **Authorship-claim declaration checker** | `scripts/wi-authorship.py audit \| release`. Checks self-reported origin, consent and contribution history for consistency with each other and with the venue; holds human-only submissions that declare AI prose or unlisted assistance; requires every consequential claim the v4 classifier finds to overlap an anchored span of a pinned source; binds a person's release decision and authority grant to the exact draft digest. `REVIEW` (exit 0) is never permission to send; `RELEASE_ELIGIBLE` (exit 0) is never proof of human authorship; `HOLD` is exit 3; nothing is transmitted. Every report says `declaration_status: self_reported`. | [`scripts/wi-authorship.py`](scripts/wi-authorship.py) · [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `-1` still read) |
-| **Experimental reference kernel** | A 334-rule editorial phrase scanner (321 literal, 13 regex, 11 categories; every match is an editorial question, never an AI verdict), a human review ledger bound to exact document and rule digests, voice-sample statistics, and a model-neutral composition contract that refuses to request prose for human-only venues and never reaches a release state. | [`prototypes/wi9/`](prototypes/wi9/README.md) |
-| **Doctrine repair** | The v8 craft library no longer prescribes sentence-length quotas, synonym swaps or other edits aimed at detector statistics. `repair_rhythm` replaces the retired v8 length-quota operator; rhythm is judged by a reader, not a statistic. | [`references/v9/defects.md`](references/v9/defects.md) (P0-12, D-14) |
-| **Records** | Defect register, wave states, editorial protocol, blinded-benchmark design, engineering handoff, receipts. | [`references/v9/README.md`](references/v9/README.md) · [`defects.md`](references/v9/defects.md) · [`WAVES.yaml`](references/v9/WAVES.yaml) · [`EDITORIAL_PROTOCOL.md`](references/v9/EDITORIAL_PROTOCOL.md) · [`QUALITY_BENCHMARK.md`](references/v9/QUALITY_BENCHMARK.md) · [`ENGINEERING_HANDOFF.md`](references/v9/ENGINEERING_HANDOFF.md) · [`plans/receipts/WI9-00.json`](plans/receipts/WI9-00.json), [`WI9-P0.json`](plans/receipts/WI9-P0.json) |
+| Tool (`wi authorship …`) | What it does for you |
+|---|---|
+| `audit`, `release` | Checks a submission's self-declared origin, consent and contribution history against each other and the venue; holds a human-only submission that declares AI prose; requires every consequential claim to rest on an exact span of a pinned source. `release` additionally needs a person's decision bound to the exact draft and that person's v6 grant from a store the operator names. `REVIEW` is never permission to send; `RELEASE_ELIGIBLE` is never proof of authorship; nothing is transmitted. |
+| `vault` | Your private firsthand material: notes, transcripts, dated drafts, interviews, each labelled `observed`, `said_by_author`, `measured`, `sourced`, `inferred`, `hypothetical` or `planned`, with consent. Redact or withdraw at any time; the bytes are deleted. `check` holds any first-person claim with no anchored source, and refuses a plan written up as done or a model-written anecdote. |
+| `meaning` | Compares your text with a revision and lists every material change in meaning for you to accept or reject: a changed number or date, a plan described as done, an estimate turned exact, a reversed opinion, a moved or invented cause or outcome, a dropped hedge or concession, an altered quotation, a new first-person sentence. Nothing reaches REVIEW until you decided every one. |
+| `ledger`, `phrase-review` | Your review decisions, recorded only under your own v6 grant and never overwritten; a later decision supersedes an earlier one in the open. A typed reviewer name on its own holds. |
+| `voice`, `voice-review`, `voice-compare` | Your voice measured from at least three of your own 500-word samples: sentence length, vocabulary, first person, and how you argue (qualifiers, disagreement, examples, reasons, concessions). A held-out check names any measure your own samples do not agree on. `voice-compare` shows where a draft drifts from you — and says plainly that matching proves nothing about who wrote it. |
+| `scan`, `structure` | 334 editorial phrase rules and five shape checks (repeated openings, hollow contrasts, template paragraphs, three-item lists, restatement), each an editorial question with an exact span. Long manuscripts are scanned in chunks, not cut off. |
+| `compose` | Bring your own model. Venue policy and evidence run first, so a human-only venue never reaches a model; your program gets only the key variable you name; the best result is a draft that needs your review, marked `ai_generated`. |
 
 ```bash
-python3 scripts/wi-authorship.py audit   --input dossier.json   # REVIEW (0) or HOLD (3)
-python3 scripts/wi-authorship.py release --input dossier.json --authority-store ~/wi-authority   # RELEASE_ELIGIBLE (0) or HOLD (3); sends nothing
-python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format text
-python3 -m unittest discover -s tests/v9 -p 'test_*.py'
+python3 scripts/wi.py authorship audit   --input dossier.json                      # REVIEW (0) or HOLD (3)
+python3 scripts/wi.py authorship release --input dossier.json --authority-store ~/wi-authority
+python3 scripts/wi.py authorship vault init  --root ~/wi9-private/vault --project my-essay
+python3 scripts/wi.py authorship vault check --root ~/wi9-private/vault --claims claims.json
+python3 scripts/wi.py authorship meaning diff --original mine.txt --candidate revised.txt
+python3 scripts/wi.py authorship voice --root ~/wi9-private/voice/essay --input voice.json
+python3 scripts/wi.py authorship scan --input draft.txt --format text
+bash scripts/test-v9.sh                                                             # the v9 regression
 ```
 
-**Where the waves stand** ([`WAVES.yaml`](references/v9/WAVES.yaml)): WI9-00 baseline VALIDATED (owner approval pending) · WI9-01 authorship contract PROTOTYPE · WI9-02 firsthand vault PLANNED · WI9-03 voice baseline PROTOTYPE (statistics only, no consented corpus) · WI9-04 thought fidelity PLANNED · WI9-05 craft repair IN_PROGRESS · WI9-06 human-only venue hold PROTOTYPE · WI9-07 blinded editorial benchmark PLANNED — **not executed** · WI9-08 canonical integration VALIDATED — receipt WI9-08 (manifest, `wi authorship`, REST audit and scan, fourth bundle, v6-bound release) · WI9-09 independent review PLANNED. Roadmap view: [`ROADMAP.md`](ROADMAP.md). How to walk through it: [`USER_GUIDE.md`](USER_GUIDE.md#authorship-and-venue-checks-v9-preview).
+**Where the waves stand** ([`WAVES.yaml`](references/v9/WAVES.yaml), the status source is [`plans/v9.manifest.yaml`](plans/v9.manifest.yaml)): WI9-00 baseline VALIDATED · WI9-01 authorship contract PROTOTYPE · WI9-02 firsthand vault PROTOTYPE · WI9-03 voice baseline PROTOTYPE · WI9-04 meaning fidelity PROTOTYPE · WI9-05 craft repair IN_PROGRESS (05G reader trial not run) · WI9-06 human-only venue hold PROTOTYPE · WI9-07 blinded editorial benchmark PLANNED — **not executed** · WI9-08 canonical integration VALIDATED · WI9-09 independent review PLANNED. A wave moves only on a PASS receipt with a CI readback ([`plans/receipts/`](plans/receipts/)). Full detail: [`references/v9/README.md`](references/v9/README.md) · walkthrough: [`USER_GUIDE.md`](USER_GUIDE.md#authorship-and-venue-checks-v9-preview) · defects: [`references/v9/defects.md`](references/v9/defects.md).
 
-**What v9 does not do.** It cannot authenticate who wrote a passage or show a source is true; an exact excerpt is a text anchor, not entailment. It reports no quality scores or benchmark results — none exist. It has no consented author corpus and no external review yet, and runs only on POSIX. Release authority is read from the local v6 grant store, which proves what was granted to whom — not who typed the decision.
+**What v9 does not do.** It cannot authenticate who wrote a passage or show that a source is true; an exact excerpt is a text anchor, not entailment, and a v6 grant shows who was authorized, not who typed a decision. The meaning diff is lexical, not semantic. It reports no quality scores or benchmark results — none exist yet. It has run on no real writer's samples and had no independent human review. It needs POSIX file safety: on Windows it refuses by name. The vault is not encrypted at rest.
 
 **AI-detector scores are never a target, a gate or a claim.** An external detector result may be archived as an observation and nothing more.
 
@@ -84,7 +91,7 @@ v3 governs *how well* the writing is built. v4 governs *what may be claimed abou
 
 Seven identifications. Each has a mechanism behind it and a failure code when it is absent.
 
-**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines)**
+**Lineage:** v1.0 (7-pass compiler) → v2.0 (Fiction Intelligence Engine) → v3.0 (11-pass governed kernel) → v4.0 (accountability layer) → v5.0 (semantic identity, dependency graph, proof-carrying release) → v6.0 (executable meaning — branches, authority, simulation, conflict-preserving merge) → v7.0 (Institutional Intelligence — authentic authorship, receipt-governed program) → **v8.0 (Story Intelligence — 340 fiction requirements across four offline engines)** → *v9 preview (Authentic Voice & Authorship Provenance — PR #8, not released)*
 
 ---
 
@@ -479,7 +486,7 @@ Law C — *never report work not done* — applies to this project's claims abou
 
 **Executable today, offline, with no model:** the whole v4 floor (`preserve` · `scan-sources` · `extract-claims` · `verify` · `gate`); the whole v5 graph (`init` · `ingest` · `atomize` · `anchor` · `graph` · `impact` · `diff` · `test` · `explain` · `bundle` · `verify-release` · `doctor`); and the sixteen v6 commands (`canon` · `branch` · `propose` · `proposals` · `simulate` · `decide` · `commit` · `log` · `merge` · `conflicts` · `authority` · `obligations` · `as-of` · `constraints` · `capsule` · `why`).
 
-**Executable as a v9 preview, offline, with no model (not released):** `scripts/wi-authorship.py` (`audit` · `release`) and the reference kernel in `prototypes/wi9/` (`wi9_hotphrases.py scan`, `wi9_phrase_review.py`, `wi9_core.py`). They check declarations and flag editorial questions; they do not authenticate a writer, verify sources, rewrite prose or run a detector. The 60-case benchmark (WI9-07) has not run.
+**Executable as a v9 preview, offline, with no model (not released):** `wi authorship audit · release · vault · meaning · ledger · phrase-review · voice · voice-review · voice-compare · scan · structure · compose`, implemented once in `scripts/wi-authorship.py` and `prototypes/wi9/`. They check declarations, hold unsourced first-person claims and silent meaning changes, and flag editorial questions; they do not authenticate a writer, verify sources, rewrite prose or run a detector. `compose` calls only a model program you name. The 60-case benchmark (WI9-07) has not run.
 
 **Executable in v8, offline, with no model:** `scripts/wi-fiction.py` (`validate` · `audit` · `gate` · `text-signals` · `explain-rule` · `catalog`), `scripts/wi-arc.py` (`validate` · `evaluate` · `gate` · `as-of` · `impact` · `diff` · `classify` · `rules`), `extensions/wi8/craft03/scripts/wi-craft.py` (`evaluate` · `validate` · `as-of` · `gate` · `rules` · `schema`) and `extensions/wi8/japan04/cli/wi8_japan.py` (`check` · `preflight` · `init` · `draft-save` · `draft-read` · `draft-propose` · `draft-decide` · `draft-history` · `publish-preview` · `migration-preview` · `studio` · `untrusted-scan`). They read a typed JSON projection of a story; **they do not read a whole manuscript, judge literary quality, recruit readers, or certify cultural accuracy** — those are planned waves in [`plans/v8.manifest.yaml`](plans/v8.manifest.yaml).
 
@@ -590,8 +597,8 @@ packs/story/              The story bundle's SKILL.md
 references/v9/            v9 preview: README, defect register, WAVES.yaml, editorial protocol, benchmark design, handoff
 scripts/wi-authorship.py  v9 preview: authorship-claim declaration checker (audit, release)
 schemas/v9/               v9 preview: authorship-dossier schema (wi9-authorship-2)
-prototypes/wi9/           v9 preview: phrase scanner, review ledger, composition contract, reference kernel
-tests/v9/                 v9 preview: authorship, schema-parity and doctrine tests
+prototypes/wi9/           v9 preview: firsthand vault, meaning diff, review ledger, voice, structure, chunked scan, model connector
+tests/v9/                 v9 preview: authorship, schema-parity, doctrine and platform-refusal tests
 references/v7/            The Institutional Intelligence program and RFC-0001
 references/v6/            The sovereign meaning runtime (24 documents)
   CONSTITUTION              The eighteen laws, the twelve runtime layers, the failure codes
@@ -691,3 +698,5 @@ Two companion files sit beside the licence and neither of them narrows it. [`NOT
 ---
 
 *v1.0 proved AI-sounding prose can be defeated by compilation instead of cosmetic cleanup. v2.0 proved fiction can be engineered as a living architecture. v3.0 proved authorship can be governed without being flattened. v4.0 proved it can be held accountable. v5.0 proved it can be inspected by someone who has no reason to trust you. **v6.0 proves it can be changed — by several people, across time, under authority — without anybody losing track of what is still true.***
+
+*The v9 preview is working to show that a writer can keep what is theirs — experience, numbers, positions and voice — through every edit, without anyone pretending a machine wrote like a person. Until real writers, a blinded benchmark and an independent reviewer have tested that, it is a preview and says so.*

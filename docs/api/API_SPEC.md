@@ -4,7 +4,7 @@
 
 This document specifies a REST API surface that any Writing Intelligence v3.0 conformant implementation can expose. v3.0 ships the doctrine; v3.1 ships the reference implementation.
 
-> **v9 preview note.** v9 is a preview, not a release. Two v9 checks are served (see *v9 preview endpoints* below); they run the same Python tools as the CLI and never authorize anything. `release` is **not** served: it reads authority from a v6 grant store the operator names on their own machine. See [`../../references/v9/README.md`](../../references/v9/README.md).
+> **v9 preview note.** v9 is a preview, not a release. Two v9 checks are served (see *v9 preview endpoints* below); they run the same Python tools as the CLI and never authorize anything. `release` is **not** served: it reads authority from a v6 grant store the operator names on their own machine. Not served, on purpose: the per-writer tools (`vault`, `ledger`, `meaning review`, `voice`, `voice-review`, `voice-compare`, `compose`) read and write a writer's private folders and grants on their own machine, so they run only through the local CLI (`wi authorship ...`). See [`../../references/v9/README.md`](../../references/v9/README.md).
 
 ## Base URL
 

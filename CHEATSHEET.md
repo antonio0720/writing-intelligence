@@ -1,4 +1,4 @@
-# Writing Intelligence v8 — Cheatsheet
+# Writing Intelligence v9 (preview) — Cheatsheet
 
 One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [`references/v6/`](references/v6/CONSTITUTION.md) · [`references/v5/`](references/v5/CONSTITUTION.md) · v8: [`references/v8/README.md`](references/v8/README.md) · v9 preview: [`references/v9/README.md`](references/v9/README.md) · install: [`docs/INSTALL.md`](docs/INSTALL.md)
 
@@ -8,17 +8,24 @@ One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [
 
 ## v9 preview — authorship and venue checks (PROPOSED, not released)
 
-8.0.0 is the release. v9 is a preview on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); the release is on HOLD until WI9-09. Nothing below changes a v4–v8 command. Detail: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md) · waves: [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml) · schema: [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
+8.0.0 is the release. v9 is the current preview line on [PR #8](https://github.com/antonio0720/writing-intelligence/pull/8); the release is on HOLD until WI9-09. Nothing below changes a v4–v8 command. Detail: [`references/v9/README.md`](references/v9/README.md) · defects: [`references/v9/defects.md`](references/v9/defects.md) · waves: [`references/v9/WAVES.yaml`](references/v9/WAVES.yaml) · schema: [`schemas/v9/authorship-dossier.schema.json`](schemas/v9/authorship-dossier.schema.json).
 
 | Command | Does | Exit |
 |---|---|---|
-| `python3 scripts/wi.py authorship {audit,release,scan} ...` | the same three v9 checks through the canonical CLI; arguments and exit codes pass through | as below |
+| `python3 scripts/wi.py authorship <tool> ...` | every v9 tool through the canonical CLI (`audit release vault meaning ledger phrase-review voice voice-review voice-compare scan structure compose`); arguments and exit codes pass through | as below |
+| `wi authorship vault init\|add\|redact\|withdraw\|list\|check --root MY_VAULT ...` | **your own** firsthand material, private (0700, never inside a repository); `add --label observed\|said_by_author\|measured\|sourced\|inferred\|hypothetical\|planned --consent`; `check --claims claims.json` holds unsourced first-person claims | `0` done/REVIEW · `3` HOLD |
+| `wi authorship meaning diff --original MINE --candidate REVISED` | every material change in meaning (numbers, dates, plan→done, estimate→exact, negation, stance, cause, outcome, hedge, concession, chronology, quotation, dropped or new claims) | `0` none · `3` deltas |
+| `wi authorship meaning review ... --ledger L --authority-store S [--vault V --claims C]` | REVIEW only when you accepted every delta under a covering grant and every new first-person sentence is anchored in your vault | `0` REVIEW · `3` HOLD |
+| `wi authorship ledger record\|verify --ledger L --authority-store S ...` | your review decisions, recorded only under your own v6 grant (human, in scope); append-only, `--supersedes HASH` to change your mind | `0` · `3` HOLD |
+| `wi authorship phrase-review --input F --report R.json --ledger L --authority-store S` | phrase findings reviewed from your ledger; a typed reviewer name alone holds `REVIEWER_UNBOUND` | `0` REVIEW · `3` HOLD |
+| `wi authorship voice-compare --root MY_FOLDER --input voice.json --text DRAFT` | where a draft drifts from your own baseline; matching proves nothing about authorship | `0` |
+| `wi authorship structure --input FILE` | repeated openings, hollow contrasts, template paragraphs, three-item lists, restatement — questions with spans | `0` |
+| `wi authorship compose --input C.json --provider-cmd /ABS/PROGRAM [--key-env NAME] --consent-to-send` | your own model, after the venue and evidence gates; best result `DRAFT_REVIEW_REQUIRED`, `ai_generated`, never release | `0` draft · `3` HOLD |
 | `python3 scripts/wi.py authorship voice --root MY_FOLDER --input voice.json` | measure **your own** voice from your own samples, kept in your own private folder; no samples ship with v9 ([guide](references/v9/VOICE_BASELINE.md)) | `0` REVIEW · `3` HOLD |
 | `python3 scripts/wi.py authorship voice-review --root MY_FOLDER --input voice.json --decision approve\|reject [--note T]` | record your own decision about your own baseline, bound to those exact samples, in that folder | `0` approved · `3` rejected or HOLD |
 | `python3 scripts/wi-authorship.py audit --input dossier.json [--out R.json]` | limited checks on a self-reported dossier | `0` REVIEW · `3` HOLD |
 | `python3 scripts/wi-authorship.py release --input dossier.json --authority-store STORE [--out R.json]` | is a person's bound release decision on file? Transmits nothing | `0` RELEASE_ELIGIBLE · `3` HOLD |
-| `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE [--format text\|json] [--include-quotes]` | 334 editorial rules (321 literal, 13 regex, 11 categories); offsets, line/column, document and rule sha256 | `0` ran |
-| `python3 prototypes/wi9/wi9_phrase_review.py --input F --report R.json --decisions D.json` | review ledger bound to the exact document and rule digests | validation result |
+| `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE [--format text\|json] [--include-quotes]` | 334 editorial rules (321 literal, 13 regex, 11 categories); offsets, line/column, document and rule sha256; long files scanned in chunks (`complete`, `chunks`) | `0` ran |
 | `python3 prototypes/wi9/wi9_core.py preflight\|plan\|diagnose\|voice\|benchmark …` | reference kernel (`preflight` is the older specimen; `wi-authorship.py` wins on disagreement) | see its README |
 | `python3 prototypes/wi9/wi9_composition.py` | model-neutral composition contract; refuses `human_only` venues; best state `DRAFT_REVIEW_REQUIRED` | library |
 
@@ -66,7 +73,9 @@ Required: `schema`, `document` (`path`, `origin`, `venue_policy`, `intended_use`
 | `SUPPORT_UNRESOLVED` | a reviewer marked evidence `needs_source` / `conflicted` (HOLD for a strict-arena submission) |
 | `DECISION_TARGET_STALE` · `AUTHORITY_UNBOUND` · `AUTHORITY_DENIED` · `AUTHORITY_EXPIRED` · `AUTHORITY_REVOKED` · `AUTHORITY_GRANT_SCOPE_EXCEEDED` · `SUBMIT_NOT_PERMITTED` | (release) decision names another digest; grant only declared in the dossier; no v6 grant, or expired, revoked, or for another venue; venue contract does not list `submit` |
 
-**Phrase scan.** A match is an editorial *question* — never proof of AI authorship, never an automatic rewrite. Dispositions in the review ledger: `retain_as_written` · `revise_for_clarity` · `needs_source` · `not_applicable`. A valid ledger means *reviewed*, not approved.
+**Phrase scan.** A match is an editorial *question* — never proof of AI authorship, never an automatic rewrite. Dispositions in the review ledger: `retain_as_written` · `revise_for_clarity` · `needs_source` · `not_applicable`, each recorded under your own grant (`claim.accept.wording_only`). A valid review means *reviewed*, not approved.
+
+**Your private stores.** Voice samples, vault and ledger live in folders you choose outside any repository; v9 ships none and a test fails if one is committed. On Windows they refuse with `PLATFORM_UNSUPPORTED`.
 
 **Never do (v9)**
 
@@ -76,7 +85,7 @@ Required: `schema`, `document` (`path`, `origin`, `venue_policy`, `intended_use`
 - Never ask for a pitch or reply for a **human-only** venue. Produce a research brief and interview prompts only; the person writes the submission.
 - Never read `REVIEW` or `RELEASE_ELIGIBLE` as "human wrote this". They check declarations.
 
-v9 wave states: WI9-00 VALIDATED (owner approval pending) · 01 PROTOTYPE · 02 PLANNED · 03 PROTOTYPE · 04 PLANNED · 05 IN_PROGRESS · 06 PROTOTYPE · 07 PLANNED (benchmark not run) · 08 PLANNED · 09 PLANNED.
+v9 wave states: WI9-00 VALIDATED (owner approval pending) · 01 PROTOTYPE · 02 PROTOTYPE · 03 PROTOTYPE · 04 PROTOTYPE · 05 IN_PROGRESS (05G not run) · 06 PROTOTYPE · 07 PLANNED (benchmark not run) · 08 VALIDATED · 09 PLANNED. The version stays 8.0.0 until WI9-09.
 
 ---
 

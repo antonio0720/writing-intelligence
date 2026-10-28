@@ -74,8 +74,9 @@ STANCE_NEG = re.compile(r"\b(?:oppose|opposes|disagree|disagrees|against|reject|
                         r"wrong|worse|worst|bad idea|shouldn['’]t|fails|hurts|mistake)\b", re.I)
 CAUSE = re.compile(r"\b(?:because|due to|caused|causes|cause|led to|leads to|lead to|resulted in|"
                    r"results in|as a result|therefore|thus|so that|drove|drives|owing to|thanks to)\b", re.I)
-CONCESSION = re.compile(r"\b(?:although|though|admittedly|granted|to be fair|even so|still|"
-                        r"on the other hand|that said|while)\b", re.I)
+# "still" and "while" are left out: they are far more often time words than concessions.
+CONCESSION = re.compile(r"\b(?:although|though|admittedly|granted|to be fair|even so|"
+                        r"on the other hand|that said|even if)\b", re.I)
 BEFORE = re.compile(r"\b(?:before|earlier|prior to|first|until)\b", re.I)
 AFTER = re.compile(r"\b(?:after|later|afterwards|subsequently|following|then)\b", re.I)
 OUTCOME = re.compile(r"\b(?:doubled|tripled|halved|increased|decreased|grew|fell|rose|boosted|saved|won|"

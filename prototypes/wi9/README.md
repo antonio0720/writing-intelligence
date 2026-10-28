@@ -37,18 +37,36 @@ python3 wi9_hotphrases.py scan --input examples/sample_essay.txt --format json >
 python3 wi9_hotphrases.py scan --input examples/sample_essay.txt --include-quotes --format text
 ```
 
-Reports carry original code-point offsets and 1-based lines/columns, a SHA-256 of the document and rule pack, repeated-rule counts, and a truncation flag. Quotes, URLs, code spans and code fences are masked by default. Masking is heuristic and legitimate phrases can be flagged: the human author or editor must decide whether to retain them.
+Reports carry original code-point offsets and 1-based lines/columns, a SHA-256 of the document and rule pack, repeated-rule counts, and a truncation flag; a long file is scanned in chunks (`chunks`, `complete`) rather than cut off. Quotes, URLs, code spans and code fences are masked by default. Masking is heuristic and legitimate phrases can be flagged: the human author or editor must decide whether to retain them.
 
 ## Human editorial-review ledger
 
-`wi9_phrase_review.py` checks a reviewer decision against the exact unchanged document and rule pack. A decision must name a finding, its original offset and excerpt, its disposition and rationale, the declared reviewer, and the review date. A valid decision means *reviewed*, never publication-approved. The reader/reviewer name in the JSON is a self-declaration, not independent identity verification.
+`wi9_phrase_review.py` checks reviewer decisions against the exact unchanged document and rule pack: each names a finding, its original offset and excerpt, its disposition and rationale, and the review time. Since 2026-10-28 a decision counts only when it comes from the review ledger (`wi9_ledger.py`), recorded under the reviewer's own v6 grant; a typed reviewer name on its own holds `REVIEWER_UNBOUND`. A valid review means *reviewed*, never publication-approved, and a grant shows who was authorized, not who typed the decision. The bundled `examples/sample_hotphrases.review.json` carries a typed name and therefore shows that HOLD:
 
 ```bash
 python3 wi9_hotphrases.py scan --input examples/sample_hotphrases.txt \
   --format json > /tmp/sample_hotphrases.scan.json
 python3 wi9_phrase_review.py --input examples/sample_hotphrases.txt \
   --report /tmp/sample_hotphrases.scan.json \
-  --decisions examples/sample_hotphrases.review.json
+  --decisions examples/sample_hotphrases.review.json        # HOLD: REVIEWER_UNBOUND:0
+python3 wi9_phrase_review.py --input examples/sample_hotphrases.txt \
+  --report /tmp/sample_hotphrases.scan.json \
+  --ledger ~/wi9-private/ledger --authority-store ~/wi-authority   # REVIEW once you recorded each finding
 ```
 
-Use `python3 -m unittest discover -s tests -p 'test_*.py' -q` for the **84** observed passing local unit tests (81 delivered + 3 added for D-15). These tests are not a blinded writing-quality study. The complete engineering handoff is included as a separate Markdown artifact outside this folder.
+## Per-writer tools added after the ZIP (2026-10-28)
+
+Every one works on the writer's own material on their own machine and is reachable as `wi authorship <tool>` from the repository root.
+
+| Module | Tool | What |
+|---|---|---|
+| `wi9_fs.py` | — | shared private-file rules: POSIX only (`PLATFORM_UNSUPPORTED` elsewhere), 0700 folders, never inside a git working tree, 0600 files, `O_NOFOLLOW`, `O_EXCL` for records that must not be overwritten |
+| `wi9_vault.py` | `vault` | WI9-02 firsthand vault: consented, labelled items; redaction and withdrawal delete bytes; digest-only event log; `check` holds unsourced first-person claims |
+| `wi9_ledger.py` | `ledger` | review decisions recorded under the reviewer's v6 grant; append-only, hash-chained, explicit supersession; grants re-read then and now |
+| `wi9_meaning.py` | `meaning` | WI9-04 thought inventory, lexical meaning diff, grant-bound review with vault anchoring for new first-person sentences |
+| `wi9_structure.py` | `structure` | WI9-05C repeated openings, hollow contrasts, template paragraphs, triads, restatement |
+| `wi9_core.py` | `voice`, `voice-review`, `voice-compare` | WI9-05F measures (qualifiers, intensifiers, disagreement, concrete detail, argument strategy), held-out stability, drift against the writer's own baseline, near-copy refusal |
+| `wi9_hotphrases.py` | `scan` | `scan_document`: chunked scanning to 20 million characters with whole-document offsets |
+| `wi9_provider.py` | `compose` | bring-your-own-model connector, gated by `wi9_composition.py`; best result `DRAFT_REVIEW_REQUIRED` |
+
+Use `python3 -m unittest discover -s tests -p 'test_*.py' -q` for the local unit tests (**189** at 2026-10-28; 84 at the ZIP plus D-15). They are synthetic-fixture tests, not a blinded writing-quality study and not evidence of any writer's experience. The complete engineering handoff is [`references/v9/ENGINEERING_HANDOFF.md`](../../references/v9/ENGINEERING_HANDOFF.md).
