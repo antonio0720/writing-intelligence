@@ -63,6 +63,15 @@ class WiAuthorship(unittest.TestCase):
             self.assertEqual(0, reviewed.returncode, reviewed.stdout[-400:])
             self.assertEqual(1, len(list(root.glob("voice-review-*.json"))))
 
+    def test_vault_subcommands_pass_through(self):
+        with tempfile.TemporaryDirectory() as d:
+            vault = str(Path(d) / "vault")
+            made = run("authorship", "vault", "init", "--root", vault, "--project", "p")
+            self.assertEqual(0, made.returncode, made.stdout[-400:])
+            held = run("authorship", "vault", "check", "--root", vault, "--claims", str(Path(d) / "absent.json"))
+            self.assertEqual(3, held.returncode)
+            self.assertIn("CLAIMS_NOT_FILE", held.stdout)
+
     def test_absent_tools_are_named_not_crashed(self):
         with tempfile.TemporaryDirectory() as d:
             (Path(d) / "scripts").mkdir()

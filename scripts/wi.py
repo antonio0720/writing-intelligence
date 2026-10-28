@@ -6092,7 +6092,12 @@ V9_AUTHORSHIP_TOOLS = {
     "scan": ("prototypes/wi9", "wi9_hotphrases.py"),
     "voice": ("prototypes/wi9", "wi9_core.py"),
     "voice-review": ("prototypes/wi9", "wi9_core.py"),
+    "vault": ("prototypes/wi9", "wi9_vault.py"),
 }
+
+# Tools with their own subcommands (`wi authorship vault add ...`): the action
+# names the tool and the next word is passed through as its subcommand.
+V9_AUTHORSHIP_GROUPS = {"vault"}
 
 
 def cmd_authorship(args):
@@ -6111,7 +6116,7 @@ def cmd_authorship(args):
                       ["install the writing-intelligence-authorship bundle, or run from the repository"],
                       {"expected": str(Path(folder) / name)})
     import subprocess
-    argv = [args.action] + list(args.rest)
+    argv = ([] if args.action in V9_AUTHORSHIP_GROUPS else [args.action]) + list(args.rest)
     return subprocess.call([sys.executable, str(script)] + argv)
 
 def main(argv=None):
@@ -6395,7 +6400,7 @@ def main(argv=None):
     sp.set_defaults(func=cmd_why)
 
     sp = sub.add_parser("authorship",
-                        help="v9 preview: authorship-claim audit, release check, phrase scan")
+                        help="v9 preview: authorship audit and release, phrase scan, voice, private vault")
     sp.add_argument("action", choices=sorted(V9_AUTHORSHIP_TOOLS))
     sp.add_argument("rest", nargs=argparse.REMAINDER,
                     help="passed unchanged to the v9 tool, e.g. --input dossier.json")
