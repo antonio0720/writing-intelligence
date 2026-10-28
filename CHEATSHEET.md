@@ -13,6 +13,8 @@ One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [
 | Command | Does | Exit |
 |---|---|---|
 | `python3 scripts/wi.py authorship {audit,release,scan} ...` | the same three v9 checks through the canonical CLI; arguments and exit codes pass through | as below |
+| `python3 scripts/wi.py authorship voice --root MY_FOLDER --input voice.json` | measure **your own** voice from your own samples, kept in your own private folder; no samples ship with v9 ([guide](references/v9/VOICE_BASELINE.md)) | `0` REVIEW · `3` HOLD |
+| `python3 scripts/wi.py authorship voice-review --root MY_FOLDER --input voice.json --decision approve\|reject [--note T]` | record your own decision about your own baseline, bound to those exact samples, in that folder | `0` approved · `3` rejected or HOLD |
 | `python3 scripts/wi-authorship.py audit --input dossier.json [--out R.json]` | limited checks on a self-reported dossier | `0` REVIEW · `3` HOLD |
 | `python3 scripts/wi-authorship.py release --input dossier.json --authority-store STORE [--out R.json]` | is a person's bound release decision on file? Transmits nothing | `0` RELEASE_ELIGIBLE · `3` HOLD |
 | `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE [--format text\|json] [--include-quotes]` | 334 editorial rules (321 literal, 13 regex, 11 categories); offsets, line/column, document and rule sha256 | `0` ran |

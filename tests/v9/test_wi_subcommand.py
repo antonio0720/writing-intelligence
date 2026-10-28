@@ -44,6 +44,25 @@ class WiAuthorship(unittest.TestCase):
         self.assertEqual(0, proc.returncode)
         self.assertIn("334 rules", proc.stdout)
 
+    def test_any_user_builds_and_reviews_their_own_voice_baseline(self):
+        import json
+        sys.path.insert(0, str(REPO / "prototypes" / "wi9"))
+        from wi9_core import sha256
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            samples = []
+            for i in range(3):
+                (root / ("s%d.txt" % i)).write_text(" ".join(["Synthetic line %d.%d for the test." % (i, j) for j in range(90)]))
+                samples.append({"id": "s%d" % i, "path": "s%d.txt" % i, "genre": "essay", "origin": "human_authored",
+                                "consent": True, "sha256": sha256((root / ("s%d.txt" % i)).read_bytes())})
+            (root / "voice.json").write_text(json.dumps({"samples": samples}))
+            built = run("authorship", "voice", "--root", d, "--input", "voice.json")
+            self.assertEqual(0, built.returncode, built.stdout[-400:])
+            self.assertIn("baseline_digest", built.stdout)
+            reviewed = run("authorship", "voice-review", "--root", d, "--input", "voice.json", "--decision", "approve")
+            self.assertEqual(0, reviewed.returncode, reviewed.stdout[-400:])
+            self.assertEqual(1, len(list(root.glob("voice-review-*.json"))))
+
     def test_absent_tools_are_named_not_crashed(self):
         with tempfile.TemporaryDirectory() as d:
             (Path(d) / "scripts").mkdir()

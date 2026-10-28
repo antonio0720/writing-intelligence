@@ -6090,6 +6090,8 @@ V9_AUTHORSHIP_TOOLS = {
     "audit": ("scripts", "wi-authorship.py"),
     "release": ("scripts", "wi-authorship.py"),
     "scan": ("prototypes/wi9", "wi9_hotphrases.py"),
+    "voice": ("prototypes/wi9", "wi9_core.py"),
+    "voice-review": ("prototypes/wi9", "wi9_core.py"),
 }
 
 

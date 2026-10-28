@@ -25,7 +25,7 @@ The trigger was an AI-generated three-part essay about miniature worlds: the con
 
 ## What exists on this branch
 
-All of it is experimental and reviewable; none of it is a release. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md). What only the owner can supply — consented voice samples, the 60-case benchmark material and reviewers, an independent human reviewer — and the exact commands that run on it: [`OWNER_INTAKE.md`](OWNER_INTAKE.md).
+All of it is experimental and reviewable; none of it is a release. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md). What only the owner can supply — the 60-case benchmark material and reviewers, an independent human reviewer — and the exact commands that run on it: [`OWNER_INTAKE.md`](OWNER_INTAKE.md). Voice samples are not one of them: every writer measures their own voice on their own machine ([`VOICE_BASELINE.md`](VOICE_BASELINE.md)), and none ships with v9.
 
 ### `scripts/wi-authorship.py` — authorship-claim declaration checker
 
@@ -50,7 +50,7 @@ The owner's reference kernel, ported unchanged except where a defect was repaire
 | WI9-00 | Baseline & evidence audit | Reproduce existing v4–v8 tests; record defects with code locations | VALIDATED — receipt WI9-00; owner approval pending |
 | WI9-01 | Authorship contract | Machine-readable venue policy, human/AI contribution history, meaningful disclosure | PROTOTYPE — schema 2, hardened checker |
 | WI9-02 | Firsthand material vault | Opt-in private author notes, exact anchors, consent + redaction, no external uploads | PLANNED — `experience_state` typing only |
-| WI9-03 | Voice baseline | 3+ consented samples / >=500 words each; compare to human blind judgments, not detectors | PROTOTYPE — statistics only, no corpus |
+| WI9-03 | Voice baseline | Each writer: 3+ of their own samples, >=500 words, reviewed by that writer; no shipped corpus | PROTOTYPE — `wi authorship voice` and `voice-review` built; awaiting a real writer's run |
 | WI9-04 | Thought fidelity | Preserve author claims, uncertainty and point of view across revisions | PLANNED |
 | WI9-05 | Craft repair | Correct overbalanced transitions, hollow contrasts and unsupported examples based on meaning | IN_PROGRESS — doctrine repaired, scanner prototyped |
 | WI9-06 | Human-only venue gate | Enforce research-only vs pitch modes and author declaration, refusal negative tests | PROTOTYPE — `release` gate added |

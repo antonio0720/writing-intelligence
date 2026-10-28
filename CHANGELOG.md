@@ -11,6 +11,8 @@ Semantic versioning per `governance/VERSIONING.md`.
 
 v8.0.0 remains the release. Nothing below changes a version string or ships in a tagged release; each item is PROTOTYPE or IN_PROGRESS in `references/v9/WAVES.yaml`.
 
+- **Voice baselines belong to each writer (WI9-03).** `wi authorship voice` measures a writer's own samples in their own private folder, and `wi authorship voice-review` records that writer's approve or reject decision there, bound to the exact samples and never overwritten. v9 ships no voice corpus and needs none from the owner; `tests/v9/test_no_shipped_voice_corpus.py` fails if one is committed. Guide: `references/v9/VOICE_BASELINE.md`.
+
 ### Added
 - **`scripts/wi-authorship.py release`** — checks a reviewed submission against a person's decision bound to the exact draft digest, an unexpired authority grant covering release and the named venue, and a venue contract recording submission as open. Returns `RELEASE_ELIGIBLE` or `HOLD`; transmits nothing
 - **Claim coverage in `wi-authorship.py audit`** — every consequential claim the v4 classifier finds in the draft must overlap an anchored evidence span; one anchored sentence can no longer carry unsourced claims beside it

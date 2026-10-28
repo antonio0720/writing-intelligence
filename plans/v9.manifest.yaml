@@ -62,8 +62,10 @@ waves:
     stage: PROTOTYPE
     depends_on: [WI9-01]
     exit:
-      - at least three consented 500-word samples per genre measured
-      - the author approves the baseline for each genre
+      - any writer builds a per-genre baseline from three or more of their own 500-word samples, kept on their own machine
+      - each writer records their own approve or reject decision, bound to the exact samples, in their own folder
+      - no voice corpus ships in the repository or a bundle, guarded by tests/v9
+      - a real writer other than the builder runs it on their own samples
       - no claim that voice similarity proves authorship
 
   - id: WI9-04

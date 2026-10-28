@@ -14,7 +14,7 @@ waves:
   WI9-00: {title: Baseline and evidence audit, status: VALIDATED, receipt: plans/receipts/WI9-00.json, open: "owner approval of the baseline"}
   WI9-01: {title: Authorship and venue contract, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "owner acceptance of schemas/v9/authorship-dossier.schema.json"}
   WI9-02: {title: Firsthand material vault, status: PLANNED, open: "only experience_state typing exists; no private vault, redaction or consent withdrawal"}
-  WI9-03: {title: Measured author voice baseline, status: PROTOTYPE, open: "prototypes/wi9 voice command only; no consented corpus collected"}
+  WI9-03: {title: Measured author voice baseline, status: PROTOTYPE, open: "per-user voice and voice-review shipped in wi authorship; no corpus ships by design; not yet exercised by a real writer on their own samples"}
   WI9-04: {title: Thought fidelity and semantic integrity, status: PLANNED, open: "thought inventory and semantic diff not built"}
   WI9-05: {title: Meaning-first craft repair, status: IN_PROGRESS, open: "05A doctrine repair and 05B scanner done; 05C partial; 05F-05G not run"}
   WI9-06: {title: Human-only venue hold, status: PROTOTYPE, receipt: plans/receipts/WI9-P0.json, open: "real governed workflow not exercised"}

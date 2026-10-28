@@ -297,12 +297,53 @@ def voice_baseline(samples, root, min_samples=3, min_words=500):
     if len(genres) > 1:
         issues.append(_report("VOICE_GENRE_MIX", "HOLD", "Separate per-genre voice baselines"))
     status = "HOLD" if issues else "REVIEW"
-    return {"status": status, "source_count": len(metrics), "genre": next(iter(genres)) if len(genres) == 1 else None,
+    genre = next(iter(genres)) if len(genres) == 1 else None
+    return {"status": status, "source_count": len(metrics), "genre": genre,
+            "baseline_digest": sha256(json.dumps([genre, sorted(digests)]).encode("utf-8")) if metrics else None,
             "sources": metrics, "mean_metrics": {
                 k: round(statistics.mean(x["metrics"][k] for x in metrics), 3)
                 for k in ("mean_sentence_words", "sentence_length_sd", "type_token_ratio", "first_person_per_1000")
             } if metrics else {}, "issues": issues,
             "note": "Similarity to these samples is a voice diagnostic, not proof of human authorship."}
+
+
+VOICE_DECISIONS = ("approve", "reject")
+
+
+def voice_review(samples, root, decision, reviewed_at, note=""):
+    """Record one writer's own decision about their own baseline, in their own folder.
+
+    Every user supplies their own samples; nothing here ships a corpus. The record
+    binds the decision to the baseline digest, so changing a sample makes it stale.
+    An approval says the writer recognises the measurements. It proves nothing about
+    who wrote any other text.
+    """
+    if decision not in VOICE_DECISIONS:
+        return {"status": "HOLD", "issues": [_report("VOICE_DECISION_INVALID", "HOLD", "decision must be approve or reject")]}
+    baseline = voice_baseline(samples, root)
+    if decision == "approve" and baseline["status"] != "REVIEW":
+        return {"status": "HOLD", "issues": [_report("VOICE_BASELINE_NOT_READY", "HOLD", "Only a baseline that qualifies can be approved")] + baseline["issues"]}
+    if baseline.get("baseline_digest") is None:
+        return {"status": "HOLD", "issues": [_report("VOICE_BASELINE_NOT_READY", "HOLD", "No readable sample to review")] + baseline["issues"]}
+    record = {"schema": "wi9.voice-review/1", "decision": decision, "reviewed_at": reviewed_at,
+              "genre": baseline["genre"], "baseline_digest": baseline["baseline_digest"],
+              "sample_digests": sorted(x["sha256"] for x in baseline["sources"]),
+              "mean_metrics": baseline["mean_metrics"], "note": str(note)[:2000],
+              "scope": "The writer's own review of their own measurements. Not proof of authorship."}
+    name = "voice-review-%s.json" % baseline["baseline_digest"][:12]
+    directory = Path(root)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0)
+    dirfd = os.open(str(directory), os.O_RDONLY | os.O_DIRECTORY | getattr(os, "O_NOFOLLOW", 0))
+    try:
+        try:
+            fd = os.open(name, flags, 0o600, dir_fd=dirfd)
+        except FileExistsError:
+            return {"status": "HOLD", "issues": [_report("VOICE_ALREADY_REVIEWED", "HOLD", "This exact baseline already has a review; change a sample to review again", name)]}
+        with os.fdopen(fd, "w", encoding="utf-8") as out:
+            json.dump(record, out, indent=2, sort_keys=True)
+    finally:
+        os.close(dirfd)
+    return {"status": "REVIEW" if decision == "approve" else "HOLD", "written": name, "record": record, "issues": baseline["issues"]}
 
 
 def editorial_plan(dossier):
@@ -386,9 +427,20 @@ def main(argv=None):
         entry = commands.add_parser(command)
         entry.add_argument("--root", required=True, help="Directory holding the input dossier, source and document files")
         entry.add_argument("--input", required=True, help="Relative JSON or UTF-8 document file name")
+    review = commands.add_parser("voice-review", help="Record your own decision about your own voice baseline")
+    review.add_argument("--root", required=True, help="Your private folder holding your samples and voice.json")
+    review.add_argument("--input", required=True, help="voice.json, relative to --root")
+    review.add_argument("--decision", required=True, choices=VOICE_DECISIONS)
+    review.add_argument("--note", default="", help="Which measurements describe you, and which do not")
     args = parser.parse_args(argv)
     try:
-        if args.command == "diagnose":
+        if args.command == "voice-review":
+            import datetime
+            data = _load_json(args.input, args.root)
+            when = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+            result = voice_review(data.get("samples", []) if isinstance(data, dict) else None,
+                                  args.root, args.decision, when, args.note)
+        elif args.command == "diagnose":
             result = editorial_diagnostics(read_text(args.root, args.input))
         else:
             data = _load_json(args.input, args.root)
