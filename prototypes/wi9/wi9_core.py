@@ -231,13 +231,54 @@ def _sentences(text):
     return [x.strip() for x in pieces if x.strip()]
 
 
+QUALIFIERS = re.compile(r"\b(?:may|might|could|perhaps|possibly|likely|probably|seems?|appears?|suggests?|"
+                        r"i think|i suspect|in my view|maybe|tends? to|somewhat|arguably|apparently)\b", re.I)
+INTENSIFIERS = re.compile(r"\b(?:very|really|extremely|incredibly|truly|absolutely|totally|deeply|highly|"
+                          r"utterly|completely|enormously)\b", re.I)
+DISAGREEMENT = re.compile(r"\b(?:disagree|wrong|however|but|yet|i doubt|not convinced|mistaken|on the contrary|"
+                          r"misses the point|i don't buy|that is not)\b", re.I)
+EXAMPLE = re.compile(r"\b(?:for example|for instance|such as|e\.g\.|take the case|consider)\b", re.I)
+CAUSAL = re.compile(r"\b(?:because|due to|so that|therefore|thus|as a result|led to|caused)\b", re.I)
+CONCEDE = re.compile(r"\b(?:although|though|admittedly|granted|to be fair|that said|even so)\b", re.I)
+CONCRETE_DETAIL = re.compile(r"\d|(?<=\w\s)[A-Z][a-z]{2,}")
+STRATEGIES = ("example", "causal", "concession", "question")
+# Voice measures compared for drift and held-out stability. The floor is the
+# smallest band that is not noise for a few hundred words of text.
+VOICE_MEASURES = {
+    "mean_sentence_words": 2.0, "sentence_length_sd": 2.0, "type_token_ratio": 0.03,
+    "first_person_per_1000": 3.0, "qualifiers_per_1000": 3.0, "intensifiers_per_1000": 2.0,
+    "disagreement_per_1000": 3.0, "concrete_detail_share": 0.05, "example_share": 0.05,
+    "causal_share": 0.05, "concession_share": 0.05, "question_share": 0.05,
+}
+
+
+def _per_1000(pattern, text, words):
+    return round(1000 * len(pattern.findall(text)) / words, 2) if words else 0
+
+
+def _share(pattern, sentences):
+    return round(sum(1 for x in sentences if pattern.search(x)) / len(sentences), 4) if sentences else 0
+
+
 def profile_text(text):
     words = re.findall(r"\b[\w'-]+\b", text.lower(), re.UNICODE)
     sentences = _sentences(text)
     lengths = [len(re.findall(r"\b[\w'-]+\b", x)) for x in sentences]
     paras = [p for p in re.split(r"\n\s*\n", text) if p.strip()]
     counts = Counter(words)
-    return {"word_count": len(words), "sentence_count": len(sentences), "paragraph_count": len(paras),
+    shares = {"example": _share(EXAMPLE, sentences), "causal": _share(CAUSAL, sentences),
+              "concession": _share(CONCEDE, sentences),
+              "question": round(sum(1 for x in sentences if x.rstrip().endswith("?")) / len(sentences), 4)
+              if sentences else 0}
+    top = max(STRATEGIES, key=lambda k: shares[k])
+    return {"qualifiers_per_1000": _per_1000(QUALIFIERS, text, len(words)),
+            "intensifiers_per_1000": _per_1000(INTENSIFIERS, text, len(words)),
+            "disagreement_per_1000": _per_1000(DISAGREEMENT, text, len(words)),
+            "concrete_detail_share": _share(CONCRETE_DETAIL, sentences),
+            "example_share": shares["example"], "causal_share": shares["causal"],
+            "concession_share": shares["concession"], "question_share": shares["question"],
+            "argument_strategy": top if shares[top] >= 0.1 else "mixed",
+            "word_count": len(words), "sentence_count": len(sentences), "paragraph_count": len(paras),
             "mean_sentence_words": round(statistics.mean(lengths), 2) if lengths else 0,
             "sentence_length_sd": round(statistics.pstdev(lengths), 2) if len(lengths) >= 2 else 0,
             "type_token_ratio": round(len(counts) / len(words), 4) if words else 0,
@@ -287,7 +328,8 @@ def voice_baseline(samples, root, min_samples=3, min_words=500):
             profile = profile_text(blob.decode("utf-8", errors="strict"))
             if profile["word_count"] < min_words:
                 issues.append(_report("VOICE_SAMPLE_SHORT", "HOLD", "Need at least %d words" % min_words, str(i)))
-            metrics.append({"sample_id": sample.get("id"), "genre": sample.get("genre"), "sha256": sha256(blob), "metrics": profile})
+            metrics.append({"sample_id": sample.get("id"), "genre": sample.get("genre"), "sha256": sha256(blob),
+                            "metrics": profile, "_text": blob.decode("utf-8")})
         except (OSError, UnicodeError, ValueError, RuntimeError, TypeError) as exc:
             issues.append(_report("VOICE_READ_FAILED", "HOLD", str(exc), str(i)))
     if len(metrics) < min_samples:
@@ -298,15 +340,89 @@ def voice_baseline(samples, root, min_samples=3, min_words=500):
     genres = {x["genre"] for x in metrics}
     if len(genres) > 1:
         issues.append(_report("VOICE_GENRE_MIX", "HOLD", "Separate per-genre voice baselines"))
+    compared = metrics[:MAX_PAIRWISE_SAMPLES]
+    if len(metrics) > MAX_PAIRWISE_SAMPLES:
+        issues.append(_report("VOICE_TOO_MANY_SAMPLES", "HOLD", "Use at most %d samples per baseline"
+                              % MAX_PAIRWISE_SAMPLES))
+    for a in range(len(compared)):
+        for b in range(a + 1, len(compared)):
+            overlap = _shingle_overlap(metrics[a]["_text"], metrics[b]["_text"])
+            if overlap >= NEAR_DUPLICATE:
+                issues.append(_report("VOICE_SAMPLES_TOO_SIMILAR", "HOLD",
+                                      "Samples %s and %s share %d%% of their phrasing; a baseline built on one "
+                                      "passage describes that passage, not you" % (
+                                          metrics[a]["sample_id"], metrics[b]["sample_id"], round(100 * overlap))))
+    stability = _held_out_stability([x["metrics"] for x in metrics]) if len(metrics) >= 3 else {}
+    for x in metrics:
+        x.pop("_text", None)
     status = "HOLD" if issues else "REVIEW"
     genre = next(iter(genres)) if len(genres) == 1 else None
     return {"status": status, "source_count": len(metrics), "genre": genre,
             "baseline_digest": sha256(json.dumps([genre, sorted(digests)]).encode("utf-8")) if metrics else None,
             "sources": metrics, "mean_metrics": {
-                k: round(statistics.mean(x["metrics"][k] for x in metrics), 3)
-                for k in ("mean_sentence_words", "sentence_length_sd", "type_token_ratio", "first_person_per_1000")
-            } if metrics else {}, "issues": issues,
+                k: round(statistics.mean(x["metrics"][k] for x in metrics), 3) for k in VOICE_MEASURES
+            } if metrics else {}, "held_out_stability": stability, "issues": issues,
             "note": "Similarity to these samples is a voice diagnostic, not proof of human authorship."}
+
+
+NEAR_DUPLICATE = 0.6
+MAX_PAIRWISE_SAMPLES = 200
+
+
+def _shingles(text, n=8):
+    words = re.findall(r"\b[\w'-]+\b", text.lower())
+    return {" ".join(words[i:i + n]) for i in range(max(0, len(words) - n + 1))}
+
+
+def _shingle_overlap(a, b):
+    sa, sb = _shingles(a), _shingles(b)
+    return len(sa & sb) / min(len(sa), len(sb)) if sa and sb else 0.0
+
+
+def _band(values, measure):
+    centre = statistics.mean(values)
+    spread = statistics.pstdev(values) if len(values) >= 2 else 0
+    return centre, max(2 * spread, 0.2 * abs(centre), VOICE_MEASURES[measure])
+
+
+def _held_out_stability(profiles):
+    """Leave one sample out, build the band from the rest, and ask whether the
+    held-out sample falls inside it. A measure that holds for every sample is
+    one this writer's baseline can speak to; one that does not is reported, not hidden."""
+    report = {}
+    for measure in VOICE_MEASURES:
+        inside = 0
+        for i, held in enumerate(profiles):
+            rest = [p[measure] for j, p in enumerate(profiles) if j != i]
+            centre, width = _band(rest, measure)
+            inside += abs(held[measure] - centre) <= width
+        report[measure] = {"held_out_within_band": inside, "samples": len(profiles),
+                           "stable": inside == len(profiles)}
+    return report
+
+
+def voice_compare(samples, root, text):
+    """Where a text sits against the writer's own baseline, measure by measure.
+
+    Drift is a question for the writer. Sitting inside every band does not show
+    the writer wrote the text: a careful imitation can match these numbers.
+    """
+    baseline = voice_baseline(samples, root)
+    if baseline["status"] != "REVIEW":
+        return {"status": "HOLD", "issues": [_report("VOICE_BASELINE_NOT_READY", "HOLD",
+                                                     "Compare against a baseline that qualifies")] + baseline["issues"]}
+    profile = profile_text(text)
+    drift = []
+    for measure in VOICE_MEASURES:
+        centre, width = _band([x["metrics"][measure] for x in baseline["sources"]], measure)
+        if abs(profile[measure] - centre) > width:
+            drift.append({"measure": measure, "text": profile[measure], "baseline": round(centre, 3),
+                          "band": round(width, 3), "direction": "higher" if profile[measure] > centre else "lower",
+                          "held_out_stable": baseline["held_out_stability"][measure]["stable"]})
+    return {"status": "REVIEW", "baseline_digest": baseline["baseline_digest"], "genre": baseline["genre"],
+            "profile": profile, "drift": drift, "release_authorized": False,
+            "note": "Drift is an editorial question for the writer. Matching the baseline does not show who wrote "
+                    "the text; a deliberate imitation can match every measure."}
 
 
 VOICE_DECISIONS = ("approve", "reject")
@@ -425,6 +541,10 @@ def _load_json(path, base):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Writing Intelligence v9 experimental offline quality + provenance tools")
     commands = parser.add_subparsers(dest="command", required=True)
+    compare = commands.add_parser("voice-compare", help="Where a text sits against your own baseline")
+    compare.add_argument("--root", required=True, help="Your private folder holding your samples and voice.json")
+    compare.add_argument("--input", required=True, help="voice.json, relative to --root")
+    compare.add_argument("--text", required=True, help="the text to compare, a path anywhere")
     for command in ("preflight", "plan", "diagnose", "voice", "benchmark"):
         entry = commands.add_parser(command)
         entry.add_argument("--root", required=True, help="Directory holding the input dossier, source and document files")
@@ -436,7 +556,14 @@ def main(argv=None):
     review.add_argument("--note", default="", help="Which measurements describe you, and which do not")
     args = parser.parse_args(argv)
     try:
-        if args.command == "voice-review":
+        if args.command == "voice-compare":
+            data = _load_json(args.input, args.root)
+            target = Path(args.text)
+            if target.is_symlink() or not target.is_file() or target.stat().st_size > MAX_FILE_BYTES:
+                raise ValueError("TEXT_NOT_A_BOUNDED_FILE")
+            result = voice_compare(data.get("samples", []) if isinstance(data, dict) else None, args.root,
+                                   target.read_text(encoding="utf-8"))
+        elif args.command == "voice-review":
             import datetime
             data = _load_json(args.input, args.root)
             when = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")

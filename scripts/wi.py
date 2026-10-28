@@ -6092,6 +6092,7 @@ V9_AUTHORSHIP_TOOLS = {
     "scan": ("prototypes/wi9", "wi9_hotphrases.py"),
     "voice": ("prototypes/wi9", "wi9_core.py"),
     "voice-review": ("prototypes/wi9", "wi9_core.py"),
+    "voice-compare": ("prototypes/wi9", "wi9_core.py"),
     "vault": ("prototypes/wi9", "wi9_vault.py"),
     "ledger": ("prototypes/wi9", "wi9_ledger.py"),
     "phrase-review": ("prototypes/wi9", "wi9_phrase_review.py"),
