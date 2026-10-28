@@ -17,9 +17,15 @@ class ReviewTests(unittest.TestCase):
                                       'status':'retain_as_written','rationale':'The specificity is in the same sentence.',
                                       'reviewer':'Antonio T. Smith Jr.','reviewed_at':'2026-10-27T12:00:00-05:00'}]}
     def test_valid_edit_review_is_not_release(self):
-        out=audit_decisions(self.text,self.report,self.decisions)
+        self.decisions['decisions'][0]['ledger_entry']='e'*64
+        out=audit_decisions(self.text,self.report,self.decisions,bound={'e'*64})
         self.assertEqual('REVIEW',out['status'])
+        self.assertEqual('v6_grant',out['reviewer_basis'])
         self.assertFalse(out['release_authorized'])
+    def test_typed_reviewer_name_alone_holds(self):
+        out=audit_decisions(self.text,self.report,self.decisions)
+        self.assertEqual('HOLD',out['status'])
+        self.assertIn('REVIEWER_UNBOUND:0',out['issues'])
     def test_changed_text_invalidates_report(self):
         out=audit_decisions(self.text+' Plus',self.report,self.decisions)
         self.assertEqual('HOLD',out['status'])
