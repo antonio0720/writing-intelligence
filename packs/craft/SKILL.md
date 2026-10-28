@@ -18,7 +18,7 @@ This bundle is the craft corpus of Writing Intelligence — the reference materi
 
 It ships as its own installable bundle for one reason, and the reason is arithmetic rather than taste: **a skill bundle may contain at most 200 files.** A bundle that exceeds the ceiling does not degrade and does not warn — it simply does not load, which would turn every install instruction in the repository into a false claim. The runtime and the library together are 229 files. Split, they are 150 and 79, and both have room to grow.
 
-Install all three — `writing-intelligence` (the runtime), this library, and `writing-intelligence-story` (the v8 story engines). They are one system in three artifacts.
+Install all three — `writing-intelligence` (the runtime), this library, and `writing-intelligence-story` (the v8 story engines). They are one system in three artifacts; the v9 preview adds a fourth, `writing-intelligence-authorship`.
 
 ---
 

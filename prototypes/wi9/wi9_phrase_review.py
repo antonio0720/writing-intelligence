@@ -13,6 +13,7 @@ from pathlib import Path
 
 STATUS = {'retain_as_written', 'revise_for_clarity', 'needs_source', 'not_applicable'}
 MAX_DECISIONS = 1000
+MAX_FILE_BYTES = 2_000_000
 
 
 def _review_time(value):
@@ -32,7 +33,19 @@ def _hexsha(value):
     return isinstance(value, str) and len(value) == 64 and all(c in '0123456789abcdef' for c in value)
 
 
-def audit_decisions(text, report, decisions):
+def _recomputed(text, report, pack):
+    """The report must be what the scanner says about this text and rule pack.
+    A hand-edited report (findings removed, digests copied) is refused."""
+    from wi9_hotphrases import scan_text, DEFAULT_PACK
+    pack = pack or DEFAULT_PACK
+    for include_quoted in (False, True):
+        fresh = scan_text(text, pack=pack, include_quoted=include_quoted)
+        if fresh['rules_sha256'] == report.get('rules_sha256') and fresh['findings'] == report.get('findings'):
+            return True
+    return False
+
+
+def audit_decisions(text, report, decisions, pack=None):
     """Bind judgment to exact span and digest; stale documents HOLD decisions."""
     issues = []
     doc_hash = hashlib.sha256(text.encode('utf-8')).hexdigest()
@@ -56,7 +69,10 @@ def audit_decisions(text, report, decisions):
         return {'status':'HOLD','issues':['REPORT_FINDINGS_INVALID'],'release_authorized':False}
     targets = {(f['id'],f['start'],f['end'],f['excerpt']) for f in hits
                if isinstance(f,dict) and all(k in f for k in ('id','start','end','excerpt'))
+               and isinstance(f['id'],str) and isinstance(f['excerpt'],str)
                and isinstance(f['start'],int) and isinstance(f['end'],int)}
+    if 'DOCUMENT_STALE' not in issues and not _recomputed(text, report, pack):
+        issues.append('REPORT_NOT_REPRODUCED')
     seen=set()
     reviewed=[]
     for i, item in enumerate(raw_items):
@@ -64,7 +80,8 @@ def audit_decisions(text, report, decisions):
             issues.append('DECISION_NOT_OBJECT:%d'%i)
             continue
         target=(item.get('rule_id'),item.get('start'),item.get('end'),item.get('excerpt'))
-        if any(not isinstance(v,int) for v in target[1:3]):
+        if not isinstance(target[0],str) or not isinstance(target[3],str) \
+                or any(not isinstance(v,int) or isinstance(v,bool) for v in target[1:3]):
             issues.append('SPAN_INVALID:%d'%i)
             continue
         if target not in targets:
@@ -83,6 +100,9 @@ def audit_decisions(text, report, decisions):
         elif _review_time(item['reviewed_at']) is None:
             issues.append('REVIEW_DATE_INVALID:%d'%i)
         reviewed.append(item)
+    unreviewed = len(targets - seen)
+    if unreviewed:
+        issues.append('FINDINGS_UNREVIEWED:%d' % unreviewed)
     return {'schema':'wi9.editorial.review.report/1',
             'status':'HOLD' if issues else 'REVIEW', 'issues':issues,
             'total_flagged':len(hits), 'total_reviewed':len(reviewed),
@@ -100,14 +120,14 @@ def main(argv=None):
     parser.add_argument('--decisions',required=True)
     args=parser.parse_args(argv)
     try:
-        inp=Path(args.input)
-        if inp.stat().st_size>2_000_000:
-            raise ValueError('SOURCE_OVERSIZE')
-        text=inp.read_text(encoding='utf-8')
+        for name in (args.input, args.report, args.decisions):
+            if Path(name).stat().st_size > MAX_FILE_BYTES:
+                raise ValueError('FILE_OVERSIZE: %s' % name)
+        text=Path(args.input).read_text(encoding='utf-8')
         report=json.loads(Path(args.report).read_text(encoding='utf-8'))
         decisions=json.loads(Path(args.decisions).read_text(encoding='utf-8'))
         result=audit_decisions(text,report,decisions)
-    except (OSError, ValueError, UnicodeError) as exc:
+    except (OSError, ValueError, UnicodeError, TypeError, RecursionError) as exc:
         result={'status':'HOLD','issues':[str(exc)],'release_authorized':False}
     print(json.dumps(result,indent=2,sort_keys=True))
     return 3 if result['status']=='HOLD' else 0

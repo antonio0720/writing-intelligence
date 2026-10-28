@@ -83,7 +83,7 @@ Either way the job refuses to publish unless, in this order:
 1. `tests/v4/test_wi.sh`, `tests/v5/test_wi5.sh`, `tests/v6/test_wi6.sh`, `tests/v7/test_wi7.sh` and `scripts/test-v8.sh` all pass — a release whose verifier is broken installs cleanly and quietly certifies nothing, which is the worst artifact this project could ship;
 2. `check-manifest.py` passes, so no shipped wave names a command that does not answer;
 3. every link resolves;
-4. all three bundles build;
+4. all four bundles build (the fourth, `writing-intelligence-authorship`, is the v9 preview) and every skill description stays within 1024 characters;
 5. the tag, `wi.py --version` and the `CHANGELOG.md` heading all agree.
 
 Only then is the tag created — a commit that fails its own release gate never gets stamped with a version number. And if the tag already exists it must point at the commit that was built, or the job stops: publishing assets under a tag naming a different commit is the one failure here nobody can see afterwards, because the release page looks entirely normal.

@@ -151,6 +151,8 @@ jobs:
             dist/writing-intelligence-craft.skill.sha256
             dist/writing-intelligence-story.skill
             dist/writing-intelligence-story.skill.sha256
+            dist/writing-intelligence-authorship.skill
+            dist/writing-intelligence-authorship.skill.sha256
             --title "Writing Intelligence ${{ steps.v.outputs.tag }}"
             --verify-tag
           )
@@ -168,7 +170,9 @@ jobs:
               dist/writing-intelligence-craft.skill \
               dist/writing-intelligence-craft.skill.sha256 \
               dist/writing-intelligence-story.skill \
-              dist/writing-intelligence-story.skill.sha256 --clobber
+              dist/writing-intelligence-story.skill.sha256 \
+              dist/writing-intelligence-authorship.skill \
+              dist/writing-intelligence-authorship.skill.sha256 --clobber
           else
             gh release create "${ARGS[@]}"
           fi

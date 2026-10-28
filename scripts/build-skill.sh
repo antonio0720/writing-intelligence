@@ -8,6 +8,7 @@
 #   writing-intelligence.skill               copy at repo root, for direct download
 #   dist/writing-intelligence-craft.skill    the craft library bundle
 #   dist/writing-intelligence-story.skill    the v8 Story Intelligence bundle
+#   dist/writing-intelligence-authorship.skill the v9 preview authorship bundle
 #
 # The build is reproducible: file order is sorted and every mtime is normalized,
 # so the same tree produces the same bytes and the published checksum means
@@ -138,6 +139,29 @@ STORY_PAYLOAD=(
   extensions/wi8/japan04
 )
 
+# The fourth bundle: Authorship (v9 preview).
+#
+# The v9 authorship checker, its schema, the reference kernel and their suites
+# are ~45 files. The runtime had six files of headroom, so they ship as their
+# own bundle — the reason the story bundle exists, applied again. scripts/wi.py
+# travels with them because claim coverage uses its v4 classifier and release
+# authority is read from its v6 grant store.
+AUTH_NAME="writing-intelligence-authorship"
+AUTH_SKILL=packs/authorship/SKILL.md
+AUTH_PAYLOAD=(
+  LICENSE
+  NOTICE
+  PATENTS.md
+  references/v9
+  schemas/v9
+  scripts/wi.py
+  scripts/wi-authorship.py
+  scripts/test-v9.sh
+  prototypes/wi9
+  examples/v9
+  tests/v9
+)
+
 # The upload limit. Not a style preference — a bundle over this does not load.
 MAX_FILES=200
 WARN_FILES=185
@@ -243,6 +267,8 @@ echo "    v6 schemas: $V6_SCHEMAS"
   || { echo "FAIL missing craft bundle skill: $CRAFT_SKILL" >&2; exit 1; }
 [ -f "$STORY_SKILL" ] \
   || { echo "FAIL missing story bundle skill: $STORY_SKILL" >&2; exit 1; }
+[ -f "$AUTH_SKILL" ] \
+  || { echo "FAIL missing authorship bundle skill: $AUTH_SKILL" >&2; exit 1; }
 
 V8_DOCS=$(ls references/v8/*.md 2>/dev/null | wc -l | tr -d ' ')
 [ "$V8_DOCS" -ge 7 ] \
@@ -536,6 +562,88 @@ fi
 rm -rf "$SSTAGE" "$SVERIFY"
 echo "    story bundle verified"
 
+# --------------------------------------------------------------------------
+# The authorship bundle (v9 preview). Same ceiling, same frontmatter rules,
+# and scripts/test-v9.sh must pass inside the extracted artifact.
+# --------------------------------------------------------------------------
+echo "==> Authorship bundle"
+
+ASTAGE="$(mktemp -d)"
+AROOT="$ASTAGE/$AUTH_NAME"
+mkdir -p "$AROOT"
+cp -L "$AUTH_SKILL" "$AROOT/SKILL.md"
+for p in "${AUTH_PAYLOAD[@]}"; do
+  [ -e "$p" ] || { echo "FAIL missing authorship payload path: $p" >&2; exit 1; }
+  mkdir -p "$AROOT/$(dirname "$p")"
+  if [ -d "$p" ]; then cp -RL "$p" "$AROOT/$(dirname "$p")/"; else cp -L "$p" "$AROOT/$p"; fi
+done
+find "$AROOT" \( -name '__pycache__' -o -name '.DS_Store' -o -name '*.pyc' \) \
+     -exec rm -rf {} + 2>/dev/null || true
+# cp -L follows links, so a symlink in a payload path would pull a file from
+# outside the repository into a published artifact. Refuse it at the source.
+for p in "${AUTH_PAYLOAD[@]}"; do
+  if [ -n "$(find "$p" -type l 2>/dev/null)" ]; then
+    echo "FAIL authorship payload path $p contains a symlink" >&2; exit 1
+  fi
+done
+
+AFILES=$(find "$AROOT" -type f | wc -l | tr -d ' ')
+echo "    staged $AFILES files (limit $MAX_FILES)"
+if [ "$AFILES" -gt "$MAX_FILES" ]; then
+  echo "FAIL authorship bundle has $AFILES files; the skill upload limit is $MAX_FILES" >&2
+  exit 1
+fi
+
+AUTH_SKILL_PATH="$AROOT/SKILL.md" python3 - <<'AUTHFM' || exit 1
+import os, re, sys
+MAX_NAME, MAX_DESC = 64, 1024
+src = open(os.environ["AUTH_SKILL_PATH"], encoding="utf-8").read()
+if not src.startswith("---\n"):
+    sys.exit("FAIL authorship SKILL.md has no YAML frontmatter")
+fm = src[4:src.find("\n---", 4)]
+bad = []
+for key, limit in (("name", MAX_NAME), ("description", MAX_DESC)):
+    m = re.search(r"^%s:[ \t]+(.*)$" % key, fm, re.M)
+    if not m:
+        sys.exit("FAIL authorship SKILL.md frontmatter has no %s:" % key)
+    v = m.group(1).strip().strip('"\'')
+    if len(v) > limit:
+        bad.append("%s is %d characters, over by %d; the limit is %d"
+                   % (key, len(v), len(v) - limit, limit))
+    if key == "description" and ": " in v:
+        bad.append("description contains ': ' — unquoted plain scalars must not")
+    if key == "name" and not re.match(r"^[a-z0-9][a-z0-9-]*$", v):
+        bad.append("name %r must be lowercase letters, digits and hyphens" % v)
+    if key == "description":
+        print("    authorship description %d/%d characters" % (len(v), limit))
+if bad:
+    for b in bad:
+        print("FAIL " + b, file=sys.stderr)
+    sys.exit(1)
+print("    authorship SKILL.md frontmatter intact")
+AUTHFM
+
+find "$AROOT" -exec touch -t 200001010000.00 {} + 2>/dev/null || true
+AUTH_BUNDLE="$OUT_DIR/$AUTH_NAME.skill"
+rm -f "$AUTH_BUNDLE"
+( cd "$ASTAGE" && find "$AUTH_NAME" -print | sort | zip -qX9 "$AUTH_BUNDLE" -@ )
+ASIZE=$(wc -c < "$AUTH_BUNDLE" | tr -d ' ')
+echo "    $AUTH_BUNDLE ($ASIZE bytes)"
+
+AVERIFY="$(mktemp -d)"
+unzip -qq "$AUTH_BUNDLE" -d "$AVERIFY"
+[ -f "$AVERIFY/$AUTH_NAME/SKILL.md" ] \
+  || { echo "FAIL authorship bundle has no SKILL.md" >&2; exit 1; }
+if RESULT=$( cd "$AVERIFY/$AUTH_NAME" && bash scripts/test-v9.sh 2>&1 ); then
+  echo "$RESULT" | sed 's/^/    /'
+else
+  echo "$RESULT" | sed 's/^/    /'
+  echo "FAIL scripts/test-v9.sh fails inside the extracted authorship bundle" >&2
+  exit 1
+fi
+rm -rf "$ASTAGE" "$AVERIFY"
+echo "    authorship bundle verified"
+
 if [ "$CHECK_ONLY" -eq 1 ]; then
   echo "==> --check: no artifacts written"
   exit 0
@@ -571,10 +679,20 @@ fi
 [ -f "$OUT_DIR/$STORY_NAME.skill.sha256" ] \
   && cat "$OUT_DIR/$STORY_NAME.skill.sha256" | sed 's/^/    /'
 
+if command -v shasum >/dev/null 2>&1; then
+  ( cd "$OUT_DIR" && shasum -a 256 "$AUTH_NAME.skill" > "$AUTH_NAME.skill.sha256" )
+elif command -v sha256sum >/dev/null 2>&1; then
+  ( cd "$OUT_DIR" && sha256sum "$AUTH_NAME.skill" > "$AUTH_NAME.skill.sha256" )
+fi
+[ -f "$OUT_DIR/$AUTH_NAME.skill.sha256" ] \
+  && cat "$OUT_DIR/$AUTH_NAME.skill.sha256" | sed 's/^/    /'
+
 if [ "$UPDATE_ROOT" -eq 1 ]; then
   cp "$BUNDLE" "$REPO/$NAME.skill"
   cp "$CRAFT_BUNDLE" "$REPO/$CRAFT_NAME.skill"
   cp "$STORY_BUNDLE" "$REPO/$STORY_NAME.skill"
+  cp "$AUTH_BUNDLE" "$REPO/$AUTH_NAME.skill"
+  echo "    updated $REPO/$AUTH_NAME.skill"
   echo "    updated $REPO/$STORY_NAME.skill"
   echo "    updated $REPO/$NAME.skill"
   echo "    updated $REPO/$CRAFT_NAME.skill"
@@ -584,6 +702,8 @@ echo
 echo "Built $NAME.skill        — $FILES files, $SIZE bytes."
 echo "Built $CRAFT_NAME.skill — $CFILES files, $CSIZE bytes."
 echo "Built $STORY_NAME.skill — $SFILES files, $SSIZE bytes."
+echo "Built $AUTH_NAME.skill — $AFILES files, $ASIZE bytes (v9 preview)."
 echo
-echo "Install all three. They are one system in three artifacts."
+echo "Install all four. They are one system in four artifacts; the authorship"
+echo "bundle is the v9 preview and is not part of the 8.0.0 release."
 echo "Upload path: Claude → Settings → Capabilities → Skills → Upload skill"

@@ -57,10 +57,10 @@ class Base(unittest.TestCase):
         path.write_text(text, encoding="utf-8")
         return path
 
-    def cli(self, case, command="audit", raw=None):
+    def cli(self, case, command="audit", raw=None, extra=()):
         path = self.root / "dossier.json"
         path.write_text(raw if raw is not None else json.dumps(case), encoding="utf-8")
-        proc = subprocess.run([sys.executable, str(RUNNER), command, "--input", str(path)],
+        proc = subprocess.run([sys.executable, str(RUNNER), command, "--input", str(path)] + list(extra),
                               capture_output=True, text=True)
         self.assertNotIn("Traceback", proc.stderr)
         return proc.returncode, json.loads(proc.stdout), proc.stderr
@@ -68,13 +68,16 @@ class Base(unittest.TestCase):
     def codes(self, report):
         return {f["code"] for f in report["findings"]}
 
-    def assert_hold(self, case, code, command="audit"):
-        exit_code, report, _ = self.cli(case, command)
+    def assert_hold(self, case, code, command="audit", extra=None):
+        exit_code, report, _ = self.cli(case, command, extra=self.default_extra(command) if extra is None else extra)
         self.assertEqual(3, exit_code, report)
         self.assertEqual("HOLD", report["status"])
         self.assertIn(code, self.codes(report))
         self.assertFalse(report["release_authorized"])
         return report
+
+    def default_extra(self, command):
+        return ()
 
     def make_covered(self):
         """A submission whose every discovered claim is anchored."""
@@ -294,16 +297,102 @@ class DeclarationsAndVenue(Base):  # P0-01, P0-09, P0-10
         self.assertNotIn(report["status"], {"RELEASE", "RELEASE_ELIGIBLE"})
 
 
-class Release(Base):  # P0-10, P0-11
-    def eligible(self):
+class ReviewFindings(Base):  # independent review findings 2, 6, 13
+    def test_submission_without_an_arena_is_held_to_the_strict_rules(self):
+        del self.case["document"]["arena"]
+        self.assert_hold(self.case, "CLAIM_UNANCHORED")
+
+    def test_arena_case_does_not_lower_the_bar(self):
+        self.case["document"]["arena"] = "Journalism"
+        self.assert_hold(self.case, "CLAIM_UNANCHORED")
+
+    def test_explicitly_non_consequential_submission_reports_coverage_only(self):
+        del self.case["document"]["arena"]
+        self.case["document"]["consequential"] = False
+        exit_code, report, _ = self.cli(self.case)
+        levels = {f["level"] for f in report["findings"] if f["code"] == "CLAIM_UNANCHORED"}
+        self.assertEqual({"advisory"}, levels)
+
+    def test_many_anchors_on_a_large_draft_stay_fast(self):
+        import time
+        body = "a" * 1_000_000
+        self.write("draft.txt", body)
+        self.case["document"]["expected_sha256"] = sha(body)
+        self.case["document_claim_anchors"] = [{"exact_excerpt": "a", "evidence_id": "e1", "start": 0}] * 300
+        t = time.time()
+        self.cli(self.case)
+        self.assertLess(time.time() - t, 10)
+
+    def test_too_many_anchors_hold(self):
+        self.case["document_claim_anchors"] = [{"exact_excerpt": NOTES, "evidence_id": "e1"}] * 1001
+        self.assert_hold(self.case, "DOCUMENT_CLAIM_ANCHORS_TOO_MANY")
+
+    def test_long_unbroken_draft_is_linear(self):
+        import time
+        body = "a." * 100_000
+        self.write("draft.txt", body)
+        self.case["document"]["expected_sha256"] = sha(body)
+        t = time.time()
+        self.cli(self.case)
+        self.assertLess(time.time() - t, 10)
+
+    def test_unwritable_out_is_a_structured_hold(self):
+        path = self.root / "dossier.json"
+        path.write_text(json.dumps(self.case), encoding="utf-8")
+        proc = subprocess.run([sys.executable, str(RUNNER), "audit", "--input", str(path),
+                               "--out", str(self.root / "missing" / "r.json")], capture_output=True, text=True)
+        self.assertEqual(3, proc.returncode)
+        self.assertNotIn("Traceback", proc.stderr)
+        self.assertIn("OUT_NOT_WRITABLE", proc.stdout)
+
+
+WI = str(RUNNER.parent / "wi.py")
+ACTOR = "Antonio T. Smith Jr."
+
+
+class Release(Base):  # P0-10, P0-11 — authority comes from the operator's v6 store
+    def setUp(self):
+        Base.setUp(self)
+        outside = tempfile.TemporaryDirectory()
+        self.addCleanup(outside.cleanup)
+        self.store_dir = Path(outside.name) / "authority"
+
+    def default_extra(self, command):
+        return ("--authority-store", str(self.store_dir)) if command == "release" else ()
+
+    def cli(self, case, command="audit", raw=None, extra=None):
+        return Base.cli(self, case, command, raw, self.default_extra(command) if extra is None else extra)
+
+    def wi(self, *args):
+        proc = subprocess.run([sys.executable, WI] + list(args), capture_output=True, text=True)
+        self.assertEqual(0, proc.returncode, proc.stdout + proc.stderr)
+        return proc.stdout
+
+    def store(self, subject=ACTOR, capability="release.approve", scope_value="Example Desk",
+              expires="2999-01-01T00:00:00+00:00", activates="2026-01-01T00:00:00+00:00",
+              kind="human"):
+        ws = self.store_dir
+        if not (ws / ".wi" / "workspace.db").exists():
+            self.wi("init", str(ws), "--title", "release authority")
+        args = ["authority", "issue", "--root", str(ws), "--subject", subject,
+                "--subject-kind", kind, "--capability", capability,
+                "--scope", "release_target", "--scope-value", scope_value,
+                "--issuer", "owner", "--expires", expires]
+        if activates:
+            args += ["--activates", activates]
+        out = self.wi(*args)
+        return out.split()[1]
+
+    def eligible(self, issue=True):
         self.make_covered()
+        if issue:
+            self.store()
         self.case["venue_contract"] = {"venue": "Example Desk", "allowed_operations": ["submit"],
                                        "deadline": "2999-01-01T00:00:00+00:00"}
         self.case["review_decision"] = {
-            "outcome": "approve", "actor": "Antonio T. Smith Jr.", "actor_kind": "human",
+            "outcome": "approve", "actor": ACTOR, "actor_kind": "human",
             "target_sha256": sha(NOTES), "decided_at": "2026-10-27T12:00:00-05:00",
-            "authority": {"holder": "Antonio T. Smith Jr.", "scope": ["release"],
-                          "venues": ["Example Desk"], "expires_at": "2999-01-01T00:00:00+00:00"}}
+            "authority": {"store": "v6"}}
         return self.case
 
     def test_bound_decision_is_release_eligible_and_sends_nothing(self):
@@ -311,16 +400,104 @@ class Release(Base):  # P0-10, P0-11
         self.assertEqual(0, exit_code, report["findings"])
         self.assertEqual("RELEASE_ELIGIBLE", report["status"])
         self.assertFalse(report["transmission_performed"])
+        self.assertEqual("release.approve", report["authority_receipt"]["capability"])
+        self.assertEqual("verified", report["authority_receipt"]["basis"])
+
+    def test_declared_grant_is_not_authority(self):
+        case = self.eligible()
+        case["review_decision"]["authority"] = {
+            "holder": ACTOR, "scope": ["release"], "venues": ["Example Desk"],
+            "expires_at": "2999-01-01T00:00:00+00:00"}
+        self.assert_hold(case, "AUTHORITY_UNBOUND", "release")
+
+    def test_missing_store_holds_and_is_not_created(self):
+        case = self.eligible(issue=False)
+        self.assert_hold(case, "AUTHORITY_STORE_MISSING", "release")
+        self.assertFalse(self.store_dir.exists())
+
+    def test_release_needs_the_operator_to_name_a_store(self):
+        self.assert_hold(self.eligible(), "AUTHORITY_STORE_REQUIRED", "release", extra=())
+
+    def test_dossier_cannot_choose_the_store(self):
+        case = self.eligible()
+        case["review_decision"]["authority"]["workspace"] = "."
+        self.assert_hold(case, "AUTHORITY_STORE_FROM_DOSSIER", "release")
+
+    def test_store_planted_inside_the_dossier_is_untrusted(self):
+        # Independent review finding 1: the author ships a store granting themselves release.
+        case = self.eligible(issue=False)
+        planted = self.root / "planted"
+        self.wi("init", str(planted), "--title", "planted")
+        self.wi("authority", "issue", "--root", str(planted), "--subject", ACTOR, "--subject-kind",
+                "human", "--capability", "release.approve", "--scope", "release_target",
+                "--scope-value", "Example Desk", "--issuer", "self",
+                "--activates", "2026-01-01T00:00:00+00:00")
+        self.assert_hold(case, "AUTHORITY_STORE_UNTRUSTED", "release", extra=("--authority-store", str(planted)))
+
+    def test_symlinked_store_database_is_refused(self):
+        # Independent review finding 4.
+        self.store()
+        real = self.store_dir / ".wi"
+        moved = self.store_dir.parent / "real-wi"
+        real.rename(moved)
+        os.symlink(str(moved), str(real))
+        self.assert_hold(self.eligible(issue=False), "AUTHORITY_STORE_SYMLINK", "release")
+
+    def test_release_never_writes_to_the_store(self):
+        # Independent review finding 5: the check opens the store read-only.
+        self.store()
+        db = self.store_dir / ".wi" / "workspace.db"
+        before = (db.read_bytes(), sorted(p.name for p in db.parent.iterdir()))
+        exit_code, report, _ = self.cli(self.eligible(issue=False), "release")
+        self.assertEqual(0, exit_code, report["findings"])
+        self.assertEqual(before, (db.read_bytes(), sorted(p.name for p in db.parent.iterdir())))
+
+    def test_store_refusals(self):
+        cases = {
+            "AUTHORITY_DENIED": dict(capability="release.build"),
+            "AUTHORITY_GRANT_SCOPE_EXCEEDED": dict(scope_value="Another Desk"),
+            "AUTHORITY_EXPIRED": dict(expires="2020-01-01T00:00:00+00:00"),
+        }
+        for code, grant in cases.items():
+            with self.subTest(code=code):
+                self.setUp()
+                case = self.eligible(issue=False)
+                self.store(**grant)
+                self.assert_hold(case, code, "release")
+
+    def test_grant_held_by_someone_else_is_denied(self):
+        case = self.eligible(issue=False)
+        self.store(subject="Someone Else")
+        self.assert_hold(case, "AUTHORITY_DENIED", "release")
+
+    def test_revoked_grant_holds(self):
+        case = self.eligible(issue=False)
+        grant_id = self.store()
+        self.wi("authority", "revoke", "--root", str(self.store_dir), "--grant", grant_id)
+        self.assert_hold(case, "AUTHORITY_REVOKED", "release")
+
+    def test_grant_that_expired_after_a_valid_decision_still_holds(self):
+        # The decision was inside the grant's window; the window has since closed.
+        case = self.eligible(issue=False)
+        self.store(activates="2019-01-01T00:00:00+00:00", expires="2020-01-01T00:00:00+00:00")
+        case["review_decision"]["decided_at"] = "2019-06-01T00:00:00+00:00"
+        self.assert_hold(case, "AUTHORITY_EXPIRED", "release")
+
+    def test_decision_before_the_grant_was_active_holds(self):
+        case = self.eligible(issue=False)
+        self.store(activates="2026-10-27T18:00:00+00:00")
+        case["review_decision"]["decided_at"] = "2026-10-27T12:00:00+00:00"
+        report = self.assert_hold(case, "AUTHORITY_EXPIRED", "release")
+        self.assertIn("decided_at", json.dumps(report))
+
+    def test_grant_held_by_a_service_cannot_release(self):
+        case = self.eligible(issue=False)
+        self.store(kind="service")
+        self.assert_hold(case, "AUTHORITY_NOT_HUMAN", "release")
 
     def test_release_refusals(self):
         mutations = {
             "DECISION_TARGET_STALE": lambda c: c["review_decision"].update(target_sha256="0" * 64),
-            "AUTHORITY_EXPIRED": lambda c: c["review_decision"]["authority"].update(
-                expires_at="2020-01-01T00:00:00+00:00"),
-            "AUTHORITY_VENUE": lambda c: c["review_decision"]["authority"].update(venues=["Other"]),
-            "AUTHORITY_SCOPE": lambda c: c["review_decision"]["authority"].update(scope=["edit"]),
-            "AUTHORITY_HOLDER_MISMATCH": lambda c: c["review_decision"]["authority"].update(
-                holder="Someone Else"),
             "DECISION_NOT_HUMAN": lambda c: c["review_decision"].update(actor_kind="model"),
             "DECISION_TIME_INVALID": lambda c: c["review_decision"].update(
                 decided_at="2026-10-27T12:00:00"),
@@ -341,13 +518,6 @@ class Release(Base):  # P0-10, P0-11
                 case = self.eligible()
                 mutate(case)
                 self.assert_hold(case, code, "release")
-
-    def test_grant_that_expired_after_a_valid_decision_still_holds(self):
-        # The decision was inside the grant's window; the window has since closed.
-        case = self.eligible()
-        case["review_decision"]["decided_at"] = "2019-06-01T00:00:00+00:00"
-        case["review_decision"]["authority"]["expires_at"] = "2020-01-01T00:00:00+00:00"
-        self.assert_hold(case, "AUTHORITY_EXPIRED", "release")
 
     def test_draft_edited_after_approval_is_stale(self):
         case = self.eligible()

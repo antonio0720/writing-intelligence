@@ -59,7 +59,10 @@ jobs:
           mutate '"hold" if submission and strict else "advisory"' '"advisory"' "claim coverage hold"
           mutate 'elif document_hash is not None and expected_doc != document_hash:' 'elif False:' "document digest compare"
           mutate 'if origin == "human_authored" and kinds_seen & AI_PROSE:' 'if False:' "origin contradicts log"
-          mutate 'elif expires < now:' 'elif False:' "grant expiry"
+          mutate 'receipt = _v6_authorize(authority_store' 'receipt = {"subject_kind": "human"} or _v6_authorize(authority_store' "v6 grant store skipped"
+          mutate 'if binding.get("store") != "v6":' 'if False:' "declared grant accepted as authority"
+          mutate 'for label, when in [("now", now)] + ([("decided_at", decided)] if decided is not None else []):' 'for label, when in [("now", now)]:' "grant not checked at decision time"
+          mutate 'if root == inner or inner in root.parents:' 'if False:' "authority store inside the dossier accepted"
           cmp scripts/wi-authorship.py /tmp/wa.orig
       - name: Never claim a release or detector guarantee
         run: |

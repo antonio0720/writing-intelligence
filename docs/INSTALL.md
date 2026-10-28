@@ -32,17 +32,18 @@ Three cells deserve their own sentences.
 
 ---
 
-## What is inside the `.skill` bundles (v8: three of them)
+## What is inside the `.skill` bundles (v8: three of them; the v9 preview adds a fourth)
 
-Since v8 the payload ships as **three bundles**, each under the 200-file ceiling, each built and verified by `scripts/build-skill.sh`:
+Since v8 the payload ships as **three bundles**, plus a fourth for the v9 preview, each under the 200-file ceiling, each built and verified by `scripts/build-skill.sh`:
 
 | Bundle | Files | Holds |
 |---|---|---|
-| `writing-intelligence.skill` | 191 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
+| `writing-intelligence.skill` | 194 | The runtime — `SKILL.md`, the v4–v8 doctrine indexes, `references/v4`–`v7`, all schemas through v6, the agents, `docs/`, `governance/`, `plans/` with the v6/v7/v8 manifests and receipts, `scripts/wi.py`, `scripts/check-manifest.py`, and the `tests/v4`–`v7` fixtures |
 | `writing-intelligence-craft.skill` | 86 | The craft library — genre packs, voiceprints, anti- and positive patterns, diagnostics, the compiler references, including v8's fiction references and genre addenda |
 | `writing-intelligence-story.skill` | 184 | v8 Story Intelligence — the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, `references/v8`, `rules/`, `schemas/v8`, `policies/`, `tests/v8`, `tests/v8_arc`, `scripts/test-v8.sh` |
+| `writing-intelligence-authorship.skill` | 46 | **v9 preview, not released** — `scripts/wi-authorship.py`, `scripts/wi.py`, `schemas/v9`, `prototypes/wi9`, `references/v9`, `examples/v9`, `tests/v9`, `scripts/test-v9.sh` |
 
-Install all three on every surface that takes uploaded skills. The section below describes the original single-bundle layout and is kept for history; the table above is current.
+Install all four on every surface that takes uploaded skills (the fourth only if you want the v9 preview). The section below describes the original single-bundle layout and is kept for history; the table above is current.
 
 
 A skill bundle may contain **at most 200 files**. Over that, the upload is
@@ -94,12 +95,14 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
 
 ## 2. Cowork and Claude.ai — the uploaded bundle
 
-1. Download **all three bundles**:
+1. Download **all three bundles**, and the v9 preview bundle if you want it:
 
    ```bash
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence.skill
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
    curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+   # v9 preview, from the PR #8 branch until it merges:
+   curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/proposal/v9-authentic-voice-provenance-20261027/writing-intelligence-authorship.skill
    ```
 
    This tracks `main`, so it always matches these instructions. CI rebuilds the bundle on every push and fails if it does not byte-match the committed one, so this file cannot quietly go stale.
@@ -107,7 +110,7 @@ The skill triggers on any writing, editing, auditing, fact-checking or verificat
    Want a pinned version? Take it from [Releases](https://github.com/antonio0720/writing-intelligence/releases), where each bundle ships with a `.sha256` beside it. Note that `releases/latest` resolves to the newest **published release** — if a version has landed on `main` and has not been released yet, `latest` is behind it.
 
 2. In Claude: **Settings → Capabilities → Skills → Upload skill** (labelled **Settings → Skills** in some versions).
-3. Select a downloaded `.skill` file. Repeat for each of the three; each appears as its own skill (`writing-intelligence`, `writing-intelligence-craft`, `writing-intelligence-story`).
+3. Select a downloaded `.skill` file. Repeat for each; each appears as its own skill (`writing-intelligence`, `writing-intelligence-craft`, `writing-intelligence-story`, and for the preview `writing-intelligence-authorship`).
 4. If a v7 copy is already installed, replace it: delete or disable the old skill of the same name, then upload the v8 file.
 
 **Verify what you downloaded** before uploading:
@@ -472,7 +475,7 @@ CI also checks that every relative link in this repository resolves (`python3 sc
 ```bash
 # 1. The authorship-claim declaration checker (not an authorship verifier)
 python3 scripts/wi-authorship.py audit   --input path/to/dossier.json   # REVIEW (exit 0) or HOLD (exit 3)
-python3 scripts/wi-authorship.py release --input path/to/dossier.json   # RELEASE_ELIGIBLE (exit 0) or HOLD (exit 3); transmits nothing
+python3 scripts/wi-authorship.py release --input path/to/dossier.json --authority-store ~/wi-authority   # RELEASE_ELIGIBLE (exit 0) or HOLD (exit 3); transmits nothing
 
 # 2. The reference kernel (editorial questions, not detection)
 python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format text

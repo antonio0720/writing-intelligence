@@ -313,12 +313,12 @@ jobs:
             exit 1
           }
 
-      # README tells people to install three skills. All have to be under the
+      # README tells people to install four skills (the fourth is the v9 preview). All have to be under the
       # installer's ceiling, and the arithmetic is done here rather than
       # discovered by whoever tries to upload them.
-      - name: All three bundles are under the 200-file ceiling
+      - name: All four bundles are under the 200-file ceiling
         run: |
-          for B in writing-intelligence writing-intelligence-craft writing-intelligence-story; do
+          for B in writing-intelligence writing-intelligence-craft writing-intelligence-story writing-intelligence-authorship; do
             n=$(unzip -Z1 "dist/$B.skill" | grep -vc '/$' || true)
             echo "$B: $n files"
             test "$n" -le 200 \
@@ -345,6 +345,16 @@ jobs:
             exit 1
           }
 
+      - name: The committed authorship bundle matches the tree
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+        run: |
+          A=$(sha256sum dist/writing-intelligence-authorship.skill | cut -d' ' -f1)
+          B=$(sha256sum writing-intelligence-authorship.skill      | cut -d' ' -f1)
+          test "$A" = "$B" || {
+            echo "::error::writing-intelligence-authorship.skill is stale — run: bash scripts/build-skill.sh"
+            exit 1
+          }
+
       - uses: actions/upload-artifact@v4
         with:
           name: writing-intelligence-skill
@@ -355,6 +365,8 @@ jobs:
             dist/writing-intelligence-craft.skill.sha256
             dist/writing-intelligence-story.skill
             dist/writing-intelligence-story.skill.sha256
+            dist/writing-intelligence-authorship.skill
+            dist/writing-intelligence-authorship.skill.sha256
           if-no-files-found: error
 
   api:

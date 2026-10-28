@@ -81,18 +81,28 @@ def excluded_intervals(text, include_quoted=False):
     if not include_quoted:
         for pattern in (r'\u201c[^\u201d\n]{1,400}\u201d', r'"[^"\n]{1,400}"'):
             ranges.extend(m.span() for m in re.finditer(pattern, text))
-    return sorted(ranges)
+    merged = []
+    for lo, hi in sorted(ranges):
+        if merged and lo <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], hi)
+        else:
+            merged.append([lo, hi])
+    return [tuple(r) for r in merged]
 
 
-def _masked(span, intervals):
+def _masked(span, intervals, starts=None):
+    """True when span overlaps a mask interval. Intervals are merged and sorted,
+    so one bisect finds the only interval that can overlap: O(log n) per match
+    (independent review finding 8)."""
     start, end = span
-    # With <1000 mask ranges for ordinary prose, a simple scan is acceptable;
-    # for larger source texts the first overlap terminates early.
-    for lo, hi in intervals:
-        if lo >= end:
-            return False
-        if hi > start and lo < end:
-            return True
+    if starts is None:
+        starts = [lo for lo, _ in intervals]
+    i = bisect.bisect_right(starts, start) - 1
+    for j in (i, i + 1):
+        if 0 <= j < len(intervals):
+            lo, hi = intervals[j]
+            if hi > start and lo < end:
+                return True
     return False
 
 
@@ -110,12 +120,13 @@ def scan_text(text, pack=DEFAULT_PACK, include_quoted=False, max_hits=MAX_HITS):
         raise ValueError('MAX_HITS_INVALID')
     rules = read_rules(pack)
     mask = excluded_intervals(text, include_quoted)
+    mask_starts = [lo for lo, _ in mask]
     normalized = text.translate(ONE_TO_ONE)  # Code-point offsets remain stable.
     newlines = [-1] + [m.start() for m in re.finditer('\n', text)]
     findings = []
     for rule in rules:
         for match in rule['_compiled'].finditer(normalized):
-            if _masked(match.span(), mask):
+            if _masked(match.span(), mask, mask_starts):
                 continue
             start, end = match.span()
             line_ix = bisect.bisect_left(newlines, start)

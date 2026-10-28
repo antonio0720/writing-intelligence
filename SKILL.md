@@ -276,7 +276,7 @@ The refusals are load-bearing, not decorative. Full reasoning in [`references/v6
 
 ## The companion packs
 
-**Three bundles in v8.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library below, which now also carries the v8 fiction compiler references and genre addenda), and `writing-intelligence-story` (the four v8 story engines, their rules, schemas and suites). Install all three; each stands alone, and each is under the 200-file ceiling.
+**Three bundles in v8.** `writing-intelligence` (this runtime), `writing-intelligence-craft` (the craft library below, which now also carries the v8 fiction compiler references and genre addenda), and `writing-intelligence-story` (the four v8 story engines, their rules, schemas and suites). Install all three; each stands alone, and each is under the 200-file ceiling. A fourth, `writing-intelligence-authorship`, carries the v9 preview tools (not part of 8.0.0).
 
 
 The craft library — 27 genre packs, the voiceprint corpus, anti-pattern and positive-pattern diagnostics, the compiler references and the diagnostic set — ships as a second installable bundle, `writing-intelligence-craft`. This is not a downgrade. A skill bundle may hold at most 200 files, and a bundle that exceeds it does not degrade, it simply does not load — which would make every install instruction in this repository false. Splitting the runtime from the library is what keeps both under the ceiling with room to grow.

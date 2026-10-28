@@ -1,7 +1,7 @@
 {
   "schema": "wi9.editorial.review/1",
   "document_sha256": "28ad24b3f3c35706c7ce6750a9524a68dc1c2955130822720429eadfcf125559",
-  "rules_sha256": "198992304815011f397a5b2930ba9c885c8ac599158b9ea5de767a018bcd2349",
+  "rules_sha256": "a2a8a9f5eb33cd9186ecd35b3ae14705dd080899c382475bdb6b580a018c657e",
   "decisions": [
     {
       "rule_id": "empty_emphasis_001",

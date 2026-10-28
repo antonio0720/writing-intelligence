@@ -81,13 +81,13 @@ For each finding you record a disposition — `retain_as_written`, `revise_for_c
 
 ### 6. When release applies
 
-Only for a `submission` to a named venue. `release` additionally needs your `review_decision` (`outcome: approve`, `actor_kind: human`, `target_sha256` equal to the draft's digest, `decided_at`) carrying an `authority` grant held by you, covering `release` and the venue, and not expired; and a `venue_contract` that names the venue, lists `submit` in `allowed_operations`, and has no passed `deadline`.
+Only for a `submission` to a named venue. `release` additionally needs your `review_decision` (`outcome: approve`, `actor_kind: human`, `target_sha256` equal to the draft's digest, `decided_at`) with `authority: {"store": "v6"}`, and the operator passes `--authority-store <a v6 workspace outside the dossier folder>` — the v6 grant store (`scripts/wi.py authority`) must show the deciding person holds `release.approve` in scope `release_target:<venue>`, active both when they decided and now; a grant written only into the dossier holds with `AUTHORITY_UNBOUND`; and a `venue_contract` that names the venue, lists `submit` in `allowed_operations`, and has no passed `deadline`.
 
 ```bash
-python3 scripts/wi-authorship.py release --input dossier/dossier.json
+python3 scripts/wi-authorship.py release --input dossier/dossier.json --authority-store ~/wi-authority
 ```
 
-`RELEASE_ELIGIBLE` (exit 0) means those declarations are on file and consistent. It transmits nothing, and it does not prove you wrote the piece. If you edit the draft afterwards the decision goes stale (`DECISION_TARGET_STALE`). The grant is a declaration until WI9-08 binds it to the v6 grant store.
+`RELEASE_ELIGIBLE` (exit 0) means those declarations are on file and consistent. It transmits nothing, and it does not prove you wrote the piece. If you edit the draft afterwards the decision goes stale (`DECISION_TARGET_STALE`). Authority comes from the v6 grant store, not from the dossier: a grant revoked or expired since you decided holds the release.
 
 ### What v9 does not do
 

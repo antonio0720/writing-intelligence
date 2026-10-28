@@ -35,14 +35,14 @@ Created by **[Antonio T. Smith Jr.](https://densitysix.com)** — Founder & CEO,
 
 ```bash
 python3 scripts/wi-authorship.py audit   --input dossier.json   # REVIEW (0) or HOLD (3)
-python3 scripts/wi-authorship.py release --input dossier.json   # RELEASE_ELIGIBLE (0) or HOLD (3); sends nothing
+python3 scripts/wi-authorship.py release --input dossier.json --authority-store ~/wi-authority   # RELEASE_ELIGIBLE (0) or HOLD (3); sends nothing
 python3 prototypes/wi9/wi9_hotphrases.py scan --input draft.txt --format text
 python3 -m unittest discover -s tests/v9 -p 'test_*.py'
 ```
 
-**Where the waves stand** ([`WAVES.yaml`](references/v9/WAVES.yaml)): WI9-00 baseline VALIDATED (owner approval pending) · WI9-01 authorship contract PROTOTYPE · WI9-02 firsthand vault PLANNED · WI9-03 voice baseline PROTOTYPE (statistics only, no consented corpus) · WI9-04 thought fidelity PLANNED · WI9-05 craft repair IN_PROGRESS · WI9-06 human-only venue hold PROTOTYPE · WI9-07 blinded editorial benchmark PLANNED — **not executed** · WI9-08 canonical integration PLANNED · WI9-09 independent review PLANNED. Roadmap view: [`ROADMAP.md`](ROADMAP.md). How to walk through it: [`USER_GUIDE.md`](USER_GUIDE.md#authorship-and-venue-checks-v9-preview).
+**Where the waves stand** ([`WAVES.yaml`](references/v9/WAVES.yaml)): WI9-00 baseline VALIDATED (owner approval pending) · WI9-01 authorship contract PROTOTYPE · WI9-02 firsthand vault PLANNED · WI9-03 voice baseline PROTOTYPE (statistics only, no consented corpus) · WI9-04 thought fidelity PLANNED · WI9-05 craft repair IN_PROGRESS · WI9-06 human-only venue hold PROTOTYPE · WI9-07 blinded editorial benchmark PLANNED — **not executed** · WI9-08 canonical integration IN_PROGRESS (fourth bundle and v6-bound release done) · WI9-09 independent review PLANNED. Roadmap view: [`ROADMAP.md`](ROADMAP.md). How to walk through it: [`USER_GUIDE.md`](USER_GUIDE.md#authorship-and-venue-checks-v9-preview).
 
-**What v9 does not do.** It cannot authenticate who wrote a passage or show a source is true; an exact excerpt is a text anchor, not entailment. It reports no quality scores or benchmark results — none exist. It has no consented author corpus and no external review yet, runs only on POSIX, and its authority grant is a declaration until WI9-08 binds it to the v6 grant store.
+**What v9 does not do.** It cannot authenticate who wrote a passage or show a source is true; an exact excerpt is a text anchor, not entailment. It reports no quality scores or benchmark results — none exist. It has no consented author corpus and no external review yet, and runs only on POSIX. Release authority is read from the local v6 grant store, which proves what was granted to whom — not who typed the decision.
 
 **AI-detector scores are never a target, a gate or a claim.** An external detector result may be archived as an observation and nothing more.
 
@@ -397,23 +397,24 @@ Each v6 law takes an earlier one further rather than replacing it. **M** rests o
 
 ## Install
 
-**Three bundles. Install all three.**
+**Four bundles. Install all four.**
 
-A skill bundle may hold at most 200 files. A bundle over that ceiling does not degrade — it does not load, which would make every install instruction on this page false. At v6 the payload split into the runtime and the craft library; v8's four story engines are ~180 files on their own, so they ship as a third bundle under the same ceiling and the same checks:
+A skill bundle may hold at most 200 files. A bundle over that ceiling does not degrade — it does not load, which would make every install instruction on this page false. At v6 the payload split into the runtime and the craft library; v8's four story engines are ~180 files on their own, so they ship as a third bundle under the same ceiling and the same checks; the v9 preview tools did not fit the runtime's last six files, so they ship as a fourth:
 
 | Bundle | Files | Contains |
 |---|---|---|
-| **`writing-intelligence.skill`** | 191 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
+| **`writing-intelligence.skill`** | 194 | The runtime: the skill, the v4–v7 doctrine and the v8 index, the v6–v8 manifests and receipts, the schemas, the twelve agents, `scripts/wi.py`, and the fixtures that prove the verifier works |
 | **`writing-intelligence-craft.skill`** | 86 | The craft library: 27 genre packs plus the v8 fiction addenda, the voiceprint corpus and fingerprint engine, the anti-pattern and positive-pattern diagnostics, the compiler references (including v8's novel architecture, rule integrity, reader experience and arc-ending projection), the diagnostic set |
 | **`writing-intelligence-story.skill`** | 184 | **New in v8.** Story Intelligence: the fiction & thriller, arc & ending, craft (C121–C180) and Japan Story OS engines, their 340-requirement registers, schemas and suites, and `scripts/test-v8.sh` |
+| **`writing-intelligence-authorship.skill`** | 46 | **v9 preview, not released.** `scripts/wi-authorship.py` (audit, release), `scripts/wi.py` (its claim classifier and v6 grant store), `schemas/v9`, the `prototypes/wi9` reference kernel and 334 phrase rules, `references/v9`, `examples/v9`, `tests/v9` and `scripts/test-v9.sh`, which runs inside the extracted bundle |
 
-The runtime now holds 191 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in three artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate for all three and prints the arithmetic, so it cannot regress into an upload nobody can install. `scripts/build-skill.sh` enforces the 200-file ceiling as a build gate and prints the arithmetic, so it cannot regress into an upload nobody can install.
+The runtime now holds 194 files, including the v7 and v8 doctrine, manifests and receipts. They are one system in four artifacts. `scripts/build-skill.sh` enforces the 200-file ceiling and the 1024-character skill description limit as build gates for all four and prints the arithmetic, so it cannot regress into an upload nobody can install.
 
 If only the runtime is present, the craft doctrine summarized in [`SKILL.md`](SKILL.md) still governs and the genre packs are one `git clone` away — degraded, and honestly degraded, rather than broken.
 
 ### Claude Code or any terminal agent — as a skill *(recommended)*
 
-One clone gets you all three bundles' contents, the CLI and the v8 engines.
+One clone gets you all four bundles' contents, the CLI, the v8 engines and the v9 preview tools.
 
 ```bash
 git clone https://github.com/antonio0720/writing-intelligence \
@@ -437,6 +438,8 @@ Do the same for the other two — both are committed at the repository root, bes
 ```bash
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+# v9 preview, from the PR #8 branch until it merges:
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/proposal/v9-authentic-voice-provenance-20261027/writing-intelligence-authorship.skill
 ```
 
 Pinned versions of all three, with checksums, are on [**Releases**](https://github.com/antonio0720/writing-intelligence/releases/latest).

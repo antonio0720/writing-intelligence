@@ -2979,7 +2979,7 @@
       "id": "meta_conclusion",
       "category": "generic_closure",
       "kind": "regex",
-      "expression": "\\b(?:ultimately|in\\s+the\\s+end)\\s*,?\\s+(?:it\\s+all|everything|the\\s+answer)\\b",
+      "expression": "\\b(?:ultimately|in\\s+the\\s+end)(?:\\s*,\\s*|\\s+)(?:it\\s+all|everything|the\\s+answer)\\b",
       "severity": "review",
       "question": "Avoid a closing that only recycles the main claim.",
       "context_note": "Pattern match alone is insufficient to justify a rewrite."

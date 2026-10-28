@@ -25,7 +25,7 @@ The trigger was an AI-generated three-part essay about miniature worlds: the con
 
 ## What exists on this branch
 
-All of it is experimental and reviewable; none of it is a release. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md).
+All of it is experimental and reviewable; none of it is a release. The defect register is [`defects.md`](defects.md); the receipts are [`plans/receipts/WI9-00.json`](../../plans/receipts/WI9-00.json) and [`plans/receipts/WI9-P0.json`](../../plans/receipts/WI9-P0.json). The engineering handoff this work follows is [`ENGINEERING_HANDOFF.md`](ENGINEERING_HANDOFF.md). What only the owner can supply — consented voice samples, the 60-case benchmark material and reviewers, an independent human reviewer — and the exact commands that run on it: [`OWNER_INTAKE.md`](OWNER_INTAKE.md).
 
 ### `scripts/wi-authorship.py` — authorship-claim declaration checker
 
@@ -33,7 +33,7 @@ This is a **declaration checker, not an authorship verifier**. `audit --input do
 
 `audit` checks: the root and nested types; bounded, symlink-free reads under the dossier directory (POSIX `O_NOFOLLOW` per component; refuses to run elsewhere); the draft against its pinned `expected_sha256` (required for any submission); unique evidence ids; exact source anchors and pinned source digests; typed `experience_state` (a planned or hypothetical item cannot support a firsthand claim) and `support_status`; draft anchors that resolve uniquely in the draft; **claim coverage** — every consequential claim the v4 classifier in `scripts/wi.py` finds in the draft must overlap an anchored span, so one safe anchor cannot carry three unsourced claims; the contribution log against the declared origin on every venue; and human-only venue rules, where assistance the venue contract does not list is refused.
 
-`release` additionally requires: a person's `review_decision` whose `target_sha256` is the exact draft digest, an authority grant held by that person that covers `release` and the named venue and has not expired, a venue contract recording `submit` as open, and an unpassed deadline. The grant is a declaration until WI9-08 binds it to the v6 grant store.
+`release` additionally requires: a person's `review_decision` whose `target_sha256` is the exact draft digest, a v6 grant-store check (`review_decision.authority = {"store": "v6"}`, with the store named by the operator through `--authority-store` and refused if it sits inside the dossier folder, if `.wi` or its database is a symlink, or if it cannot be opened read-only) proving that person holds `release.approve` in scope `release_target:<venue>`, active when they decided and now, by a human subject; a venue contract recording `submit` as open; and an unpassed deadline. A grant declared only in the dossier holds (`AUTHORITY_UNBOUND`). The v6 store's own refusals (`DENIED`, `REVOKED`, `EXPIRED`, `GRANT_SCOPE_EXCEEDED`) come through as `AUTHORITY_*` codes.
 
 Dossier contract: [`schemas/v9/authorship-dossier.schema.json`](../../schemas/v9/authorship-dossier.schema.json) (`wi9-authorship-2`; `wi9-authorship-1` dossiers are still read). `tests/v9/test_schema_parity.py` keeps the schema and the checker on one vocabulary.
 
@@ -55,7 +55,7 @@ The owner's reference kernel, ported unchanged except where a defect was repaire
 | WI9-05 | Craft repair | Correct overbalanced transitions, hollow contrasts and unsupported examples based on meaning | IN_PROGRESS — doctrine repaired, scanner prototyped |
 | WI9-06 | Human-only venue gate | Enforce research-only vs pitch modes and author declaration, refusal negative tests | PROTOTYPE — `release` gate added |
 | WI9-07 | Editorial benchmark | Author-rated fidelity, originality of observation, evidence accuracy, editor-rated usefulness | PLANNED — NOT EXECUTED |
-| WI9-08 | Integration | Additive integration into `wi.py`, CLI docs, schema, regression and versioned release | PLANNED |
+| WI9-08 | Integration | Additive integration into `wi.py`, CLI docs, schema, regression and versioned release | IN_PROGRESS — fourth bundle built and verified; `release` bound to the v6 grant store; `wi.py` subcommand, v9 manifest and API/MCP still open |
 | WI9-09 | Independent review & rollout | Artifact verification, negative controls, external review, owner's release decision | PLANNED — release HOLD |
 
 ### Measurement, not mythology

@@ -19,6 +19,7 @@ from pathlib import Path
 
 MAX_FILE_BYTES = 5_000_000
 MAX_MANIFEST_BYTES = 1_000_000
+MAX_LIST = 5_000  # bounds work per manifest (independent review finding 14)
 SCHEMA = "wi9.preflight/1"
 ORIGINS = {"human_authored", "ai_assisted", "ai_generated", "unknown"}
 USES = {"research", "internal_review", "submission"}
@@ -106,6 +107,9 @@ def preflight(data, root):
     issues = []
     if not isinstance(data, dict):
         return {"status": "HOLD", "issues": [_report("INVALID_ROOT", "HOLD", "Top-level JSON must be an object")], "release_authorized": False}
+    for key in ("contributions", "evidence", "claim_links"):
+        if isinstance(data.get(key), list) and len(data[key]) > MAX_LIST:
+            return {"status": "HOLD", "issues": [_report("LIST_TOO_LONG", "HOLD", "%s exceeds %d items" % (key, MAX_LIST))], "release_authorized": False}
     if data.get("schema") != SCHEMA:
         issues.append(_report("SCHEMA_UNKNOWN", "HOLD", "Expected %s" % SCHEMA))
     doc = data.get("document")
@@ -268,6 +272,8 @@ def editorial_diagnostics(text):
 
 def voice_baseline(samples, root, min_samples=3, min_words=500):
     issues, metrics = [], []
+    if not isinstance(samples, list) or len(samples) > MAX_LIST:
+        return {"status": "HOLD", "issues": [_report("VOICE_SAMPLES_INVALID", "HOLD", "samples must be a list of at most %d" % MAX_LIST)]}
     for i, sample in enumerate(samples):
         if not isinstance(sample, dict) or sample.get("origin") != "human_authored" or sample.get("consent") is not True:
             issues.append(_report("VOICE_SOURCE_INELIGIBLE", "HOLD", "Human-authored and consented sample required", str(i)))
@@ -330,8 +336,8 @@ def _quantile(vals, fraction):
 def evaluate_benchmark(data, minimum_pairs=60):
     """Locked before evaluation: pair exact same case and reviewer; no detector scoring."""
     rows = data.get("ratings") if isinstance(data, dict) else None
-    if not isinstance(rows, list):
-        return {"status": "HOLD", "reason": "Ratings must be a list"}
+    if not isinstance(rows, list) or len(rows) > MAX_LIST * 4:
+        return {"status": "HOLD", "reason": "Ratings must be a list of at most %d" % (MAX_LIST * 4)}
     cells, errs = {}, []
     for i, row in enumerate(rows):
         if not isinstance(row, dict):

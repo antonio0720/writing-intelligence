@@ -55,10 +55,10 @@ Exit status: **0**, `status: REVIEW`, `release_authorized: false`.
 `REVIEW` is not an approval. Running the second subcommand on the same dossier:
 
 ```
-$ python3 scripts/wi-authorship.py release --input examples/v9/claim-coverage/dossier-cut.json
+$ python3 scripts/wi-authorship.py release --input examples/v9/claim-coverage/dossier-cut.json --authority-store ~/wi-authority
 ```
 
-returns `HOLD` (exit **3**) with, among others, `DECISION_REQUIRED` and `AUTHORITY_REQUIRED`: no person has recorded a decision bound to this exact draft digest, and no unexpired authority grant for this venue exists in the dossier. Even when both are supplied, `RELEASE_ELIGIBLE` means the declared gates agree with each other; it is not proof the text was written by a person, and the tool still sends nothing.
+returns `HOLD` (exit **3**) with, among others, `DECISION_REQUIRED` and `AUTHORITY_REQUIRED`: no person has recorded a decision bound to this exact draft digest, and the decision names no v6 grant store to check. Release authority is never read from the dossier: the deciding person needs a `release.approve` grant for this venue in a v6 workspace (`scripts/wi.py authority issue`). Even when both are supplied, `RELEASE_ELIGIBLE` means the gates agree; it is not proof the text was written by a person, and the tool still sends nothing.
 
 ## Limits of this example
 

@@ -29,10 +29,14 @@ def prepare_request(dossier):
         return {"status": "HOLD", "reason": "CONTRACT_INVALID"}
     policy = venue.get('policy', 'unknown')
     mode = document.get('intended_use', 'unknown')
+    if not isinstance(policy, str):
+        return {"status": "HOLD", "reason": "VENUE_POLICY_UNKNOWN"}
     if policy == 'human_only':
         return {"status": "HOLD", "reason": "HUMAN_ONLY_NO_GENERATED_PROSE",
                 "alternative": "Research brief / questions only, written submission must originate with the person"}
-    if policy == 'unknown':
+    if policy not in ('ai_permitted', 'disclosure_required'):
+        # Allowlist, not blocklist: 'human-only', 'Human_Only' or any unrecognised
+        # value must never open a prose request (independent review finding 9).
         return {"status": "HOLD", "reason": "VENUE_POLICY_UNKNOWN"}
     if policy == 'disclosure_required' and not venue.get('disclosure_plan'):
         return {"status": "HOLD", "reason": "DISCLOSURE_PLAN_REQUIRED"}
@@ -99,8 +103,11 @@ def inspect_candidate(candidate, request):
         if not isinstance(text, str) or not text.strip():
             errors.append('TEXT_EMPTY:%d' % i)
             continue
-        if not isinstance(ids, list) or not ids or any(not isinstance(v, str) or v not in source_cards for v in ids):
+        ids_ok = isinstance(ids, list) and bool(ids) and all(isinstance(v, str) for v in ids)
+        if not ids_ok or any(v not in source_cards for v in ids):
             errors.append('EVIDENCE_UNRESOLVED:%d' % i)
+        if not ids_ok:
+            ids = []
         if p.get('author_review_required') is not True:
             errors.append('REVIEW_FLAG_ABSENT:%d' % i)
         quotes = p.get('direct_quotes', [])
@@ -113,7 +120,7 @@ def inspect_candidate(candidate, request):
                 continue
             original = source_cards[quote['source_id']].get('source_quote')
             q = quote.get('exact_text')
-            if not isinstance(q, str) or not isinstance(original, str) or q not in original or q not in text:
+            if not isinstance(q, str) or not q.strip() or not isinstance(original, str) or q not in original or q not in text:
                 errors.append('QUOTATION_UNVERIFIED:%d' % i)
         if p.get('asserts_firsthand') is True:
             if not any(source_cards[v].get('kind') == 'firsthand' and source_cards[v].get('source_origin') == 'human_authored' for v in ids if v in source_cards):

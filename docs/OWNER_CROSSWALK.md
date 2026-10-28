@@ -36,7 +36,7 @@ The table above is the v8 fiction merge plan. This one maps the v9 waves (PR #8,
 | WI9-05 Craft repair | IN_PROGRESS | Doctrine repair across `references/compiler/`, `references/diagnostics/` (`repair_rhythm` in `rewrite_operators.md`), `references/anti_patterns/`; `prototypes/wi9/wi9_hotphrases.py`, `wi9_phrase_review.py`; guard `tests/v9/test_doctrine_meaning_led.py` |
 | WI9-06 Human-only venue gate | PROTOTYPE | `release` in `scripts/wi-authorship.py`; `prototypes/wi9/wi9_composition.py` (refuses `human_only` venues) |
 | WI9-07 Editorial benchmark | PLANNED, not executed | `references/v9/QUALITY_BENCHMARK.md`; `wi9_core.py benchmark` holds until 60 matched cases exist |
-| WI9-08 Integration | PLANNED | Will fold into `scripts/wi.py`, `docs/api/API_SPEC.md`, `docs/mcp/MCP_SPEC.md`, and bind the `release` grant to the v6 store |
+| WI9-08 Integration | IN_PROGRESS | Done: `packs/authorship/SKILL.md` and the fourth bundle in `scripts/build-skill.sh`; `release` reads the v6 grant store. Open: fold into `scripts/wi.py`, `docs/api/API_SPEC.md`, `docs/mcp/MCP_SPEC.md` |
 | WI9-09 Independent review and rollout | PLANNED, release HOLD | Receipt and owner approval still to come |
 
 Rule carried over from v8: the standalone v9 tools are traceable additions, not a second evaluator for rules `scripts/wi.py` owns. Where the two disagree, `scripts/wi-authorship.py` is the answer for authorship and venue, and the difference is a defect to record.

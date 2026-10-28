@@ -13,7 +13,7 @@ One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [
 | Command | Does | Exit |
 |---|---|---|
 | `python3 scripts/wi-authorship.py audit --input dossier.json [--out R.json]` | limited checks on a self-reported dossier | `0` REVIEW · `3` HOLD |
-| `python3 scripts/wi-authorship.py release --input dossier.json [--out R.json]` | is a person's bound release decision on file? Transmits nothing | `0` RELEASE_ELIGIBLE · `3` HOLD |
+| `python3 scripts/wi-authorship.py release --input dossier.json --authority-store STORE [--out R.json]` | is a person's bound release decision on file? Transmits nothing | `0` RELEASE_ELIGIBLE · `3` HOLD |
 | `python3 prototypes/wi9/wi9_hotphrases.py scan --input FILE [--format text\|json] [--include-quotes]` | 334 editorial rules (321 literal, 13 regex, 11 categories); offsets, line/column, document and rule sha256 | `0` ran |
 | `python3 prototypes/wi9/wi9_phrase_review.py --input F --report R.json --decisions D.json` | review ledger bound to the exact document and rule digests | validation result |
 | `python3 prototypes/wi9/wi9_core.py preflight\|plan\|diagnose\|voice\|benchmark …` | reference kernel (`preflight` is the older specimen; `wi-authorship.py` wins on disagreement) | see its README |
@@ -23,7 +23,7 @@ One page. Depth: [`USER_GUIDE.md`](USER_GUIDE.md) · [`SKILL.md`](SKILL.md) · [
 
 - **REVIEW** — the limited checks passed. It is *not* permission to send, *not* a claim of human authorship, and `release_authorized` stays `false`. A stderr notice says so.
 - **HOLD** — at least one check failed. Each finding carries a `code`, a `level` and a `target`. Fix the dossier or the draft, re-run.
-- **RELEASE_ELIGIBLE** — `release` only. Requires a REVIEW audit, a person's `review_decision` whose `target_sha256` is the exact draft digest, an unexpired grant held by that person covering `release` and the named venue, a venue contract listing `submit`, and an unpassed deadline. It is still a declaration check; nothing is sent.
+- **RELEASE_ELIGIBLE** — `release` only. Requires a REVIEW audit, a person's `review_decision` whose `target_sha256` is the exact draft digest, a v6 grant-store check that the person holds `release.approve` in scope `release_target:<venue>` (active at decision time and now, human subject — issue it with `python3 scripts/wi.py authority issue --capability release.approve --scope release_target --scope-value "<venue>" --subject "<name>"`), a venue contract listing `submit`, and an unpassed deadline. The dossier names the store (`"authority": {"store": "v6"}`); the operator names the store with `--authority-store`, which must be outside the dossier folder; a grant typed into the dossier holds `AUTHORITY_UNBOUND`. Nothing is sent.
 
 Every report says `declaration_status: self_reported`. Nothing here authenticates a writer or proves a source true.
 
@@ -61,7 +61,7 @@ Required: `schema`, `document` (`path`, `origin`, `venue_policy`, `intended_use`
 | `CONSENT_ABSENT` · `SOURCE_DIGEST_MISMATCH` · `EXCERPT_MISSING` | consent not recorded; source changed; quote is not verbatim in the source |
 | `DOCUMENT_ANCHOR_AMBIGUOUS` | the excerpt occurs twice in the draft — add `start` |
 | `SUPPORT_UNRESOLVED` | a reviewer marked evidence `needs_source` / `conflicted` (HOLD for a strict-arena submission) |
-| `DECISION_TARGET_STALE` · `AUTHORITY_EXPIRED` · `AUTHORITY_VENUE` · `SUBMIT_NOT_PERMITTED` | (release) decision names another digest; grant expired or does not cover this venue; venue contract does not list `submit` |
+| `DECISION_TARGET_STALE` · `AUTHORITY_UNBOUND` · `AUTHORITY_DENIED` · `AUTHORITY_EXPIRED` · `AUTHORITY_REVOKED` · `AUTHORITY_GRANT_SCOPE_EXCEEDED` · `SUBMIT_NOT_PERMITTED` | (release) decision names another digest; grant only declared in the dossier; no v6 grant, or expired, revoked, or for another venue; venue contract does not list `submit` |
 
 **Phrase scan.** A match is an editorial *question* — never proof of AI authorship, never an automatic rewrite. Dispositions in the review ledger: `retain_as_written` · `revise_for_clarity` · `needs_source` · `not_applicable`. A valid ledger means *reviewed*, not approved.
 
@@ -136,7 +136,7 @@ Executable today: B, C, D, E, F, G (claim atoms), H, I, K, L (bundles), **M, N, 
 
 ## Install — one line per surface
 
-**Three bundles.** A bundle may hold at most 200 files. `writing-intelligence.skill` is the runtime (191 files — skill, doctrine, schemas, agents, `scripts/wi.py`, manifests and receipts, fixtures), `writing-intelligence-craft.skill` is the craft library (86 files — genre packs, voiceprints, anti-patterns, compiler references including v8's fiction references, diagnostics) and `writing-intelligence-story.skill` is v8 Story Intelligence (184 files — the four story engines, registers, schemas, suites). Install all three. A clone gets you everything at once.
+**Four bundles.** A bundle may hold at most 200 files. `writing-intelligence.skill` is the runtime (194 files — skill, doctrine, schemas, agents, `scripts/wi.py`, manifests and receipts, fixtures), `writing-intelligence-craft.skill` is the craft library (86 files — genre packs, voiceprints, anti-patterns, compiler references including v8's fiction references, diagnostics) and `writing-intelligence-story.skill` is v8 Story Intelligence (184 files — the four story engines, registers, schemas, suites). `writing-intelligence-authorship.skill` is the **v9 preview** (46 files — `wi-authorship.py`, `wi.py`, `schemas/v9`, `prototypes/wi9`, `references/v9`, `examples/v9`, `tests/v9`); it is not part of the 8.0.0 release and lives on the PR #8 branch until it merges. Install all four. A clone gets you everything at once.
 
 ```bash
 # Claude Code / terminal agent — user-scoped skill (everything, one clone)
@@ -151,6 +151,8 @@ curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main
 # ...then the craft and story bundles, uploaded the same way:
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-craft.skill
 curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/main/writing-intelligence-story.skill
+# v9 preview, from the PR #8 branch until it merges:
+curl -LO https://raw.githubusercontent.com/antonio0720/writing-intelligence/proposal/v9-authentic-voice-provenance-20261027/writing-intelligence-authorship.skill
 # pinned versions with checksums: https://github.com/antonio0720/writing-intelligence/releases/latest
 
 # CLI only — the deterministic core, one file, no dependencies

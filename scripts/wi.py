@@ -162,19 +162,24 @@ def sentences(text):
     out, buf = [], []
     # Common abbreviations that should not end a sentence in Latin scripts.
     abbrev = re.compile(r"(?:^|\s)(?:[A-Z][a-z]{0,3}|e\.g|i\.e|vs|cf|et al|Dr|Mr|Mrs|Ms|Prof|Fig|No|pp)\.$")
+    # The longest token plus its dot is six characters, so once the buffer is
+    # longer than eight only its tail can match, and only after whitespace.
+    # Testing the tail keeps the split linear: joining the whole buffer at
+    # every terminator made a long run of "a." quadratic (v9 review, D-18).
+    abbrev_tail = re.compile(r"\s(?:[A-Z][a-z]{0,3}|e\.g|i\.e|vs|cf|et al|Dr|Mr|Mrs|Ms|Prof|Fig|No|pp)\.$")
     i = 0
     while i < len(text):
         ch = text[i]
         buf.append(ch)
         if ch in _TERMINATORS:
             nxt = text[i + 1] if i + 1 < len(text) else " "
-            cur = "".join(buf)
             # Decimal numbers: 3.5 — not a boundary.
             if ch == "." and i + 1 < len(text) and text[i + 1].isdigit() \
                and i > 0 and text[i - 1].isdigit():
                 i += 1
                 continue
-            if ch == "." and abbrev.search(cur):
+            if ch == "." and (abbrev.search("".join(buf)) if len(buf) <= 8
+                              else abbrev_tail.search("".join(buf[-8:]))):
                 i += 1
                 continue
             if nxt.isspace() or nxt in "\u201d\"')]" or ord(ch) > 0x3000:

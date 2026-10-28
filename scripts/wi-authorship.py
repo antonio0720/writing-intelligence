@@ -33,7 +33,9 @@ import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
+import bisect
 import re
+import sqlite3
 import stat
 import sys
 
@@ -60,6 +62,7 @@ MAX_BYTES = 5_000_000
 MAX_DOSSIER_BYTES = 2_000_000
 MAX_JSON_DEPTH = 32
 MAX_LIST = 5_000
+MAX_ANCHORS = 1_000
 SHA_RE = re.compile(r"^[0-9a-f]{64}$")
 CONSEQUENTIAL_CLASSES = {"observed_fact", "sourced_fact", "inference"}
 
@@ -272,7 +275,16 @@ def analyze(dossier, root, now=None):
     if arena is not None and not isinstance(arena, str):
         flag("ARENA_INVALID", "hold", "arena must be a string.")
         arena = None
-    strict = arena in STRICT_ARENAS
+    if isinstance(arena, str):
+        arena = arena.strip().lower() or None
+    consequential = doc.get("consequential", True)
+    if not isinstance(consequential, bool):
+        flag("CONSEQUENTIAL_INVALID", "hold", "document.consequential must be true or false.")
+        consequential = True
+    # An unknown or missing arena never lowers the bar: a submission is held
+    # to the strict evidence rules unless it says, explicitly, that it makes
+    # no consequential claim.
+    strict = arena in STRICT_ARENAS or (doc.get("intended_use") == "submission" and consequential)
     if origin not in ORIGINS:
         flag("ORIGIN_UNKNOWN", "hold", "Declare human_authored, ai_assisted, or ai_generated.")
     if venue not in VENUES:
@@ -449,6 +461,10 @@ def analyze(dossier, root, now=None):
     if submission and strict and not passages:
         flag("DOCUMENT_CLAIM_ANCHORS_REQUIRED", "hold",
              "Consequential submissions must anchor claims to draft passages.")
+    if len(passages) > MAX_ANCHORS:
+        flag("DOCUMENT_CLAIM_ANCHORS_TOO_MANY", "hold",
+             "More than %d draft anchors; split the document." % MAX_ANCHORS)
+        passages = []
     spans = []
     for index, passage in enumerate(passages):
         tag = "document_claim_anchors[%d]" % index
@@ -469,19 +485,19 @@ def analyze(dossier, root, now=None):
         if body is None or snippet not in body:
             flag("DOCUMENT_ANCHOR_MISSING", "hold", "Claim excerpt is absent from the submitted draft.", tag)
             continue
-        positions = [m.start() for m in re.finditer(re.escape(snippet), body)]
         start = passage.get("start")
         if start is not None:
-            if not isinstance(start, int) or isinstance(start, bool) or start not in positions:
+            if (not isinstance(start, int) or isinstance(start, bool) or start < 0
+                    or not body.startswith(snippet, start)):
                 flag("DOCUMENT_ANCHOR_OFFSET_MISMATCH", "hold",
                      "start does not locate the excerpt in the draft.", tag)
                 continue
-        elif len(positions) > 1:
-            flag("DOCUMENT_ANCHOR_AMBIGUOUS", "hold",
-                 "Excerpt occurs %d times in the draft; give its start offset." % len(positions), tag)
-            continue
         else:
-            start = positions[0]
+            start = body.find(snippet)
+            if body.find(snippet, start + 1) >= 0:
+                flag("DOCUMENT_ANCHOR_AMBIGUOUS", "hold",
+                     "Excerpt occurs more than once in the draft; give its start offset.", tag)
+                continue
         if target is not None:
             spans.append((start, start + len(snippet), target))
 
@@ -494,8 +510,13 @@ def analyze(dossier, root, now=None):
         except Exception as exc:  # another file; report the failure, never crash
             claims = []
             flag("CLAIM_DISCOVERY_FAILED", "hold", "Claim discovery failed: %s" % exc)
+        spans.sort()
+        starts = [s for s, _, _ in spans]
+        widest = max([e - s for s, e, _ in spans] or [0])
         for claim in claims:
-            linked = sorted({t for s, e, t in spans if s < claim["end"] and e > claim["start"]})
+            lo = bisect.bisect_left(starts, claim["start"] - widest)
+            hi = bisect.bisect_left(starts, claim["end"])
+            linked = sorted({t for s, e, t in spans[lo:hi] if e > claim["start"]})
             coverage.append({"claim_id": claim["id"], "class": claim["class"],
                              "start": claim["start"], "end": claim["end"],
                              "anchored": bool(linked), "evidence_ids": linked,
@@ -541,7 +562,114 @@ def analyze(dossier, root, now=None):
     })
 
 
-def release(dossier, root, now=None):
+RELEASE_CAPABILITY = "release.approve"
+
+
+def _open_store_readonly(store, dossier_root):
+    """Open an operator-named v6 store read-only, or raise Refusal.
+
+    The store must sit outside the dossier directory: anyone who controls the
+    dossier can write a store that grants themselves release. `.wi` and its
+    database must be real files, not symlinks, and the database is opened with
+    sqlite's read-only mode so a release check can never write to it.
+    """
+    if not isinstance(store, str) or not store:
+        raise Refusal("AUTHORITY_STORE_REQUIRED",
+                      "release needs --authority-store: the v6 workspace that holds release grants")
+    root = Path(store).resolve()
+    inner = Path(dossier_root).resolve()
+    if root == inner or inner in root.parents:
+        raise Refusal("AUTHORITY_STORE_UNTRUSTED",
+                      "the authority store is inside the dossier directory; its author could grant themselves release")
+    wi_dir = root / ".wi"
+    db = wi_dir / "workspace.db"
+    for part in (wi_dir, db):
+        try:
+            mode = os.lstat(str(part)).st_mode
+        except OSError:
+            raise Refusal("AUTHORITY_STORE_MISSING", "no v6 workspace store at %s" % store)
+        if stat.S_ISLNK(mode):
+            raise Refusal("AUTHORITY_STORE_SYMLINK", "%s is a symlink" % part.name)
+    if not stat.S_ISREG(os.lstat(str(db)).st_mode):
+        raise Refusal("AUTHORITY_STORE_MISSING", "workspace.db is not a regular file")
+    try:
+        conn = sqlite3.connect("file:%s?mode=ro" % db.as_posix(), uri=True)
+        conn.row_factory = sqlite3.Row
+        conn.execute("SELECT 1 FROM v6_grant LIMIT 1")
+    except sqlite3.Error as exc:
+        raise Refusal("AUTHORITY_STORE_UNREADABLE", "v6 store could not be read: %s" % exc)
+    return conn
+
+
+def _store_authorize(conn, actor, capability, scope, at):
+    """The v6 authorize rule over a read-only connection; same order, same codes."""
+    wi = _wi_module()
+    held = []
+    for r in conn.execute("SELECT * FROM v6_grant WHERE subject=? ORDER BY created_at", (actor,)):
+        row = conn.execute("SELECT payload_json FROM v6_object WHERE digest=?", (r["digest"],)).fetchone()
+        if row is None:
+            raise Refusal("AUTHORITY_STORE_UNREADABLE", "a grant object is missing from the store")
+        g = json.loads(row["payload_json"])
+        g["_revoked_at"] = r["revoked_at"]
+        held.append(g)
+    if not held:
+        raise Refusal("AUTHORITY_DENIED", "%s holds no capability grant" % actor)
+    expired, revoked, out_of_scope = [], [], []
+    for g in held:
+        if not wi.v6_capability_covers(g.get("capability", ""), capability):
+            continue
+        if g.get("_revoked_at"):
+            revoked.append(g)
+            continue
+        if (g.get("activates_at") and at < str(g["activates_at"])) or \
+           (g.get("expires_at") and at >= str(g["expires_at"])):
+            expired.append(g)
+            continue
+        if not wi.v6_scope_covers(g.get("scope") or {}, scope):
+            out_of_scope.append(g)
+            continue
+        return g
+    if revoked:
+        raise Refusal("AUTHORITY_REVOKED", "every grant %s holds for %s has been revoked" % (actor, capability))
+    if expired:
+        raise Refusal("AUTHORITY_EXPIRED", "%s holds %s but the grant is not active at %s" % (actor, capability, at))
+    if out_of_scope:
+        raise Refusal("AUTHORITY_GRANT_SCOPE_EXCEEDED", "%s holds %s but not in this scope" % (actor, capability))
+    raise Refusal("AUTHORITY_DENIED", "%s holds no grant covering %s" % (actor, capability))
+
+
+def _v6_authorize(store, dossier_root, actor, venue, now, decided, flag):
+    """Ask the operator's v6 store whether `actor` holds release.approve here.
+
+    Checked twice: when the decision was made, and now. A grant revoked or
+    expired since the decision cannot release, and a decision made before its
+    grant was active was never authorized.
+    """
+    if actor is None or venue is None:
+        return None
+    scope = {"kind": "release_target", "value": venue}
+    label = "now"
+    try:
+        conn = _open_store_readonly(store, dossier_root)
+        try:
+            granted = None
+            for label, when in [("now", now)] + ([("decided_at", decided)] if decided is not None else []):
+                granted = _store_authorize(conn, actor, RELEASE_CAPABILITY, scope,
+                                           when.astimezone(_dt.timezone.utc).isoformat())
+        finally:
+            conn.close()
+    except Refusal as exc:
+        flag(exc.code, "v6 store refused release at %s: %s" % (label, exc))
+        return None
+    except (sqlite3.Error, ValueError, TypeError) as exc:
+        flag("AUTHORITY_STORE_UNREADABLE", "v6 store could not be read: %s" % exc)
+        return None
+    return {"grant_id": granted.get("grant_id"), "capability": RELEASE_CAPABILITY,
+            "scope": scope, "subject": actor, "subject_kind": granted.get("subject_kind"),
+            "issuer": granted.get("issuer"), "basis": "verified", "store": str(Path(store).resolve())}
+
+
+def release(dossier, root, now=None, authority_store=None):
     """Bind a person's review decision and authority grant to the exact draft."""
     now = now or _dt.datetime.now(_dt.timezone.utc)
     audit = analyze(dossier, root, now)
@@ -595,25 +723,27 @@ def release(dossier, root, now=None):
     elif decided > now:
         flag("DECISION_TIME_FUTURE", "decided_at is in the future.")
 
-    grant = decision.get("authority")
-    if not isinstance(grant, dict):
-        flag("AUTHORITY_REQUIRED", "The decision must carry the authority grant it acts under.")
-        grant = {}
-    if actor is None or grant.get("holder") != actor:
-        flag("AUTHORITY_HOLDER_MISMATCH", "The grant is not held by the deciding person.")
-    scope = grant.get("scope")
-    if not isinstance(scope, list) or "release" not in scope:
-        flag("AUTHORITY_SCOPE", "The grant does not include release.")
-    venues = grant.get("venues")
-    if not isinstance(venues, list) or venue_name is None or venue_name not in venues:
-        flag("AUTHORITY_VENUE", "The grant does not cover this venue.")
-    expires = parse_time(grant.get("expires_at"))
-    if expires is None:
-        flag("AUTHORITY_EXPIRY_INVALID", "expires_at must be offset-aware ISO 8601.")
-    elif expires < now:
-        flag("AUTHORITY_EXPIRED", "The authority grant has expired.")
-    elif decided is not None and decided > expires:
-        flag("AUTHORITY_EXPIRED", "The decision was made after the grant expired.")
+    # Authority is read from the v6 grant store, never from the dossier. A
+    # grant written into the dossier is a claim about authority, and the
+    # person who wrote the dossier is the person whose authority is in doubt.
+    binding = decision.get("authority")
+    receipt = None
+    if not isinstance(binding, dict):
+        flag("AUTHORITY_REQUIRED", "The decision must name the v6 grant store it acts under.")
+        binding = {}
+    if binding.get("store") != "v6":
+        flag("AUTHORITY_UNBOUND",
+             "A grant declared in the dossier is not authority; bind the decision "
+             "to the v6 store (authority.store = \"v6\").")
+    elif "workspace" in binding:
+        flag("AUTHORITY_STORE_FROM_DOSSIER",
+             "The dossier may not choose the authority store; the operator names it with --authority-store.")
+    else:
+        receipt = _v6_authorize(authority_store, root, actor, venue_name, now, decided, flag)
+    if receipt is not None and receipt.get("subject_kind") != "human":
+        flag("AUTHORITY_NOT_HUMAN",
+             "The v6 grant is held by a %s; release is decided by a person." % receipt.get("subject_kind"))
+        receipt = None
 
     status = "HOLD" if findings else "RELEASE_ELIGIBLE"
     return {
@@ -624,10 +754,11 @@ def release(dossier, root, now=None):
         "release_authorized": status == "RELEASE_ELIGIBLE",
         "transmission_performed": False,
         "declaration_status": "self_reported",
+        "authority_receipt": receipt if status == "RELEASE_ELIGIBLE" else None,
         "findings": findings,
         "limitations": LIMITATIONS + [
-            "RELEASE_ELIGIBLE means the declared gates agree; this tool sends nothing.",
-            "The authority grant is a declaration; binding it to the v6 grant store is WI9-08 work.",
+            "RELEASE_ELIGIBLE means the gates agree; this tool sends nothing.",
+            "Authority is checked in the local v6 grant store; the store proves who was granted what, not who typed the decision.",
         ],
     }
 
@@ -642,6 +773,9 @@ def main(argv=None):
         cmd = sub.add_parser(name, help=text)
         cmd.add_argument("--input", required=True)
         cmd.add_argument("--out")
+        if name == "release":
+            cmd.add_argument("--authority-store", dest="authority_store",
+                             help="the v6 workspace holding release grants; must be outside the dossier directory")
     args = parser.parse_args(argv)
     try:
         path = Path(args.input)
@@ -649,16 +783,25 @@ def main(argv=None):
             raise Refusal("PATH_SYMLINK", "the dossier is a symlink")
         path = path.resolve()
         dossier, _ = load_json_bounded(path)
-        result = analyze(dossier, path.parent) if args.command == "audit" else release(dossier, path.parent)
+        result = (analyze(dossier, path.parent) if args.command == "audit"
+                  else release(dossier, path.parent, authority_store=args.authority_store))
     except Refusal as exc:
         result = _report("HOLD", [{"code": exc.code, "level": "hold", "message": str(exc),
                                    "target": "dossier"}], {})
-    except (OSError, ValueError, TypeError) as exc:
+    except (OSError, ValueError, TypeError, RecursionError) as exc:
         result = _report("HOLD", [{"code": "DOSSIER_INVALID", "level": "hold", "message": str(exc),
                                    "target": "dossier"}], {})
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.out:
-        Path(args.out).write_text(rendered, encoding="utf-8")
+        try:
+            fd = os.open(args.out, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0), 0o644)
+            with os.fdopen(fd, "w", encoding="utf-8") as out:
+                out.write(rendered)
+        except OSError as exc:
+            sys.stdout.write(json.dumps(_report("HOLD", [{"code": "OUT_NOT_WRITABLE", "level": "hold",
+                                                           "message": str(exc), "target": "--out"}], {}),
+                                        indent=2, sort_keys=True) + "\n")
+            return 3
     else:
         sys.stdout.write(rendered)
     if result["status"] == "REVIEW":
